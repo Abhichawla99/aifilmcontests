@@ -1,8 +1,4 @@
-import fs from 'fs'
-import path from 'path'
-
-const DATA_DIR = path.join(process.cwd(), 'data')
-const SUBSCRIBERS_FILE = path.join(DATA_DIR, 'subscribers.json')
+import { supabaseAdmin } from './supabase'
 
 export interface Subscriber {
   email: string
@@ -10,40 +6,39 @@ export interface Subscriber {
   confirmed: boolean
 }
 
-function ensureDataDir() {
-  if (!fs.existsSync(DATA_DIR)) {
-    fs.mkdirSync(DATA_DIR, { recursive: true })
-  }
-  if (!fs.existsSync(SUBSCRIBERS_FILE)) {
-    fs.writeFileSync(SUBSCRIBERS_FILE, JSON.stringify([]))
-  }
-}
+export async function getSubscribers(): Promise<Subscriber[]> {
+  const { data, error } = await supabaseAdmin
+    .from('subscribers')
+    .select('email, created_at, confirmed')
+    .order('created_at', { ascending: false })
 
-export function getSubscribers(): Subscriber[] {
-  ensureDataDir()
-  try {
-    const data = fs.readFileSync(SUBSCRIBERS_FILE, 'utf-8')
-    return JSON.parse(data)
-  } catch {
+  if (error) {
+    console.error('[Supabase] Failed to fetch subscribers:', error.message)
     return []
   }
+
+  return data.map(row => ({
+    email: row.email,
+    createdAt: row.created_at,
+    confirmed: row.confirmed,
+  }))
 }
 
-export function addSubscriber(email: string): { success: boolean; message: string } {
-  ensureDataDir()
-  const subscribers = getSubscribers()
+export async function addSubscriber(email: string): Promise<{ success: boolean; message: string }> {
   const normalizedEmail = email.toLowerCase().trim()
 
-  if (subscribers.find(s => s.email === normalizedEmail)) {
-    return { success: false, message: 'This email is already subscribed.' }
+  const { error } = await supabaseAdmin
+    .from('subscribers')
+    .insert({ email: normalizedEmail, confirmed: true })
+
+  if (error) {
+    // Postgres unique violation code
+    if (error.code === '23505') {
+      return { success: false, message: 'This email is already subscribed.' }
+    }
+    console.error('[Supabase] Failed to add subscriber:', error.message)
+    return { success: false, message: 'Something went wrong. Please try again.' }
   }
 
-  subscribers.push({
-    email: normalizedEmail,
-    createdAt: new Date().toISOString(),
-    confirmed: true,
-  })
-
-  fs.writeFileSync(SUBSCRIBERS_FILE, JSON.stringify(subscribers, null, 2))
-  return { success: true, message: 'Successfully subscribed!' }
+  return { success: true, message: 'Successfully subscribed! You\'ll get alerts for new contests.' }
 }

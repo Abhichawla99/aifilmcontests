@@ -1,24 +1,27 @@
-import { contests, getContestsByStatus } from '@/data/contests'
+import { getAllContests } from '@/lib/contests-db'
+import { Contest } from '@/data/contests'
 import ContestBrowser from '@/components/ContestBrowser'
 import EmailSubscribe from '@/components/EmailSubscribe'
 
 export const dynamic = 'force-dynamic'
+export const revalidate = 0
 
 function formatDate(d: string) {
   return new Date(d).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })
 }
 
 function getDaysLeft(deadline: string) {
-  const diff = new Date(deadline).getTime() - Date.now()
-  return Math.ceil(diff / (1000 * 60 * 60 * 24))
+  return Math.ceil((new Date(deadline).getTime() - Date.now()) / (1000 * 60 * 60 * 24))
 }
 
-export default function Home() {
-  const openContests = getContestsByStatus('open')
-  const upcomingContests = getContestsByStatus('upcoming')
-  const allActive = [...openContests, ...upcomingContests]
+export default async function Home() {
+  // Fetch live from Supabase on every request
+  const allContests: Contest[] = await getAllContests()
 
-  const totalPrizeDollars = allActive.reduce((sum, c) => {
+  const openContests = allContests.filter(c => c.status === 'open')
+  const upcomingContests = allContests.filter(c => c.status === 'upcoming')
+
+  const totalPrizeDollars = [...openContests, ...upcomingContests].reduce((sum, c) => {
     const m = c.prize.match(/\$([0-9,]+)/)
     if (m) return sum + parseInt(m[1].replace(/,/g, ''))
     const mEur = c.prize.match(/€([0-9,]+)/)
@@ -26,13 +29,11 @@ export default function Home() {
     return sum
   }, 0)
 
-  // For ticker: open contests sorted by deadline
+  // Ticker: open contests sorted by soonest deadline
   const tickerContests = [...openContests].sort(
     (a, b) => new Date(a.deadline).getTime() - new Date(b.deadline).getTime()
   )
-
-  // Build ticker items (doubled for seamless loop)
-  const tickerItems = [...tickerContests, ...tickerContests]
+  const tickerItems = [...tickerContests, ...tickerContests] // doubled for seamless loop
 
   return (
     <div className="min-h-screen" style={{ background: '#06060d' }}>
@@ -44,7 +45,6 @@ export default function Home() {
           style={{ background: 'radial-gradient(circle, #a855f7, transparent 70%)' }} />
         <div className="absolute bottom-0 left-0 w-[400px] h-[400px] rounded-full opacity-[0.04]"
           style={{ background: 'radial-gradient(circle, #10b981, transparent 70%)' }} />
-        {/* Subtle grid */}
         <div className="absolute inset-0 opacity-[0.012]"
           style={{
             backgroundImage: 'linear-gradient(rgba(255,255,255,0.5) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.5) 1px, transparent 1px)',
@@ -68,17 +68,13 @@ export default function Home() {
           </div>
 
           <div className="hidden sm:flex items-center gap-6">
-            <a href="#contests" className="text-sm text-zinc-500 hover:text-zinc-200 transition-colors">
-              Browse
-            </a>
-            <a href="mailto:hello@aifilmcontests.com" className="text-sm text-zinc-500 hover:text-zinc-200 transition-colors">
-              Submit a Contest
-            </a>
+            <a href="#contests" className="text-sm text-zinc-500 hover:text-zinc-200 transition-colors">Browse</a>
+            <a href="mailto:hello@aifilmcontests.com" className="text-sm text-zinc-500 hover:text-zinc-200 transition-colors">Submit a Contest</a>
           </div>
 
           <a
             href="#subscribe"
-            className="px-4 py-2 rounded-lg text-sm font-semibold text-white transition-all hover:-translate-y-px hover:shadow-lg"
+            className="px-4 py-2 rounded-lg text-sm font-semibold text-white transition-all hover:-translate-y-px"
             style={{ background: 'linear-gradient(135deg, #4f46e5, #7c3aed)', fontFamily: 'Space Grotesk, sans-serif', boxShadow: '0 0 0 1px rgba(99,102,241,0.3)' }}
           >
             Get Alerts
@@ -101,17 +97,13 @@ export default function Home() {
                     className="inline-flex items-center gap-2 px-8 hover:opacity-80 transition-opacity"
                     style={{ textDecoration: 'none' }}
                   >
-                    <span
-                      className="w-1.5 h-1.5 rounded-full flex-shrink-0"
-                      style={{ background: isUrgent ? '#ef4444' : '#10b981' }}
-                    />
+                    <span className="w-1.5 h-1.5 rounded-full flex-shrink-0"
+                      style={{ background: isUrgent ? '#ef4444' : '#10b981' }} />
                     <span className="text-xs text-zinc-400 font-medium whitespace-nowrap" style={{ fontFamily: 'Space Grotesk, sans-serif' }}>
                       {c.name}
                     </span>
-                    <span
-                      className="text-xs font-semibold whitespace-nowrap"
-                      style={{ color: isUrgent ? '#f97316' : '#6b7280', fontFamily: 'Space Grotesk, sans-serif' }}
-                    >
+                    <span className="text-xs font-semibold whitespace-nowrap"
+                      style={{ color: isUrgent ? '#f97316' : '#6b7280', fontFamily: 'Space Grotesk, sans-serif' }}>
                       {days <= 0 ? 'Closes today' : `${days}d left`}
                     </span>
                     <span className="text-zinc-700 text-xs">·</span>
@@ -128,17 +120,14 @@ export default function Home() {
         <section className="px-6 pt-16 pb-12 max-w-7xl mx-auto">
           <div className="grid lg:grid-cols-2 gap-12 items-center">
 
-            {/* Left: Headline + stats */}
             <div className="fade-up">
               <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-emerald-500/20 bg-emerald-500/8 text-emerald-400 text-xs font-medium mb-7" style={{ fontFamily: 'Space Grotesk, sans-serif' }}>
                 <span className="live-dot w-1.5 h-1.5 rounded-full bg-emerald-400" />
                 {openContests.length} contests open right now · Updated daily
               </div>
 
-              <h1
-                className="text-5xl sm:text-6xl font-bold leading-[1.05] tracking-tight text-white mb-6"
-                style={{ fontFamily: 'Space Grotesk, sans-serif' }}
-              >
+              <h1 className="text-5xl sm:text-6xl font-bold leading-[1.05] tracking-tight text-white mb-6"
+                style={{ fontFamily: 'Space Grotesk, sans-serif' }}>
                 Every AI Film<br />
                 Competition.{' '}
                 <span className="gradient-text">One Place.</span>
@@ -148,7 +137,6 @@ export default function Home() {
                 The definitive hub for creative AI film competitions, festivals, grants, and challenges — tracked and verified daily by an AI agent.
               </p>
 
-              {/* Stat row */}
               <div className="grid grid-cols-3 gap-3 max-w-md">
                 {[
                   { value: openContests.length.toString(), label: 'Open Now', color: '#10b981' },
@@ -156,10 +144,8 @@ export default function Home() {
                   { value: `$${Math.round(totalPrizeDollars / 1000)}K+`, label: 'Prize Pool', color: '#818cf8' },
                 ].map(s => (
                   <div key={s.label} className="rounded-xl p-4 border border-white/[0.06] bg-white/[0.025]">
-                    <div
-                      className="text-2xl font-bold mb-0.5"
-                      style={{ fontFamily: 'Space Grotesk, sans-serif', color: s.color }}
-                    >
+                    <div className="text-2xl font-bold mb-0.5"
+                      style={{ fontFamily: 'Space Grotesk, sans-serif', color: s.color }}>
                       {s.value}
                     </div>
                     <div className="text-xs text-zinc-600">{s.label}</div>
@@ -168,20 +154,11 @@ export default function Home() {
               </div>
             </div>
 
-            {/* Right: Subscribe card */}
             <div id="subscribe" className="fade-up">
-              <div
-                className="rounded-2xl p-8 border"
-                style={{
-                  background: 'rgba(99, 102, 241, 0.04)',
-                  borderColor: 'rgba(99, 102, 241, 0.15)',
-                }}
-              >
+              <div className="rounded-2xl p-8 border"
+                style={{ background: 'rgba(99, 102, 241, 0.04)', borderColor: 'rgba(99, 102, 241, 0.15)' }}>
                 <div className="mb-6">
-                  <h2
-                    className="text-2xl font-bold text-white mb-2"
-                    style={{ fontFamily: 'Space Grotesk, sans-serif' }}
-                  >
+                  <h2 className="text-2xl font-bold text-white mb-2" style={{ fontFamily: 'Space Grotesk, sans-serif' }}>
                     Never miss a deadline
                   </h2>
                   <p className="text-zinc-500 text-sm leading-relaxed">
@@ -214,24 +191,19 @@ export default function Home() {
           </div>
         </section>
 
-        {/* ─── Divider ─── */}
         <div className="max-w-7xl mx-auto px-6">
           <div className="h-px bg-gradient-to-r from-transparent via-white/10 to-transparent" />
         </div>
 
         {/* ─── Contest Browser ─── */}
         <section id="contests" className="px-6 pt-12 pb-24 max-w-7xl mx-auto">
-          {/* Section header */}
           <div className="flex items-start justify-between mb-8 gap-4">
             <div>
-              <h2
-                className="text-2xl font-bold text-white mb-1"
-                style={{ fontFamily: 'Space Grotesk, sans-serif' }}
-              >
+              <h2 className="text-2xl font-bold text-white mb-1" style={{ fontFamily: 'Space Grotesk, sans-serif' }}>
                 Browse Competitions
               </h2>
               <p className="text-sm text-zinc-600">
-                {allActive.length} active · verified against live sources daily
+                {openContests.length + upcomingContests.length} active · verified against live sources daily · powered by Supabase
               </p>
             </div>
             <div className="flex items-center gap-1.5 text-xs text-zinc-600 flex-shrink-0 mt-1">
@@ -240,27 +212,16 @@ export default function Home() {
             </div>
           </div>
 
-          <ContestBrowser contests={contests} />
+          <ContestBrowser contests={allContests} />
         </section>
 
-        {/* ─── Bottom CTA banner ─── */}
+        {/* ─── Bottom CTA ─── */}
         <section className="px-6 pb-24 max-w-5xl mx-auto">
-          <div
-            className="relative rounded-2xl overflow-hidden px-8 py-12 sm:px-16 text-center"
-            style={{
-              background: 'linear-gradient(135deg, rgba(79,70,229,0.1) 0%, rgba(124,58,237,0.1) 100%)',
-              border: '1px solid rgba(99,102,241,0.15)',
-            }}
-          >
-            {/* Film strip accent top */}
-            <div
-              className="absolute top-0 left-0 right-0 h-1"
-              style={{ background: 'linear-gradient(90deg, #6366f1, #a855f7, #ec4899, #6366f1)' }}
-            />
-            <h2
-              className="text-3xl sm:text-4xl font-bold text-white mb-4"
-              style={{ fontFamily: 'Space Grotesk, sans-serif' }}
-            >
+          <div className="relative rounded-2xl overflow-hidden px-8 py-12 sm:px-16 text-center"
+            style={{ background: 'linear-gradient(135deg, rgba(79,70,229,0.1), rgba(124,58,237,0.1))', border: '1px solid rgba(99,102,241,0.15)' }}>
+            <div className="absolute top-0 left-0 right-0 h-1"
+              style={{ background: 'linear-gradient(90deg, #6366f1, #a855f7, #ec4899, #6366f1)' }} />
+            <h2 className="text-3xl sm:text-4xl font-bold text-white mb-4" style={{ fontFamily: 'Space Grotesk, sans-serif' }}>
               Know before the deadline.
             </h2>
             <p className="text-zinc-400 mb-8 max-w-md mx-auto text-sm leading-relaxed">
@@ -276,29 +237,21 @@ export default function Home() {
         <footer className="border-t border-white/[0.04] px-6 py-8">
           <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
             <div className="flex items-center gap-2.5">
-              <div
-                className="w-7 h-7 rounded-md flex items-center justify-center text-xs font-bold"
-                style={{ background: 'linear-gradient(135deg, #4f46e5, #7c3aed)' }}
-              >
+              <div className="w-7 h-7 rounded-md flex items-center justify-center text-xs font-bold"
+                style={{ background: 'linear-gradient(135deg, #4f46e5, #7c3aed)' }}>
                 AI
               </div>
               <span className="font-semibold text-zinc-300 text-sm" style={{ fontFamily: 'Space Grotesk, sans-serif' }}>
                 AI Film Contests
               </span>
             </div>
-
             <p className="text-xs text-zinc-700 text-center">
               Tracking every AI film competition · Updated daily by an AI research agent
             </p>
-
             <div className="flex items-center gap-4 text-xs text-zinc-700">
-              <a href="mailto:hello@aifilmcontests.com" className="hover:text-zinc-400 transition-colors">
-                Submit a Contest
-              </a>
+              <a href="mailto:hello@aifilmcontests.com" className="hover:text-zinc-400 transition-colors">Submit a Contest</a>
               <span>·</span>
-              <a href="https://github.com/Abhichawla99/aifilmcontests" target="_blank" rel="noopener noreferrer" className="hover:text-zinc-400 transition-colors">
-                GitHub
-              </a>
+              <a href="https://github.com/Abhichawla99/aifilmcontests" target="_blank" rel="noopener noreferrer" className="hover:text-zinc-400 transition-colors">GitHub</a>
             </div>
           </div>
         </footer>
