@@ -20,7 +20,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: result.message }, { status: 409 })
     }
 
-    await sendWelcomeEmail(email)
+    await sendWelcomeEmail(email, name || null)
     return NextResponse.json({ success: true, message: result.message })
   } catch (error) {
     console.error('Subscribe error:', error)

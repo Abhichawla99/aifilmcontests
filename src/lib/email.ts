@@ -1,98 +1,206 @@
 import { Resend } from 'resend'
 
 const FROM_EMAIL = process.env.FROM_EMAIL || 'contests@aifilmcontests.com'
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://aifilmcontests.com'
 
 function getResend() {
   return new Resend(process.env.RESEND_API_KEY || 'placeholder')
 }
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://aifilmcontests.com'
 
-export async function sendWelcomeEmail(email: string) {
+// ─── Shared styles ────────────────────────────────────────────────────────────
+
+const emailBase = `
+  background-color: #09090f;
+  color: #ffffff;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', sans-serif;
+  margin: 0;
+  padding: 0;
+  -webkit-text-size-adjust: 100%;
+`
+
+const container = `
+  max-width: 580px;
+  margin: 0 auto;
+  padding: 40px 24px;
+`
+
+const rule = `
+  border: none;
+  border-top: 1px solid rgba(255,255,255,0.07);
+  margin: 32px 0;
+`
+
+const footer = `
+  color: #3f3f46;
+  font-size: 12px;
+  line-height: 1.7;
+  text-align: center;
+`
+
+const badge = (label: string, color: string) => `
+  <span style="display:inline-block; background:${color}; color:#fff; font-size:11px; font-weight:700; letter-spacing:0.08em; text-transform:uppercase; padding:3px 10px; border-radius:4px;">${label}</span>
+`
+
+function contestCard(contest: {
+  name: string
+  organizer: string
+  prize: string
+  deadline: string
+  description: string
+  url: string
+  daysLeft?: number
+  isNew?: boolean
+  isUrgent?: boolean
+}) {
+  const urgentBadge = contest.isUrgent
+    ? `<span style="color:#ef4444; font-size:12px; font-weight:700; margin-left:8px;">🔴 ${contest.daysLeft}d left</span>`
+    : contest.isNew
+    ? badge('New', '#4f46e5')
+    : ''
+
+  return `
+    <div style="border:1px solid rgba(255,255,255,0.07); border-radius:10px; padding:20px 22px; margin-bottom:12px;">
+      <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:4px;">
+        <span style="color:#71717a; font-size:12px; letter-spacing:0.04em; text-transform:uppercase;">${contest.organizer}</span>
+        <span style="color:#a1a1aa; font-size:12px;">${urgentBadge}</span>
+      </div>
+      <div style="font-size:17px; font-weight:700; margin-bottom:6px; color:#fff;">${contest.name}</div>
+      <div style="color:#a1a1aa; font-size:14px; line-height:1.55; margin-bottom:14px;">${contest.description}</div>
+      <div style="display:flex; align-items:center; justify-content:space-between;">
+        <div>
+          <span style="color:#4f46e5; font-weight:700; font-size:15px;">${contest.prize}</span>
+          <span style="color:#52525b; font-size:13px; margin-left:12px;">Due ${new Date(contest.deadline).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</span>
+        </div>
+        <a href="${contest.url}" style="color:#4f46e5; font-size:13px; font-weight:600; text-decoration:none;">Apply →</a>
+      </div>
+    </div>
+  `
+}
+
+// ─── Welcome email ─────────────────────────────────────────────────────────────
+
+export async function sendWelcomeEmail(email: string, name?: string | null) {
   if (!process.env.RESEND_API_KEY) {
-    console.log(`[Dev] Welcome email would be sent to: ${email}`)
+    console.log(`[Dev] Welcome email → ${email}`)
     return { success: true }
   }
+
+  const firstName = name?.split(' ')[0] ?? null
+  const greeting = firstName ? `Hey ${firstName},` : 'Hey,'
 
   try {
     await getResend().emails.send({
       from: `AI Film Contests <${FROM_EMAIL}>`,
       to: email,
-      subject: '🎬 Welcome to AI Film Contests - You\'re In!',
+      subject: 'You\'re on the list — AI Film Contests',
       html: `
 <!DOCTYPE html>
-<html>
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Welcome to AI Film Contests</title>
-</head>
-<body style="background-color: #0a0a0f; color: #ffffff; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; margin: 0; padding: 0;">
-  <div style="max-width: 600px; margin: 0 auto; padding: 40px 20px;">
+<html lang="en">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"></head>
+<body style="${emailBase}">
+<div style="${container}">
 
-    <div style="text-align: center; margin-bottom: 40px;">
-      <div style="display: inline-block; background: linear-gradient(135deg, #7c3aed, #ec4899); padding: 2px; border-radius: 16px;">
-        <div style="background: #0a0a0f; border-radius: 14px; padding: 20px 40px;">
-          <h1 style="margin: 0; font-size: 24px; font-weight: 800; background: linear-gradient(135deg, #8b5cf6, #ec4899); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">
-            🎬 AI Film Contests
-          </h1>
-        </div>
-      </div>
-    </div>
-
-    <h2 style="font-size: 28px; font-weight: 700; text-align: center; margin-bottom: 16px;">
-      You're officially on the list! 🎉
-    </h2>
-
-    <p style="color: #a1a1aa; font-size: 16px; line-height: 1.6; text-align: center; margin-bottom: 32px;">
-      Thanks for subscribing to AI Film Contests. You'll be the first to know whenever new competitions, grants, and opportunities in the creative AI filmmaking world are announced.
-    </p>
-
-    <div style="background: linear-gradient(135deg, rgba(124, 58, 237, 0.15), rgba(236, 72, 153, 0.15)); border: 1px solid rgba(139, 92, 246, 0.3); border-radius: 16px; padding: 24px; margin-bottom: 32px;">
-      <h3 style="margin: 0 0 12px 0; font-size: 18px; color: #8b5cf6;">What to expect:</h3>
-      <ul style="margin: 0; padding-left: 20px; color: #d4d4d8; line-height: 2;">
-        <li>Instant alerts when new contests open</li>
-        <li>Deadline reminders (1 week before close)</li>
-        <li>Grant and funding opportunities</li>
-        <li>Festival submission windows</li>
-        <li>Special early-bird opportunities</li>
-      </ul>
-    </div>
-
-    <div style="text-align: center; margin-bottom: 32px;">
-      <a href="${SITE_URL}" style="display: inline-block; background: linear-gradient(135deg, #7c3aed, #ec4899); color: white; text-decoration: none; padding: 16px 40px; border-radius: 50px; font-weight: 700; font-size: 16px;">
-        Browse All Contests →
-      </a>
-    </div>
-
-    <hr style="border: none; border-top: 1px solid rgba(255,255,255,0.1); margin: 32px 0;">
-
-    <p style="color: #52525b; font-size: 12px; text-align: center;">
-      You're receiving this because you subscribed at <a href="${SITE_URL}" style="color: #8b5cf6;">${SITE_URL}</a><br>
-      To unsubscribe, reply to this email with "unsubscribe"
-    </p>
+  <div style="margin-bottom:36px;">
+    <span style="font-family:'Space Grotesk',sans-serif; font-size:15px; font-weight:700; letter-spacing:0.06em; text-transform:uppercase; color:#4f46e5;">AI Film Contests</span>
   </div>
+
+  <h1 style="font-size:26px; font-weight:700; margin:0 0 8px 0; line-height:1.25;">${greeting}</h1>
+  <h2 style="font-size:26px; font-weight:700; margin:0 0 20px 0; line-height:1.25; color:#a1a1aa;">You're officially on the list.</h2>
+
+  <p style="color:#a1a1aa; font-size:15px; line-height:1.65; margin-bottom:28px;">
+    We track every AI film competition, festival, and open call — and verify them daily against live sources. You'll get notified when new ones open, and reminded before deadlines close.
+  </p>
+
+  <div style="border:1px solid rgba(255,255,255,0.07); border-radius:10px; padding:20px 22px; margin-bottom:28px;">
+    <div style="font-size:13px; font-weight:600; color:#71717a; text-transform:uppercase; letter-spacing:0.06em; margin-bottom:14px;">What you'll receive</div>
+    <div style="color:#d4d4d8; font-size:14px; line-height:2.1;">
+      ✦ &nbsp;Alert when a new contest opens<br>
+      ✦ &nbsp;Deadline reminder 7 days before close<br>
+      ✦ &nbsp;Weekly digest every Monday (open contests only)<br>
+      ✦ &nbsp;No noise — only when something matters
+    </div>
+  </div>
+
+  <a href="${SITE_URL}" style="display:inline-block; background:#4f46e5; color:#fff; text-decoration:none; padding:13px 28px; border-radius:8px; font-size:14px; font-weight:600; letter-spacing:0.02em;">Browse Open Contests →</a>
+
+  <hr style="${rule}">
+  <div style="${footer}">
+    <a href="${SITE_URL}" style="color:#3f3f46; text-decoration:none;">${SITE_URL}</a> &nbsp;·&nbsp; Reply "unsubscribe" to opt out
+  </div>
+
+</div>
 </body>
 </html>
       `,
     })
     return { success: true }
   } catch (error) {
-    console.error('Failed to send welcome email:', error)
+    console.error('[Email] Welcome failed:', error)
     return { success: false, error }
   }
 }
 
-export async function sendNewContestNotification(
+// ─── New contest alert ─────────────────────────────────────────────────────────
+
+export async function sendNewContestAlerts(
   subscribers: string[],
-  contest: { name: string; organizer: string; deadline: string; prize: string; url: string; description: string }
+  contests: Array<{
+    name: string
+    organizer: string
+    prize: string
+    deadline: string
+    url: string
+    description: string
+  }>
 ) {
   if (!process.env.RESEND_API_KEY) {
-    console.log(`[Dev] Contest notification would be sent to ${subscribers.length} subscribers`)
+    console.log(`[Dev] New contest alert → ${subscribers.length} subscribers, ${contests.length} contests`)
     return { success: true }
   }
+  if (!subscribers.length || !contests.length) return { success: true }
+
+  const plural = contests.length > 1
+  const subject = plural
+    ? `${contests.length} new AI film contests just opened`
+    : `New contest: ${contests[0].name}`
+
+  const cards = contests.map(c => contestCard({ ...c, isNew: true })).join('')
+
+  const html = `
+<!DOCTYPE html>
+<html lang="en">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"></head>
+<body style="${emailBase}">
+<div style="${container}">
+
+  <div style="margin-bottom:28px; display:flex; align-items:center; justify-content:space-between;">
+    <span style="font-family:'Space Grotesk',sans-serif; font-size:15px; font-weight:700; letter-spacing:0.06em; text-transform:uppercase; color:#4f46e5;">AI Film Contests</span>
+    ${badge(plural ? `${contests.length} New` : '1 New', '#4f46e5')}
+  </div>
+
+  <h1 style="font-size:22px; font-weight:700; margin:0 0 6px 0;">
+    ${plural ? `${contests.length} new contests just opened` : 'A new contest just opened'}
+  </h1>
+  <p style="color:#71717a; font-size:14px; margin:0 0 24px 0;">Verified against live sources today.</p>
+
+  ${cards}
+
+  <div style="text-align:center; margin-top:24px;">
+    <a href="${SITE_URL}" style="color:#4f46e5; font-size:13px; font-weight:600; text-decoration:none;">View all open contests →</a>
+  </div>
+
+  <hr style="${rule}">
+  <div style="${footer}">
+    <a href="${SITE_URL}" style="color:#3f3f46; text-decoration:none;">${SITE_URL}</a> &nbsp;·&nbsp; Reply "unsubscribe" to opt out
+  </div>
+
+</div>
+</body>
+</html>
+  `
 
   try {
-    // Send in batches of 50 (Resend batch limit)
+    // Batch in 50s (Resend limit)
     const batchSize = 50
     for (let i = 0; i < subscribers.length; i += batchSize) {
       const batch = subscribers.slice(i, i + batchSize)
@@ -100,53 +208,173 @@ export async function sendNewContestNotification(
         from: `AI Film Contests <${FROM_EMAIL}>`,
         to: FROM_EMAIL,
         bcc: batch,
-        subject: `🎬 New Contest: ${contest.name} — ${contest.prize}`,
-        html: `
-<!DOCTYPE html>
-<html>
-<body style="background-color: #0a0a0f; color: #ffffff; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; margin: 0; padding: 0;">
-  <div style="max-width: 600px; margin: 0 auto; padding: 40px 20px;">
-    <div style="text-align: center; margin-bottom: 32px;">
-      <span style="background: linear-gradient(135deg, #7c3aed, #ec4899); color: white; padding: 6px 16px; border-radius: 50px; font-size: 13px; font-weight: 600;">
-        🆕 NEW CONTEST ALERT
-      </span>
-    </div>
-
-    <h1 style="font-size: 28px; font-weight: 800; margin-bottom: 8px;">${contest.name}</h1>
-    <p style="color: #8b5cf6; font-size: 16px; margin-bottom: 16px;">by ${contest.organizer}</p>
-
-    <p style="color: #a1a1aa; font-size: 16px; line-height: 1.6; margin-bottom: 24px;">${contest.description}</p>
-
-    <div style="display: grid; gap: 12px; margin-bottom: 32px;">
-      <div style="background: rgba(124, 58, 237, 0.1); border: 1px solid rgba(124, 58, 237, 0.3); border-radius: 12px; padding: 16px;">
-        <div style="color: #8b5cf6; font-size: 12px; font-weight: 600; margin-bottom: 4px;">PRIZE</div>
-        <div style="font-size: 20px; font-weight: 700;">${contest.prize}</div>
-      </div>
-      <div style="background: rgba(236, 72, 153, 0.1); border: 1px solid rgba(236, 72, 153, 0.3); border-radius: 12px; padding: 16px;">
-        <div style="color: #ec4899; font-size: 12px; font-weight: 600; margin-bottom: 4px;">DEADLINE</div>
-        <div style="font-size: 18px; font-weight: 700;">${new Date(contest.deadline).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}</div>
-      </div>
-    </div>
-
-    <div style="text-align: center;">
-      <a href="${SITE_URL}" style="display: inline-block; background: linear-gradient(135deg, #7c3aed, #ec4899); color: white; text-decoration: none; padding: 16px 40px; border-radius: 50px; font-weight: 700; font-size: 16px;">
-        View Contest Details →
-      </a>
-    </div>
-
-    <hr style="border: none; border-top: 1px solid rgba(255,255,255,0.1); margin: 32px 0;">
-    <p style="color: #52525b; font-size: 12px; text-align: center;">
-      <a href="${SITE_URL}" style="color: #8b5cf6;">${SITE_URL}</a> · Reply "unsubscribe" to opt out
-    </p>
-  </div>
-</body>
-</html>
-        `,
+        subject,
+        html,
       })
     }
-    return { success: true }
+    return { success: true, sent: subscribers.length }
   } catch (error) {
-    console.error('Failed to send contest notification:', error)
+    console.error('[Email] Contest alert failed:', error)
+    return { success: false, error }
+  }
+}
+
+// ─── Deadline reminder (7 days) ────────────────────────────────────────────────
+
+export async function sendDeadlineReminders(
+  subscribers: string[],
+  urgentContests: Array<{
+    name: string
+    organizer: string
+    prize: string
+    deadline: string
+    url: string
+    description: string
+    daysLeft: number
+  }>
+) {
+  if (!process.env.RESEND_API_KEY) {
+    console.log(`[Dev] Deadline reminder → ${subscribers.length} subscribers, ${urgentContests.length} contests`)
+    return { success: true }
+  }
+  if (!subscribers.length || !urgentContests.length) return { success: true }
+
+  const subject = urgentContests.length === 1
+    ? `⏰ ${urgentContests[0].daysLeft} days left: ${urgentContests[0].name}`
+    : `⏰ ${urgentContests.length} contests closing this week`
+
+  const cards = urgentContests
+    .sort((a, b) => a.daysLeft - b.daysLeft)
+    .map(c => contestCard({ ...c, isUrgent: true }))
+    .join('')
+
+  const html = `
+<!DOCTYPE html>
+<html lang="en">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"></head>
+<body style="${emailBase}">
+<div style="${container}">
+
+  <div style="margin-bottom:28px;">
+    <span style="font-family:'Space Grotesk',sans-serif; font-size:15px; font-weight:700; letter-spacing:0.06em; text-transform:uppercase; color:#4f46e5;">AI Film Contests</span>
+  </div>
+
+  <h1 style="font-size:22px; font-weight:700; margin:0 0 6px 0;">
+    ${urgentContests.length === 1 ? 'This contest closes soon' : `${urgentContests.length} contests closing this week`}
+  </h1>
+  <p style="color:#71717a; font-size:14px; margin:0 0 24px 0;">Don't miss your window to submit.</p>
+
+  ${cards}
+
+  <div style="text-align:center; margin-top:24px;">
+    <a href="${SITE_URL}" style="color:#4f46e5; font-size:13px; font-weight:600; text-decoration:none;">See all deadlines →</a>
+  </div>
+
+  <hr style="${rule}">
+  <div style="${footer}">
+    <a href="${SITE_URL}" style="color:#3f3f46; text-decoration:none;">${SITE_URL}</a> &nbsp;·&nbsp; Reply "unsubscribe" to opt out
+  </div>
+
+</div>
+</body>
+</html>
+  `
+
+  try {
+    const batchSize = 50
+    for (let i = 0; i < subscribers.length; i += batchSize) {
+      const batch = subscribers.slice(i, i + batchSize)
+      await getResend().emails.send({
+        from: `AI Film Contests <${FROM_EMAIL}>`,
+        to: FROM_EMAIL,
+        bcc: batch,
+        subject,
+        html,
+      })
+    }
+    return { success: true, sent: subscribers.length }
+  } catch (error) {
+    console.error('[Email] Deadline reminder failed:', error)
+    return { success: false, error }
+  }
+}
+
+// ─── Weekly digest (Mondays) ───────────────────────────────────────────────────
+
+export async function sendWeeklyDigest(
+  subscribers: string[],
+  openContests: Array<{
+    name: string
+    organizer: string
+    prize: string
+    deadline: string
+    url: string
+    description: string
+    daysLeft?: number
+  }>
+) {
+  if (!process.env.RESEND_API_KEY) {
+    console.log(`[Dev] Weekly digest → ${subscribers.length} subscribers, ${openContests.length} open contests`)
+    return { success: true }
+  }
+  if (!subscribers.length || !openContests.length) return { success: true }
+
+  const subject = `${openContests.length} AI film contests open right now`
+
+  // Sort: urgent first
+  const sorted = [...openContests].sort((a, b) =>
+    new Date(a.deadline).getTime() - new Date(b.deadline).getTime()
+  )
+  const cards = sorted.map(c => contestCard(c)).join('')
+
+  const html = `
+<!DOCTYPE html>
+<html lang="en">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"></head>
+<body style="${emailBase}">
+<div style="${container}">
+
+  <div style="margin-bottom:28px; display:flex; align-items:center; justify-content:space-between;">
+    <span style="font-family:'Space Grotesk',sans-serif; font-size:15px; font-weight:700; letter-spacing:0.06em; text-transform:uppercase; color:#4f46e5;">AI Film Contests</span>
+    <span style="color:#52525b; font-size:12px;">Weekly digest</span>
+  </div>
+
+  <h1 style="font-size:22px; font-weight:700; margin:0 0 6px 0;">
+    ${openContests.length} contest${openContests.length !== 1 ? 's' : ''} open right now
+  </h1>
+  <p style="color:#71717a; font-size:14px; margin:0 0 24px 0;">Sorted by deadline. All verified against live sources.</p>
+
+  ${cards}
+
+  <div style="text-align:center; margin-top:24px;">
+    <a href="${SITE_URL}" style="display:inline-block; background:#4f46e5; color:#fff; text-decoration:none; padding:12px 26px; border-radius:8px; font-size:14px; font-weight:600;">View all contests →</a>
+  </div>
+
+  <hr style="${rule}">
+  <div style="${footer}">
+    <a href="${SITE_URL}" style="color:#3f3f46; text-decoration:none;">${SITE_URL}</a> &nbsp;·&nbsp; Reply "unsubscribe" to opt out
+  </div>
+
+</div>
+</body>
+</html>
+  `
+
+  try {
+    const batchSize = 50
+    for (let i = 0; i < subscribers.length; i += batchSize) {
+      const batch = subscribers.slice(i, i + batchSize)
+      await getResend().emails.send({
+        from: `AI Film Contests <${FROM_EMAIL}>`,
+        to: FROM_EMAIL,
+        bcc: batch,
+        subject,
+        html,
+      })
+    }
+    return { success: true, sent: subscribers.length }
+  } catch (error) {
+    console.error('[Email] Weekly digest failed:', error)
     return { success: false, error }
   }
 }
