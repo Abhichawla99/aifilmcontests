@@ -66,3 +66,9 @@ create policy "contests_service_write"
 drop policy if exists "subscribers_service_only" on subscribers;
 create policy "subscribers_service_only"
   on subscribers for all using (auth.role() = 'service_role');
+
+-- ── Table grants ─────────────────────────────────────────────
+-- Required for PostgREST (the Supabase API) to access the tables
+grant all    on table contests    to service_role;
+grant select on table contests    to anon, authenticated;
+grant all    on table subscribers to service_role;

@@ -2,6 +2,7 @@ import { supabaseAdmin } from './supabase'
 
 export interface Subscriber {
   email: string
+  name: string | null
   createdAt: string
   confirmed: boolean
 }
@@ -9,7 +10,7 @@ export interface Subscriber {
 export async function getSubscribers(): Promise<Subscriber[]> {
   const { data, error } = await supabaseAdmin
     .from('subscribers')
-    .select('email, created_at, confirmed')
+    .select('email, name, created_at, confirmed')
     .order('created_at', { ascending: false })
 
   if (error) {
@@ -19,20 +20,21 @@ export async function getSubscribers(): Promise<Subscriber[]> {
 
   return data.map(row => ({
     email: row.email,
+    name: row.name ?? null,
     createdAt: row.created_at,
     confirmed: row.confirmed,
   }))
 }
 
-export async function addSubscriber(email: string): Promise<{ success: boolean; message: string }> {
-  const normalizedEmail = email.toLowerCase().trim()
-
+export async function addSubscriber(
+  email: string,
+  name: string | null = null,
+): Promise<{ success: boolean; message: string }> {
   const { error } = await supabaseAdmin
     .from('subscribers')
-    .insert({ email: normalizedEmail, confirmed: true })
+    .insert({ email: email.toLowerCase().trim(), name, confirmed: true })
 
   if (error) {
-    // Postgres unique violation code
     if (error.code === '23505') {
       return { success: false, message: 'This email is already subscribed.' }
     }
@@ -40,5 +42,5 @@ export async function addSubscriber(email: string): Promise<{ success: boolean; 
     return { success: false, message: 'Something went wrong. Please try again.' }
   }
 
-  return { success: true, message: 'Successfully subscribed! You\'ll get alerts for new contests.' }
+  return { success: true, message: "You're subscribed. We'll alert you when new contests open." }
 }
