@@ -1,0 +1,22 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npx create-next-app@latest . --typescript --tailwind --eslint --app --src-dir --import-alias \"@/*\" --yes)",
+      "Read(//Users/abhichawla/**)",
+      "Bash(npx create-next-app@latest aifilmcontests --typescript --tailwind --eslint --app --src-dir --import-alias \"@/*\" --yes)",
+      "Bash(npm init:*)",
+      "Bash(npm install:*)",
+      "Bash(npm run:*)",
+      "mcp__Claude_Preview__preview_start",
+      "Bash(pkill -f \"next dev\")",
+      "WebSearch",
+      "Bash(curl -s \"http://localhost:3002/_next/static/css/app/layout.css\")",
+      "Bash(curl -s \"http://localhost:3002/_next/static/css/app/layout.css?v=1773804928139\")",
+      "Bash(find /Users/abhichawla -name package.json -maxdepth 5 -not -path */node_modules/*)",
+      "Bash(gh auth:*)",
+      "Bash(git init:*)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)"
+    ]
+  }
+}
