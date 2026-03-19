@@ -85,6 +85,18 @@ export async function upsertContest(contest: Contest) {
   if (error) throw new Error(`Failed to upsert contest ${contest.id}: ${error.message}`)
 }
 
+// Fetch a single contest by ID (public read)
+export async function getContestById(id: string): Promise<Contest | null> {
+  const { data, error } = await supabase
+    .from('contests')
+    .select('*')
+    .eq('id', id)
+    .single()
+
+  if (error || !data) return null
+  return rowToContest(data as Record<string, unknown>)
+}
+
 // Admin: mark a contest closed by id
 export async function closeContest(id: string) {
   const { error } = await supabaseAdmin

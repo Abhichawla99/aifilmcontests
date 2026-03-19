@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
+import Link from 'next/link'
 import { Contest } from '@/data/contests'
 
 const categoryLabels: Record<string, string> = {
@@ -42,10 +43,8 @@ export default function ContestCard({ contest }: { contest: Contest }) {
   const isUrgent = isOpen && cd && cd.days <= 7
 
   return (
-    <a
-      href={contest.url}
-      target="_blank"
-      rel="noopener noreferrer"
+    <Link
+      href={`/contests/${contest.id}`}
       className={`card group ${isUrgent ? 'urgent-card' : ''}`}
     >
       <div className={`flex flex-col flex-1 p-5 gap-3 ${isClosed ? 'opacity-40' : ''}`}>
@@ -102,7 +101,7 @@ export default function ContestCard({ contest }: { contest: Contest }) {
           ))}
         </div>
 
-        {/* Row 5: prize + apply */}
+        {/* Row 5: prize + view */}
         <hr className="rule" />
         <div className="flex items-center justify-between gap-3">
           <div>
@@ -113,7 +112,7 @@ export default function ContestCard({ contest }: { contest: Contest }) {
           </div>
           {!isClosed && (
             <span className="text-[13px] font-medium text-indigo-400 group-hover:text-indigo-300 transition-colors flex items-center gap-1 flex-shrink-0" style={{ fontFamily: 'Space Grotesk, sans-serif' }}>
-              Apply
+              View details
               <svg className="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
               </svg>
@@ -122,6 +121,6 @@ export default function ContestCard({ contest }: { contest: Contest }) {
         </div>
 
       </div>
-    </a>
+    </Link>
   )
 }
