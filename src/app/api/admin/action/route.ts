@@ -58,6 +58,20 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ ok: true })
   }
 
+  // ── Update full contest fields ─────────────────────────────────────────────
+  if (action === 'update-contest') {
+    const { id, ...fields } = payload
+    const allowed = ['name', 'organizer', 'status', 'deadline', 'submission_open', 'prize',
+      'description', 'url', 'eligibility', 'entry_fee', 'featured', 'location', 'event_date']
+    const update: Record<string, unknown> = {}
+    for (const key of allowed) {
+      if (key in fields) update[key] = fields[key] === '' ? null : fields[key]
+    }
+    const { error } = await supabaseAdmin.from('contests').update(update).eq('id', id)
+    if (error) return NextResponse.json({ error: error.message }, { status: 400 })
+    return NextResponse.json({ ok: true })
+  }
+
   // ── Delete contest ─────────────────────────────────────────────────────────
   if (action === 'delete-contest') {
     const { id } = payload
