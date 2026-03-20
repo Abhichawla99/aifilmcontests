@@ -164,22 +164,7 @@ export default async function Home() {
                     href="https://ruminatex.com"
                     target="_blank"
                     rel="noopener noreferrer"
-                    style={{
-                      display: 'inline-flex', alignItems: 'center', gap: 7,
-                      textDecoration: 'none',
-                      border: '1px solid rgba(165,180,252,0.15)',
-                      borderRadius: 100, padding: '5px 14px',
-                      background: 'rgba(99,102,241,0.05)',
-                      transition: 'border-color 0.2s, background 0.2s',
-                    }}
-                    onMouseEnter={e => {
-                      e.currentTarget.style.borderColor = 'rgba(165,180,252,0.3)'
-                      e.currentTarget.style.background  = 'rgba(99,102,241,0.1)'
-                    }}
-                    onMouseLeave={e => {
-                      e.currentTarget.style.borderColor = 'rgba(165,180,252,0.15)'
-                      e.currentTarget.style.background  = 'rgba(99,102,241,0.05)'
-                    }}
+                    className="presented-by-badge"
                   >
                     <span style={{ fontSize: 11, color: '#52525b', fontFamily: 'Space Grotesk, sans-serif', fontWeight: 500 }}>
                       Presented by
