@@ -108,37 +108,74 @@ h1, h2, h3, h4, h5, .display {
   background: rgba(10, 9, 22, 0.6);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
-  transition: border-color 0.2s, background 0.2s, box-shadow 0.2s, transform 0.18s;
+  /* transform driven by JS-set CSS vars; transition re-enabled on mouseleave */
+  transform: perspective(800px) rotateX(var(--tx, 0deg)) rotateY(var(--ty, 0deg)) translateY(var(--lift, 0px));
+  transition: border-color 0.2s, background 0.2s, box-shadow 0.2s, transform 0.35s cubic-bezier(0.23,1,0.32,1);
   text-decoration: none;
   color: inherit;
   display: flex;
   flex-direction: column;
   overflow: hidden;
+  will-change: transform;
 }
+
+/* Mouse-tracked spotlight */
 .card::before {
   content: '';
   position: absolute;
   inset: 0;
   border-radius: 14px;
-  background: radial-gradient(600px circle at var(--mx, 50%) var(--my, 50%), rgba(99,102,241,0.06), transparent 60%);
+  background: radial-gradient(420px circle at var(--mx, 50%) var(--my, 50%), rgba(99,102,241,0.09), transparent 65%);
   opacity: 0;
-  transition: opacity 0.3s;
+  transition: opacity 0.25s;
   pointer-events: none;
-}
-.card:hover {
-  border-color: rgba(255,255,255,0.12);
-  background: rgba(14, 13, 32, 0.75);
-  box-shadow: 0 0 0 1px rgba(99,102,241,0.12), 0 8px 32px -8px rgba(0,0,0,0.5), 0 0 60px -20px rgba(99,102,241,0.15);
-  transform: translateY(-2px);
+  z-index: 0;
 }
 .card:hover::before { opacity: 1; }
 
-.card.urgent-card {
-  border-color: rgba(239,68,68,0.15);
+/* Shimmer sweep on hover */
+.card-shimmer {
+  position: absolute;
+  inset: 0;
+  border-radius: 14px;
+  background: linear-gradient(
+    108deg,
+    transparent 30%,
+    rgba(255,255,255,0.028) 45%,
+    rgba(255,255,255,0.055) 50%,
+    rgba(255,255,255,0.028) 55%,
+    transparent 70%
+  );
+  background-size: 220% 100%;
+  background-position: -100% 0;
+  pointer-events: none;
+  opacity: 0;
+  z-index: 0;
+  transition: none;
 }
+.card:hover .card-shimmer {
+  opacity: 1;
+  background-position: 200% 0;
+  transition: background-position 0.65s ease, opacity 0.15s ease;
+}
+
+.card:hover {
+  border-color: rgba(255,255,255,0.11);
+  background: rgba(12, 11, 28, 0.78);
+  box-shadow: 0 0 0 1px rgba(99,102,241,0.1), 0 12px 40px -8px rgba(0,0,0,0.55), 0 0 70px -24px rgba(99,102,241,0.18);
+}
+
+/* Card title colour shift on hover */
+.card:hover .card-title { color: #c7d2fe !important; }
+
+/* View details arrow nudge */
+.card:hover .card-cta { color: #a5b4fc !important; }
+.card:hover .card-arrow { transform: translateX(3px); }
+
+.card.urgent-card { border-color: rgba(239,68,68,0.14); }
 .card.urgent-card:hover {
-  border-color: rgba(239,68,68,0.3);
-  box-shadow: 0 0 0 1px rgba(239,68,68,0.15), 0 8px 32px -8px rgba(0,0,0,0.5), 0 0 60px -20px rgba(239,68,68,0.1);
+  border-color: rgba(239,68,68,0.28);
+  box-shadow: 0 0 0 1px rgba(239,68,68,0.12), 0 12px 40px -8px rgba(0,0,0,0.55), 0 0 70px -24px rgba(239,68,68,0.12);
 }
 
 /* ── Status dot ─────────────────────────────────────────────────────────────── */

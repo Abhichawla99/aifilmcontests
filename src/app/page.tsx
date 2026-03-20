@@ -60,16 +60,26 @@ export default async function Home() {
         }}>
           <div className="max-w-6xl mx-auto px-5 py-4 flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <div style={{
-                width: 32, height: 32, borderRadius: 8,
-                background: 'linear-gradient(135deg, #4f46e5, #7c3aed)',
-                display: 'flex', alignItems: 'center', justifyContent: 'center',
-                fontSize: 11, fontWeight: 800, fontFamily: 'Space Grotesk, sans-serif',
-                color: '#fff', letterSpacing: '-0.02em',
-                boxShadow: '0 0 16px rgba(99,102,241,0.4)',
-              }}>
-                AI
-              </div>
+              {/* Logo mark — film frame with play triangle */}
+              <svg width="30" height="30" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ flexShrink: 0 }}>
+                <defs>
+                  <linearGradient id="navbg" x1="0" y1="0" x2="1" y2="1">
+                    <stop offset="0%" stopColor="#3730a3"/>
+                    <stop offset="100%" stopColor="#5b21b6"/>
+                  </linearGradient>
+                  <linearGradient id="navshine" x1="0" y1="0" x2="1" y2="1">
+                    <stop offset="0%" stopColor="rgba(255,255,255,0.12)"/>
+                    <stop offset="100%" stopColor="rgba(255,255,255,0)"/>
+                  </linearGradient>
+                </defs>
+                <rect width="32" height="32" rx="7.5" fill="url(#navbg)"/>
+                <rect width="32" height="32" rx="7.5" fill="url(#navshine)"/>
+                <rect x="3.5" y="3.5" width="3.2" height="3.2" rx="0.7" fill="rgba(255,255,255,0.22)"/>
+                <rect x="25.3" y="3.5" width="3.2" height="3.2" rx="0.7" fill="rgba(255,255,255,0.22)"/>
+                <rect x="3.5" y="25.3" width="3.2" height="3.2" rx="0.7" fill="rgba(255,255,255,0.22)"/>
+                <rect x="25.3" y="25.3" width="3.2" height="3.2" rx="0.7" fill="rgba(255,255,255,0.22)"/>
+                <path d="M12.5 10.2L22.5 16L12.5 21.8V10.2Z" fill="white" opacity="0.92"/>
+              </svg>
               <span style={{
                 fontFamily: 'Space Grotesk, sans-serif', fontWeight: 700,
                 fontSize: 15, color: '#e4e4e7', letterSpacing: '-0.01em',
