@@ -66,18 +66,28 @@ export async function POST(request: NextRequest) {
 
   // ── Send weekly digest ─────────────────────────────────────────────────────
   if (action === 'send-digest') {
+    if (!process.env.RESEND_API_KEY) {
+      return NextResponse.json({ error: 'RESEND_API_KEY is not set in environment variables' }, { status: 500 })
+    }
     const [{ data: contests }, { data: subs }] = await Promise.all([
       supabaseAdmin.from('contests').select('name,organizer,prize,deadline,url,description').eq('status', 'open').order('deadline'),
       supabaseAdmin.from('subscribers').select('email').eq('confirmed', true),
     ])
-    if (!contests?.length) return NextResponse.json({ error: 'No open contests' }, { status: 400 })
-    if (!subs?.length) return NextResponse.json({ error: 'No subscribers' }, { status: 400 })
-    await sendWeeklyDigest(subs.map(s => s.email), contests)
+    if (!contests?.length) return NextResponse.json({ error: 'No open contests to send' }, { status: 400 })
+    if (!subs?.length) return NextResponse.json({ error: 'No confirmed subscribers' }, { status: 400 })
+
+    const result = await sendWeeklyDigest(subs.map(s => s.email), contests)
+    if (!result.success) {
+      return NextResponse.json({ error: `Resend failed: ${JSON.stringify(result.error)}` }, { status: 500 })
+    }
     return NextResponse.json({ ok: true, sent: subs.length, contests: contests.length })
   }
 
   // ── Send deadline reminders ────────────────────────────────────────────────
   if (action === 'send-reminders') {
+    if (!process.env.RESEND_API_KEY) {
+      return NextResponse.json({ error: 'RESEND_API_KEY is not set in environment variables' }, { status: 500 })
+    }
     const today = new Date()
     today.setHours(0, 0, 0, 0)
     const in7 = new Date(today)
@@ -93,19 +103,25 @@ export async function POST(request: NextRequest) {
         .order('deadline'),
       supabaseAdmin.from('subscribers').select('email').eq('confirmed', true),
     ])
-    if (!urgent?.length) return NextResponse.json({ error: 'No contests closing in ≤7 days' }, { status: 400 })
-    if (!subs?.length) return NextResponse.json({ error: 'No subscribers' }, { status: 400 })
+    if (!urgent?.length) return NextResponse.json({ error: 'No contests closing in ≤7 days right now' }, { status: 400 })
+    if (!subs?.length) return NextResponse.json({ error: 'No confirmed subscribers' }, { status: 400 })
 
     const withDays = urgent.map(c => ({
       ...c,
       daysLeft: Math.ceil((new Date(c.deadline).getTime() - Date.now()) / 86_400_000),
     }))
-    await sendDeadlineReminders(subs.map(s => s.email), withDays)
+    const result = await sendDeadlineReminders(subs.map(s => s.email), withDays)
+    if (!result.success) {
+      return NextResponse.json({ error: `Resend failed: ${JSON.stringify(result.error)}` }, { status: 500 })
+    }
     return NextResponse.json({ ok: true, sent: subs.length, contests: urgent.length })
   }
 
   // ── Send custom email ──────────────────────────────────────────────────────
   if (action === 'send-custom') {
+    if (!process.env.RESEND_API_KEY) {
+      return NextResponse.json({ error: 'RESEND_API_KEY is not set in environment variables' }, { status: 500 })
+    }
     const { subject, body } = payload
     if (!subject?.trim() || !body?.trim()) {
       return NextResponse.json({ error: 'Subject and body required' }, { status: 400 })
@@ -113,8 +129,7 @@ export async function POST(request: NextRequest) {
 
     const { data: subs } = await supabaseAdmin
       .from('subscribers').select('email').eq('confirmed', true)
-
-    if (!subs?.length) return NextResponse.json({ error: 'No subscribers' }, { status: 400 })
+    if (!subs?.length) return NextResponse.json({ error: 'No confirmed subscribers' }, { status: 400 })
 
     const FROM_EMAIL = process.env.FROM_EMAIL || 'contests@updates.aifilmcontests.com'
     const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://aifilmcontests.com'
@@ -139,19 +154,26 @@ export async function POST(request: NextRequest) {
 </div></body></html>`
 
     const emails = subs.map(s => s.email)
-    const batchSize = 50
-    for (let i = 0; i < emails.length; i += batchSize) {
-      await resend.emails.send({
-        from: `AI Film Contests <${FROM_EMAIL}>`,
-        to: FROM_EMAIL,
-        bcc: emails.slice(i, i + batchSize),
-        subject,
-        html,
-        headers: {
-          'List-Unsubscribe': `<${SITE_URL}/unsubscribe>`,
-          'List-Unsubscribe-Post': 'List-Unsubscribe=One-Click',
-        },
-      })
+    try {
+      const batchSize = 50
+      for (let i = 0; i < emails.length; i += batchSize) {
+        const { error } = await resend.emails.send({
+          from: `AI Film Contests <${FROM_EMAIL}>`,
+          to: FROM_EMAIL,
+          bcc: emails.slice(i, i + batchSize),
+          subject,
+          html,
+          headers: {
+            'List-Unsubscribe': `<${SITE_URL}/unsubscribe>`,
+            'List-Unsubscribe-Post': 'List-Unsubscribe=One-Click',
+          },
+        })
+        if (error) {
+          return NextResponse.json({ error: `Resend error: ${error.message}` }, { status: 500 })
+        }
+      }
+    } catch (err) {
+      return NextResponse.json({ error: `Send failed: ${String(err)}` }, { status: 500 })
     }
 
     return NextResponse.json({ ok: true, sent: emails.length })
