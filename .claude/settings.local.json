@@ -54,7 +54,11 @@
       "WebFetch(domain:baiff.eu)",
       "WebFetch(domain:illuminatefilmfestival.com)",
       "WebFetch(domain:playgroundpastime.ai)",
-      "Bash(node /Users/abhichawla/aifilmcontests/scripts/update-contests.mjs)"
+      "Bash(node /Users/abhichawla/aifilmcontests/scripts/update-contests.mjs)",
+      "Bash(node scripts/update-contests.mjs)",
+      "Bash(npx tsc:*)",
+      "Bash(node -e \":*)",
+      "mcp__scheduled-tasks__list_scheduled_tasks"
     ]
   }
 }
