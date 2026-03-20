@@ -1,48 +1,94 @@
 import { MetadataRoute } from 'next'
 import { getAllContests } from '@/lib/contests-db'
 
-const BASE_URL = 'https://aifilmcontests.com'
+const BASE = 'https://aifilmcontests.com'
 
-const CATEGORY_SLUGS = [
-  'short-film', 'animation', 'feature', 'documentary',
-  'experimental', 'music-video', 'commercial', 'advertising',
+// ── Static pages ─────────────────────────────────────────────────────────────
+// Add new static routes here as the site grows.
+const STATIC_PAGES: MetadataRoute.Sitemap = [
+  {
+    url: BASE,
+    changeFrequency: 'daily',
+    priority: 1.0,
+  },
+  {
+    url: `${BASE}/cinematic-ads`,
+    changeFrequency: 'weekly',
+    priority: 0.8,
+  },
 ]
 
-const TOOL_SLUGS = ['runway', 'kling', 'luma', 'hailuo', 'pika', 'sora']
+// ── Category hub pages ────────────────────────────────────────────────────────
+const CATEGORIES = [
+  'short-film',
+  'animation',
+  'feature',
+  'documentary',
+  'experimental',
+  'music-video',
+  'commercial',
+  'advertising',
+] as const
+
+// ── AI tool hub pages ─────────────────────────────────────────────────────────
+const TOOLS = [
+  'runway',
+  'kling',
+  'luma',
+  'hailuo',
+  'pika',
+  'sora',
+] as const
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const contests = await getAllContests()
+  const now      = new Date()
 
-  const contestUrls: MetadataRoute.Sitemap = contests.map(c => ({
-    url: `${BASE_URL}/contests/${c.id}`,
-    lastModified: new Date(),
-    changeFrequency: c.status === 'open' ? 'daily' : 'weekly',
-    priority: c.status === 'open' ? 0.9 : c.status === 'upcoming' ? 0.7 : 0.4,
-  }))
+  // Individual contest pages — priority + frequency based on status
+  const contestUrls: MetadataRoute.Sitemap = contests.map(c => {
+    const isOpen     = c.status === 'open'
+    const isUpcoming = c.status === 'upcoming'
 
-  const categoryUrls: MetadataRoute.Sitemap = CATEGORY_SLUGS.map(slug => ({
-    url: `${BASE_URL}/categories/${slug}`,
-    lastModified: new Date(),
+    // Use deadline as last-modified proxy; fall back to today
+    const lastMod = isOpen
+      ? now                          // refresh daily while open
+      : c.deadline
+        ? new Date(c.deadline)
+        : now
+
+    return {
+      url:             `${BASE}/contests/${c.id}`,
+      lastModified:    lastMod,
+      changeFrequency: isOpen ? 'daily' : isUpcoming ? 'weekly' : 'monthly',
+      priority:        isOpen ? 0.9 : isUpcoming ? 0.7 : 0.35,
+    }
+  })
+
+  // Category hub pages
+  const categoryUrls: MetadataRoute.Sitemap = CATEGORIES.map(slug => ({
+    url:             `${BASE}/categories/${slug}`,
+    lastModified:    now,
     changeFrequency: 'daily',
-    priority: 0.8,
+    priority:        0.78,
   }))
 
-  const toolUrls: MetadataRoute.Sitemap = TOOL_SLUGS.map(slug => ({
-    url: `${BASE_URL}/tools/${slug}`,
-    lastModified: new Date(),
+  // AI tool hub pages
+  const toolUrls: MetadataRoute.Sitemap = TOOLS.map(slug => ({
+    url:             `${BASE}/tools/${slug}`,
+    lastModified:    now,
     changeFrequency: 'weekly',
-    priority: 0.75,
+    priority:        0.72,
   }))
 
   return [
-    {
-      url: BASE_URL,
-      lastModified: new Date(),
-      changeFrequency: 'daily',
-      priority: 1.0,
-    },
+    // Static pages first (highest crawl priority)
+    ...STATIC_PAGES.map(p => ({ ...p, lastModified: now })),
+
+    // Category & tool hubs (frequently updated, important for SEO)
     ...categoryUrls,
     ...toolUrls,
-    ...contestUrls,
+
+    // Individual contest pages (largest set, sorted: open → upcoming → closed)
+    ...contestUrls.sort((a, b) => (b.priority ?? 0) - (a.priority ?? 0)),
   ]
 }
