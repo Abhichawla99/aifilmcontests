@@ -86,11 +86,11 @@ export default function ContestCard({ contest }: { contest: Contest }) {
               onMouseLeave={e => (e.currentTarget.style.color = '#e4e4e7')}>
             {contest.name}
           </h3>
-          <p className="text-xs font-medium tracking-widest uppercase" style={{ color: '#3f3f46' }}>{contest.organizer}</p>
+          <p className="text-xs font-medium tracking-widest uppercase" style={{ color: '#52525b' }}>{contest.organizer}</p>
         </div>
 
         {/* Row 3: description */}
-        <p className="text-[13px] text-zinc-400 leading-relaxed line-clamp-2 flex-1">
+        <p className="text-[13px] leading-relaxed line-clamp-2 flex-1" style={{ color: '#71717a' }}>
           {contest.description}
         </p>
 

@@ -3,6 +3,8 @@ import { Contest } from '@/data/contests'
 import ContestBrowser from '@/components/ContestBrowser'
 import EmailSubscribe from '@/components/EmailSubscribe'
 import BackgroundFX from '@/components/BackgroundFX'
+import MouseOrbs from '@/components/MouseOrbs'
+import FeaturedSpotlight from '@/components/FeaturedSpotlight'
 
 export const dynamic  = 'force-dynamic'
 export const revalidate = 0
@@ -24,6 +26,13 @@ export default async function Home() {
     return m ? sum + parseInt(m[1].replace(/,/g, '')) : sum
   }, 0)
 
+  // Pick featured: highest-prize open contest, fallback to first upcoming
+  const featured: Contest | null = open.concat().sort((a, b) => {
+    const pa = parseInt(a.prize.match(/\$([0-9,]+)/)?.[1].replace(/,/g,'') || '0')
+    const pb = parseInt(b.prize.match(/\$([0-9,]+)/)?.[1].replace(/,/g,'') || '0')
+    return pb - pa
+  })[0] ?? upcoming[0] ?? null
+
   const ticker = [...open].sort((a, b) => new Date(a.deadline).getTime() - new Date(b.deadline).getTime())
   const tickerItems = [...ticker, ...ticker]
 
@@ -33,38 +42,8 @@ export default async function Home() {
       {/* ── Animated WebGL shader + film grain ── */}
       <BackgroundFX />
 
-      {/* ── Fixed background orbs (supplement the shader) ── */}
-      <div aria-hidden style={{ position: 'fixed', inset: 0, zIndex: 1, pointerEvents: 'none', overflow: 'hidden' }}>
-        {/* Main indigo orb — hero left */}
-        <div style={{
-          position: 'absolute', width: 900, height: 900, borderRadius: '50%',
-          background: 'radial-gradient(circle, rgba(99,102,241,0.13) 0%, rgba(79,70,229,0.06) 40%, transparent 70%)',
-          top: -300, left: -250,
-          animation: 'orb1 22s ease-in-out infinite',
-          filter: 'blur(1px)',
-        }} />
-        {/* Purple orb — upper right */}
-        <div style={{
-          position: 'absolute', width: 600, height: 600, borderRadius: '50%',
-          background: 'radial-gradient(circle, rgba(139,92,246,0.1) 0%, transparent 65%)',
-          top: 50, right: -150,
-          animation: 'orb2 28s ease-in-out infinite',
-        }} />
-        {/* Teal orb — lower center */}
-        <div style={{
-          position: 'absolute', width: 500, height: 500, borderRadius: '50%',
-          background: 'radial-gradient(circle, rgba(20,184,166,0.07) 0%, transparent 65%)',
-          bottom: '20%', left: '40%',
-          animation: 'orb3 20s ease-in-out infinite',
-        }} />
-        {/* Small accent orb — hero area */}
-        <div style={{
-          position: 'absolute', width: 300, height: 300, borderRadius: '50%',
-          background: 'radial-gradient(circle, rgba(236,72,153,0.08) 0%, transparent 70%)',
-          top: '30%', left: '55%',
-          animation: 'orb1 16s ease-in-out infinite reverse',
-        }} />
-      </div>
+      {/* ── Parallax background orbs (client — react to mouse) ── */}
+      <MouseOrbs />
 
       {/* ── Content (above shader + orbs + grain) ── */}
       <div style={{ position: 'relative', zIndex: 10 }}>
@@ -81,7 +60,6 @@ export default async function Home() {
         }}>
           <div className="max-w-6xl mx-auto px-5 py-4 flex items-center justify-between">
             <div className="flex items-center gap-3">
-              {/* Logo mark */}
               <div style={{
                 width: 32, height: 32, borderRadius: 8,
                 background: 'linear-gradient(135deg, #4f46e5, #7c3aed)',
@@ -101,7 +79,7 @@ export default async function Home() {
             </div>
 
             <nav className="hidden sm:flex items-center gap-6">
-              {[['Browse', '#contests'], ['Subscribe', '#subscribe'], ['Submit a Contest', 'mailto:hello@aifilmcontests.com']].map(([label, href]) => (
+              {([['Browse', '#contests'], ['Subscribe', '#subscribe'], ['Submit a Contest', 'mailto:hello@aifilmcontests.com']] as [string, string][]).map(([label, href]) => (
                 <a key={label} href={href} className="link-muted" style={{ fontSize: 13, fontWeight: 500 }}>{label}</a>
               ))}
             </nav>
@@ -148,117 +126,134 @@ export default async function Home() {
         )}
 
         {/* ── Hero ── */}
-        <section style={{ padding: '80px 0 60px', position: 'relative' }}>
+        <section style={{ padding: 'clamp(56px, 8vw, 96px) 0 clamp(48px, 6vw, 80px)', position: 'relative' }}>
 
-          {/* Subtle dot grid in hero area */}
-          <div className="dot-grid" style={{
-            position: 'absolute', inset: 0, opacity: 0.4, pointerEvents: 'none',
-          }} />
+          {/* Subtle dot grid */}
+          <div className="dot-grid" style={{ position: 'absolute', inset: 0, opacity: 0.4, pointerEvents: 'none' }} />
 
           <div className="max-w-6xl mx-auto px-5" style={{ position: 'relative' }}>
 
-            {/* Live badge */}
+            {/* Two-column grid: text left, featured contest right */}
             <div style={{
-              display: 'inline-flex', alignItems: 'center', gap: 8,
-              border: '1px solid rgba(34,197,94,0.2)',
-              borderRadius: 100, padding: '5px 14px',
-              background: 'rgba(34,197,94,0.05)',
-              marginBottom: 32,
-            }}>
-              <span className="dot dot-open live" style={{ width: 5, height: 5 }} />
-              <span style={{ fontSize: 12, color: '#4ade80', fontFamily: 'Space Grotesk, sans-serif', fontWeight: 500, letterSpacing: '0.02em' }}>
-                {open.length} contests open · verified daily by AI agent
-              </span>
-            </div>
+              display: 'grid',
+              gridTemplateColumns: 'minmax(0,1fr) minmax(0,420px)',
+              gap: 'clamp(32px, 5vw, 64px)',
+              alignItems: 'center',
+            }}
+              className="hero-grid"
+            >
 
-            {/* Headline */}
-            <h1 style={{
-              fontFamily: 'Space Grotesk, sans-serif',
-              fontSize: 'clamp(44px, 7vw, 80px)',
-              fontWeight: 700,
-              lineHeight: 1.0,
-              letterSpacing: '-0.04em',
-              color: '#f4f4f5',
-              marginBottom: 24,
-              maxWidth: 800,
-            }}>
-              Every AI film contest.<br />
-              <span className="g">One place.</span>
-            </h1>
-
-            <p style={{
-              fontSize: 'clamp(15px, 2vw, 18px)',
-              color: '#52525b',
-              lineHeight: 1.75,
-              marginBottom: 48,
-              maxWidth: 520,
-              fontWeight: 400,
-            }}>
-              The only tracker for creative AI film competitions, festivals, grants, and challenges.
-              Deadline-verified daily by an agent that actually reads each page.
-            </p>
-
-            {/* Stats strip */}
-            <div style={{
-              display: 'flex', alignItems: 'center', gap: 0,
-              flexWrap: 'wrap',
-              marginBottom: 56,
-              border: '1px solid rgba(255,255,255,0.06)',
-              borderRadius: 12,
-              overflow: 'hidden',
-              background: 'rgba(255,255,255,0.02)',
-              backdropFilter: 'blur(8px)',
-              width: 'fit-content',
-              maxWidth: '100%',
-            }}>
-              {[
-                { n: open.length,     label: 'Open now',    color: '#4ade80' },
-                { n: upcoming.length, label: 'Coming soon', color: '#fbbf24' },
-                { n: `$${(totalPrize / 1000).toFixed(0)}K+`, label: 'In prizes', color: '#a5b4fc' },
-                { n: allContests.filter(c => c.status !== 'closed').length, label: 'Active total', color: '#71717a' },
-              ].map((s, i) => (
-                <div key={s.label} style={{
-                  padding: '16px 28px',
-                  borderRight: i < 3 ? '1px solid rgba(255,255,255,0.05)' : 'none',
-                  display: 'flex', flexDirection: 'column', gap: 3,
+              {/* ── LEFT COLUMN ── */}
+              <div>
+                {/* Live badge */}
+                <div style={{
+                  display: 'inline-flex', alignItems: 'center', gap: 8,
+                  border: '1px solid rgba(34,197,94,0.2)',
+                  borderRadius: 100, padding: '5px 14px',
+                  background: 'rgba(34,197,94,0.05)',
+                  marginBottom: 28,
                 }}>
-                  <span style={{
-                    fontFamily: 'Space Grotesk, sans-serif',
-                    fontWeight: 700, fontSize: 28,
-                    color: s.color,
-                    lineHeight: 1,
-                  }}>
-                    {s.n}
-                  </span>
-                  <span style={{ fontSize: 11, color: '#3f3f46', textTransform: 'uppercase', letterSpacing: '0.06em', fontFamily: 'Space Grotesk, sans-serif' }}>
-                    {s.label}
+                  <span className="dot dot-open live" style={{ width: 5, height: 5 }} />
+                  <span style={{ fontSize: 12, color: '#4ade80', fontFamily: 'Space Grotesk, sans-serif', fontWeight: 500, letterSpacing: '0.02em' }}>
+                    {open.length} contests open · updated daily
                   </span>
                 </div>
-              ))}
-            </div>
 
-            {/* Subscribe card */}
-            <div id="subscribe" style={{ maxWidth: 440 }}>
-              <div style={{
-                border: '1px solid rgba(255,255,255,0.08)',
-                borderRadius: 16,
-                padding: '28px 28px',
-                background: 'rgba(10,9,22,0.7)',
-                backdropFilter: 'blur(20px)',
-                WebkitBackdropFilter: 'blur(20px)',
-                boxShadow: '0 0 0 1px rgba(99,102,241,0.06), 0 24px 48px -12px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,255,255,0.04)',
-              }}>
-                <div style={{ fontSize: 11, color: '#4f46e5', fontFamily: 'Space Grotesk, sans-serif', fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: 10 }}>
-                  Free alerts
-                </div>
-                <h2 style={{ fontFamily: 'Space Grotesk, sans-serif', fontSize: 19, fontWeight: 700, color: '#f4f4f5', marginBottom: 6, letterSpacing: '-0.02em' }}>
-                  Never miss a deadline
-                </h2>
-                <p style={{ fontSize: 13, color: '#52525b', marginBottom: 20, lineHeight: 1.65 }}>
-                  Get notified when new contests open and 7 days before any deadline closes.
+                {/* Headline */}
+                <h1 style={{
+                  fontFamily: 'Space Grotesk, sans-serif',
+                  fontSize: 'clamp(40px, 6vw, 72px)',
+                  fontWeight: 700,
+                  lineHeight: 1.0,
+                  letterSpacing: '-0.04em',
+                  color: '#f4f4f5',
+                  marginBottom: 22,
+                  maxWidth: 680,
+                }}>
+                  Every AI film<br />contest.{' '}
+                  <span className="g">One place.</span>
+                </h1>
+
+                <p style={{
+                  fontSize: 'clamp(14px, 1.8vw, 17px)',
+                  color: '#71717a',
+                  lineHeight: 1.8,
+                  marginBottom: 40,
+                  maxWidth: 500,
+                }}>
+                  The only tracker for creative AI film competitions, festivals, grants, and challenges.
+                  Deadline-verified daily by an agent that actually reads each page.
                 </p>
-                <EmailSubscribe />
+
+                {/* Stats strip */}
+                <div style={{
+                  display: 'flex', alignItems: 'center', gap: 0,
+                  flexWrap: 'wrap',
+                  marginBottom: 44,
+                  border: '1px solid rgba(255,255,255,0.06)',
+                  borderRadius: 12,
+                  overflow: 'hidden',
+                  background: 'rgba(255,255,255,0.02)',
+                  backdropFilter: 'blur(8px)',
+                  width: 'fit-content',
+                  maxWidth: '100%',
+                }}>
+                  {[
+                    { n: open.length,     label: 'Open now',    color: '#4ade80' },
+                    { n: upcoming.length, label: 'Coming soon', color: '#fbbf24' },
+                    { n: `$${(totalPrize / 1000).toFixed(0)}K+`, label: 'In prizes', color: '#a5b4fc' },
+                    { n: allContests.filter(c => c.status !== 'closed').length, label: 'Active', color: '#71717a' },
+                  ].map((s, i) => (
+                    <div key={s.label} style={{
+                      padding: '14px 22px',
+                      borderRight: i < 3 ? '1px solid rgba(255,255,255,0.05)' : 'none',
+                      display: 'flex', flexDirection: 'column', gap: 3,
+                    }}>
+                      <span style={{
+                        fontFamily: 'Space Grotesk, sans-serif',
+                        fontWeight: 700, fontSize: 'clamp(20px, 2.5vw, 26px)',
+                        color: s.color, lineHeight: 1,
+                      }}>
+                        {s.n}
+                      </span>
+                      <span style={{ fontSize: 10, color: '#3f3f46', textTransform: 'uppercase', letterSpacing: '0.06em', fontFamily: 'Space Grotesk, sans-serif' }}>
+                        {s.label}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+
+                {/* Subscribe card */}
+                <div id="subscribe" style={{ maxWidth: 420 }}>
+                  <div style={{
+                    border: '1px solid rgba(255,255,255,0.08)',
+                    borderRadius: 16,
+                    padding: '24px 24px',
+                    background: 'rgba(10,9,22,0.7)',
+                    backdropFilter: 'blur(20px)',
+                    WebkitBackdropFilter: 'blur(20px)',
+                    boxShadow: '0 0 0 1px rgba(99,102,241,0.06), 0 24px 48px -12px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,255,255,0.04)',
+                  }}>
+                    <div style={{ fontSize: 10, color: '#4f46e5', fontFamily: 'Space Grotesk, sans-serif', fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: 8 }}>
+                      Free alerts
+                    </div>
+                    <h2 style={{ fontFamily: 'Space Grotesk, sans-serif', fontSize: 17, fontWeight: 700, color: '#f4f4f5', marginBottom: 5, letterSpacing: '-0.02em' }}>
+                      Never miss a deadline
+                    </h2>
+                    <p style={{ fontSize: 12, color: '#52525b', marginBottom: 18, lineHeight: 1.65 }}>
+                      Get notified when new contests open and 7 days before any deadline closes.
+                    </p>
+                    <EmailSubscribe />
+                  </div>
+                </div>
               </div>
+
+              {/* ── RIGHT COLUMN: featured spotlight ── */}
+              {featured && (
+                <div className="hero-spotlight">
+                  <FeaturedSpotlight contest={featured} />
+                </div>
+              )}
             </div>
 
           </div>
@@ -281,23 +276,93 @@ export default async function Home() {
               }}>
                 Browse Competitions
               </h2>
-              <p style={{ fontSize: 13, color: '#3f3f46' }}>
+              <p style={{ fontSize: 13, color: '#52525b' }}>
                 {open.length + upcoming.length} active · verified against live sources daily
               </p>
             </div>
-            <div style={{
-              display: 'flex', alignItems: 'center', gap: 6,
-              fontSize: 12, color: '#27272a',
-              border: '1px solid rgba(255,255,255,0.04)',
-              borderRadius: 8, padding: '6px 12px',
-              background: 'rgba(255,255,255,0.01)',
+            <div className="agent-badge" style={{
+              display: 'flex', alignItems: 'center', gap: 8,
+              fontSize: 12,
+              border: '1px solid rgba(34,197,94,0.2)',
+              borderRadius: 100, padding: '7px 16px',
+              background: 'rgba(34,197,94,0.04)',
+              backdropFilter: 'blur(8px)',
             }}>
-              <span className="dot dot-open live" style={{ width: 5, height: 5 }} />
-              Agent running daily
+              <span className="dot dot-open live" style={{ width: 6, height: 6 }} />
+              <span style={{ fontFamily: 'Space Grotesk, sans-serif', fontWeight: 600, color: '#4ade80', letterSpacing: '0.01em' }}>
+                Research agent running daily
+              </span>
+              <span style={{ fontSize: 10, color: '#166534', fontFamily: 'Space Grotesk, sans-serif', fontWeight: 500 }}>
+                · fresh contests added 24/7
+              </span>
             </div>
           </div>
 
           <ContestBrowser contests={allContests} />
+        </section>
+
+        {/* ── Ruminatex / Cinematic AI advertising callout ── */}
+        <section className="max-w-6xl mx-auto px-5 pb-12">
+          <div style={{
+            border: '1px solid rgba(255,255,255,0.05)',
+            borderRadius: 16,
+            padding: '24px 28px',
+            background: 'rgba(255,255,255,0.015)',
+            backdropFilter: 'blur(8px)',
+            display: 'flex',
+            flexWrap: 'wrap',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            gap: 16,
+          }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
+              {/* Film frame icon */}
+              <div style={{
+                width: 36, height: 36, borderRadius: 8, flexShrink: 0,
+                background: 'rgba(99,102,241,0.08)',
+                border: '1px solid rgba(99,102,241,0.15)',
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+              }}>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="rgba(165,180,252,0.7)" strokeWidth="1.8">
+                  <rect x="2" y="2" width="20" height="20" rx="2.5" />
+                  <path d="M7 2v20M17 2v20M2 12h20M2 7h5M2 17h5M17 7h5M17 17h5" />
+                </svg>
+              </div>
+              <div>
+                <p style={{ fontSize: 13, color: '#71717a', lineHeight: 1.6 }}>
+                  Looking to create{' '}
+                  <span style={{ color: '#a1a1aa' }}>cinematic AI content</span> for your brand?{' '}
+                  <a
+                    href="/cinematic-ads"
+                    style={{ color: '#818cf8', textDecoration: 'none', fontWeight: 500 }}
+                    onMouseEnter={undefined}
+                  >
+                    Explore how AI is reshaping brand filmmaking →
+                  </a>
+                </p>
+              </div>
+            </div>
+            <a
+              href="https://ruminatex.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{
+                fontSize: 12,
+                color: '#3f3f46',
+                textDecoration: 'none',
+                fontFamily: 'Space Grotesk, sans-serif',
+                fontWeight: 500,
+                letterSpacing: '0.02em',
+                border: '1px solid rgba(255,255,255,0.05)',
+                borderRadius: 8,
+                padding: '6px 14px',
+                transition: 'color 0.15s, border-color 0.15s',
+                whiteSpace: 'nowrap',
+              }}
+            >
+              ruminatex.com
+            </a>
+          </div>
         </section>
 
         {/* ── Bottom CTA ── */}
@@ -369,13 +434,25 @@ export default async function Home() {
                 AI Film Contests
               </span>
             </div>
-            <span style={{ fontSize: 12, color: '#1c1c28' }}>
+
+            <span style={{ fontSize: 12, color: '#27272a' }}>
               Tracking every AI film competition · Updated daily
             </span>
+
             <div className="flex items-center gap-4" style={{ fontSize: 12 }}>
               <a href="mailto:hello@aifilmcontests.com" className="link-muted">Submit a Contest</a>
               <span style={{ color: '#1c1c28' }}>·</span>
-              <a href="https://github.com/Abhichawla99/aifilmcontests" target="_blank" rel="noopener noreferrer" className="link-muted">GitHub</a>
+              <a href="/cinematic-ads" className="link-muted">Cinematic AI Ads</a>
+              <span style={{ color: '#1c1c28' }}>·</span>
+              <a
+                href="https://ruminatex.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="link-muted"
+                style={{ fontSize: 11 }}
+              >
+                Crafted by Ruminatex
+              </a>
             </div>
           </div>
         </footer>
