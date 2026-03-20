@@ -145,18 +145,52 @@ export default async function Home() {
 
               {/* ── LEFT COLUMN ── */}
               <div>
-                {/* Live badge */}
-                <div style={{
-                  display: 'inline-flex', alignItems: 'center', gap: 8,
-                  border: '1px solid rgba(34,197,94,0.2)',
-                  borderRadius: 100, padding: '5px 14px',
-                  background: 'rgba(34,197,94,0.05)',
-                  marginBottom: 28,
-                }}>
-                  <span className="dot dot-open live" style={{ width: 5, height: 5 }} />
-                  <span style={{ fontSize: 12, color: '#4ade80', fontFamily: 'Space Grotesk, sans-serif', fontWeight: 500, letterSpacing: '0.02em' }}>
-                    {open.length} contests open · updated daily
-                  </span>
+                {/* Live badge + Presented by — same row */}
+                <div style={{ display: 'flex', alignItems: 'center', gap: 14, flexWrap: 'wrap', marginBottom: 28 }}>
+                  <div style={{
+                    display: 'inline-flex', alignItems: 'center', gap: 8,
+                    border: '1px solid rgba(34,197,94,0.2)',
+                    borderRadius: 100, padding: '5px 14px',
+                    background: 'rgba(34,197,94,0.05)',
+                  }}>
+                    <span className="dot dot-open live" style={{ width: 5, height: 5 }} />
+                    <span style={{ fontSize: 12, color: '#4ade80', fontFamily: 'Space Grotesk, sans-serif', fontWeight: 500, letterSpacing: '0.02em' }}>
+                      {open.length} contests open · updated daily
+                    </span>
+                  </div>
+
+                  {/* Presented by Ruminatex */}
+                  <a
+                    href="https://ruminatex.com"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    style={{
+                      display: 'inline-flex', alignItems: 'center', gap: 7,
+                      textDecoration: 'none',
+                      border: '1px solid rgba(165,180,252,0.15)',
+                      borderRadius: 100, padding: '5px 14px',
+                      background: 'rgba(99,102,241,0.05)',
+                      transition: 'border-color 0.2s, background 0.2s',
+                    }}
+                    onMouseEnter={e => {
+                      e.currentTarget.style.borderColor = 'rgba(165,180,252,0.3)'
+                      e.currentTarget.style.background  = 'rgba(99,102,241,0.1)'
+                    }}
+                    onMouseLeave={e => {
+                      e.currentTarget.style.borderColor = 'rgba(165,180,252,0.15)'
+                      e.currentTarget.style.background  = 'rgba(99,102,241,0.05)'
+                    }}
+                  >
+                    <span style={{ fontSize: 11, color: '#52525b', fontFamily: 'Space Grotesk, sans-serif', fontWeight: 500 }}>
+                      Presented by
+                    </span>
+                    <span style={{ fontSize: 12, color: '#a5b4fc', fontFamily: 'Space Grotesk, sans-serif', fontWeight: 700, letterSpacing: '-0.01em' }}>
+                      Ruminatex
+                    </span>
+                    <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="rgba(165,180,252,0.5)" strokeWidth="2.5">
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                    </svg>
+                  </a>
                 </div>
 
                 {/* Headline */}
