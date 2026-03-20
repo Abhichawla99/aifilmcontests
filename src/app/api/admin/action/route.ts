@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { supabaseAdmin } from '@/lib/supabase'
 import { sendWeeklyDigest, sendDeadlineReminders } from '@/lib/email'
+import { runResearch } from '@/lib/research'
 import { Resend } from 'resend'
 
 function checkAuth(request: NextRequest) {
@@ -39,15 +40,8 @@ export async function POST(request: NextRequest) {
 
   // ── Run research ───────────────────────────────────────────────────────────
   if (action === 'research') {
-    const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://aifilmcontests.com'
-    const secret = process.env.CRON_SECRET
-
-    // Call our own cron endpoint
-    const res = await fetch(`${baseUrl}/api/cron/research`, {
-      headers: { Authorization: `Bearer ${secret}` },
-    })
-    const data = await res.json()
-    return NextResponse.json(data)
+    const result = await runResearch()
+    return NextResponse.json(result, { status: result.ok ? 200 : 500 })
   }
 
   // ── Update contest status ──────────────────────────────────────────────────
