@@ -8,9 +8,10 @@ import { Suspense } from 'react'
 function UnsubscribeContent() {
   const params = useSearchParams()
   const token = params.get('token')
+  const done = params.get('done')
 
   const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>(
-    token ? 'loading' : 'idle'
+    done ? 'success' : token ? 'loading' : 'idle'
   )
   const [message, setMessage] = useState('')
   const [email, setEmail] = useState('')

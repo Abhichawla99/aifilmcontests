@@ -7,6 +7,23 @@ function getResend() {
   return new Resend(process.env.RESEND_API_KEY || 'placeholder')
 }
 
+// ─── Deliverability headers ────────────────────────────────────────────────────
+//
+// List-Unsubscribe       — tells Gmail/Outlook this is a legitimate list email
+//                          and surfaces the native "Unsubscribe" button
+// List-Unsubscribe-Post  — RFC 8058: enables Gmail's one-click unsubscribe
+//                          Gmail POSTs "List-Unsubscribe=One-Click" to the URL
+//
+// Together these are the #1 technical signal that keeps email out of spam.
+
+function listUnsubscribeHeaders(unsubUrl: string) {
+  return {
+    'List-Unsubscribe': `<${unsubUrl}>`,
+    'List-Unsubscribe-Post': 'List-Unsubscribe=One-Click',
+    'X-Entity-Ref-ID': `aifilmcontests-${Date.now()}`, // prevents Gmail threading all emails together
+  }
+}
+
 // ─── Shared styles ────────────────────────────────────────────────────────────
 
 const emailBase = `background-color:#09090f;color:#ffffff;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Helvetica Neue',sans-serif;margin:0;padding:0;`
@@ -17,12 +34,12 @@ function hr() {
   return `<hr style="border:none;border-top:1px solid rgba(255,255,255,0.07);margin:32px 0;">`
 }
 
-function footer(unsubscribeUrl: string) {
+function footer(unsubscribeLink: string) {
   return `
     <div style="color:#3f3f46;font-size:12px;text-align:center;line-height:1.8;">
       <a href="${SITE_URL}" style="color:#3f3f46;text-decoration:none;">${SITE_URL}</a>
       &nbsp;·&nbsp;
-      <a href="${unsubscribeUrl}" style="color:#3f3f46;text-decoration:underline;">Unsubscribe</a>
+      <a href="${unsubscribeLink}" style="color:#3f3f46;text-decoration:underline;">Unsubscribe</a>
     </div>
   `
 }
@@ -89,6 +106,7 @@ export async function sendWelcomeEmail(
       from: `AI Film Contests <${FROM_EMAIL}>`,
       to: email,
       subject: "You're on the list — AI Film Contests",
+      headers: listUnsubscribeHeaders(unsub),
       html: `
 <!DOCTYPE html>
 <html lang="en">
@@ -103,10 +121,10 @@ export async function sendWelcomeEmail(
 
   <p style="color:#a1a1aa;font-size:15px;line-height:1.65;margin-bottom:28px;">
     We track every AI film competition and verify them daily against live sources.
-    You'll get notified when new ones open, and reminded before deadlines close.
+    You'll get notified when new ones open and reminded before deadlines close.
   </p>
 
-  <div style="border:1px solid rgba(255,255,255,0.07);border-radius:10px;padding:20px 22px;margin-bottom:28px;">
+  <div style="border:1px solid rgba(255,255,255,0.07);border-radius:10px;padding:20px 22px;margin-bottom:24px;">
     <div style="font-size:12px;font-weight:600;color:#52525b;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:14px;">What you'll receive</div>
     <div style="color:#d4d4d8;font-size:14px;line-height:2.2;">
       ✦&nbsp;&nbsp;Alert when a new contest opens<br>
@@ -114,6 +132,15 @@ export async function sendWelcomeEmail(
       ✦&nbsp;&nbsp;Weekly digest every Monday<br>
       ✦&nbsp;&nbsp;No noise — only when something matters
     </div>
+  </div>
+
+  <!-- Inbox tip — asking for a reply is the strongest positive signal to Gmail -->
+  <div style="border:1px solid rgba(79,70,229,0.25);border-radius:10px;padding:18px 22px;margin-bottom:28px;background:rgba(79,70,229,0.05);">
+    <div style="font-size:13px;font-weight:600;color:#818cf8;margin-bottom:6px;">One quick thing</div>
+    <p style="color:#a1a1aa;font-size:14px;line-height:1.6;margin:0;">
+      If this landed in Promotions, drag it to your <strong style="color:#e4e4e7;">Primary</strong> inbox — or just reply to this email with anything.
+      That tells Gmail you want these here, and all future alerts will land in the right place.
+    </p>
   </div>
 
   <a href="${SITE_URL}" style="display:inline-block;background:#4f46e5;color:#fff;text-decoration:none;padding:13px 28px;border-radius:8px;font-size:14px;font-weight:600;letter-spacing:0.02em;">Browse Open Contests →</a>
@@ -158,7 +185,7 @@ export async function sendNewContestAlerts(
     : `New contest: ${contests[0].name}`
 
   const cards = contests.map(c => contestCard(c, { isNew: true })).join('')
-  const unsub = unsubscribeUrl() // generic — bulk send can't personalise
+  const unsub = unsubscribeUrl()
 
   const html = `
 <!DOCTYPE html>
@@ -190,6 +217,7 @@ export async function sendNewContestAlerts(
         to: FROM_EMAIL,
         bcc: subscribers.slice(i, i + batchSize),
         subject,
+        headers: listUnsubscribeHeaders(unsub),
         html,
       })
     }
@@ -255,6 +283,7 @@ export async function sendDeadlineReminders(
         to: FROM_EMAIL,
         bcc: subscribers.slice(i, i + batchSize),
         subject,
+        headers: listUnsubscribeHeaders(unsub),
         html,
       })
     }
@@ -321,6 +350,7 @@ export async function sendWeeklyDigest(
         to: FROM_EMAIL,
         bcc: subscribers.slice(i, i + batchSize),
         subject,
+        headers: listUnsubscribeHeaders(unsub),
         html,
       })
     }
