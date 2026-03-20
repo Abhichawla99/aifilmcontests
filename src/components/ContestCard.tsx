@@ -60,7 +60,7 @@ export default function ContestCard({ contest }: { contest: Contest }) {
               {isOpen ? 'Open' : isClosed ? 'Closed' : 'Coming Soon'}
             </span>
             {contest.entryFee === 'Free' && !isClosed && (
-              <span className="text-xs text-zinc-600 border border-zinc-800 rounded px-1.5 py-0.5" style={{ fontFamily: 'Space Grotesk, sans-serif' }}>
+              <span style={{ fontSize: 10, color: '#4ade80', border: '1px solid rgba(34,197,94,0.2)', borderRadius: 5, padding: '2px 7px', fontFamily: 'Space Grotesk, sans-serif', fontWeight: 600, letterSpacing: '0.04em', background: 'rgba(34,197,94,0.04)' }}>
                 Free
               </span>
             )}
@@ -81,10 +81,12 @@ export default function ContestCard({ contest }: { contest: Contest }) {
 
         {/* Row 2: name + organizer */}
         <div>
-          <h3 className="text-[15px] font-semibold text-white leading-snug mb-0.5 group-hover:text-indigo-200 transition-colors" style={{ fontFamily: 'Space Grotesk, sans-serif' }}>
+          <h3 className="text-[15px] font-semibold leading-snug mb-0.5 transition-colors" style={{ fontFamily: 'Space Grotesk, sans-serif', color: '#e4e4e7' }}
+              onMouseEnter={e => (e.currentTarget.style.color = '#c7d2fe')}
+              onMouseLeave={e => (e.currentTarget.style.color = '#e4e4e7')}>
             {contest.name}
           </h3>
-          <p className="text-xs text-zinc-600 font-medium tracking-wide uppercase">{contest.organizer}</p>
+          <p className="text-xs font-medium tracking-widest uppercase" style={{ color: '#3f3f46' }}>{contest.organizer}</p>
         </div>
 
         {/* Row 3: description */}
@@ -95,7 +97,7 @@ export default function ContestCard({ contest }: { contest: Contest }) {
         {/* Row 4: categories */}
         <div className="flex flex-wrap gap-1">
           {contest.categories.slice(0, 4).map(cat => (
-            <span key={cat} className="text-[11px] text-zinc-600 border border-zinc-800 rounded px-1.5 py-0.5">
+            <span key={cat} style={{ fontSize: 10, color: '#52525b', border: '1px solid rgba(255,255,255,0.06)', borderRadius: 5, padding: '2px 7px', fontFamily: 'Space Grotesk, sans-serif', fontWeight: 500, letterSpacing: '0.04em', textTransform: 'uppercase' }}>
               {categoryLabels[cat]}
             </span>
           ))}
