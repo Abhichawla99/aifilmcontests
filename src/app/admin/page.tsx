@@ -13,7 +13,7 @@ export default async function AdminPage() {
   ] = await Promise.all([
     supabaseAdmin
       .from('contests')
-      .select('id, name, organizer, status, deadline, prize, featured, url')
+      .select('id, name, organizer, status, deadline, prize, featured, url, created_at')
       .order('status')
       .order('deadline'),
     supabaseAdmin.from('subscribers').select('*', { count: 'exact', head: true }),

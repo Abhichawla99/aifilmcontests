@@ -4,6 +4,8 @@ import { sendWeeklyDigest, sendDeadlineReminders } from '@/lib/email'
 import { runResearch } from '@/lib/research'
 import { Resend } from 'resend'
 
+export const maxDuration = 300 // allow research to take up to 5 min
+
 function checkAuth(request: NextRequest) {
   const token = request.cookies.get('admin_token')?.value
   return token === process.env.ADMIN_TOKEN
@@ -155,12 +157,13 @@ export async function POST(request: NextRequest) {
 
     const emails = subs.map(s => s.email)
     try {
-      const batchSize = 50
+      const batchSize = 49
       for (let i = 0; i < emails.length; i += batchSize) {
+        const batch = emails.slice(i, i + batchSize)
         const { error } = await resend.emails.send({
           from: `AI Film Contests <${FROM_EMAIL}>`,
-          to: FROM_EMAIL,
-          bcc: emails.slice(i, i + batchSize),
+          to: batch[0],
+          bcc: batch.length > 1 ? batch.slice(1) : undefined,
           subject,
           html,
           headers: {

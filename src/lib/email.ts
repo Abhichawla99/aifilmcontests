@@ -210,16 +210,22 @@ export async function sendNewContestAlerts(
 </html>`
 
   try {
-    const batchSize = 50
+    const batchSize = 49 // 1 in `to` + 49 in `bcc` = 50 per Resend batch
     for (let i = 0; i < subscribers.length; i += batchSize) {
-      await getResend().emails.send({
+      const batch = subscribers.slice(i, i + batchSize)
+      const { data, error } = await getResend().emails.send({
         from: `AI Film Contests <${FROM_EMAIL}>`,
-        to: FROM_EMAIL,
-        bcc: subscribers.slice(i, i + batchSize),
+        to: batch[0],
+        bcc: batch.length > 1 ? batch.slice(1) : undefined,
         subject,
         headers: listUnsubscribeHeaders(unsub),
         html,
       })
+      if (error) {
+        console.error('[Email] Contest alert Resend error:', error)
+        return { success: false, error }
+      }
+      console.log('[Email] Contest alert sent, id:', data?.id)
     }
     return { success: true, sent: subscribers.length }
   } catch (error) {
@@ -276,16 +282,22 @@ export async function sendDeadlineReminders(
 </html>`
 
   try {
-    const batchSize = 50
+    const batchSize = 49
     for (let i = 0; i < subscribers.length; i += batchSize) {
-      await getResend().emails.send({
+      const batch = subscribers.slice(i, i + batchSize)
+      const { data, error } = await getResend().emails.send({
         from: `AI Film Contests <${FROM_EMAIL}>`,
-        to: FROM_EMAIL,
-        bcc: subscribers.slice(i, i + batchSize),
+        to: batch[0],
+        bcc: batch.length > 1 ? batch.slice(1) : undefined,
         subject,
         headers: listUnsubscribeHeaders(unsub),
         html,
       })
+      if (error) {
+        console.error('[Email] Deadline reminder Resend error:', error)
+        return { success: false, error }
+      }
+      console.log('[Email] Deadline reminder sent, id:', data?.id)
     }
     return { success: true, sent: subscribers.length }
   } catch (error) {
@@ -343,16 +355,22 @@ export async function sendWeeklyDigest(
 </html>`
 
   try {
-    const batchSize = 50
+    const batchSize = 49
     for (let i = 0; i < subscribers.length; i += batchSize) {
-      await getResend().emails.send({
+      const batch = subscribers.slice(i, i + batchSize)
+      const { data, error } = await getResend().emails.send({
         from: `AI Film Contests <${FROM_EMAIL}>`,
-        to: FROM_EMAIL,
-        bcc: subscribers.slice(i, i + batchSize),
+        to: batch[0],
+        bcc: batch.length > 1 ? batch.slice(1) : undefined,
         subject,
         headers: listUnsubscribeHeaders(unsub),
         html,
       })
+      if (error) {
+        console.error('[Email] Weekly digest Resend error:', error)
+        return { success: false, error }
+      }
+      console.log('[Email] Weekly digest sent, id:', data?.id)
     }
     return { success: true, sent: subscribers.length }
   } catch (error) {

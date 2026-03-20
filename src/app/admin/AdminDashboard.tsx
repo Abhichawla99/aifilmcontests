@@ -13,6 +13,7 @@ type Contest = {
   prize: string
   featured: boolean
   url: string
+  created_at: string | null
 }
 
 type Stats = {
@@ -89,7 +90,11 @@ export default function AdminDashboard({ contests: initial, stats }: { contests:
       return `Maintenance done — ${closed} closed, ${opened} opened`
     }
     if (action === 'research') {
-      return `Research done — ${data.newContestsFound ?? 0} new contests found, ${(data.addedToDb as string[])?.length ?? 0} added`
+      const candidates = data.phase1Candidates ?? '?'
+      const found = data.newContestsFound ?? 0
+      const added = (data.addedToDb as string[])?.length ?? 0
+      const upsertErr = data.upsertError ? ` (DB error: ${data.upsertError})` : ''
+      return `Research done — ${candidates} URLs found, ${found} validated, ${added} added to DB${upsertErr}`
     }
     if (action === 'send-digest') return `Weekly digest sent to ${data.sent} subscribers`
     if (action === 'send-reminders') return `Reminders sent to ${data.sent} subscribers`
@@ -226,7 +231,7 @@ export default function AdminDashboard({ contests: initial, stats }: { contests:
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid rgba(255,255,255,0.07)', background: 'rgba(255,255,255,0.02)' }}>
-                  {['Status', 'Name', 'Organizer', 'Prize', 'Deadline', 'Actions'].map(h => (
+                  {['Status', 'Name', 'Organizer', 'Prize', 'Deadline', 'Added', 'Actions'].map(h => (
                     <th key={h} style={{ padding: '10px 14px', textAlign: 'left', color: '#52525b', fontWeight: 600, fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.06em', whiteSpace: 'nowrap' }}>{h}</th>
                   ))}
                 </tr>
@@ -268,6 +273,9 @@ export default function AdminDashboard({ contests: initial, stats }: { contests:
                       <td style={{ padding: '10px 14px', whiteSpace: 'nowrap' }}>
                         <span style={{ color: isUrgent ? '#f87171' : '#71717a' }}>{fmt(c.deadline)}</span>
                         {c.status === 'open' && <span style={{ fontSize: '11px', color: isUrgent ? '#f87171' : '#3f3f46', marginLeft: '6px' }}>{dl}d</span>}
+                      </td>
+                      <td style={{ padding: '10px 14px', whiteSpace: 'nowrap', color: '#3f3f46', fontSize: '12px' }}>
+                        {c.created_at ? new Date(c.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: '2-digit' }) : '—'}
                       </td>
                       <td style={{ padding: '10px 14px', whiteSpace: 'nowrap' }}>
                         <div style={{ display: 'flex', gap: '8px' }}>
@@ -331,13 +339,13 @@ export default function AdminDashboard({ contests: initial, stats }: { contests:
             <div style={{ border: '1px solid rgba(255,255,255,0.07)', borderRadius: '10px', padding: '20px 22px', marginBottom: '20px', background: 'rgba(255,255,255,0.02)' }}>
               <div style={{ fontSize: '12px', color: '#52525b', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: '12px', fontFamily: 'Space Grotesk, sans-serif' }}>What it does</div>
               <div style={{ fontSize: '13px', color: '#71717a', lineHeight: 2.1 }}>
-                ✦&nbsp;&nbsp;Searches 5 targeted queries via Perplexity Sonar Pro<br />
-                ✦&nbsp;&nbsp;Fetches and reads each promising result page<br />
-                ✦&nbsp;&nbsp;Validates deadline, prize, eligibility from live page<br />
-                ✦&nbsp;&nbsp;Deduplicates against existing database<br />
-                ✦&nbsp;&nbsp;Writes new contests to Supabase (live immediately)<br />
-                ✦&nbsp;&nbsp;Emails subscribers if new contests found<br />
-                ✦&nbsp;&nbsp;Cost: ~$0.04 per run via OpenRouter
+                ✦&nbsp;&nbsp;<strong style={{ color: '#a1a1aa' }}>Phase 1</strong> — searches 6 queries via Perplexity Sonar Pro, returns candidate URLs<br />
+                ✦&nbsp;&nbsp;<strong style={{ color: '#a1a1aa' }}>Phase 2</strong> — visits each URL and extracts deadline, prize, eligibility from the live page<br />
+                ✦&nbsp;&nbsp;Deduplicates against all 24+ existing contests by ID, name, and URL<br />
+                ✦&nbsp;&nbsp;Sanitizes fields before writing — no schema mismatches<br />
+                ✦&nbsp;&nbsp;Writes to Supabase immediately — live on site within seconds<br />
+                ✦&nbsp;&nbsp;Emails subscribers automatically when new contests are added<br />
+                ✦&nbsp;&nbsp;Cost: ~$0.06–0.10 per run via OpenRouter
               </div>
             </div>
             <button
