@@ -8,13 +8,14 @@ html { scroll-behavior: smooth; overflow-x: hidden; }
 
 body {
   background: #050508;
-  color: #e4e4e7;
+  color: #d4d4d8;
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Helvetica Neue', sans-serif;
   font-size: 15px;
-  line-height: 1.6;
+  line-height: 1.7;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   overflow-x: hidden;
+  font-feature-settings: 'kern' 1, 'liga' 1;
 }
 
 h1, h2, h3, h4, h5, .display {
@@ -197,7 +198,7 @@ h1, h2, h3, h4, h5, .display {
   padding: 5px 12px;
   border-radius: 7px;
   border: 1px solid transparent;
-  color: #52525b;
+  color: #71717a;
   cursor: pointer;
   transition: all 0.15s;
   background: none;
@@ -211,7 +212,7 @@ h1, h2, h3, h4, h5, .display {
 
 /* ── Inline text link ───────────────────────────────────────────────────────── */
 .link-muted {
-  color: #52525b;
+  color: #71717a;
   text-decoration: none;
   transition: color 0.15s;
 }
@@ -257,7 +258,7 @@ h1, h2, h3, h4, h5, .display {
   outline: none;
   transition: border-color 0.15s, background 0.15s, box-shadow 0.15s;
 }
-.input::placeholder { color: #3f3f46; }
+.input::placeholder { color: #52525b; }
 .input:focus {
   border-color: rgba(99,102,241,0.4);
   background: rgba(99,102,241,0.04);

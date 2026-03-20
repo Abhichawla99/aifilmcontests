@@ -269,7 +269,7 @@ export default async function Home() {
                     <h2 style={{ fontFamily: 'Space Grotesk, sans-serif', fontSize: 17, fontWeight: 700, color: '#f4f4f5', marginBottom: 5, letterSpacing: '-0.02em' }}>
                       Never miss a deadline
                     </h2>
-                    <p style={{ fontSize: 12, color: '#52525b', marginBottom: 18, lineHeight: 1.65 }}>
+                    <p style={{ fontSize: 13, color: '#a1a1aa', marginBottom: 18, lineHeight: 1.7 }}>
                       Get notified when new contests open and 7 days before any deadline closes.
                     </p>
                     <EmailSubscribe />
@@ -305,7 +305,7 @@ export default async function Home() {
               }}>
                 Browse Competitions
               </h2>
-              <p style={{ fontSize: 13, color: '#52525b' }}>
+              <p style={{ fontSize: 13, color: '#71717a' }}>
                 {open.length + upcoming.length} active · verified against live sources daily
               </p>
             </div>
@@ -321,7 +321,7 @@ export default async function Home() {
               <span style={{ fontFamily: 'Space Grotesk, sans-serif', fontWeight: 600, color: '#4ade80', letterSpacing: '0.01em' }}>
                 Research agent running daily
               </span>
-              <span style={{ fontSize: 10, color: '#166534', fontFamily: 'Space Grotesk, sans-serif', fontWeight: 500 }}>
+              <span style={{ fontSize: 10, color: '#4ade80', fontFamily: 'Space Grotesk, sans-serif', fontWeight: 400, opacity: 0.6 }}>
                 · fresh contests added 24/7
               </span>
             </div>
@@ -358,9 +358,9 @@ export default async function Home() {
                 </svg>
               </div>
               <div>
-                <p style={{ fontSize: 13, color: '#71717a', lineHeight: 1.6 }}>
+                <p style={{ fontSize: 13, color: '#a1a1aa', lineHeight: 1.6 }}>
                   Looking to create{' '}
-                  <span style={{ color: '#a1a1aa' }}>cinematic AI content</span> for your brand?{' '}
+                  <span style={{ color: '#d4d4d8', fontWeight: 500 }}>cinematic AI content</span> for your brand?{' '}
                   <a
                     href="/cinematic-ads"
                     style={{ color: '#818cf8', textDecoration: 'none', fontWeight: 500 }}
@@ -434,7 +434,7 @@ export default async function Home() {
               }}>
                 Know before the deadline.
               </h2>
-              <p style={{ fontSize: 14, color: '#52525b', lineHeight: 1.75 }}>
+              <p style={{ fontSize: 14, color: '#a1a1aa', lineHeight: 1.8 }}>
                 An AI agent searches the web daily, visits each contest URL, and verifies every deadline against the live page — so you never act on stale information.
               </p>
             </div>
@@ -464,7 +464,7 @@ export default async function Home() {
               </span>
             </div>
 
-            <span style={{ fontSize: 12, color: '#27272a' }}>
+            <span style={{ fontSize: 12, color: '#52525b' }}>
               Tracking every AI film competition · Updated daily
             </span>
 
