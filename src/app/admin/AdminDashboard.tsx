@@ -269,17 +269,27 @@ export default function AdminDashboard({ contests: initial, stats }: { contests:
 
   function formatSuccessMsg(action: string, data: Record<string, unknown>) {
     if (action === 'maintenance') {
-      const closed = (data.closed as unknown[])?.length ?? 0
-      const opened = (data.opened as unknown[])?.length ?? 0
-      return `Maintenance done — ${closed} closed, ${opened} opened`
+      const closedList = (data.closed as Array<{ name: string }>) ?? []
+      const openedList = (data.opened as Array<{ name: string }>) ?? []
+      if (closedList.length === 0 && openedList.length === 0) {
+        return `Maintenance done — all ${contests.length} contest statuses are current, nothing changed`
+      }
+      const parts = []
+      if (closedList.length) parts.push(`closed ${closedList.length}: ${closedList.map(c => c.name).join(', ')}`)
+      if (openedList.length) parts.push(`opened ${openedList.length}: ${openedList.map(c => c.name).join(', ')}`)
+      return `Maintenance done — ${parts.join(' · ')}`
     }
     if (action === 'research') {
       const candidates = data.phase1Candidates ?? '?'
-      const pages = data.pagesRead ?? '?'
+      const direct = data.pagesReadDirectly ?? '?'
+      const fallback = data.pagesBlockedFallback ?? '?'
       const found = data.newContestsFound ?? 0
       const added = (data.addedToDb as string[])?.length ?? 0
-      const upsertErr = data.upsertError ? ` ⚠ DB: ${data.upsertError}` : ''
-      return `Research done — ${candidates} URLs found, ${pages} pages read, ${found} validated, ${added} added${upsertErr}`
+      const upsertErr = data.upsertError ? ` ⚠ DB error: ${data.upsertError}` : ''
+      // Also push each log line
+      const lines: string[] = data.log as string[] ?? []
+      lines.forEach(l => log('info', l))
+      return `Research done — ${candidates} candidates, ${direct} fetched, ${fallback} via Perplexity, ${found} new, ${added} added${upsertErr}`
     }
     if (action === 'send-digest') return `Weekly digest sent to ${data.sent} subscribers`
     if (action === 'send-reminders') return `Reminders sent to ${data.sent} subscribers`

@@ -17,18 +17,27 @@ function sanitize(c: Record<string, unknown>): Record<string, unknown> {
 }
 
 function parseJsonArray(text: string): Record<string, unknown>[] {
-  const match = text.match(/\[[\s\S]*\]/)
+  // Extract first JSON array found anywhere in the text
+  const match = text.match(/\[[\s\S]*?\]/)
   if (!match) return []
   try {
     const parsed = JSON.parse(match[0])
     return Array.isArray(parsed) ? parsed : []
   } catch {
+    // Try to find a larger array if the first match failed
+    const greedyMatch = text.match(/\[[\s\S]*\]/)
+    if (greedyMatch) {
+      try {
+        const parsed = JSON.parse(greedyMatch[0])
+        if (Array.isArray(parsed) && parsed.length > 0) return parsed
+      } catch { /* continue */ }
+    }
     return []
   }
 }
 
 // Strip HTML to readable plain text, capped at maxLen chars
-function htmlToText(html: string, maxLen = 8000): string {
+function htmlToText(html: string, maxLen = 9000): string {
   return html
     .replace(/<script[\s\S]*?<\/script>/gi, '')
     .replace(/<style[\s\S]*?<\/style>/gi, '')
@@ -37,18 +46,14 @@ function htmlToText(html: string, maxLen = 8000): string {
     .replace(/<footer[\s\S]*?<\/footer>/gi, '')
     .replace(/<!--[\s\S]*?-->/g, '')
     .replace(/<[^>]+>/g, ' ')
-    .replace(/&nbsp;/g, ' ')
-    .replace(/&amp;/g, '&')
-    .replace(/&lt;/g, '<')
-    .replace(/&gt;/g, '>')
-    .replace(/&quot;/g, '"')
+    .replace(/&nbsp;/gi, ' ').replace(/&amp;/gi, '&').replace(/&lt;/gi, '<').replace(/&gt;/gi, '>').replace(/&quot;/gi, '"').replace(/&#39;/gi, "'")
     .replace(/\s+/g, ' ')
     .trim()
     .slice(0, maxLen)
 }
 
-// Fetch a URL and return stripped plain text. Returns null on any failure.
-async function fetchPageText(url: string): Promise<string | null> {
+// Fetch a URL and return stripped plain text. Returns null on any error/block.
+async function fetchPageText(url: string): Promise<{ text: string; method: 'direct' } | { text: null; method: 'blocked'; reason: string }> {
   try {
     const controller = new AbortController()
     const timer = setTimeout(() => controller.abort(), 12000)
@@ -58,20 +63,31 @@ async function fetchPageText(url: string): Promise<string | null> {
         'User-Agent': 'Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)',
         'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
         'Accept-Language': 'en-US,en;q=0.5',
+        'Cache-Control': 'no-cache',
       },
     })
     clearTimeout(timer)
+    if (res.status === 403 || res.status === 429 || res.status === 503) {
+      return { text: null, method: 'blocked', reason: `HTTP ${res.status}` }
+    }
     if (!res.ok) {
-      console.log(`[Research] Fetch ${url} → HTTP ${res.status}`)
-      return null
+      return { text: null, method: 'blocked', reason: `HTTP ${res.status}` }
     }
     const ct = res.headers.get('content-type') ?? ''
-    if (!ct.includes('html') && !ct.includes('text')) return null
+    if (!ct.includes('html') && !ct.includes('text')) {
+      return { text: null, method: 'blocked', reason: `Non-HTML content-type: ${ct}` }
+    }
     const html = await res.text()
-    return htmlToText(html)
+    // Detect Cloudflare / JS challenge pages (< 2000 chars of real text is a red flag)
+    const text = htmlToText(html)
+    if (text.length < 500) {
+      return { text: null, method: 'blocked', reason: 'Page too short (likely bot challenge)' }
+    }
+    return { text, method: 'direct' }
   } catch (err) {
-    console.log(`[Research] Fetch failed ${url}:`, String(err).slice(0, 80))
-    return null
+    const msg = String(err)
+    const reason = msg.includes('abort') ? 'Timeout (12s)' : msg.slice(0, 60)
+    return { text: null, method: 'blocked', reason }
   }
 }
 
@@ -92,10 +108,40 @@ async function callOpenRouter(
   })
   if (!res.ok) {
     const err = await res.text()
-    throw new Error(`OpenRouter ${res.status}: ${err}`)
+    throw new Error(`OpenRouter ${res.status}: ${err.slice(0, 200)}`)
   }
   const data = await res.json()
   return data.choices?.[0]?.message?.content ?? ''
+}
+
+// ── The contest extraction schema (used in both Phase 3a and 3b prompts) ───────
+function extractionSchema(today: string) {
+  return `Return ONLY a valid JSON array. Each contest object must have ALL of these exact fields:
+{
+  "id": "descriptive-kebab-slug-2026",
+  "name": "Exact contest name as written on the page",
+  "organizer": "Organisation running it",
+  "description": "2-3 sentences: what AI tools are required, the theme, where winners screen",
+  "deadline": "YYYY-MM-DD",
+  "submission_open": null,
+  "prize": "Exact prize from the page e.g. $10,000 Grand Prize",
+  "prize_details": ["First place: $X"],
+  "url": "https://exact-url",
+  "status": "open",
+  "categories": ["short-film"],
+  "ai_tools_allowed": ["Tool name or Any AI tools"],
+  "eligibility": "Who can enter and restrictions",
+  "entry_fee": "Free or exact fee",
+  "featured": false,
+  "tags": [],
+  "location": null,
+  "event_date": null
+}
+
+ABSOLUTE RULES:
+- Only include a contest if deadline > ${today} AND both deadline and prize are explicitly stated
+- featured: true ONLY for prizes > $10,000 or from Runway/Kling/Luma/Google/major festivals
+- Return [] if nothing qualifies. ONLY the JSON array — zero other text.`
 }
 
 export async function runResearch(): Promise<{
@@ -107,183 +153,220 @@ export async function runResearch(): Promise<{
   error?: string
   upsertError?: string
   phase1Candidates?: number
-  pagesRead?: number
+  pagesReadDirectly?: number
+  pagesBlockedFallback?: number
+  log: string[]
 }> {
   const today = new Date().toISOString().slice(0, 10)
+  const runLog: string[] = []
+  const info = (msg: string) => { console.log(`[Research] ${msg}`); runLog.push(msg) }
 
   // ── Load existing contests for dedup ─────────────────────────────────────────
   const { data: existing } = await supabaseAdmin.from('contests').select('id, name, url')
   const existingIds = (existing ?? []).map(c => c.id)
   const existingNames = (existing ?? []).map(c => c.name.toLowerCase().trim())
   const existingUrls = (existing ?? []).map(c => (c.url ?? '').toLowerCase().replace(/\/$/, ''))
-  const dbList = (existing ?? []).map(c => `- ${c.id}: ${c.name}`).join('\n')
+
+  // Show short names list for dedup reference (not full prompt — just IDs)
+  const dbList = (existing ?? []).map(c => `${c.id}: ${c.name}`).join('\n')
+
+  info(`Loaded ${existing?.length ?? 0} existing contests for dedup`)
 
   // ══════════════════════════════════════════════════════════════════════════════
-  // PHASE 1 — Perplexity discovers candidate contest URLs via web search
-  // We only ask for URLs + names here — fast, cheap, high recall.
+  // PHASE 1 — Perplexity discovers candidate contest URLs
+  // KEY: We do NOT ask Perplexity to dedup against our DB in this phase.
+  // We want ALL AI film contest URLs it can find — code handles dedup.
   // ══════════════════════════════════════════════════════════════════════════════
   let candidates: Array<{ name: string; url: string }> = []
 
   try {
+    info('Phase 1: Searching for AI film contest URLs...')
     const p1 = await callOpenRouter(
       [
         {
           role: 'system',
           content: `You are a research assistant for aifilmcontests.com. Today is ${today}.
-
-ALREADY IN OUR DATABASE (skip these):
-${dbList}
-
-Search the web for AI film contests that are currently open for submissions and NOT in our database.
+Search the web and return ALL AI film contests and video competitions you can find that are currently open for submissions in 2025-2026.
+Include contests run by AI companies (Runway, Kling, Luma, Hailuo, Pika, Sora, Stability, ElevenLabs), film festivals with AI categories, brand-sponsored AI video challenges, and independent AI filmmaking awards.
 Return ONLY a JSON array: [{"name":"Contest Name","url":"https://exact-url"}]
-Up to 15 results. Return [] if nothing new. No markdown, no explanation, just the array.`,
+Up to 20 results. No explanation, no markdown.`,
         },
         {
           role: 'user',
-          content: `Search for new AI film contests using these queries:
-1. "AI film festival 2026 open submissions"
-2. "AI film competition 2026 open call deadline"
-3. "generative AI short film contest submissions open 2026"
-4. "AI filmmaking award open call 2026 prize"
-5. "Runway Kling Luma Hailuo Pika film competition 2026 submissions"
-6. "AI generated video contest 2026 cash prize"
+          content: `Search for all of these and return the URLs:
+1. "AI film festival 2025 2026 open submissions"
+2. "AI film competition open call 2026 prize"
+3. "generative AI short film contest submissions 2026"
+4. "AI video competition cash prize 2026 open"
+5. "Runway Kling Luma AI film award 2026"
+6. "AI filmmaking challenge grant 2026"
+7. "film festival AI category open call 2026"
+8. "AI generated video contest winner prize 2026"
 
-Return the JSON array of {name, url} for any new AI film contest you find that is NOT already in our database.`,
+Return every AI film contest you find as [{"name":"...","url":"..."}]`,
         },
       ],
       'perplexity/sonar-pro',
-      1500,
+      2000,
     )
 
     const raw = parseJsonArray(p1)
-    candidates = (raw as Array<{ name?: string; url?: string }>)
-      .filter(c => {
-        if (!c.url || !c.name) return false
-        const url = c.url.toLowerCase().replace(/\/$/, '')
-        const name = c.name.toLowerCase().trim()
-        if (existingUrls.includes(url)) return false
-        if (existingNames.includes(name)) return false
-        return true
-      })
-      .map(c => ({ name: c.name!, url: c.url! }))
-      .slice(0, 15)
+    info(`Phase 1 raw response: ${raw.length} items returned by Perplexity`)
 
-    console.log(`[Research] Phase 1: ${candidates.length} candidates`)
+    // Dedup in code (not in prompt — Perplexity was too conservative)
+    const allCandidates = (raw as Array<{ name?: string; url?: string }>).filter(c => {
+      if (!c.url || !c.name) return false
+      const url = c.url.toLowerCase().replace(/\/$/, '')
+      const name = c.name.toLowerCase().trim()
+      // Skip if URL or name exactly matches what's already in DB
+      if (existingUrls.includes(url)) return false
+      if (existingNames.includes(name)) return false
+      return true
+    }).map(c => ({ name: c.name!, url: c.url! }))
+
+    candidates = allCandidates.slice(0, 20)
+    info(`Phase 1 after dedup: ${candidates.length} new candidates (${raw.length - candidates.length} already in DB)`)
   } catch (err) {
-    return { ok: false, date: today, newContestsFound: 0, addedToDb: [], model: 'perplexity/sonar-pro + gpt-4o-mini', error: `Phase 1 failed: ${String(err)}` }
+    const errMsg = `Phase 1 failed: ${String(err)}`
+    info(errMsg)
+    return { ok: false, date: today, newContestsFound: 0, addedToDb: [], model: 'perplexity/sonar-pro + gpt-4o-mini', error: errMsg, log: runLog }
   }
 
   if (candidates.length === 0) {
-    return { ok: true, date: today, newContestsFound: 0, addedToDb: [], model: 'perplexity/sonar-pro + gpt-4o-mini', phase1Candidates: 0 }
+    info('Phase 1 found no new candidates — all known AI film contests are already in the database')
+    return { ok: true, date: today, newContestsFound: 0, addedToDb: [], model: 'perplexity/sonar-pro + gpt-4o-mini', phase1Candidates: 0, pagesReadDirectly: 0, pagesBlockedFallback: 0, log: runLog }
   }
 
   // ══════════════════════════════════════════════════════════════════════════════
-  // PHASE 2 — Actually fetch each candidate page ourselves (100% real content)
-  // We do this in parallel so 15 pages takes ~10–15s total.
+  // PHASE 2 — Attempt to fetch each candidate page directly
+  // Many sites block bots (Cloudflare etc). We split into:
+  //   - "fetched": pages we successfully read → Phase 3a (GPT-4o-mini)
+  //   - "blocked": pages we couldn't read   → Phase 3b (Perplexity fallback)
   // ══════════════════════════════════════════════════════════════════════════════
-  const fetched = await Promise.allSettled(
+  info(`Phase 2: Fetching ${candidates.length} pages directly...`)
+  const fetchResults = await Promise.allSettled(
     candidates.map(async c => ({
       name: c.name,
       url: c.url,
-      text: await fetchPageText(c.url),
+      ...(await fetchPageText(c.url)),
     }))
   )
 
-  const pagesWithContent = fetched
-    .filter((r): r is PromiseFulfilledResult<{ name: string; url: string; text: string | null }> => r.status === 'fulfilled' && r.value.text !== null)
-    .map(r => r.value)
+  const fetched: Array<{ name: string; url: string; text: string }> = []
+  const blocked: Array<{ name: string; url: string; reason: string }> = []
 
-  console.log(`[Research] Phase 2: ${pagesWithContent.length}/${candidates.length} pages fetched successfully`)
+  for (const r of fetchResults) {
+    if (r.status === 'fulfilled') {
+      if (r.value.method === 'direct' && r.value.text) {
+        fetched.push({ name: r.value.name, url: r.value.url, text: r.value.text })
+      } else {
+        blocked.push({ name: r.value.name, url: r.value.url, reason: (r.value as { reason?: string }).reason ?? 'Unknown' })
+      }
+    }
+  }
 
-  if (pagesWithContent.length === 0) {
-    return { ok: true, date: today, newContestsFound: 0, addedToDb: [], model: 'perplexity/sonar-pro + gpt-4o-mini', phase1Candidates: candidates.length, pagesRead: 0 }
+  info(`Phase 2: ${fetched.length} pages read directly, ${blocked.length} blocked (${blocked.map(b => `${b.name}: ${b.reason}`).join(', ') || 'none'})`)
+
+  // ══════════════════════════════════════════════════════════════════════════════
+  // PHASE 3a — Extract from directly-fetched pages using GPT-4o-mini
+  // The model sees ACTUAL page text — cannot hallucinate deadline or prize.
+  // ══════════════════════════════════════════════════════════════════════════════
+  let extractedFromFetch: Record<string, unknown>[] = []
+
+  if (fetched.length > 0) {
+    info(`Phase 3a: Extracting data from ${fetched.length} directly-fetched pages...`)
+    const pageBlock = fetched
+      .map((p, i) => `=== PAGE ${i + 1}: ${p.name}\nURL: ${p.url}\n\n${p.text}\n===`)
+      .join('\n\n')
+
+    try {
+      const p3a = await callOpenRouter(
+        [
+          {
+            role: 'system',
+            content: `You extract AI film contest data from actual web page text. Today is ${today}.
+Only include contests where the deadline AND prize amount are explicitly written on the page. Skip any page where you cannot find both.
+${extractionSchema(today)}`,
+          },
+          {
+            role: 'user',
+            content: `Extract contest data from these pages. Only include where deadline AND prize are clearly stated:\n\n${pageBlock}`,
+          },
+        ],
+        'openai/gpt-4o-mini',
+        4000,
+      )
+      extractedFromFetch = parseJsonArray(p3a)
+      info(`Phase 3a extracted ${extractedFromFetch.length} contests from ${fetched.length} pages`)
+    } catch (err) {
+      info(`Phase 3a failed: ${String(err)} — continuing with Phase 3b`)
+    }
   }
 
   // ══════════════════════════════════════════════════════════════════════════════
-  // PHASE 3 — Extract structured data from real page content using gpt-4o-mini
-  // The model sees ACTUAL page text — no hallucination possible on deadline/prize.
+  // PHASE 3b — Ask Perplexity to visit the blocked URLs directly
+  // Perplexity has its own crawler and CAN read pages that block our fetch.
   // ══════════════════════════════════════════════════════════════════════════════
-  const pageBlock = pagesWithContent
-    .map((p, i) => `--- PAGE ${i + 1}: ${p.name}\nURL: ${p.url}\n\n${p.text}\n---`)
-    .join('\n\n')
+  let extractedFromPerplexity: Record<string, unknown>[] = []
 
-  let newContests: Record<string, unknown>[] = []
+  if (blocked.length > 0) {
+    info(`Phase 3b: Asking Perplexity to visit ${blocked.length} blocked pages...`)
+    const urlList = blocked.map((b, i) => `${i + 1}. ${b.name}: ${b.url}`).join('\n')
 
-  try {
-    const p3 = await callOpenRouter(
-      [
-        {
-          role: 'system',
-          content: `You are a data extraction agent for aifilmcontests.com. Today is ${today}.
+    try {
+      const p3b = await callOpenRouter(
+        [
+          {
+            role: 'system',
+            content: `You visit specific web pages and extract AI film contest information. Today is ${today}.
+Visit each URL listed and extract the contest details. Only include contests with explicit deadline AND prize on the page.
+${extractionSchema(today)}`,
+          },
+          {
+            role: 'user',
+            content: `Visit each of these pages and extract the contest data:
+${urlList}
 
-You will receive the actual text content of several web pages. For each page, extract the contest details IF AND ONLY IF:
-1. AI-generated content is a CORE requirement (not optional alongside traditional filmmaking)
-2. The submission deadline is clearly stated on the page AND is after ${today}
-3. A prize amount is clearly stated on the page
-4. This is a real, live contest (not past, not cancelled)
-
-Return ONLY a valid JSON array. Each contest object must have ALL of these exact fields:
-{
-  "id": "descriptive-kebab-slug-year",
-  "name": "Exact contest name as written on the page",
-  "organizer": "Exact organisation name as written on the page",
-  "description": "2-3 sentences describing: what AI tools are required or encouraged, the theme/subject matter, and where/how winners are screened or exhibited. Based only on what the page says.",
-  "deadline": "YYYY-MM-DD",
-  "submission_open": null,
-  "prize": "Exact prize text from the page, e.g. $10,000 Grand Prize",
-  "prize_details": ["First place: $X", "Runner-up: $Y"],
-  "url": "https://the-exact-url-of-this-page",
-  "status": "open",
-  "categories": ["short-film"],
-  "ai_tools_allowed": ["Tool name if specific, or Any AI tools"],
-  "eligibility": "Who can enter and any restrictions, exactly as stated on the page",
-  "entry_fee": "Free, or the exact fee from the page",
-  "featured": false,
-  "tags": [],
-  "location": null,
-  "event_date": null
-}
-
-ABSOLUTE RULES — violating these is worse than returning []:
-- If the deadline is not EXPLICITLY written on the page: skip this contest entirely
-- If the prize is not EXPLICITLY written on the page: skip this contest entirely
-- If the page is a past contest or a 404 / error page: skip it
-- featured: true ONLY for total prizes exceeding $10,000 USD, or contests run by Runway, Kling, Luma, Google DeepMind, or major international film festivals
-- Return ONLY the JSON array. Zero other text.`,
-        },
-        {
-          role: 'user',
-          content: `Extract contest data from these pages. Only include contests where deadline AND prize are explicitly stated:\n\n${pageBlock}`,
-        },
-      ],
-      'openai/gpt-4o-mini',
-      4000,
-    )
-
-    const raw = parseJsonArray(p3)
-    newContests = raw
-      .filter((c: Record<string, unknown>) => {
-        if (!c.id || !c.name || !c.deadline || !c.url) return false
-        if (existingIds.includes(c.id as string)) return false
-        if (existingNames.includes((c.name as string).toLowerCase().trim())) return false
-        const dl = new Date(c.deadline as string)
-        if (isNaN(dl.getTime()) || dl <= new Date()) return false
-        return true
-      })
-      .map(sanitize)
-
-    console.log(`[Research] Phase 3: ${newContests.length} contests extracted and validated`)
-  } catch (err) {
-    return {
-      ok: false,
-      date: today,
-      newContestsFound: 0,
-      addedToDb: [],
-      model: 'perplexity/sonar-pro + gpt-4o-mini',
-      error: `Phase 3 extraction failed: ${String(err)}`,
-      phase1Candidates: candidates.length,
-      pagesRead: pagesWithContent.length,
+Go to each URL, read the actual page content, and return the JSON array.`,
+          },
+        ],
+        'perplexity/sonar-pro',
+        4000,
+      )
+      extractedFromPerplexity = parseJsonArray(p3b)
+      info(`Phase 3b extracted ${extractedFromPerplexity.length} contests from ${blocked.length} blocked pages`)
+    } catch (err) {
+      info(`Phase 3b failed: ${String(err)}`)
     }
+  }
+
+  // ── Combine, validate, deduplicate ────────────────────────────────────────────
+  const allExtracted = [...extractedFromFetch, ...extractedFromPerplexity]
+  info(`Total extracted before validation: ${allExtracted.length}`)
+
+  const newContests = allExtracted
+    .filter((c: Record<string, unknown>) => {
+      if (!c.id || !c.name || !c.deadline || !c.url) return false
+      if (existingIds.includes(c.id as string)) return false
+      if (existingNames.includes((c.name as string).toLowerCase().trim())) return false
+      const dl = new Date(c.deadline as string)
+      if (isNaN(dl.getTime()) || dl <= new Date()) return false
+      return true
+    })
+    // Deduplicate within batch (same URL or same name)
+    .filter((c, idx, arr) => {
+      const url = (c.url as string).toLowerCase().replace(/\/$/, '')
+      const name = (c.name as string).toLowerCase().trim()
+      return arr.findIndex(x =>
+        (x.url as string).toLowerCase().replace(/\/$/, '') === url ||
+        (x.name as string).toLowerCase().trim() === name
+      ) === idx
+    })
+    .map(sanitize)
+
+  info(`After validation + dedup: ${newContests.length} new contests ready to insert`)
+  if (newContests.length > 0) {
+    info(`Contests to add: ${newContests.map(c => `"${c.name}"`).join(', ')}`)
   }
 
   // ── Write to Supabase ─────────────────────────────────────────────────────────
@@ -291,18 +374,17 @@ ABSOLUTE RULES — violating these is worse than returning []:
   let upsertError: string | undefined
 
   if (newContests.length > 0) {
-    console.log('[Research] Upserting:', newContests.map(c => `${c.id} (${c.name})`))
     const { data: upserted, error: upsertErr } = await supabaseAdmin
       .from('contests')
       .upsert(newContests, { onConflict: 'id' })
       .select('id, name')
 
     if (upsertErr) {
-      console.error('[Research] Upsert failed:', upsertErr.message)
+      info(`Upsert FAILED: ${upsertErr.message}`)
       upsertError = upsertErr.message
     } else {
       addedIds = (upserted ?? []).map(c => c.id)
-      console.log('[Research] Added:', addedIds)
+      info(`Upsert SUCCESS: added ${addedIds.length} contests: ${addedIds.join(', ')}`)
     }
   }
 
@@ -321,9 +403,10 @@ ABSOLUTE RULES — violating these is worse than returning []:
 
       if (newContestData?.length && subs?.length) {
         await sendNewContestAlerts(subs.map(s => s.email), newContestData)
+        info(`Emailed ${subs.length} subscribers about ${newContestData.length} new contests`)
       }
     } catch (err) {
-      console.error('[Research] Notification failed:', err)
+      info(`Subscriber email failed: ${String(err)}`)
     }
   }
 
@@ -334,7 +417,9 @@ ABSOLUTE RULES — violating these is worse than returning []:
     addedToDb: addedIds,
     model: 'perplexity/sonar-pro + gpt-4o-mini',
     phase1Candidates: candidates.length,
-    pagesRead: pagesWithContent.length,
+    pagesReadDirectly: fetched.length,
+    pagesBlockedFallback: blocked.length,
+    log: runLog,
     ...(upsertError ? { upsertError } : {}),
   }
 }
