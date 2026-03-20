@@ -58,7 +58,9 @@
       "Bash(node scripts/update-contests.mjs)",
       "Bash(npx tsc:*)",
       "Bash(node -e \":*)",
-      "mcp__scheduled-tasks__list_scheduled_tasks"
+      "mcp__scheduled-tasks__list_scheduled_tasks",
+      "Bash(next build:*)",
+      "Bash(npx next:*)"
     ]
   }
 }

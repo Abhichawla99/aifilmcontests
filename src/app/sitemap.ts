@@ -38,6 +38,68 @@ const TOOLS = [
   'hailuo',
   'pika',
   'sora',
+  'midjourney',
+  'stable-diffusion',
+  'heygen',
+  'adobe-firefly',
+  'elevenlabs',
+  'capcut',
+  'topaz',
+  'invideo',
+] as const
+
+// ── Guide pages ───────────────────────────────────────────────────────────────
+const GUIDES = [
+  'how-to-enter-ai-film-contest',
+  'ai-filmmaking-tools-guide',
+  'winning-strategies-ai-film-competitions',
+  'ai-video-production-workflow',
+  'ai-film-submission-tips',
+  'ai-film-festivals-explained',
+  'generative-ai-filmmaking-2026',
+  'ai-brand-film-guide',
+  'building-ai-film-portfolio',
+  'ai-film-post-production',
+] as const
+
+// ── Topic cluster pages ───────────────────────────────────────────────────────
+const TOPICS = [
+  'text-to-video-filmmaking',
+  'generative-ai-narrative',
+  'ai-visual-effects',
+  'ai-cinematography',
+  'ai-brand-storytelling',
+  'synthetic-media-art',
+  'ai-film-festivals-2026',
+  'ai-documentary-making',
+  'ai-animation-production',
+  'ai-commercial-production',
+] as const
+
+// ── Comparison pages ──────────────────────────────────────────────────────────
+const VS_PAGES = [
+  'runway-vs-kling',
+  'runway-vs-sora',
+  'runway-vs-luma',
+  'kling-vs-sora',
+  'best-ai-video-tools-2026',
+] as const
+
+// ── Location pages ────────────────────────────────────────────────────────────
+const LOCATIONS = [
+  'usa',
+  'europe',
+  'uk',
+  'online',
+  'global',
+] as const
+
+// ── Prize tier pages ──────────────────────────────────────────────────────────
+const PRIZES = [
+  'free-entry',
+  'high-prize',
+  'cash-prizes',
+  'grants',
 ] as const
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
@@ -80,6 +142,46 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority:        0.72,
   }))
 
+  // Guide pages
+  const guideUrls: MetadataRoute.Sitemap = GUIDES.map(slug => ({
+    url:             `${BASE}/guide/${slug}`,
+    lastModified:    now,
+    changeFrequency: 'monthly',
+    priority:        0.70,
+  }))
+
+  // Topic cluster pages
+  const topicUrls: MetadataRoute.Sitemap = TOPICS.map(slug => ({
+    url:             `${BASE}/topics/${slug}`,
+    lastModified:    now,
+    changeFrequency: 'monthly',
+    priority:        0.68,
+  }))
+
+  // Comparison pages
+  const vsUrls: MetadataRoute.Sitemap = VS_PAGES.map(slug => ({
+    url:             `${BASE}/vs/${slug}`,
+    lastModified:    now,
+    changeFrequency: 'monthly',
+    priority:        0.66,
+  }))
+
+  // Location pages
+  const locationUrls: MetadataRoute.Sitemap = LOCATIONS.map(slug => ({
+    url:             `${BASE}/location/${slug}`,
+    lastModified:    now,
+    changeFrequency: 'weekly',
+    priority:        0.65,
+  }))
+
+  // Prize tier pages
+  const prizeUrls: MetadataRoute.Sitemap = PRIZES.map(slug => ({
+    url:             `${BASE}/prize/${slug}`,
+    lastModified:    now,
+    changeFrequency: 'weekly',
+    priority:        0.65,
+  }))
+
   return [
     // Static pages first (highest crawl priority)
     ...STATIC_PAGES.map(p => ({ ...p, lastModified: now })),
@@ -87,6 +189,13 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     // Category & tool hubs (frequently updated, important for SEO)
     ...categoryUrls,
     ...toolUrls,
+
+    // Editorial & SEO hub pages
+    ...guideUrls,
+    ...topicUrls,
+    ...vsUrls,
+    ...locationUrls,
+    ...prizeUrls,
 
     // Individual contest pages (largest set, sorted: open → upcoming → closed)
     ...contestUrls.sort((a, b) => (b.priority ?? 0) - (a.priority ?? 0)),

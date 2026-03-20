@@ -54,6 +54,62 @@ const TOOLS: Record<string, {
     keywords: 'Sora AI film contest, OpenAI Sora competition 2026, Sora film festival',
     matchTerms: ['sora', 'openai'],
   },
+  'midjourney': {
+    name: 'MidJourney',
+    tagline: 'AI film contests compatible with MidJourney',
+    description: 'MidJourney is the leading AI image generation tool and is widely used in AI film production for concept art, storyboarding, and key frame generation. While not a video tool itself, MidJourney images are frequently used as reference frames for video generation tools like Runway and Kling.',
+    keywords: 'MidJourney film contest, MidJourney AI competition 2026',
+    matchTerms: ['midjourney', 'mid journey'],
+  },
+  'stable-diffusion': {
+    name: 'Stable Diffusion',
+    tagline: 'AI film contests compatible with Stable Diffusion',
+    description: 'Stable Diffusion and its variants (SDXL, ComfyUI workflows) are used extensively in AI film production for image generation, img2img transformation, and ControlNet-guided video frames. Open source and highly customizable.',
+    keywords: 'Stable Diffusion film contest, Stable Diffusion AI competition 2026',
+    matchTerms: ['stable diffusion', 'comfyui', 'sdxl'],
+  },
+  'heygen': {
+    name: 'HeyGen',
+    tagline: 'AI film contests compatible with HeyGen',
+    description: 'HeyGen specializes in AI avatar and talking head video generation — useful for documentary-style AI films, interview recreations, and narrative films featuring consistent human characters.',
+    keywords: 'HeyGen film contest, HeyGen AI competition 2026',
+    matchTerms: ['heygen', 'hey gen'],
+  },
+  'adobe-firefly': {
+    name: 'Adobe Firefly',
+    tagline: 'AI film contests compatible with Adobe Firefly',
+    description: "Adobe Firefly's generative fill, text-to-image, and video generation capabilities are increasingly used in professional AI film production, particularly for compositing and visual effects work in Adobe Premiere Pro and After Effects.",
+    keywords: 'Adobe Firefly film contest, Firefly AI competition 2026',
+    matchTerms: ['firefly', 'adobe ai', 'adobe firefly'],
+  },
+  'elevenlabs': {
+    name: 'ElevenLabs',
+    tagline: 'AI film contests using ElevenLabs voice and audio',
+    description: 'ElevenLabs produces the most convincing AI voiceover available. Its voices are standard in competition-level AI film production. Many winning AI films rely on ElevenLabs for narration, character voices, and sound design elements.',
+    keywords: 'ElevenLabs film contest, ElevenLabs AI voice competition 2026',
+    matchTerms: ['elevenlabs', 'eleven labs'],
+  },
+  'capcut': {
+    name: 'CapCut',
+    tagline: 'AI film contests compatible with CapCut',
+    description: "CapCut's AI generation features — including text-to-video, AI effects, and smart editing tools — are used primarily for short-form AI film content. Particularly relevant for competitions that accept social-media formatted entries.",
+    keywords: 'CapCut AI film contest, CapCut video competition 2026',
+    matchTerms: ['capcut', 'cap cut'],
+  },
+  'topaz': {
+    name: 'Topaz Video AI',
+    tagline: 'AI film contests using Topaz for upscaling and enhancement',
+    description: 'Topaz Video AI is used in virtually every professional AI film production for upscaling, frame interpolation, and noise reduction. It transforms 1080p AI-generated footage into 4K delivery quality, and removes the artifacts and flickering that generation tools sometimes produce.',
+    keywords: 'Topaz Video AI film, AI video upscaling competition 2026',
+    matchTerms: ['topaz'],
+  },
+  'invideo': {
+    name: 'InVideo AI',
+    tagline: 'AI film contests compatible with InVideo AI',
+    description: 'InVideo AI offers a text-to-video generation system with a focus on accessible, script-driven production. Used for documentary-style and informational AI films where narrative clarity is prioritized.',
+    keywords: 'InVideo AI film contest, InVideo AI competition 2026',
+    matchTerms: ['invideo', 'in video'],
+  },
 }
 
 export async function generateStaticParams() {
