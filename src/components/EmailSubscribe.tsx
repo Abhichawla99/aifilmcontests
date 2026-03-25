@@ -44,12 +44,37 @@ export default function EmailSubscribe({ compact = false }: { compact?: boolean 
 
   if (status === 'success') {
     return (
-      <div className="py-4 text-center">
-        <p className="text-white font-semibold mb-1" style={{ fontFamily: 'Space Grotesk, sans-serif' }}>You&apos;re in.</p>
-        <p className="text-sm text-zinc-500">{message}</p>
+      <div className="py-2">
+        <p className="text-white font-semibold mb-1" style={{ fontFamily: 'Space Grotesk, sans-serif', fontSize: 15 }}>
+          You&apos;re in. Check your inbox now.
+        </p>
+        <p className="text-sm mb-3" style={{ color: '#71717a', lineHeight: 1.6 }}>
+          We just sent you a welcome email.
+        </p>
+
+        {/* Reply nudge */}
+        <div style={{
+          border: '1px solid rgba(99,102,241,0.2)',
+          borderRadius: 10,
+          padding: '14px 16px',
+          background: 'rgba(79,70,229,0.05)',
+          marginBottom: 12,
+        }}>
+          <p style={{ fontSize: 13, fontWeight: 600, color: '#818cf8', marginBottom: 5, fontFamily: 'Space Grotesk, sans-serif' }}>
+            One quick step to guarantee delivery →
+          </p>
+          <p style={{ fontSize: 13, color: '#a1a1aa', lineHeight: 1.65, margin: 0 }}>
+            <strong style={{ color: '#e4e4e7' }}>Reply to that email</strong> — even just &ldquo;got it&rdquo; works.
+            This tells your inbox we&apos;re legit and ensures every future contest alert lands in
+            your <strong style={{ color: '#e4e4e7' }}>Primary</strong> inbox, not Promotions.
+            The more you reply to our emails, the better your delivery gets.
+          </p>
+        </div>
+
         <button
           onClick={() => { setStatus('idle'); setMessage('') }}
-          className="mt-3 text-xs text-zinc-700 hover:text-zinc-500 underline underline-offset-2 transition-colors"
+          className="text-xs underline underline-offset-2 transition-colors"
+          style={{ color: '#52525b' }}
         >
           Subscribe another email
         </button>

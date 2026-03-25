@@ -135,11 +135,17 @@ export async function sendWelcomeEmail(
   </div>
 
   <!-- Inbox tip — asking for a reply is the strongest positive signal to Gmail -->
-  <div style="border:1px solid rgba(79,70,229,0.25);border-radius:10px;padding:18px 22px;margin-bottom:28px;background:rgba(79,70,229,0.05);">
-    <div style="font-size:13px;font-weight:600;color:#818cf8;margin-bottom:6px;">One quick thing</div>
-    <p style="color:#a1a1aa;font-size:14px;line-height:1.6;margin:0;">
-      If this landed in Promotions, drag it to your <strong style="color:#e4e4e7;">Primary</strong> inbox — or just reply to this email with anything.
-      That tells Gmail you want these here, and all future alerts will land in the right place.
+  <div style="border:1px solid rgba(79,70,229,0.3);border-radius:10px;padding:20px 22px;margin-bottom:28px;background:rgba(79,70,229,0.07);">
+    <div style="font-size:13px;font-weight:700;color:#818cf8;letter-spacing:0.02em;margin-bottom:8px;">⚡ One quick step — takes 5 seconds</div>
+    <p style="color:#d4d4d8;font-size:15px;font-weight:600;margin:0 0 8px 0;line-height:1.4;">
+      Reply to this email to make sure every alert lands in your inbox.
+    </p>
+    <p style="color:#a1a1aa;font-size:14px;line-height:1.65;margin:0 0 10px 0;">
+      Even a simple "got it" is enough. Replying tells Gmail and Outlook that you want our emails —
+      so future contest alerts skip Promotions and go straight to your <strong style="color:#e4e4e7;">Primary</strong> inbox every time.
+    </p>
+    <p style="color:#71717a;font-size:13px;line-height:1.6;margin:0;">
+      The more you reply, the better your delivery stays. We send updates worth replying to — so keep them coming.
     </p>
   </div>
 

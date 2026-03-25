@@ -78,7 +78,7 @@ export default async function ContestPage({ params }: { params: Promise<{ id: st
   const isUrgent   = isOpen && dl <= 7
 
   // JSON-LD Event schema
-  const jsonLd = {
+  const jsonLdEvent = {
     '@context': 'https://schema.org',
     '@type': 'Event',
     name: contest.name,
@@ -88,7 +88,9 @@ export default async function ContestPage({ params }: { params: Promise<{ id: st
     eventStatus: isClosed
       ? 'https://schema.org/EventCancelled'
       : 'https://schema.org/EventScheduled',
-    eventAttendanceMode: 'https://schema.org/OnlineEventAttendanceMode',
+    eventAttendanceMode: contest.location
+      ? 'https://schema.org/MixedEventAttendanceMode'
+      : 'https://schema.org/OnlineEventAttendanceMode',
     ...(contest.eventDate ? {
       startDate: contest.eventDate,
       endDate: contest.eventDate,
@@ -98,14 +100,36 @@ export default async function ContestPage({ params }: { params: Promise<{ id: st
         '@type': 'Place',
         name: contest.location,
       },
-    } : {}),
+    } : {
+      location: {
+        '@type': 'VirtualLocation',
+        url: contest.url,
+      },
+    }),
+    offers: {
+      '@type': 'Offer',
+      price: contest.entryFee === 'Free' ? '0' : contest.entryFee,
+      priceCurrency: 'USD',
+      availability: isClosed ? 'https://schema.org/SoldOut' : 'https://schema.org/InStock',
+      validThrough: contest.deadline,
+      url: contest.url,
+    },
+  }
+
+  const jsonLdBreadcrumb = {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'AI Film Contests', item: 'https://aifilmcontests.com' },
+      { '@type': 'ListItem', position: 2, name: contest.name, item: `https://aifilmcontests.com/contests/${contest.id}` },
+    ],
   }
 
   return (
     <>
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        dangerouslySetInnerHTML={{ __html: JSON.stringify([jsonLdEvent, jsonLdBreadcrumb]) }}
       />
 
       <div style={{ background: '#080810', minHeight: '100vh' }}>

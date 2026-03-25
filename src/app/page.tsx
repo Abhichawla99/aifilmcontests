@@ -36,8 +36,45 @@ export default async function Home() {
   const ticker = [...open].sort((a, b) => new Date(a.deadline).getTime() - new Date(b.deadline).getTime())
   const tickerItems = [...ticker, ...ticker]
 
+  // JSON-LD: ItemList of open contests for rich results
+  const jsonLdItemList = {
+    '@context': 'https://schema.org',
+    '@type': 'ItemList',
+    name: 'Open AI Film Contests',
+    description: 'Currently open AI film competitions, festivals, and grants.',
+    numberOfItems: open.length,
+    itemListElement: open.slice(0, 20).map((c, i) => ({
+      '@type': 'ListItem',
+      position: i + 1,
+      item: {
+        '@type': 'Event',
+        name: c.name,
+        url: `https://aifilmcontests.com/contests/${c.id}`,
+        description: c.description,
+        organizer: { '@type': 'Organization', name: c.organizer },
+        eventAttendanceMode: 'https://schema.org/OnlineEventAttendanceMode',
+        eventStatus: 'https://schema.org/EventScheduled',
+        ...(c.eventDate ? { startDate: c.eventDate } : {}),
+        ...(c.location ? { location: { '@type': 'Place', name: c.location } } : {}),
+        offers: {
+          '@type': 'Offer',
+          price: c.entryFee === 'Free' ? '0' : c.entryFee,
+          priceCurrency: 'USD',
+          availability: 'https://schema.org/InStock',
+          validThrough: c.deadline,
+          url: c.url,
+        },
+      },
+    })),
+  }
+
   return (
     <div style={{ background: '#050508', minHeight: '100vh', position: 'relative' }}>
+
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLdItemList) }}
+      />
 
       {/* ── Animated WebGL shader + film grain ── */}
       <BackgroundFX />

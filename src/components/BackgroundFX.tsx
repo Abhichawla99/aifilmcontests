@@ -151,6 +151,7 @@ export default function BackgroundFX() {
       const paint = () => {
         if (tick % 2 === 0) {
           const { width, height } = grain
+          if (width === 0 || height === 0) { tick++; grainRaf = requestAnimationFrame(paint); return }
           const img = ctx.createImageData(width, height)
           const d   = img.data
           for (let i = 0; i < d.length; i += 4) {

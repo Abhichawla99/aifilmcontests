@@ -19,10 +19,41 @@ export const metadata: Metadata = {
   robots: 'index, follow',
 }
 
+const jsonLdWebsite = {
+  '@context': 'https://schema.org',
+  '@type': 'WebSite',
+  name: 'AI Film Contests',
+  url: 'https://aifilmcontests.com',
+  description: 'The definitive tracker for AI film competitions, festivals, grants, and challenges. Updated daily.',
+  potentialAction: {
+    '@type': 'SearchAction',
+    target: 'https://aifilmcontests.com/#contests?q={search_term_string}',
+    'query-input': 'required name=search_term_string',
+  },
+}
+
+const jsonLdOrganization = {
+  '@context': 'https://schema.org',
+  '@type': 'Organization',
+  name: 'AI Film Contests',
+  url: 'https://aifilmcontests.com',
+  logo: 'https://aifilmcontests.com/favicon.svg',
+  sameAs: [],
+  contactPoint: {
+    '@type': 'ContactPoint',
+    email: 'hello@aifilmcontests.com',
+    contactType: 'customer service',
+  },
+}
+
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" className="dark">
       <head>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify([jsonLdWebsite, jsonLdOrganization]) }}
+        />
         <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
         <link rel="alternate icon" href="/favicon.svg" />
         <link rel="apple-touch-icon" href="/favicon.svg" />
