@@ -1,5 +1,6 @@
 import { supabaseAdmin } from './supabase'
 import { sendNewContestAlerts } from './email'
+import { logEmailSent } from './email-logs'
 
 // ── Only these columns exist in the contests table ────────────────────────────
 const VALID_COLUMNS = [
@@ -403,6 +404,9 @@ Go to each URL, read the actual page content, and return the JSON array.`,
 
       if (newContestData?.length && subs?.length) {
         await sendNewContestAlerts(subs.map(s => s.email), newContestData)
+        for (const id of addedIds) {
+          await logEmailSent('new_contest', id, subs.length)
+        }
         info(`Emailed ${subs.length} subscribers about ${newContestData.length} new contests`)
       }
     } catch (err) {

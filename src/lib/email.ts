@@ -312,6 +312,81 @@ export async function sendDeadlineReminders(
   }
 }
 
+// ─── 3-day expiring contest alert ──────────────────────────────────────────────
+
+export async function sendExpiringContestAlerts(
+  subscribers: string[],
+  expiringContests: Array<{
+    name: string
+    organizer: string
+    prize: string
+    deadline: string
+    url: string
+    description: string
+    daysLeft: number
+  }>
+) {
+  if (!process.env.RESEND_API_KEY) {
+    console.log(`[Dev] Expiring alert → ${subscribers.length} subs, ${expiringContests.length} contests`)
+    return { success: true }
+  }
+  if (!subscribers.length || !expiringContests.length) return { success: true }
+
+  const sorted = [...expiringContests].sort((a, b) => a.daysLeft - b.daysLeft)
+  const subject = sorted.length === 1
+    ? `🚨 ${sorted[0].daysLeft}d left to enter: ${sorted[0].name}`
+    : `🚨 ${sorted.length} contests closing in 3 days`
+
+  const cards = sorted.map(c => contestCard(c, { daysLeft: c.daysLeft })).join('')
+  const unsub = unsubscribeUrl()
+
+  const html = `
+<!DOCTYPE html>
+<html lang="en">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"></head>
+<body style="${emailBase}">
+<div style="${wrap}">
+  <div style="margin-bottom:28px;display:flex;align-items:center;justify-content:space-between;">
+    ${wordmark}
+    <span style="background:#dc2626;color:#fff;font-size:11px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;padding:3px 10px;border-radius:4px;">Closing Soon</span>
+  </div>
+  <h1 style="font-size:22px;font-weight:700;margin:0 0 6px 0;">${sorted.length === 1 ? 'Last chance — this contest closes in 3 days' : `${sorted.length} contests are about to close`}</h1>
+  <p style="color:#ef4444;font-size:14px;font-weight:600;margin:0 0 24px 0;">Submit now or miss the deadline entirely.</p>
+  ${cards}
+  <div style="text-align:center;margin-top:24px;">
+    <a href="${SITE_URL}" style="display:inline-block;background:#dc2626;color:#fff;text-decoration:none;padding:13px 28px;border-radius:8px;font-size:14px;font-weight:600;letter-spacing:0.02em;">Submit before it's too late →</a>
+  </div>
+  ${hr()}
+  ${footer(unsub)}
+</div>
+</body>
+</html>`
+
+  try {
+    const batchSize = 49
+    for (let i = 0; i < subscribers.length; i += batchSize) {
+      const batch = subscribers.slice(i, i + batchSize)
+      const { data, error } = await getResend().emails.send({
+        from: `AI Film Contests <${FROM_EMAIL}>`,
+        to: batch[0],
+        bcc: batch.length > 1 ? batch.slice(1) : undefined,
+        subject,
+        headers: listUnsubscribeHeaders(unsub),
+        html,
+      })
+      if (error) {
+        console.error('[Email] Expiring alert Resend error:', error)
+        return { success: false, error }
+      }
+      console.log('[Email] Expiring alert sent, id:', data?.id)
+    }
+    return { success: true, sent: subscribers.length }
+  } catch (error) {
+    console.error('[Email] Expiring alert failed:', error)
+    return { success: false, error }
+  }
+}
+
 // ─── Weekly digest (Mondays) ───────────────────────────────────────────────────
 
 export async function sendWeeklyDigest(
