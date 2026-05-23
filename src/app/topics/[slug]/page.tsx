@@ -119,6 +119,16 @@ const TOPICS: Record<string, TopicData> = {
     ruminatex: true,
     ruminatexNote: 'Ruminatex is a cinematic AI advertising agency creating brand films and commercial content that competes at the highest level of advertising craft. See their work at ruminatex.com.',
   },
+
+  'ai-film-festivals-with-million-dollar-prizes': {
+    title: 'AI Film Festivals With Million-Dollar Prizes: The 2026 List',
+    description: 'The five AI film festivals offering $1 million or more in prizes during 2026 — XPRIZE Future Vision ($3.5M), Astana AIFF ($1M), Luma Dream Brief ($1M), Google Gemini Global AI Film Award ($1M), and Runway Hundred Film Fund (up to $1M+). Eligibility, deadlines, judges, and submission strategy.',
+    keywords: 'million dollar AI film prize, AI film contest $1 million, biggest AI film festival prizes 2026, XPRIZE Future Vision, Astana AIFF, Luma Dream Brief, Runway Hundred Film Fund',
+    body: "Five AI film festivals offer prize pools of $1 million or more in 2026: the Future Vision XPRIZE ($3.5M+), the Astana AI Film Festival ($1M), the Luma AI Dream Brief ($1M), the Google Gemini Global AI Film Award ($1M, now concluded), and the Runway Hundred Film Fund (grants from $5K to $1M+). Each is funded by a different stakeholder in the AI film ecosystem — a non-profit moonshot organization, a national government, two AI tool companies, and a fifth AI tool company through a rolling production fund — and each rewards a different style of work. This page lists every contest with a million-dollar tier, breaks down what they actually pay, names the people who judge them, and explains which one fits which kind of filmmaker.\n\n## Future Vision XPRIZE — $3.5 Million for Optimistic Sci-Fi\n\nThe Future Vision XPRIZE is the single largest AI film prize ever announced. Launched on March 9, 2026 by XPRIZE founder Peter Diamandis in partnership with Google and Range Media Partners, it offers a grand prize of $2.5 million in feature production funding plus a $100,000 cash prize to one filmmaker, alongside $100,000 cash awards to four additional finalists. Per the official rules at futurevisionxprize.com, entrants submit a three-minute short film or trailer and a treatment of no more than twelve pages — including a one-page cover sheet with logline, synopsis, and personal statement. Entry is free, open globally, and the contest accepts live action, animation, AI, or any hybrid approach. The submission window closes August 15, 2026, with finalists named and the winner announced at a live Los Angeles event on September 25, 2026. The thematic ask is unusual and specific: portray AI not as the villain of the future but as the hero of it — what Diamandis calls a modern 'Star Trek' moment. Variety has called the prize 'the largest sci-fi film competition in history,' and the production support package — Range Media's development pipeline plus Google's creative-tech stack — is arguably worth more than the cash. The XPRIZE is the right target for filmmakers who can write to a treatment, think in feature-length scope, and align with a hopeful, technology-positive vision of the future.\n\n## Astana AI Film Festival — $1 Million From Kazakhstan\n\nThe Astana AI Film Festival (AAIFF) is the largest single-jurisdiction AI film prize fund in the world: $1 million in total prize money, organized by the government of Kazakhstan in its capital Astana. According to the Astana Times' April 2026 announcement, the festival opened its global call for submissions in May 2026 and accepts entries through the end of August 2026, with the festival itself taking place in autumn 2026. The format is a short film of up to ten minutes, generated using AI tools, uploaded with a project description to the festival's landing platform. Entry is free and open to creators worldwide regardless of country of origin, experience level, or studio affiliation. The festival program goes beyond the competition: an AI content conference, pitch sessions for creators and producers, and curated screenings. Astana is the right target for international filmmakers who want a flagship festival run on a fresh, well-funded circuit without the gatekeeping of older film institutions. The $1 million total fund is split across categories, so winning isn't a single-shot moonshot — there are multiple awards to compete for. Because this is the inaugural edition, jury composition and historical winning patterns don't yet exist; entries will be judged on their merits without a long bias track-record to game.\n\n## Luma AI Dream Brief — $1 Million for a Cannes Gold Lion\n\nThe Luma Dream Brief, announced in February 2026, offers $1 million to the team that wins a 2026 Cannes Lions Gold Lion using Luma AI. Developed by Luma in collaboration with experiential creative agency DE-YAN, the brief challenges creatives to use Luma's platform to produce a fully-realized commercial for a Luma-branded product. Submissions closed March 22, 2026, but the prize itself is decided by results at the Cannes Lions festival in June 2026 — meaning the work is still in the field, still being assessed, and the $1 million has not yet been paid out at the time of writing. Entries had to be at least 70% AI-generated using Luma AI, at least ten seconds long, and built around Luma-branded creative. Selected finalists receive paid media support to ensure the work runs publicly within the eligibility period. The jury is unusually star-heavy for an AI tool competition: leaders from Nike, HBO Max, Wieden+Kennedy, Chili's, and Boston Beer, plus Simpsons writer Bill Oakley and Old Spice spokesman Isaiah Mustafa. The Dream Brief is shorthand for what serious commercial AI looks like in 2026: not a hobbyist contest, but a brief written by an AI company to convince the advertising establishment that Luma can hit Gold Lion craft. Filmmakers who treat this prize as a creative-direction challenge (rather than a tool-demo) are the ones who win it.\n\n## Google Gemini Global AI Film Award — $1 Million (Concluded)\n\nThe Google Gemini Global AI Film Award was a $1 million grand-prize competition run as part of the 1 Billion Followers Summit and tied to Google's Gemini and Veo lineage of AI tools. Its submission window closed in December 2025; the award is included on this list because it remains the only AI film prize to have actually paid out $1 million in cash to a single winner during the current cycle. The contest required films generated primarily with Google's AI tools (the Veo family and Gemini), and was used by Google as a signature marketing moment to credential Veo against Runway and Sora. Submissions are no longer open, but the award is relevant for two reasons: first, it sets the precedent that AI tool companies are now willing to write seven-figure checks to filmmakers who use their tools at flagship competitions; and second, watching what won — and how the winning film was made — is the most accurate guide to what large AI tool companies value when they put their own brand on a $1M prize. A reissue of the program is widely expected in late 2026, and filmmakers should monitor the 1 Billion Followers Summit announcements.\n\n## Runway Hundred Film Fund — $5K to $1M+, Rolling\n\nThe Runway Hundred Film Fund is structurally different from the other four entries on this list. It is not a contest with a single deadline and a single grand-prize ceremony — it is a rolling production fund that has committed to producing up to one hundred AI-augmented films, with individual grants ranging from $5,000 at the low end to more than $1 million at the upper end, plus up to $2 million in Runway platform credits per project. The fund currently holds $5 million in committed capital and Runway has stated publicly it may grow to $10 million. Application decisions are typically made within fourteen days of submission, a turnaround that is unheard of in traditional film grants. Eligibility is broader than most: professional directors, producers, screenwriters, and creative professionals can apply, and every format qualifies — features, shorts, documentaries, experimental projects, and music videos. The advisory panel includes Tribeca Festival founder Jane Rosenthal, Company 3 founder Stefan Sonnenfeld, will.i.am, NVIDIA VP Richard Kerris, and TV Academy governor Christina Lee Storm. For filmmakers with a developed treatment and a clear AI-augmented production plan, the Hundred Film Fund is the highest-EV target on this list because it can be approached at any time, it does not require a competition win to receive money, and the upper end of the grant range matches a full feature-film budget.\n\n## Comparing the Five: Which Million-Dollar Prize Is Right for You\n\nThe five million-dollar tiers serve different filmmakers. The XPRIZE rewards writers who can develop a feature treatment around an optimistic AI premise and present a three-minute taste — it is the target for sci-fi-leaning, narrative-feature-track filmmakers. The Astana AIFF rewards short-form AI cinema of any genre and is the right call for filmmakers who already have or can rapidly produce a ten-minute AI short and who want a flagship festival win on their résumé. The Luma Dream Brief rewards commercial-craft creatives operating at agency level, where Cannes Lions Gold is a realistic outcome; it is the wrong target for narrative filmmakers and the right target for senior creative directors at AI-native production studios. The Google Gemini Award (when it returns) will reward tool-specific virtuosity with Veo and Gemini. The Runway Hundred Film Fund rewards developed projects with a clear AI production plan and is the right target for filmmakers who have a treatment they want to actually produce, rather than a finished film they want to enter.\n\n## Eligibility, Tools, and Submission Materials\n\nThe million-dollar contests have surprisingly little overlap in their eligibility requirements. XPRIZE accepts any production approach including pure live-action — AI is allowed, not required. Astana requires AI-generated work and caps duration at ten minutes. Luma's Dream Brief required 70% Luma-AI generation and a Luma-branded commercial focus. Google Gemini required predominant use of Google's tool family. Runway's Hundred Fund accepts any AI-augmented production plan but explicitly favors projects using Runway tools. None of these prizes charge entry fees, and all five are open to international filmmakers. Submission materials diverge: XPRIZE wants a treatment plus short film, Astana wants a film plus project description, Luma wanted a fully-finished commercial, Google wanted a finished film, and Runway wants a treatment plus production plan plus director's reel.\n\n## Strategic Submission Planning for 2026\n\nA filmmaker who wants to seriously compete for million-dollar AI film money in 2026 should think of these five prizes as a portfolio, not a lottery. The Astana deadline (August 31, 2026) and the XPRIZE deadline (August 15, 2026) are two weeks apart — close enough that the same film, recut, can target both if the work is short-form and thematically aligned. The Luma Dream Brief is past for 2026 but will likely return; commercial-track creatives should already be drafting concepts. The Runway Hundred Film Fund can be applied to immediately and again later in the year if rejected. The Google Gemini reissue is expected in late 2026. The strategically best position is to have one finished short ready by August (for Astana and the AI International Film Festival route), one treatment ready (for XPRIZE), and one project pitch (for the Hundred Film Fund). According to Fortune's March 2026 coverage of the XPRIZE launch, billionaire Peter Diamandis framed the prize as a deliberate counter to AI doom narratives — meaning the strongest XPRIZE submissions will lean into agency-positive, problem-solving futures rather than dystopia. According to Variety's coverage of the Runway fund, the strongest Hundred Fund applications come from filmmakers with a clear directorial voice already evident in prior work.\n\n## Beyond the Million-Dollar Tier\n\nWhile $1 million is the headline number, several adjacent contests pay near-million sums and deserve mention: the Runway AI Film Festival has a $135,000+ total prize pool with a $20,000 Grand Prix, the World AI Film Festival (WAIFF) carries €20,000+ in total awards judged by a jury that has included Gong Li, and the Reply AI Film Festival distributes €30,000+ in cash. The Curious Refuge Animation Awards offer up to $10,000 plus a development deal. For filmmakers whose work doesn't fit the specific eligibility of the million-dollar prizes — for example, a narrative short that's neither sci-fi nor commercial — these mid-tier festivals are higher-probability targets with prize pools that still pay rent. The complete circuit, ranked by prize size and updated daily, is what aifilmcontests.com tracks.",
+    relatedTools: ['runway', 'luma', 'sora'],
+    relatedCategories: ['short-film', 'feature', 'experimental', 'commercial'],
+    ruminatex: false,
+  },
 }
 
 const TOOL_NAMES: Record<string, string> = {
@@ -180,12 +190,33 @@ export default async function TopicPage({ params }: { params: Promise<{ slug: st
   const all = await getAllContests()
   const openContests = all.filter(c => c.status === 'open').slice(0, 4)
 
-  const jsonLd = {
+  const pageUrl = `https://aifilmcontests.com/topics/${slug}`
+  const nowIso = new Date().toISOString()
+
+  const articleSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'Article',
+    headline: topic.title,
+    description: topic.description,
+    mainEntityOfPage: { '@type': 'WebPage', '@id': pageUrl },
+    author: { '@type': 'Organization', name: 'AI Film Contests', url: 'https://aifilmcontests.com' },
+    publisher: {
+      '@type': 'Organization',
+      name: 'AI Film Contests',
+      url: 'https://aifilmcontests.com',
+      logo: { '@type': 'ImageObject', url: 'https://aifilmcontests.com/logo.png' },
+    },
+    datePublished: nowIso,
+    dateModified: nowIso,
+    keywords: topic.keywords,
+  }
+
+  const itemListSchema = {
     '@context': 'https://schema.org',
     '@type': 'ItemList',
     name: topic.title,
     description: topic.description,
-    url: `https://aifilmcontests.com/topics/${slug}`,
+    url: pageUrl,
     numberOfItems: openContests.length,
     itemListElement: openContests.map((c, i) => ({
       '@type': 'ListItem',
@@ -195,9 +226,59 @@ export default async function TopicPage({ params }: { params: Promise<{ slug: st
     })),
   }
 
+  // Topic-specific FAQs (extendable per page). Default falls back to a generic FAQ.
+  const FAQS_BY_SLUG: Record<string, { q: string; a: string }[]> = {
+    'ai-film-festivals-with-million-dollar-prizes': [
+      {
+        q: 'Which AI film festival has the biggest prize in 2026?',
+        a: 'The Future Vision XPRIZE has the single largest AI film prize pool in 2026 at over $3.5 million. The grand prize is $2.5 million in feature production funding plus a $100,000 cash prize, with four additional $100,000 finalist awards. Submissions close August 15, 2026 and the winner is announced at a live Los Angeles event on September 25, 2026.',
+      },
+      {
+        q: 'How many AI film festivals offer a $1 million prize in 2026?',
+        a: 'Five: the Future Vision XPRIZE ($3.5M total), the Astana AI Film Festival ($1M total prize fund), the Luma AI Dream Brief ($1M for a Cannes Lions Gold winner), the Google Gemini Global AI Film Award ($1M grand prize, now concluded for the 2025 cycle), and the Runway Hundred Film Fund (grants from $5K to $1M+ per project).',
+      },
+      {
+        q: 'How do I submit to the Astana AI Film Festival?',
+        a: 'The Astana AI Film Festival accepts AI-generated short films up to ten minutes in length. Filmmakers upload the film and a project description to the festival landing platform between May and the end of August 2026. Entry is free, open globally, and the festival itself takes place in autumn 2026 in Astana, Kazakhstan.',
+      },
+      {
+        q: 'Is the Future Vision XPRIZE free to enter?',
+        a: 'Yes. The Future Vision XPRIZE is free to enter and open globally. Submissions require a three-minute short film or trailer plus a treatment of up to twelve pages with a one-page cover sheet containing a logline, synopsis, and personal statement. The competition accepts live action, animation, AI, or any hybrid production approach.',
+      },
+      {
+        q: 'When does the Luma Dream Brief pay out the $1 million?',
+        a: 'The $1 million Luma Dream Brief grand prize is decided by results at the Cannes Lions festival in June 2026. Submissions closed March 22, 2026; finalists receive paid media support to run the work publicly. The prize is awarded to the team whose Luma-AI-generated commercial wins a 2026 Cannes Lions Gold Lion.',
+      },
+      {
+        q: 'How does the Runway Hundred Film Fund differ from the other million-dollar prizes?',
+        a: 'The Runway Hundred Film Fund is a rolling production fund, not a fixed-deadline contest. Grants range from $5,000 to $1 million+ per project plus up to $2 million in Runway credits. Applications are reviewed within fourteen days, and every format qualifies — features, shorts, documentaries, experimental projects, and music videos.',
+      },
+      {
+        q: 'Which million-dollar AI film prize is best for a first-time filmmaker?',
+        a: 'The Astana AI Film Festival is the most accessible for newcomers: free entry, no studio affiliation required, a short-film format capped at ten minutes, and no historical jury bias because it is the inaugural edition. Filmmakers with a finished AI short should target Astana first and use the XPRIZE for a more ambitious treatment-driven submission.',
+      },
+    ],
+  }
+
+  const faqs = FAQS_BY_SLUG[slug] || []
+
+  const faqSchema = faqs.length > 0 ? {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: faqs.map(f => ({
+      '@type': 'Question',
+      name: f.q,
+      acceptedAnswer: { '@type': 'Answer', text: f.a },
+    })),
+  } : null
+
+  const jsonLd = [articleSchema, itemListSchema, faqSchema].filter(Boolean)
+
   return (
     <InnerLayout>
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
+      {jsonLd.map((schema, i) => (
+        <script key={i} type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }} />
+      ))}
 
       <div className="max-w-4xl mx-auto px-5 py-12">
 
@@ -223,9 +304,28 @@ export default async function TopicPage({ params }: { params: Promise<{ slug: st
           }}>
             {topic.title}
           </h1>
-          <p style={{ fontSize: 16, color: '#71717a', lineHeight: 1.75, maxWidth: 720 }}>
-            {topic.body}
-          </p>
+          {topic.body.split('\n\n').map((block, i) => {
+            const trimmed = block.trim()
+            if (trimmed.startsWith('## ')) {
+              return (
+                <h2 key={i} style={{
+                  fontFamily: 'Space Grotesk, sans-serif',
+                  fontSize: 22,
+                  fontWeight: 700,
+                  letterSpacing: '-0.01em',
+                  color: '#f4f4f5',
+                  marginTop: 28,
+                  marginBottom: 12,
+                  maxWidth: 720,
+                }}>{trimmed.slice(3)}</h2>
+              )
+            }
+            return (
+              <p key={i} style={{ fontSize: 16, color: '#71717a', lineHeight: 1.75, maxWidth: 720, marginBottom: 16 }}>
+                {trimmed}
+              </p>
+            )
+          })}
         </div>
 
         {/* Tool chips */}
@@ -335,6 +435,40 @@ export default async function TopicPage({ params }: { params: Promise<{ slug: st
             </div>
             <div style={{ marginTop: 16 }}>
               <Link href="/" className="link-muted" style={{ fontSize: 13 }}>View all open contests →</Link>
+            </div>
+          </section>
+        )}
+
+        {/* FAQ section (visible to readers, mirrors FAQPage JSON-LD) */}
+        {faqs.length > 0 && (
+          <section style={{ marginBottom: 48 }}>
+            <h2 style={{
+              fontFamily: 'Space Grotesk, sans-serif',
+              fontSize: 13,
+              fontWeight: 600,
+              color: '#52525b',
+              textTransform: 'uppercase',
+              letterSpacing: '0.08em',
+              marginBottom: 16,
+            }}>
+              Frequently Asked Questions
+            </h2>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 18 }}>
+              {faqs.map((f, i) => (
+                <div key={i} style={{
+                  borderTop: '1px solid rgba(255,255,255,0.05)',
+                  paddingTop: 18,
+                }}>
+                  <h3 style={{
+                    fontFamily: 'Space Grotesk, sans-serif',
+                    fontSize: 16,
+                    fontWeight: 600,
+                    color: '#f4f4f5',
+                    marginBottom: 8,
+                  }}>{f.q}</h3>
+                  <p style={{ fontSize: 14, color: '#a1a1aa', lineHeight: 1.7, maxWidth: 720 }}>{f.a}</p>
+                </div>
+              ))}
             </div>
           </section>
         )}

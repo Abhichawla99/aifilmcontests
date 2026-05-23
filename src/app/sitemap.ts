@@ -74,6 +74,7 @@ const TOPICS = [
   'ai-documentary-making',
   'ai-animation-production',
   'ai-commercial-production',
+  'ai-film-festivals-with-million-dollar-prizes',
 ] as const
 
 // ── Comparison pages ──────────────────────────────────────────────────────────
