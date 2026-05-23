@@ -60,6 +60,7 @@ const GUIDES = [
   'ai-brand-film-guide',
   'building-ai-film-portfolio',
   'ai-film-post-production',
+  'ai-film-festivals-deadlines-june-2026',
 ] as const
 
 // ── Topic cluster pages ───────────────────────────────────────────────────────

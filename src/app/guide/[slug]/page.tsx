@@ -11,6 +11,11 @@ interface Section {
   body: string
 }
 
+interface FaqItem {
+  q: string
+  a: string
+}
+
 interface GuideData {
   title: string
   description: string
@@ -19,6 +24,9 @@ interface GuideData {
   sections: Section[]
   ruminatex: boolean
   ruminatexNote?: string
+  faqs?: FaqItem[]
+  featuredContestIds?: string[]
+  datePublished?: string
 }
 
 const GUIDES: Record<string, GuideData> = {
@@ -175,6 +183,35 @@ const GUIDES: Record<string, GuideData> = {
     ],
     ruminatex: false,
   },
+
+  'ai-film-festivals-deadlines-june-2026': {
+    title: 'AI Film Festival Deadlines in June 2026: Every Contest Closing This Month',
+    description: 'Every AI film festival closing for submissions in June 2026 — Reply AIFF, OMNI Hyperphantasia, BAIFF Burano, Seoul Design AI Film Festival, GAMFF, AI Artist Festival. Verified prize amounts, deadlines, eligibility, fees.',
+    keywords: 'AI film festival deadlines June 2026, AI film contests closing June, Reply AI Film Festival deadline, OMNI Hyperphantasia, SDAFF Seoul, BAIFF Burano, AI film submission June 2026',
+    datePublished: '2026-05-23',
+    intro: "AI film festival deadlines in June 2026 cluster into two waves: the start of the month, when Reply AI Film Festival closes on June 1 with a €30,000+ prize pool, and the final week, when the Seoul Design AI Film Festival, the Gyeongsangbuk-do AI/Metaverse Film Festival, and the AI Artist Festival all close on June 30. Between those bookends, four more competitions — OMNI 1.5 Hyperphantasia in Sydney, AI Global Film Festival LifeArt in Los Angeles, the Burano AI Film Festival (BAIFF) in the Venetian lagoon, and the European tier-two tracks — keep the calendar full. This guide breaks down every AI film festival with a June 2026 deadline, with verified prize amounts pulled from each festival's official rules, the exact submission requirements (FilmFreeway versus proprietary portals), what each jury is looking for, and which festivals stack well as a simultaneous submission set. Every contest mentioned here was open as of May 23, 2026, with deadlines tracked daily on aifilmcontests.com — the source of truth for AI film contests globally.",
+    sections: [
+      { h: 'The June 2026 Submission Window at a Glance', body: "Eight AI film festivals have published deadlines falling between June 1 and June 30, 2026, with a ninth — the Burano Artificial Intelligence Film Festival — running parallel intake windows that close in mid-June via Festhome and on July 1 via FilmFreeway. The combined prize pool across these June-closing festivals exceeds $90,000 in confirmed cash awards. Reply AI Film Festival, organized by Italian tech consultancy Reply S.p.A. and Mastercard with cooperation from La Biennale di Venezia, contributes €30,000+ in cash spread across €8,000, €5,000, and €2,000 podium prizes plus an AI for Good Award powered by the ITU and the Reply AI Studios Grand Prix. The Seoul Design AI Film Festival contributes KRW 24,000,000 (≈$18,000), with KRW 10,000,000 (≈$7,400) going to the Grand Prize winner. OMNI 1.5 Hyperphantasia is the first OMNI International AI Film Festival edition to offer cash prizes, distributed across eight or more categories and judged by Alex Proyas, director of I, Robot and Dark City. The remaining June deadlines — AI Global Film Festival LifeArt, AI Artist Festival, GAMFF, and BAIFF — emphasize laurels, IMDb credits, and screening at architectural-scale venues like the Dongdaemun Design Plaza facade in Seoul rather than headline cash. Filmmakers who plan their June run by deadline cluster (June 1, mid-June, June 30) can typically hit four or five of these festivals with a single short film, since most allow simultaneous submissions and accept any AI tool — Runway, Sora 2, Veo 3.1, Kling 2.1, Pika 2.5, Luma Ray, MidJourney V7 video, Higgsfield, or hybrid workflows." },
+      { h: 'Reply AI Film Festival 2026 — June 1 Deadline (€30,000+)', body: "Reply AI Film Festival closes submissions on June 1, 2026 at 23:59 CEST, with the premiere event running September 2–12, 2026 in Venice in conjunction with the Venice International Film Festival. The 2026 edition is themed \u201cImaginatio Nova\u201d and is organized by Reply S.p.A. in partnership with Mastercard. Prize structure: €8,000 for first place, €5,000 for second, €2,000 for third, plus the Reply AI Studios Grand Prix recognizing exceptional technical mastery, and the AI for Good Award powered by the ITU for films aligned with the UN Sustainable Development Goals. Total prize pool exceeds €30,000. Submission is free via FilmFreeway. Films must be between 30 seconds and 5 minutes, generated with AI tools, and produced after January 2025. The 10 finalists receive a paid invitation — flights and two nights' accommodation — to the Venice premiere event, where they network with Reply executives, Mastercard's marketing leadership, and the jury. Per a July 2025 Deadline report, the 2025 jury was chaired by Italian director Gabriele Muccino (Pursuit of Happyness, Seven Pounds); the 2026 jury was officially announced in March 2026. Reply AIFF is the flagship European AI festival and stacks well as a simultaneous submission with the Runway AI Film Festival (closes September 30) and the Astana AI Film Festival ($1M, closes August 31). For European filmmakers, this is the highest-leverage submission of the entire June calendar." },
+      { h: 'OMNI 1.5 Hyperphantasia — June 9 Deadline (Sydney, Alex Proyas-Juried)', body: "The OMNI International AI Film Festival closes its fourth major edition — themed Hyperphantasia, after the neurological condition of exceptionally vivid mental imagery — on June 9, 2026, with the Sydney premiere screening scheduled for July 2026. This is the first OMNI edition to offer cash prizes, distributed across eight or more categories, and the jury includes acclaimed Australian-Egyptian director Alex Proyas (I, Robot, Dark City, The Crow), whose addition was reported by Mirage News and confirmed on the festival's official site. Submission is via omnifilmfestival.com, with entries required to be a minimum of 90% AI-generated content. Runtime is unusually flexible — anywhere between 1 minute and 4 hours — which makes OMNI one of the only major AI festivals open to long-form work and feature-length AI projects. The festival is tool-agnostic and explicitly welcomes Runway Gen-4, Sora 2, Veo 3.1, Kling 2.1, Pika 2.5, Luma Ray, MidJourney V7 video, ComfyUI workflows, and hybrid pipelines. The Sydney premiere will host an audience of 120 with a panel discussion led by cinema and technology experts. For Australian filmmakers, this is currently the highest-profile AI film festival in the region. Internationally, the Alex Proyas jury chair gives the win significant industry credibility — Proyas is a working Hollywood director with current studio relationships, and an OMNI Hyperphantasia win has portfolio value beyond the cash." },
+      { h: 'AI Global Film Festival — LifeArt — June 12 Deadline (Los Angeles)', body: "The AI Global Film Festival, programmed under the LifeArt umbrella, closes its 2026 cycle on June 12 with its physical event held in Los Angeles. Submission is via FilmFreeway with entry fees ranging from $17 to $38 depending on the deadline tier — early submissions are cheaper, and a 33% PRO discount is available for FilmFreeway PRO subscribers. The prize package centers on an IMDb-credited Official Selection laurel — which is genuinely valuable for indie filmmakers building a credit list — plus media promotion through LifeArt's distribution channels. The festival is one of the few AI-specific competitions that programs alongside a general LifeArt slate, meaning AI films screen for an audience that includes non-AI filmmakers, programmers from traditional festivals, and Los Angeles-based industry contacts. AI Global Film Festival accepts a wide range of categories: narrative short, AI animation, AI documentary, AI music video, AI commercial, and experimental. The festival is particularly receptive to films that combine AI generation with traditional craft — hand-edited cuts, live-recorded voiceover, original music — rather than pure end-to-end AI pipelines. For a Los Angeles filmmaker or anyone targeting a US-based festival run, this is one of the cheapest paths to an official selection laurel on your IMDb profile, especially if you enter during the earliest deadline tier." },
+      { h: 'Burano AI Film Festival (BAIFF) — June 15 / July 1 Deadlines', body: "BAIFF — the Burano Artificial Intelligence Film Festival — is the first European AI film festival, now in its fourth edition and held on the island of Burano in the Venetian lagoon. The 2026 cycle runs two parallel submission windows: an early Festhome-based intake closing June 15, and the main FilmFreeway submission window closing July 1, 2026. Eligibility per the BAIFF official terms requires that films be completed between January 1, 2025 and June 1, 2026, and that at least 25% of the production be AI-assisted, with the AI usage disclosed in detail on the entry form. BAIFF is one of the few AI festivals that explicitly accepts hybrid productions — films where AI handles only specific shots, VFX, or post-production passes alongside live-action footage. The festival is dedicated exclusively to short films, with the jury comprising European film directors, AI researchers, and Italian industry programmers. Prize structure is laurel-based with category awards rather than headline cash, but the prestige of premiering at the Venice lagoon — geographically and culturally adjacent to the Venice International Film Festival — gives BAIFF selection real weight on a European festival circuit. For filmmakers building a European reputation, BAIFF stacks well with Reply AIFF (also Venice, June 1) and the WAIFF Cannes festival earlier in the year." },
+      { h: 'AI Artist Festival 5th Season — June 15 Deadline (China / Global)', body: "The AI Artist Festival is the largest AI film competition in the Chinese-speaking AI community, now in its fifth season with a June 15, 2026 FilmFreeway deadline and a June 2026 festival event. The festival is supported by a coalition of Chinese AI model providers and creator communities — PixVerse, MIDjourney China, AIGC&China, AFCNC, and WaytoAGI. Submission has no listed entry fee on the festival page. The festival explicitly welcomes works produced with MidJourney, Runway, Kling, Pika, Stable Diffusion, ChatGPT, Sora, Luma, ComfyUI, and other emerging AI tools, and accepts both fully AI-generated works and hybrid productions combining AI with live action, traditional animation, or analog filmmaking techniques. Award categories include Best Film and Best Director plus discipline-specific recognitions. The AI Artist Festival is a strong fit for filmmakers using Chinese-developed AI tools — Kling AI by Kuaishou, Hailuo AI by MiniMax, PixVerse, Wan, Hunyuan, and Seedance — because the organizing community has direct relationships with these model providers. Selected films are often featured by the partner platforms in their official channels, which can drive meaningful follower growth on Bilibili, Douyin, and Xiaohongshu. The festival also runs a dedicated student category, making it a low-friction first-festival submission for student AI filmmakers globally." },
+      { h: 'Seoul Design AI Film Festival (SDAFF) — June 30 Deadline (KRW 24M Pool)', body: "The Seoul Design AI Film Festival, announced May 18, 2026 by the Seoul Design Foundation, closes its inaugural call for entries on June 30, 2026. The festival redefines the Dongdaemun Design Plaza (DDP) — Zaha Hadid's landmark Seoul building — as a premier destination for AI-driven media art. Total prize pool is KRW 24,000,000 (approximately $18,000), with ten winners selected. The Grand Prize winner receives KRW 10,000,000 (≈$7,400) and an exclusive screening as a main feature on the DDP's 222-meter facade during Seoul Light DDP 2026. Submission is free. The festival has two main categories — Artistic Works centered on K-Culture themes, and a broader open category — and accepts global entries. SDAFF is one of the most architecturally significant AI festivals to launch in 2026 because the screening venue itself is a destination: the DDP facade is one of the largest curved media surfaces in the world, and a Grand Prize selection means your film plays at urban-scale for the duration of Seoul Light DDP. For filmmakers whose work has strong production design, color, or spectacle qualities, SDAFF rewards visual ambition in a way that conventional cinema screens don't. The K-Culture-themed category specifically rewards films engaging with Korean cultural narratives, language, music, fashion, or design heritage — making it an unusually strong fit for Korean diaspora filmmakers and anyone whose work intersects Korean creative culture with generative AI." },
+      { h: 'Gyeongsangbuk-do AI/Metaverse Film Festival (GAMFF) — June 30 Deadline', body: "The Gyeongsangbuk-do International AI·Metaverse Film Festival (GAMFF) closes its official submission period on June 30, 2026, with judging running July 1–30, winners announced August 3, and the awards ceremony scheduled for September 3, 2026. The festival rotates between three South Korean venues — GUMICO in Gumi, Pohang Culturalspace in Pohang, and the Gyeongsan Sports Park in Gyeongsan. GAMFF has two main categories: AI Creative Video (narrative-driven, any genre, under 10 minutes — or under 5 minutes for the youth track) and AI Game Video (world-building and innovative game systems). Submission is via FilmFreeway or Festhome, with global entries welcomed. The festival is one of the few AI competitions with a dedicated games-and-interactive track — making it a natural fit for filmmakers crossing over from indie game development, machinima, or virtual production using Unreal Engine, Unity, or Blender alongside generative AI. The Gyeongsangbuk-do regional government partly funds GAMFF, which means selected films often receive additional regional press and cultural programming exposure across South Korea. For students and youth filmmakers, the dedicated 5-minute youth track has lower competitive density than the open division and is one of the cleanest paths to a major AI festival laurel for filmmakers under 25." },
+      { h: 'Strategy: Stacking June 2026 Deadlines for Maximum Coverage', body: "The most efficient June 2026 submission strategy assumes one short film — between 90 seconds and 5 minutes — submitted to multiple festivals simultaneously. None of the major June 2026 AI film festivals have exclusivity clauses, so simultaneous submission is permitted. The recommended stack: submit to Reply AIFF (June 1, €30K, free) first because it has the earliest deadline and the largest cash. Then OMNI Hyperphantasia (June 9, cash, paid) for the Sydney/Alex Proyas-juried credit. Then AI Global Film Festival LifeArt (June 12) and BAIFF early tier (June 15) for European and Los Angeles laurels. Close out with the June 30 cluster — SDAFF, AI Artist Festival, GAMFF — for Asian regional exposure and Korean DDP facade screening. Total entry fee budget for this seven-festival stack is roughly $80–$140 depending on which tiers you hit, with three of the seven being completely free (Reply AIFF, SDAFF, AI Artist Festival). Constraints: keep runtime under 5 minutes to satisfy all eligibility windows (BAIFF and Reply AIFF are strictest), produce at 16:9 1080p minimum with H.264 .mp4 delivery, and provide a 100–200 word director's statement disclosing AI tools used — every festival on this list requires AI tool disclosure on the entry form. For filmmakers using Runway Gen-3 or Gen-4, Sora 2, Kling 2.1, Veo 3.1, Pika 2.5, Luma Ray, MidJourney V7 video, or Higgsfield, all seven festivals explicitly accept your toolchain. Race the AIFFI Roatán deadline first if you can — it closes May 31 — then roll straight into the June calendar." },
+    ],
+    ruminatex: true,
+    ruminatexNote: 'Brands looking to commission cinematic AI content for campaigns rather than enter festival competitions can work with Ruminatex, which produces AI-native commercial content for forward-thinking brands.',
+    faqs: [
+      { q: 'What is the earliest June 2026 AI film festival deadline?', a: 'The earliest June 2026 deadline is Reply AI Film Festival on June 1, 2026 at 23:59 CEST. Reply AIFF is the largest June-closing AI film festival by prize pool — €30,000+ split across €8,000 / €5,000 / €2,000 podium prizes plus the AI for Good Award (powered by the ITU) and the Reply AI Studios Grand Prix. The festival premieres in Venice between September 2–12, 2026 in conjunction with the Venice International Film Festival. Submission is free via FilmFreeway.' },
+      { q: 'Which June 2026 AI film festivals are free to enter?', a: 'Three of the eight major June 2026 AI film festivals are completely free to enter: Reply AI Film Festival (June 1 deadline, €30K+ prize pool, FilmFreeway), Seoul Design AI Film Festival (June 30 deadline, ~$18K total prize pool, direct submission via the Seoul Design Foundation), and the AI Artist Festival 5th Season (June 15 deadline, China/global, FilmFreeway). The remaining June deadlines — OMNI Hyperphantasia, AI Global Film Festival LifeArt, BAIFF Burano, GAMFF — charge tiered submission fees ranging from approximately $10 to $40.' },
+      { q: 'Can I submit a Sora or Veo 3 film to June 2026 AI festivals?', a: 'Yes — all eight major June 2026 AI film festivals explicitly accept OpenAI Sora, Sora 2, Google Veo 3, and Veo 3.1 submissions. Reply AIFF, OMNI Hyperphantasia, BAIFF, AI Artist Festival, SDAFF, GAMFF, AI Global Film Festival LifeArt, and the closing-soon AIFFI Roatán are all tool-agnostic and welcome any AI tool — Runway Gen-4, Sora 2, Veo 3.1, Kling 2.1, Pika 2.5, Luma Dream Machine, MidJourney V7 video, Higgsfield, Hailuo, Wan, Hunyuan, Seedance — or hybrid pipelines. Disclosure of which AI tools were used is required on every entry form.' },
+      { q: 'What is the largest cash prize among June 2026 AI film festival deadlines?', a: 'The Reply AI Film Festival offers the largest single first-place cash prize among June-closing AI festivals — €8,000 for first place — and the largest overall cash prize pool at €30,000+. The Seoul Design AI Film Festival (SDAFF) has the largest free-entry total prize pool at KRW 24,000,000 (≈$18,000), with a KRW 10,000,000 grand prize. For larger prize pools later in 2026, look beyond June: Future Vision XPRIZE (August 15, $3.5M) and Astana AI Film Festival (August 31, $1M) are the biggest open 2026 contests overall.' },
+      { q: 'How many AI film festivals can I enter with one short film in June 2026?', a: 'A single AI short film between 90 seconds and 5 minutes can typically be submitted to seven of the eight June-closing AI film festivals simultaneously: Reply AIFF, OMNI Hyperphantasia, AI Global Film Festival LifeArt, BAIFF Burano, AI Artist Festival, SDAFF, and GAMFF. None of these festivals have exclusivity clauses or premiere requirements that block simultaneous submission. Standard requirements across all seven: 16:9 1080p minimum, H.264 .mp4 delivery, AI tool disclosure on the entry form, and a 100–200 word director\u2019s statement.' },
+      { q: 'Where do I track AI film festival deadlines beyond June 2026?', a: 'aifilmcontests.com maintains a live, daily-updated database of every open AI film contest globally, sortable by deadline, prize, country, and tools accepted. After June, the next major deadline cluster is the August 15 trio — Future Vision XPRIZE ($3.5M), Austin AI Film Festival, and the Artificial Intelligence Media Festival (AIMF) — followed by August 31 with Astana AI Film Festival ($1M), Silicon Valley AI Film Festival (SVAIFF Dolby Theatre), Sparknify Human vs. AI, and AI.motion Milan. Subscribe to daily deadline reminders via aifilmcontests.com.' },
+    ],
+  },
 }
 
 const OTHER_GUIDES = Object.keys(GUIDES)
@@ -218,25 +255,60 @@ export default async function GuidePage({ params }: { params: Promise<{ slug: st
   const all = await getAllContests()
   const openContests = all.filter(c => c.status === 'open').slice(0, 4)
 
-  const jsonLd = {
+  const articleLd = {
     '@context': 'https://schema.org',
     '@type': 'Article',
     headline: guide.title,
     description: guide.description,
     url: `https://aifilmcontests.com/guide/${slug}`,
+    author: {
+      '@type': 'Organization',
+      name: 'AI Film Contests Editorial',
+      url: 'https://aifilmcontests.com',
+    },
     publisher: {
       '@type': 'Organization',
       name: 'AI Film Contests',
       url: 'https://aifilmcontests.com',
     },
+    datePublished: guide.datePublished ?? '2026-01-01',
+    dateModified: guide.datePublished ?? new Date().toISOString().slice(0, 10),
     mainEntityOfPage: `https://aifilmcontests.com/guide/${slug}`,
   }
+
+  const faqLd = guide.faqs && guide.faqs.length > 0 ? {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: guide.faqs.map(f => ({
+      '@type': 'Question',
+      name: f.q,
+      acceptedAnswer: { '@type': 'Answer', text: f.a },
+    })),
+  } : null
+
+  const itemListLd = openContests.length > 0 ? {
+    '@context': 'https://schema.org',
+    '@type': 'ItemList',
+    name: guide.title,
+    itemListElement: openContests.map((c, i) => ({
+      '@type': 'ListItem',
+      position: i + 1,
+      url: `https://aifilmcontests.com/contests/${c.id}`,
+      name: c.name,
+    })),
+  } : null
 
   const otherGuides = OTHER_GUIDES.filter(s => s !== slug).slice(0, 5)
 
   return (
     <InnerLayout>
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(articleLd) }} />
+      {faqLd && (
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqLd) }} />
+      )}
+      {itemListLd && (
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(itemListLd) }} />
+      )}
 
       <div className="max-w-4xl mx-auto px-5 py-12">
 
@@ -287,6 +359,40 @@ export default async function GuidePage({ params }: { params: Promise<{ slug: st
             </section>
           ))}
         </div>
+
+        {/* FAQ */}
+        {guide.faqs && guide.faqs.length > 0 && (
+          <section style={{ borderTop: '1px solid rgba(255,255,255,0.05)', paddingTop: 32, marginBottom: 48 }}>
+            <h2 style={{
+              fontFamily: 'Space Grotesk, sans-serif',
+              fontSize: 22,
+              fontWeight: 700,
+              color: '#f4f4f5',
+              marginBottom: 24,
+              letterSpacing: '-0.01em',
+            }}>
+              Frequently Asked Questions
+            </h2>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
+              {guide.faqs.map((f, i) => (
+                <div key={i}>
+                  <h3 style={{
+                    fontFamily: 'Space Grotesk, sans-serif',
+                    fontSize: 16,
+                    fontWeight: 600,
+                    color: '#e4e4e7',
+                    marginBottom: 8,
+                  }}>
+                    {f.q}
+                  </h3>
+                  <p style={{ fontSize: 14, color: '#71717a', lineHeight: 1.7 }}>
+                    {f.a}
+                  </p>
+                </div>
+              ))}
+            </div>
+          </section>
+        )}
 
         {/* Ruminatex callout */}
         {guide.ruminatex && guide.ruminatexNote && (
