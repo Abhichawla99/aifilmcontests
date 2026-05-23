@@ -84,9 +84,8 @@ export default function InnerLayout({ children }: InnerLayoutProps) {
               href="https://ruminatex.com"
               target="_blank"
               rel="noopener noreferrer"
-              style={{ fontSize: 12, color: '#3f3f46', textDecoration: 'none', transition: 'color 0.15s' }}
-              onMouseEnter={e => (e.currentTarget.style.color = '#6366f1')}
-              onMouseLeave={e => (e.currentTarget.style.color = '#3f3f46')}
+              className="link-muted"
+              style={{ fontSize: 12 }}
             >
               Crafted by Ruminatex
             </a>
