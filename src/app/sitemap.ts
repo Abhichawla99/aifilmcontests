@@ -3,7 +3,7 @@ import { getAllContests } from '@/lib/contests-db'
 
 const BASE = 'https://aifilmcontests.com'
 
-// ── Static pages ─────────────────────────────────────────────────────────────
+// ââ Static pages âââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
 // Add new static routes here as the site grows.
 const STATIC_PAGES: MetadataRoute.Sitemap = [
   {
@@ -18,7 +18,7 @@ const STATIC_PAGES: MetadataRoute.Sitemap = [
   },
 ]
 
-// ── Category hub pages ────────────────────────────────────────────────────────
+// ââ Category hub pages ââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
 const CATEGORIES = [
   'short-film',
   'animation',
@@ -30,7 +30,7 @@ const CATEGORIES = [
   'advertising',
 ] as const
 
-// ── AI tool hub pages ─────────────────────────────────────────────────────────
+// ââ AI tool hub pages âââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
 const TOOLS = [
   'runway',
   'kling',
@@ -48,7 +48,7 @@ const TOOLS = [
   'invideo',
 ] as const
 
-// ── Guide pages ───────────────────────────────────────────────────────────────
+// ââ Guide pages âââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
 const GUIDES = [
   'how-to-enter-ai-film-contest',
   'ai-filmmaking-tools-guide',
@@ -63,7 +63,7 @@ const GUIDES = [
   'ai-film-festivals-deadlines-june-2026',
 ] as const
 
-// ── Topic cluster pages ───────────────────────────────────────────────────────
+// ââ Topic cluster pages âââââââââââââââââââââââââââââââââââââââââââââââââââââââ
 const TOPICS = [
   'text-to-video-filmmaking',
   'generative-ai-narrative',
@@ -76,9 +76,10 @@ const TOPICS = [
   'ai-animation-production',
   'ai-commercial-production',
   'ai-film-festivals-with-million-dollar-prizes',
+  'best-ai-film-festivals-for-sora-users',
 ] as const
 
-// ── Comparison pages ──────────────────────────────────────────────────────────
+// ââ Comparison pages ââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
 const VS_PAGES = [
   'runway-vs-kling',
   'runway-vs-sora',
@@ -87,7 +88,7 @@ const VS_PAGES = [
   'best-ai-video-tools-2026',
 ] as const
 
-// ── Location pages ────────────────────────────────────────────────────────────
+// ââ Location pages ââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
 const LOCATIONS = [
   'usa',
   'europe',
@@ -96,7 +97,7 @@ const LOCATIONS = [
   'global',
 ] as const
 
-// ── Prize tier pages ──────────────────────────────────────────────────────────
+// ââ Prize tier pages ââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
 const PRIZES = [
   'free-entry',
   'high-prize',
@@ -108,7 +109,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const contests = await getAllContests()
   const now      = new Date()
 
-  // Individual contest pages — priority + frequency based on status
+  // Individual contest pages â priority + frequency based on status
   const contestUrls: MetadataRoute.Sitemap = contests.map(c => {
     const isOpen     = c.status === 'open'
     const isUpcoming = c.status === 'upcoming'
@@ -199,7 +200,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     ...locationUrls,
     ...prizeUrls,
 
-    // Individual contest pages (largest set, sorted: open → upcoming → closed)
+    // Individual contest pages (largest set, sorted: open â upcoming â closed)
     ...contestUrls.sort((a, b) => (b.priority ?? 0) - (a.priority ?? 0)),
   ]
 }

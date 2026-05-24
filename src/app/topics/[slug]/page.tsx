@@ -129,6 +129,71 @@ const TOPICS: Record<string, TopicData> = {
     relatedCategories: ['short-film', 'feature', 'experimental', 'commercial'],
     ruminatex: false,
   },
+  'best-ai-film-festivals-for-sora-users': {
+    title: 'Best AI Film Festivals That Accept Sora Submissions in 2026',
+    description: 'The definitive list of AI film festivals that accept OpenAI Sora and Sora 2 work in 2026 — prizes, deadlines, disclosure rules, and which festivals reward Sora aesthetics. Cited from live contest data.',
+    keywords: 'AI film festivals that accept Sora, Sora film contests 2026, OpenAI Sora festival submissions, where to submit Sora film, Sora 2 video competitions, Sora short film festival',
+    body: 'OpenAI Sora and Sora 2 films are eligible for nearly every major AI film festival running in 2026, including the $1 million Astana AI Film Festival, the $3.5 million Future Vision XPRIZE, the €30,000+ Reply AI Film Festival in Venice, the Runway AI Festival, the AI Artist Festival, BAIFF Burano, AIFFI, IFFI Goa AI Film Festival, Silicon Valley AIFF at the Dolby Theatre, and the Austin AI Film Festival. Of the 36 currently open AI film contests tracked in our live database, 32 explicitly accept Sora or any AI tool. The catch is in the fine print: each festival has its own disclosure rules, percentage-of-AI thresholds, audio requirements, and human-in-the-loop tests that determine whether your Sora short actually scores.
+
+This guide is built for the filmmaker holding a Sora 2 clip and a Sora API key. It is sorted by prize size, lists the eligibility nuance for each, and tells you where Sora aesthetics tend to win versus where they get marked down. Every contest cited here comes from our live database, which is rebuilt nightly from organizer announcements and filmmaker community feedback.
+
+## What counts as a Sora-eligible festival in 2026
+
+A Sora-eligible festival is any AI film contest whose rules either (a) name Sora in an accepted-tools list, (b) say "any AI tools," "any generative video model," or "any AI software," or (c) require a minimum AI-generated percentage that Sora can satisfy on its own. Almost no festival in 2026 excludes Sora specifically — the only structural exclusions in the wild are tool-specific contests like the Google Gemini Global AI Film Award (now concluded) and Luma\'s Dream Brief, both of which are walled gardens for their host platform. Sora\'s competitive advantage at festivals comes from three traits OpenAI shipped with Sora 2 in 2026: 25-second clips with synchronized dialogue and ambient audio, the Character Cameos feature for consistent characters across shots, and an upgraded physics engine that judges read as "cinematic" rather than "AI-looking." The Sora 2 Pro tier extends this further with longer-form generation, the model OpenAI itself describes as a leap in controllability.
+
+Two practical constraints to know going in. First, every Sora video carries C2PA provenance metadata and a visible watermark by default — festivals generally allow you to remove the watermark for a final submission cut, but they expect you to disclose Sora in your director\'s statement. Second, the OpenAI consumer Sora app was wound down to focus the team on the API, so production-grade work now flows through the Sora 2 Video API that OpenAI opened to all developers earlier in 2026 — programmatic generation is officially the path.
+
+## The $3.5M Future Vision XPRIZE — Sora-eligible, deadline August 15, 2026
+
+The Future Vision XPRIZE is the largest film prize in the world that explicitly welcomes AI tools. Backed by Google and Range Media Partners with a $3.5 million pool, it asks filmmakers worldwide to submit a three-minute short or trailer plus a twelve-page treatment depicting an optimistic, technology-enabled future. Per XPRIZE\'s official rules, "creators may use any production tools, including live action, animation, AI, or hybrid approaches," which makes Sora 2 fair game for the entire film if you can keep it within the three-minute runtime. The structural rule to watch: founder Peter Diamandis has stated the films must remain human-driven — "we\'re not looking for an AI to write a script and an AI to make a film without a human in the loop" — so a Sora submission needs a credible written treatment, named director, and clear authorial intent. Grand prize is $2.5 million in production funding plus $100,000 cash to develop the short into a feature, with four runner-up finalists each receiving $100,000. Judges include Astro Teller (Google X), Cathie Wood (ARK Invest), Rod Roddenberry (Roddenberry Foundation), and XPRIZE CEO Anousheh Ansari. Finalists pitch live at the Moonshot Gathering in Los Angeles on September 25, 2026. Sora 2\'s strength on sci-fi-adjacent worldbuilding and its 25-second clip ceiling map well to a three-minute structured short.
+
+## The $1M Astana AI Film Festival — Sora-eligible, deadline August 31, 2026
+
+Astana AI Film Festival is Kazakhstan\'s inaugural international AI festival and carries a $1 million total prize fund — one of the largest cash pools in AI cinema. According to the Astana Times announcement, the competition is open to any filmmaker worldwide regardless of experience or access to professional studios, and submissions are AI-generated short films of up to ten minutes uploaded to the festival platform with a project description. Entry is free. The rules do not restrict tool choice, which makes Sora and Sora 2 fully eligible — particularly competitive because Sora\'s audio-synced output reduces the post-production load on solo filmmakers competing against agency-backed entries. The festival event is scheduled for autumn 2026 in Astana, with applications open from May through end of August. For a Sora filmmaker, Astana is the highest expected-value contest of the year by prize per submission: a $1M pool against an applicant field still small enough that high-craft Sora work can rank.
+
+## The €30,000+ Reply AI Film Festival — Sora-eligible, deadline June 1, 2026
+
+Reply AI Film Festival is the European flagship and the closest the AI film world has to a Venice Film Festival counterpart. Its 2026 edition closes June 1 and hosts its premiere event September 2 through 12 at Lido di Venezia, parallel to the 83rd Venice International Film Festival proper. The prize structure pays €8,000 for first place, €5,000 for second, and €2,000 for third, plus a Production Excellence Award, a Lexus Visionary Award, an AI for Good Award co-developed with the International Telecommunication Union, and a Best Use of AI in Filmmaking prize — total pool exceeds €30,000. Per Reply\'s official FAQ, films should incorporate AI-powered tools in the creation process but are explicitly not required to be 100% AI-generated, which makes Sora-plus-live-action hybrids legal. Director Gabriele Muccino chairs the 2026 jury. Reply is the right festival for narratively confident Sora work that uses generative video as part of a larger production, not the only ingredient. Entry is free.
+
+## The Runway AI Film Festival accepts Sora work too — deadline cycle February to April
+
+Although the Runway AI Festival is sponsored and named by a competing platform, its rules accept any AI tools. The 2026 entry window ran January 28 to April 27, with ten winning teams or individual entrants announced on or about April 30, finalists screened at gala events in New York and Los Angeles, and selected work shown at partner festivals worldwide. The 2027 edition will open in early 2027 on the same cycle; if you have Sora work right now, your path is to begin a 12-month festival run targeting 2027 Runway AIF in addition to nearer-deadline contests. Runway\'s jury and curators have historically rewarded craft over tool brand — past selections have included films made with mixed pipelines — so Sora submissions are competitive on their own merits.
+
+## AI Artist Festival 5th Season — Sora listed explicitly, deadline June 30, 2026
+
+AI Artist Festival is the rare 2026 contest that names Sora in its accepted-tools list alongside Midjourney, Runway, Kling, Pika, Stable Diffusion, ComfyUI, Luma, and PixVerse. Open globally to filmmakers 18 and over, the rules require fully AI or hybrid AI-plus-live-action films completed between January 1, 2025 and June 1, 2026. Categories cover short film, animation, documentary, experimental, music video, and commercial work. Prizes are festival laurels and community recognition rather than large cash awards, which makes this a credibility-building contest — useful if your Sora portfolio needs official-selection laurels before you submit to Astana or XPRIZE. Sora 2\'s anime and stylized capabilities give it an edge in the experimental and music video tracks.
+
+## BAIFF Burano Artificial Intelligence Film Festival — deadline July 1, 2026
+
+BAIFF, the Burano Artificial Intelligence Film Festival held in Venice, Italy, explicitly lists Sora alongside Runway, Kling, Veo, Midjourney, Higgsfield, Luma, and any AI tool. Open to filmmakers 18 and older worldwide, the rules require films at least 25% AI-generated and completed between January 1, 2025 and June 1, 2026. Jury, honorary, and category awards include both cash prizes and screening slots. The Burano edition has built a curatorial reputation for rewarding atmosphere and visual specificity over technical novelty — Sora 2\'s photoreal lighting and motion stability play well here. A separate 4th edition fourth-cycle BAIFF closes June 15, 2026 for short films, music video, documentary, animation, and experimental — also any-tool-accepted with a 25% minimum AI threshold.
+
+## AIFFI International Festival for AI-Generated Short Films — deadline May 31, 2026
+
+AIFFI is closing imminently — May 31, 2026 — and accepts any AI tools, making it the most time-sensitive Sora-eligible contest in this guide. The prize pool is over $10,000 USD in awards, the category is short film, and the entry fee varies by category. AIFFI is run by an established organizer with festival programming in the AI short film space and has built credibility through selectivity. If you have a finished Sora short, this is the deadline to hit.
+
+## Silicon Valley AI Film Festival (SVAIFF) Awards — Dolby Theatre, deadline August 31, 2026
+
+SVAIFF is a US-focused AI festival that culminates in screenings at the Dolby Theatre in Hollywood. It accepts any AI tools across short film, narrative, experimental, and advertising categories. The prize is festival selection plus Dolby Theatre screening plus industry exposure — not large cash, but the venue is unique in AI film: there is no other contest that puts a Sora short on the Dolby Theatre screen. For a US filmmaker building credentials in the entertainment industry, SVAIFF has structural value beyond the prize.
+
+## Other open Sora-eligible contests closing in 2026
+
+Beyond the headline festivals, our live database lists 25 additional open contests in 2026 that accept Sora as part of any-AI-tool rules. The most notable are Austin AI Film Festival (deadline August 15, 2026 — second annual edition, cash prizes plus festival screening), Artificial Intelligence Media Festival (AIMF, deadline August 15, 2026 — 501c3-run with LA screening, includes a student track), IFFI Goa AI Film Festival 2026 (deadline August 31, 2026 — operated by India\'s National Film Development Corporation Ministry of Information and Broadcasting with WAVES Film Bazaar and LTIMindtree, free submission via FilmFreeway, includes a Cinema AI Hackathon track), Seoul Design AI Film Festival (deadline June 30, 2026 — KRW 24 million prize plus DDP Facade screening, free entry), OMNI 1.5 HYPERPHANTASIA in Sydney (deadline June 9, 2026 — Sydney\'s first cash-prize AI film festival across eight-plus categories), Gyeongsangbuk-do International AI/Metaverse Film Festival (GAMFF, deadline June 30, 2026 — cash prizes plus festival selection), AI for the Future Festival HLPF Edition (deadline July 1, 2026 — selections screen at the United Nations HLPF event in NYC), Bochnia International AI Film Festival in Poland (deadline August 15, 2026 — $2,500 USD cash pool), BLACK AI FEST (deadline July 15, 2026 — 21-category academy awards format), AI.motion at IULM Milan (deadline August 31, 2026 — RAI Cinema Channel Prize plus PROMPT Magazine Prize, free entry), Sparknify Human vs. AI Film Festival (deadline August 31, 2026 — $3,000 Humanity Award plus expanding entry-fee-funded pool), AIGC for Future Global Challenge (deadline August 31, 2026 — $10,000 total pool), and the AI ZONE International AI Film Festival (deadline September 30, 2026 — cash award for Best AI Mini Movie).
+
+## How to position a Sora film for selection
+
+Three practical positioning notes for Sora 2 filmmakers. First, lead the director\'s statement with intent — what your film argues, who directed it, what creative decisions you made about prompt selection, edit, and sound — because programmers read these looking for evidence of authorial choice rather than tool novelty. Second, name Sora 2 explicitly in your tech credits along with any other tools (editing software, voice models, music generation); festivals that require AI disclosure expect specificity, and being vague reads as evasive. Third, treat Sora\'s 25-second clip ceiling as a structural strength: it forces clean shot decisions in three-act shorts and rewards filmmakers who plan in scenes rather than continuous takes. The Sora films that won early Tribeca "Sora Shorts" slots — work by Bonnie Discepolo, Ellie Foumbi, Nikyatu Jusu, Reza Sixo Safai, and Michaela Ternasky-Holland — succeeded because they were treated as directed shorts, not generative experiments. That same standard applies at the 2026 festivals listed in this guide.
+
+## The festivals where Sora does not yet apply
+
+Two notable exclusions to plan around. The Google Gemini Global AI Film Award required submissions made on Google\'s own Flow / Veo platform — Sora work was not eligible there, and the inaugural cycle has now concluded. Luma AI Dream Brief, the $1 million Cannes Lions-aligned commercial competition, restricts entries to Luma Dream Machine and Ray outputs. Beyond those two platform-walled contests, every other major 2026 AI film prize accepts Sora.
+
+## Bottom line — where to focus this season
+
+If you have one Sora 2 short ready to submit in the next 90 days, the highest expected-value combination is Astana AIFF for prize size ($1M pool, free entry, August 31 deadline), Future Vision XPRIZE for prize and prestige ($3.5M pool, free entry, August 15 deadline, requires a treatment), Reply AIFF for European visibility (€30K pool, free entry, June 1 deadline, Venice premiere), and AIFFI for an immediate-deadline domestic win ($10K+ pool, May 31 deadline). Add AI Artist Festival and BAIFF Burano for laurels that strengthen later applications. That is the realistic Sora festival run for the second half of 2026.',
+    relatedTools: ['sora', 'runway', 'kling', 'veo'],
+    relatedCategories: ['short-film', 'experimental', 'narrative'],
+    ruminatex: false,
+  },
 }
 
 const TOOL_NAMES: Record<string, string> = {
@@ -256,6 +321,32 @@ export default async function TopicPage({ params }: { params: Promise<{ slug: st
       {
         q: 'Which million-dollar AI film prize is best for a first-time filmmaker?',
         a: 'The Astana AI Film Festival is the most accessible for newcomers: free entry, no studio affiliation required, a short-film format capped at ten minutes, and no historical jury bias because it is the inaugural edition. Filmmakers with a finished AI short should target Astana first and use the XPRIZE for a more ambitious treatment-driven submission.',
+      },
+    ],
+    'best-ai-film-festivals-for-sora-users': [
+      {
+        q: 'Which AI film festivals in 2026 accept Sora films?',
+        a: 'Almost every major AI film festival in 2026 accepts Sora and Sora 2 work, including the $1M Astana AI Film Festival (deadline August 31, 2026), the $3.5M Future Vision XPRIZE (August 15, 2026), the €30,000+ Reply AI Film Festival in Venice (June 1, 2026), the Runway AI Festival, AI Artist Festival, BAIFF Burano, AIFFI, IFFI Goa, SVAIFF at the Dolby Theatre, and Austin AIFF. Of 36 open AI film contests tracked in our live database, 32 explicitly accept Sora or any AI tool. The two platform-locked exceptions are Luma Dream Brief (Luma-only) and the now-concluded Google Gemini Global AI Film Award (Flow / Veo only).',
+      },
+      {
+        q: 'Does the Future Vision XPRIZE allow Sora-generated films?',
+        a: 'Yes. Per Future Vision XPRIZE official rules, creators may use any production tools including live action, animation, AI, or hybrid approaches, which makes Sora 2 eligible for the entire film. The structural requirement is that the film must remain human-driven — founder Peter Diamandis has explicitly stated that purely AI-generated films without a human in the loop are not the goal. A Sora submission needs a named director, a written 12-page treatment, and clear authorial intent. The submission deadline is August 15, 2026 and the grand prize is $2.5 million in production funding plus $100,000 cash.',
+      },
+      {
+        q: 'Do I have to disclose that my film used Sora when submitting to festivals?',
+        a: 'Yes — both for legal reasons and selection reasons. Every Sora video carries C2PA provenance metadata and a visible watermark by default. Most festivals allow watermark removal for the final cut but require AI disclosure in the director\'s statement and tech credits. Be specific: name Sora 2 alongside any other tools used (editing software, voice models, music generation, manual rotoscoping). Programmers read disclosure statements looking for evidence of authorial choice and risk mitigation, and vague disclosure reads as evasive.',
+      },
+      {
+        q: 'What is the largest cash prize for a Sora-eligible AI film festival in 2026?',
+        a: 'The Future Vision XPRIZE has the largest prize pool at $3.5 million total, with $2.5 million in production funding plus a $100,000 cash grand prize and four runner-up finalists at $100,000 each. Sora 2 is eligible for the entire production. The Astana AI Film Festival is the next largest at $1 million total prize fund, also Sora-eligible and free to enter. Both close in August 2026.',
+      },
+      {
+        q: 'Can I submit the same Sora film to multiple festivals at the same time?',
+        a: 'Generally yes, with two exceptions to check per festival. Most AI festivals accept simultaneous submissions and have no premiere requirement, which is different from traditional film festival circuits. The two situations to watch are festivals that explicitly require world or regional premieres in their rules, and contests like Reply AIFF and Runway AIF where becoming a finalist may include a premiere obligation for the gala screening. Read each festival\'s rules section on premiere status before paying late-tier entry fees, and keep your director\'s statement consistent across applications so the same Sora film is described the same way at every contest.',
+      },
+      {
+        q: 'Are there Sora-specific film festivals run by OpenAI?',
+        a: 'Not as a recurring annual festival. OpenAI ran the Sora Shorts initiative in partnership with Tribeca Festival to showcase early Sora work from invited filmmakers including Bonnie Discepolo, Ellie Foumbi, Nikyatu Jusu, Reza Sixo Safai, and Michaela Ternasky-Holland, but Sora Shorts was a curated showcase rather than an open competition. The OpenAI consumer Sora app has been wound down to refocus on the Sora 2 Video API. For competitive submission opportunities, Sora filmmakers compete in the general AI film festival circuit listed above rather than in a tool-walled OpenAI-only contest.',
       },
     ],
   }
