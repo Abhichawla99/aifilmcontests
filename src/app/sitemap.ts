@@ -61,6 +61,7 @@ const GUIDES = [
   'building-ai-film-portfolio',
   'ai-film-post-production',
   'ai-film-festivals-deadlines-june-2026',
+  'ai-film-festivals-deadlines-july-2026',
   'how-to-submit-to-reply-ai-film-festival-2026',
   'how-to-submit-to-berlin-ai-film-festival-2026',
   'how-to-submit-to-astana-ai-film-festival-2026',
