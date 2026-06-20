@@ -67,6 +67,7 @@ const GUIDES = [
   'how-to-submit-to-berlin-ai-film-festival-2026',
   'how-to-submit-to-astana-ai-film-festival-2026',
   'how-to-submit-to-future-vision-xprize-2026',
+  'how-to-win-runway-ai-film-festival',
   'how-to-apply-to-runway-hundred-film-fund-2026',
 ] as const
 
