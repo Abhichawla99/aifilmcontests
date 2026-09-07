@@ -176,8 +176,8 @@ export async function buildDailyReport(): Promise<DailyReport> {
   const todos: string[] = []
   if (!migrated) todos.push('Paste supabase/migrations/2026-09-07-autopilot.sql into Supabase → SQL Editor → Run. Takes 30 seconds. Unlocks tracking, sales, and robot reporting.')
   if (quotaBlocked) todos.push(quotaLogged
-    ? 'Upgrade Resend to Pro ($20/mo, 50k emails) at resend.com → Settings → Billing. Resend is refusing sends: monthly limit hit. Until then no subscriber gets any email.'
-    : `Emails look stuck: ${pending} contest update${pending === 1 ? '' : 's'} should have gone out but nothing has been sent for ${daysSinceEmail ?? '?'} days. Most likely the Resend monthly limit (the old crons hit it on Sep 7). Upgrade Resend to Pro ($20/mo) at resend.com → Settings → Billing, or it resumes on the 1st.`)
+    ? `Upgrade Resend to Pro ($20/mo) at resend.com → Settings → Billing → Transactional. Resend is refusing sends. The Free plan allows 100 emails a day and 3,000 a month; the list is ${active ?? '?'} people, so a full send can never fit. Until then no subscriber gets any email.`
+    : `Emails look stuck: ${pending} contest update${pending === 1 ? '' : 's'} should have gone out but nothing has been sent for ${daysSinceEmail ?? '?'} days. The Free plan allows 100 emails a day and 3,000 a month; the list is ${active ?? '?'} people, so a full send can never fit. Upgrade Resend to Pro ($20/mo) at resend.com → Settings → Billing → Transactional.`)
   if (!process.env.REPORT_TO_EMAIL) todos.push('Vercel → aifilmcontests → Settings → Environment Variables → add REPORT_TO_EMAIL = your email, then redeploy. This report then arrives by email every morning at 10am.')
   if (migrated && !engagementMeasurable) todos.push(`Resend → Domains → turn on Open + Click tracking. Then Resend → Webhooks → add ${SITE_URL}/api/webhooks/resend (all email events) and put its signing secret in Vercel as RESEND_WEBHOOK_SECRET.`)
   if (!stripeReady) todos.push(`Stripe → Payment Links → create "Featured listing, ${PRICE_LABEL}". Put the link URL in Vercel as STRIPE_PAYMENT_LINK. Stripe → Webhooks → add ${SITE_URL}/api/webhooks/stripe for checkout.session.completed and put its secret in Vercel as STRIPE_WEBHOOK_SECRET.`)
@@ -190,7 +190,7 @@ export async function buildDailyReport(): Promise<DailyReport> {
     const todoNo = todos.findIndex(t => t.startsWith('Upgrade Resend') || t.startsWith('Emails look stuck')) + 1
     headline = quotaLogged
       ? `🔴 Emails are blocked. Resend says we hit the monthly limit. Subscribers have received nothing for ${daysSinceEmail ?? '?'} days. Fix: upgrade Resend (to-do #${todoNo}).`
-      : `🔴 Emails look stuck. ${pendingNew.length} new contest${pendingNew.length === 1 ? '' : 's'} and ${pendingClosing.length} last-call${pendingClosing.length === 1 ? '' : 's'} are waiting, but nothing has gone out in ${daysSinceEmail ?? '?'} days. Almost certainly the Resend monthly limit. Fix: to-do #${todoNo}.`
+      : `🔴 Emails look stuck. ${pendingNew.length} new contest${pendingNew.length === 1 ? '' : 's'} and ${pendingClosing.length} last-call${pendingClosing.length === 1 ? '' : 's'} are waiting, but nothing has gone out in ${daysSinceEmail ?? '?'} days. The Resend Free plan caps sends at 100 a day and the list is ${active ?? '?'} people. Fix: to-do #${todoNo}.`
   } else if (!migrated) {
     headline = `🟡 The robots are running but can't report in yet. Paste the SQL (to-do #1, 30 seconds) and tomorrow's report has real numbers.`
   } else if (daysSinceEmail != null && daysSinceEmail >= 8) {

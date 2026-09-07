@@ -84,7 +84,7 @@ export async function GET(request: NextRequest) {
       const closingThisWeek = open.filter(c => c.deadline <= in7).map(c => ({ ...toItem(c), daysLeft: daysLeft(c.deadline) }))
       const newThisWeek = open.filter(c => c.created_at && c.created_at >= since7d).map(toItem)
       result = await sendWeeklyDigest(subs, open.map(toItem), { newThisWeek, closingThisWeek })
-      if (result.success) {
+      if (result.sent > 0) { // log even a partial send: no duplicates tomorrow
         await logEmailSent('weekly_digest', weekKey, result.sent)
         for (const c of newContests) await logEmailSent('new_contest', c.id, result.sent)
         for (const c of closingSoon) await logEmailSent('3day_expiring', c.id, result.sent)
@@ -102,15 +102,18 @@ export async function GET(request: NextRequest) {
       newContests: newContests.map(toItem),
       closingSoon: closingSoon.map(c => ({ ...toItem(c), daysLeft: daysLeft(c.deadline) })),
     })
-    if (result.success) {
+    if (result.sent > 0) { // log even a partial send: no duplicates tomorrow
       for (const c of newContests) await logEmailSent('new_contest', c.id, result.sent)
       for (const c of closingSoon) await logEmailSent('3day_expiring', c.id, result.sent)
     }
   }
 
   if (!result || !result.success) {
+    const partial = (result?.sent ?? 0) > 0
     const why = result?.quotaExceeded
-      ? 'Resend monthly quota exceeded — nobody got emails today. Upgrade Resend.'
+      ? partial
+        ? `Resend quota hit mid-send: ${result!.sent} of ${subs.length} people got today's email, ${result!.failed} did not (they won't be retried). Upgrade Resend.`
+        : `Resend quota exceeded — nobody got emails today (Free plan: 100/day, 3,000/month; list is ${subs.length}). Upgrade Resend.`
       : `Send failed: ${JSON.stringify(result?.error ?? 'unknown').slice(0, 300)}`
     await logAgentRun('notify', 'failed', why, { mode, sent: result?.sent ?? 0, failed: result?.failed ?? 0 })
     return NextResponse.json({ ok: false, mode, error: why }, { status: 500 })
