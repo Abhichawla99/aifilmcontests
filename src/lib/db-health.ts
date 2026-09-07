@@ -40,7 +40,7 @@ export async function migrationApplied(): Promise<boolean> {
 }
 
 export type AgentTask =
-  | 'research' | 'seo' | 'optimizer' | 'sales' | 'notify' | 'scorecard' | 'outreach' | 'sale' | 'maintenance' | 'vercel-research'
+  | 'research' | 'seo' | 'optimizer' | 'sales' | 'design' | 'weekly' | 'submission' | 'notify' | 'scorecard' | 'outreach' | 'sale' | 'maintenance' | 'vercel-research'
 export type AgentStatus = 'ok' | 'failed' | 'skipped'
 
 /** Best-effort: record what a robot did. Silently no-ops until the migration exists. */

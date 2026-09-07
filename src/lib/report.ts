@@ -185,7 +185,8 @@ export async function buildDailyReport(): Promise<DailyReport> {
     q.select('task,status,summary,ran_at').gte('ran_at', h36.toISOString()).order('ran_at', { ascending: false }).limit(100))
   const latestByTask = new Map<string, { status: string; summary: string | null; ran_at: string }>()
   for (const r of runs.data) if (!latestByTask.has(r.task)) latestByTask.set(r.task, r)
-  const expectedRobots = ['research', 'seo', 'optimizer', 'sales', 'notify', 'outreach', 'vercel-research', 'maintenance']
+  const expectedRobots = ['research', 'seo', 'optimizer', 'design', 'sales', 'notify', 'outreach', 'vercel-research', 'maintenance']
+  const submissions7 = await count('agent_runs', q => q.eq('task', 'submission').gte('ran_at', d7.toISOString()))
 
   // ── To-do list (shrinks as things get done) ─────────────────────────────────
   const todos: string[] = []
@@ -257,6 +258,7 @@ export async function buildDailyReport(): Promise<DailyReport> {
   L.push(`• Added yesterday: ${added.data.length}${added.data.length ? ` (${added.data.map(a => a.name).slice(0, 6).join(', ')})` : ''}.`)
   L.push(`• Closing in the next 3 days: ${closing.data.length}${closing.data.length ? ` (${closing.data.map(c => c.name).join(', ')})` : ''}.`)
   L.push(`• Featured (paid) right now: ${featuredNow ?? 0}.`)
+  L.push(`• Submitted by visitors (7 days): ${submissions7 ?? 0} via ${SITE_URL}/submit (the research robot verifies them).`)
   L.push('')
   L.push('MONEY')
   if (sales30.missing) L.push('• Featured listing sales: not tracked yet (needs the SQL).')
@@ -279,7 +281,7 @@ export async function buildDailyReport(): Promise<DailyReport> {
       L.push(`${icon} ${task} — ${(r.summary ?? '').slice(0, 160)}`)
     }
     Array.from(latestByTask.entries()).forEach(([task, r]) => { if (!expectedRobots.includes(task)) L.push(`${r.status === 'ok' ? '✅' : '❌'} ${task} — ${(r.summary ?? '').slice(0, 160)}`) })
-    const silent = ['research', 'seo', 'optimizer', 'sales'].filter(t => !latestByTask.has(t))
+    const silent = ['research', 'seo', 'optimizer', 'design', 'sales'].filter(t => !latestByTask.has(t))
     if (silent.length) L.push(`😴 Didn't check in: ${silent.join(', ')} (Mac asleep or Claude Desktop closed?)`)
   }
   L.push('')

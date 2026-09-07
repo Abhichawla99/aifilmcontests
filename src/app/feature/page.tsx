@@ -78,7 +78,7 @@ export default async function FeaturePage({ searchParams }: { searchParams: Prom
               ? <a href={payUrl(picked.id)!} style={btn}>Feature {picked.name.length > 28 ? 'this contest' : picked.name} →</a>
               : <a href={mailto(picked.name)} style={btn}>Email us to feature it →</a>
           ) : (
-            <a href={mailto()} style={{ ...btn, background: 'rgba(255,255,255,0.06)', boxShadow: 'none', color: '#d4d4d8' }}>Not listed yet? Email us (free) →</a>
+            <a href="/submit" style={{ ...btn, background: 'rgba(255,255,255,0.06)', boxShadow: 'none', color: '#d4d4d8' }}>Not listed yet? Submit it (free) →</a>
           )}
         </div>
 

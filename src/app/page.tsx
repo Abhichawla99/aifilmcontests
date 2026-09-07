@@ -132,7 +132,7 @@ export default async function Home() {
             </div>
 
             <nav className="hidden sm:flex items-center gap-6">
-              {([['Browse', '#contests'], ['Subscribe', '#subscribe'], ['Submit a Contest', 'mailto:hello@aifilmcontests.com']] as [string, string][]).map(([label, href]) => (
+              {([['Browse', '#contests'], ['Subscribe', '#subscribe'], ['Submit a Contest', '/submit']] as [string, string][]).map(([label, href]) => (
                 <a key={label} href={href} className="link-muted" style={{ fontSize: 13, fontWeight: 500 }}>{label}</a>
               ))}
             </nav>
@@ -512,7 +512,7 @@ export default async function Home() {
             </span>
 
             <div className="flex items-center gap-4" style={{ fontSize: 12 }}>
-              <a href="mailto:hello@aifilmcontests.com" className="link-muted">Submit a Contest</a>
+              <a href="/submit" className="link-muted">Submit a Contest</a>
               <span style={{ color: '#1c1c28' }}>·</span>
               <a href="/cinematic-ads" className="link-muted">Cinematic AI Ads</a>
               <span style={{ color: '#1c1c28' }}>·</span>

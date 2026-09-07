@@ -399,7 +399,7 @@ export default async function ContestPage({ params }: { params: Promise<{ id: st
               Tracking every AI film competition · Updated daily
             </span>
             <div className="flex items-center gap-4" style={{ fontSize: 12 }}>
-              <a href="mailto:hello@aifilmcontests.com" className="link-muted">Submit a Contest</a>
+              <a href="/submit" className="link-muted">Submit a Contest</a>
               <span style={{ color: '#27272a' }}>·</span>
               <Link href={`/feature?contest=${contest.id}`} className="link-muted">Organizer? Feature this contest</Link>
               <span style={{ color: '#27272a' }}>·</span>

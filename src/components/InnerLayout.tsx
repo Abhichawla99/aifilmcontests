@@ -79,7 +79,7 @@ export default function InnerLayout({ children }: InnerLayoutProps) {
           {/* Right: links */}
           <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
             <Link href="/" className="link-muted" style={{ fontSize: 12 }}>Browse All</Link>
-            <a href="mailto:hello@aifilmcontests.com" className="link-muted" style={{ fontSize: 12 }}>Submit a Contest</a>
+            <a href="/submit" className="link-muted" style={{ fontSize: 12 }}>Submit a Contest</a>
             <a
               href="https://ruminatex.com"
               target="_blank"
