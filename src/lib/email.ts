@@ -187,18 +187,25 @@ async function logSends(rows: Array<{
 
 export async function sendToRecipients(opts: {
   kind: EmailKind
-  subject: string
+  /** One subject for everyone, or a function for per-person subjects. */
+  subject: string | ((r: Recipient) => string)
   recipients: Array<string | Recipient>
   html: (r: Recipient, unsubUrl: string) => string
   text?: (r: Recipient, unsubUrl: string) => string
-  contestIds?: string[]
+  /** Contest ids mentioned, for per-person dedup. Prefix with new:/soon:/week: to say how. */
+  contestIds?: string[] | ((r: Recipient) => string[])
   replyTo?: string
+  /** Smaller batches waste fewer sends when a daily quota runs out mid-way. */
+  batchSize?: number
 }): Promise<SendResult> {
   const recipients = normalizeRecipients(opts.recipients)
   if (!recipients.length) return { success: true, sent: 0, failed: 0 }
+  const subjectFor = (r: Recipient) => (typeof opts.subject === 'function' ? opts.subject(r) : opts.subject)
+  const idsFor = (r: Recipient) => (typeof opts.contestIds === 'function' ? opts.contestIds(r) : opts.contestIds ?? null)
+  const size = Math.min(100, Math.max(1, opts.batchSize ?? BATCH))
 
   if (!process.env.RESEND_API_KEY) {
-    console.log(`[Dev] ${opts.kind} → ${recipients.length} recipients: "${opts.subject}"`)
+    console.log(`[Dev] ${opts.kind} → ${recipients.length} recipients: "${subjectFor(recipients[0])}"`)
     return { success: true, sent: recipients.length, failed: 0 }
   }
 
@@ -206,15 +213,15 @@ export async function sendToRecipients(opts: {
   let sent = 0
   let failed = 0
 
-  for (let i = 0; i < recipients.length; i += BATCH) {
-    const chunk = recipients.slice(i, i + BATCH)
+  for (let i = 0; i < recipients.length; i += size) {
+    const chunk = recipients.slice(i, i + size)
     const payload = chunk.map(r => {
       const unsub = unsubscribeUrl(r.token)
       return {
         from: `AI Film Contests <${FROM_EMAIL}>`,
         to: [r.email],
         reply_to: opts.replyTo ?? REPLY_TO,
-        subject: opts.subject,
+        subject: subjectFor(r),
         headers: listUnsubscribeHeaders(unsub),
         tags: [{ name: 'kind', value: opts.kind }],
         html: opts.html(r, unsub),
@@ -237,9 +244,9 @@ export async function sendToRecipients(opts: {
       await logSends(chunk.map((r, idx) => ({
         email_type: opts.kind,
         recipient: r.email,
-        subject: opts.subject,
+        subject: subjectFor(r),
         resend_email_id: ids[idx]?.id ?? null,
-        contest_ids: opts.contestIds ?? null,
+        contest_ids: idsFor(r),
       })))
     } catch (err) {
       console.error(`[Email] ${opts.kind} batch threw:`, err)
@@ -249,7 +256,7 @@ export async function sendToRecipients(opts: {
       }
     }
 
-    if (i + BATCH < recipients.length) await sleep(700) // stay under Resend's 2 req/s
+    if (i + size < recipients.length) await sleep(600) // stay under Resend's 2 req/s
   }
 
   return { success: failed === 0, sent, failed }
@@ -301,10 +308,10 @@ export async function sendWelcomeEmail(
   <div style="border:1px solid rgba(255,255,255,0.07);border-radius:10px;padding:20px 22px;margin-bottom:24px;">
     <div style="font-size:12px;font-weight:600;color:#52525b;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:14px;">What you'll receive</div>
     <div style="color:#d4d4d8;font-size:14px;line-height:2.2;">
-      ✦&nbsp;&nbsp;New contest alerts, the day they open<br>
-      ✦&nbsp;&nbsp;A Monday digest: what's open and what closes this week<br>
-      ✦&nbsp;&nbsp;One last-call ping 3 days before a deadline<br>
-      ✦&nbsp;&nbsp;Never more than one email a day
+      ✦&nbsp;&nbsp;New contests, within a day or two of opening<br>
+      ✦&nbsp;&nbsp;A last call before a deadline closes<br>
+      ✦&nbsp;&nbsp;What's closing this week, once a week<br>
+      ✦&nbsp;&nbsp;Everything bundled: a few emails a month, never daily spam
     </div>
   </div>
 
@@ -324,7 +331,7 @@ export async function sendWelcomeEmail(
   </div>`, unsub),
     text: (_r, unsub) =>
       `${firstName ? `Hey ${firstName},` : 'Hey,'}\n\nYou're on the list. We track every AI film competition and verify them daily.\n\n` +
-      `What you'll receive:\n- New contest alerts, the day they open\n- A Monday digest: what's open and what closes this week\n- One last-call ping 3 days before a deadline\n- Never more than one email a day\n\n` +
+      `What you'll receive:\n- New contests, within a day or two of opening\n- A last call before a deadline closes\n- What's closing this week, once a week\n- Everything bundled: a few emails a month, never daily spam\n\n` +
       `Quick favour: reply "got it" to this email so future alerts land in your Primary inbox.\n\nBrowse open contests: ${SITE_URL}\n\nUnsubscribe: ${unsub}`,
   })
   return { success: result.success, error: result.error }
@@ -371,6 +378,61 @@ export async function sendDailyPulse(
       (soon.length ? `CLOSING IN 3 DAYS\n\n${textList(soon)}\n\n` : '') +
       `All open contests: ${SITE_URL}\nUnsubscribe: ${unsub}`,
   })
+}
+
+// ─── Per-person bundle: everything new for ONE subscriber since their last email ─
+
+export interface Bundle {
+  newContests: ContestEmailItem[]
+  closingSoon: ContestEmailItem[]      // ≤ 3 days
+  closingThisWeek: ContestEmailItem[]  // 4–7 days
+}
+
+export function buildBundleEmail(b: Bundle): {
+  subject: string
+  html: (unsub: string) => string
+  text: (unsub: string) => string
+  contestIds: string[]
+} {
+  const news = b.newContests.map(c => ({ ...c, isNew: true }))
+  const soon = [...b.closingSoon].sort((a, c) => (a.daysLeft ?? 99) - (c.daysLeft ?? 99))
+  const week = [...b.closingThisWeek].sort((a, c) => (a.daysLeft ?? 99) - (c.daysLeft ?? 99))
+  const parts: string[] = []
+  if (news.length) parts.push(news.length === 1 ? `New: ${news[0].name}` : `${news.length} new contests`)
+  if (soon.length) parts.push(soon.length === 1 ? `${soon[0].daysLeft}d left: ${soon[0].name}` : `${soon.length} closing in 3 days`)
+  if (!news.length && !soon.length && week.length) parts.push(`${week.length} contest${week.length !== 1 ? 's' : ''} closing this week`)
+  const subject = (soon.length && !news.length ? '🚨 ' : '') + parts.join(' · ')
+
+  const h1 = news.length
+    ? (news.length === 1 ? 'A new contest just opened' : `${news.length} new contests just opened`)
+    : soon.length ? 'Last call' : 'Closing this week'
+  const body = `
+  <h1 style="font-size:22px;font-weight:700;margin:0 0 6px 0;">${h1}</h1>
+  <p style="color:#71717a;font-size:14px;margin:0 0 8px 0;">Everything since your last email, verified against live sources.</p>
+  ${news.length ? sectionTitle('New') + news.map(contestCard).join('') : ''}
+  ${soon.length ? sectionTitle('Closing in 3 days', 'Submit now or miss the deadline entirely.') + soon.map(contestCard).join('') : ''}
+  ${week.length ? sectionTitle('Closing this week') + week.map(contestCard).join('') : ''}
+  <div style="text-align:center;margin-top:24px;">
+    <a href="${SITE_URL}" style="display:inline-block;background:#4f46e5;color:#fff;text-decoration:none;padding:12px 26px;border-radius:8px;font-size:14px;font-weight:600;">View all open contests →</a>
+  </div>`
+  const badge = news.length
+    ? `<span style="background:#4f46e5;color:#fff;font-size:11px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;padding:3px 10px;border-radius:4px;">${news.length} New</span>`
+    : soon.length ? `<span style="background:#dc2626;color:#fff;font-size:11px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;padding:3px 10px;border-radius:4px;">Closing Soon</span>` : ''
+
+  return {
+    subject,
+    html: unsub => shell(body, unsub, badge),
+    text: unsub =>
+      (news.length ? `NEW\n\n${textList(news)}\n\n` : '') +
+      (soon.length ? `CLOSING IN 3 DAYS\n\n${textList(soon)}\n\n` : '') +
+      (week.length ? `CLOSING THIS WEEK\n\n${textList(week)}\n\n` : '') +
+      `All open contests: ${SITE_URL}\nUnsubscribe: ${unsub}`,
+    contestIds: [
+      ...news.map(c => `new:${c.id}`),
+      ...soon.map(c => `soon:${c.id}`),
+      ...week.map(c => `week:${c.id}`),
+    ].filter(x => !x.endsWith(':undefined')),
+  }
 }
 
 // ─── Weekly digest (Mondays) ──────────────────────────────────────────────────
