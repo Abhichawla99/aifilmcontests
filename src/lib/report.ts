@@ -119,7 +119,23 @@ export async function buildDailyReport(): Promise<DailyReport> {
 
   const notifyFail = await rows<{ summary: string; ran_at: string }>('agent_runs', q =>
     q.select('summary,ran_at').eq('task', 'notify').eq('status', 'failed').gte('ran_at', d2.toISOString()).order('ran_at', { ascending: false }).limit(1))
-  const quotaBlocked = /quota/i.test(notifyFail.data[0]?.summary ?? '')
+  const quotaLogged = /quota/i.test(notifyFail.data[0]?.summary ?? '')
+
+  // Things that SHOULD have been emailed but weren't (works even before the migration)
+  const sentLog = await rows<{ email_type: string; contest_id: string | null }>('email_logs', q =>
+    q.select('email_type,contest_id').order('sent_at', { ascending: false }).limit(1000))
+  const announced = new Set(sentLog.data.filter(r => r.email_type === 'new_contest').map(r => r.contest_id))
+  const pinged = new Set(sentLog.data.filter(r => r.email_type === '3day_expiring').map(r => r.contest_id))
+  const recentNew = await rows<{ id: string; name: string }>('contests', q =>
+    q.select('id,name').eq('status', 'open').gte('created_at', d2.toISOString()).limit(50))
+  const dueSoon = await rows<{ id: string; name: string }>('contests', q =>
+    q.select('id,name').eq('status', 'open').gte('deadline', today).lte('deadline', in3).limit(50))
+  const pendingNew = recentNew.data.filter(c => !announced.has(c.id))
+  const pendingClosing = dueSoon.data.filter(c => !pinged.has(c.id))
+  const pending = pendingNew.length + pendingClosing.length
+
+  const emailsStuck = pending > 0 && (daysSinceEmail == null || daysSinceEmail >= 2)
+  const quotaBlocked = quotaLogged || emailsStuck
 
   // ── Contests ────────────────────────────────────────────────────────────────
   const [cTotal, cOpen, cUpcoming, cClosed] = await Promise.all([
@@ -132,7 +148,7 @@ export async function buildDailyReport(): Promise<DailyReport> {
     q.select('name,status').gte('created_at', yStart.toISOString()).lt('created_at', dayStart.toISOString()).limit(20))
   const closing = await rows<{ name: string; deadline: string }>('contests', q =>
     q.select('name,deadline').eq('status', 'open').gte('deadline', today).lte('deadline', in3).order('deadline').limit(10))
-  const featuredNow = await count('contests', q => q.eq('featured', true).eq('status', 'open'))
+  const featuredNow = await count('contests', q => q.eq('status', 'open').gt('featured_until', now.toISOString()))
 
   // ── Money ───────────────────────────────────────────────────────────────────
   const sales30 = await rows<{ name: string; featured_paid_at: string }>('contests', q =>
@@ -159,7 +175,10 @@ export async function buildDailyReport(): Promise<DailyReport> {
   // ── To-do list (shrinks as things get done) ─────────────────────────────────
   const todos: string[] = []
   if (!migrated) todos.push('Paste supabase/migrations/2026-09-07-autopilot.sql into Supabase → SQL Editor → Run. Takes 30 seconds. Unlocks tracking, sales, and robot reporting.')
-  if (quotaBlocked) todos.push('Upgrade Resend to Pro ($20/mo, 50k emails) at resend.com → Settings → Billing. Until then no subscriber gets any email.')
+  if (quotaBlocked) todos.push(quotaLogged
+    ? 'Upgrade Resend to Pro ($20/mo, 50k emails) at resend.com → Settings → Billing. Resend is refusing sends: monthly limit hit. Until then no subscriber gets any email.'
+    : `Emails look stuck: ${pending} contest update${pending === 1 ? '' : 's'} should have gone out but nothing has been sent for ${daysSinceEmail ?? '?'} days. Most likely the Resend monthly limit (the old crons hit it on Sep 7). Upgrade Resend to Pro ($20/mo) at resend.com → Settings → Billing, or it resumes on the 1st.`)
+  if (!process.env.REPORT_TO_EMAIL) todos.push('Vercel → aifilmcontests → Settings → Environment Variables → add REPORT_TO_EMAIL = your email, then redeploy. This report then arrives by email every morning at 10am.')
   if (migrated && !engagementMeasurable) todos.push(`Resend → Domains → turn on Open + Click tracking. Then Resend → Webhooks → add ${SITE_URL}/api/webhooks/resend (all email events) and put its signing secret in Vercel as RESEND_WEBHOOK_SECRET.`)
   if (!stripeReady) todos.push(`Stripe → Payment Links → create "Featured listing, ${PRICE_LABEL}". Put the link URL in Vercel as STRIPE_PAYMENT_LINK. Stripe → Webhooks → add ${SITE_URL}/api/webhooks/stripe for checkout.session.completed and put its secret in Vercel as STRIPE_WEBHOOK_SECRET.`)
   if (!analyticsOn) todos.push('Vercel → aifilmcontests → Analytics tab → Enable. (Code is already in.) Then tell Claude "analytics is on" and this line disappears.')
@@ -168,7 +187,10 @@ export async function buildDailyReport(): Promise<DailyReport> {
   // ── Headline ────────────────────────────────────────────────────────────────
   let headline: string
   if (quotaBlocked) {
-    headline = `🔴 Emails are blocked. Resend says we hit the monthly limit. Subscribers have received nothing for ${daysSinceEmail ?? '?'} days. Fix: upgrade Resend (to-do #${todos.findIndex(t => t.startsWith('Upgrade Resend')) + 1}).`
+    const todoNo = todos.findIndex(t => t.startsWith('Upgrade Resend') || t.startsWith('Emails look stuck')) + 1
+    headline = quotaLogged
+      ? `🔴 Emails are blocked. Resend says we hit the monthly limit. Subscribers have received nothing for ${daysSinceEmail ?? '?'} days. Fix: upgrade Resend (to-do #${todoNo}).`
+      : `🔴 Emails look stuck. ${pendingNew.length} new contest${pendingNew.length === 1 ? '' : 's'} and ${pendingClosing.length} last-call${pendingClosing.length === 1 ? '' : 's'} are waiting, but nothing has gone out in ${daysSinceEmail ?? '?'} days. Almost certainly the Resend monthly limit. Fix: to-do #${todoNo}.`
   } else if (!migrated) {
     headline = `🟡 The robots are running but can't report in yet. Paste the SQL (to-do #1, 30 seconds) and tomorrow's report has real numbers.`
   } else if (daysSinceEmail != null && daysSinceEmail >= 8) {
@@ -208,13 +230,14 @@ export async function buildDailyReport(): Promise<DailyReport> {
   L.push('EMAILS')
   L.push(`• Sent yesterday: ${n(sentYesterday ?? (lastSend.missing ? null : 0))}. Last 7 days: ${n(sends7Approx)}.`)
   L.push(`• Last email went out: ${lastEmailAt ? `${lastEmailAt.toISOString().slice(0, 10)} (${daysSinceEmail} days ago)` : 'never / unknown'}.`)
+  L.push(`• Waiting to go out: ${pendingNew.length} new-contest announcement${pendingNew.length === 1 ? '' : 's'}, ${pendingClosing.length} last-call ping${pendingClosing.length === 1 ? '' : 's'}.`)
   L.push(`• Rule: one email a day max. New contests same day, last-call at 3 days, digest on Mondays.`)
   L.push('')
   L.push('CONTESTS')
   L.push(`• ${n(cTotal)} tracked · ${n(cOpen)} open · ${n(cUpcoming)} upcoming · ${n(cClosed)} closed.`)
   L.push(`• Added yesterday: ${added.data.length}${added.data.length ? ` (${added.data.map(a => a.name).slice(0, 6).join(', ')})` : ''}.`)
   L.push(`• Closing in the next 3 days: ${closing.data.length}${closing.data.length ? ` (${closing.data.map(c => c.name).join(', ')})` : ''}.`)
-  L.push(`• Featured (paid) right now: ${n(featuredNow)}.`)
+  L.push(`• Featured (paid) right now: ${featuredNow ?? 0}.`)
   L.push('')
   L.push('MONEY')
   if (sales30.missing) L.push('• Featured listing sales: not tracked yet (needs the SQL).')
@@ -261,7 +284,7 @@ export async function buildDailyReport(): Promise<DailyReport> {
       migrated, quotaBlocked, analyticsOn, stripeReady, outreachMode,
       people: { total, active, left, newYesterday, new7, newMonth, newLastMonth, topSources },
       engagement: { measurable: engagementMeasurable, opened30: opened.size, clicked30: clicked.size, complaints7, bounces7 },
-      emails: { sentYesterday, sends7: sends7Approx, lastEmailAt: lastEmailAt?.toISOString() ?? null, daysSinceEmail },
+      emails: { sentYesterday, sends7: sends7Approx, lastEmailAt: lastEmailAt?.toISOString() ?? null, daysSinceEmail, pendingNew: pendingNew.map(c => c.name), pendingClosing: pendingClosing.map(c => c.name), quotaLogged, emailsStuck },
       contests: { total: cTotal, open: cOpen, upcoming: cUpcoming, closed: cClosed, addedYesterday: added.data, closingSoon: closing.data, featuredNow },
       money: { sales30: sales30.data.length, revenue30Cents: sales30.data.length * PRICE_CENTS, drafted7, sentOut7, contactsKnown },
       robots: Object.fromEntries(Array.from(latestByTask.entries())),
