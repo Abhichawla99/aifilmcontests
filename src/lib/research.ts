@@ -1,6 +1,5 @@
 import { supabaseAdmin } from './supabase'
-import { sendNewContestAlerts } from './email'
-import { logEmailSent } from './email-logs'
+import { logAgentRun } from './db-health'
 
 // ── Only these columns exist in the contests table ────────────────────────────
 const VALID_COLUMNS = [
@@ -389,30 +388,15 @@ Go to each URL, read the actual page content, and return the JSON array.`,
     }
   }
 
-  // ── Email subscribers about new contests ──────────────────────────────────────
-  if (addedIds.length > 0) {
-    try {
-      const { data: newContestData } = await supabaseAdmin
-        .from('contests')
-        .select('name, organizer, prize, deadline, url, description')
-        .in('id', addedIds)
-
-      const { data: subs } = await supabaseAdmin
-        .from('subscribers')
-        .select('email')
-        .eq('confirmed', true)
-
-      if (newContestData?.length && subs?.length) {
-        await sendNewContestAlerts(subs.map(s => s.email), newContestData)
-        for (const id of addedIds) {
-          await logEmailSent('new_contest', id, subs.length)
-        }
-        info(`Emailed ${subs.length} subscribers about ${newContestData.length} new contests`)
-      }
-    } catch (err) {
-      info(`Subscriber email failed: ${String(err)}`)
-    }
-  }
+  // Emails are sent by /api/cron/notify (one deduped email per day). This job only discovers + upserts.
+  await logAgentRun(
+    'vercel-research',
+    upsertError ? 'failed' : 'ok',
+    upsertError
+      ? `Upsert failed: ${upsertError}`
+      : `Perplexity pass: ${candidates.length} candidates → added ${addedIds.length}${addedIds.length ? ' (' + addedIds.join(', ') + ')' : ''}`,
+    { phase1Candidates: candidates.length, addedIds },
+  )
 
   return {
     ok: true,

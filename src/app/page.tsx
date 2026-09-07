@@ -26,8 +26,14 @@ export default async function Home() {
     return m ? sum + parseInt(m[1].replace(/,/g, '')) : sum
   }, 0)
 
-  // Pick featured: highest-prize open contest, fallback to first upcoming
-  const featured: Contest | null = open.concat().sort((a, b) => {
+  // Pick featured: a PAID, unexpired featured listing wins the spotlight
+  // (most recent purchase first). Otherwise the highest-prize open contest;
+  // fallback to first upcoming. The plain `featured` flag is editorial only.
+  const nowMs = Date.now()
+  const paidFeatured = open
+    .filter(c => c.featuredUntil && new Date(c.featuredUntil).getTime() > nowMs)
+    .sort((a, b) => new Date(b.featuredPaidAt ?? 0).getTime() - new Date(a.featuredPaidAt ?? 0).getTime())[0] ?? null
+  const featured: Contest | null = paidFeatured ?? open.concat().sort((a, b) => {
     const pa = parseInt(a.prize.match(/\$([0-9,]+)/)?.[1].replace(/,/g,'') || '0')
     const pb = parseInt(b.prize.match(/\$([0-9,]+)/)?.[1].replace(/,/g,'') || '0')
     return pb - pa

@@ -23,7 +23,12 @@ export default function EmailSubscribe({ compact = false }: { compact?: boolean 
       const res = await fetch('/api/subscribe', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name: name.trim(), email: email.trim(), consent }),
+        body: JSON.stringify({
+          name: name.trim(),
+          email: email.trim(),
+          consent,
+          source: typeof window !== 'undefined' ? window.location.pathname : null,
+        }),
       })
       const data = await res.json()
       if (res.ok) {

@@ -5,7 +5,7 @@ import { sendWelcomeEmail } from '@/lib/email'
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json()
-    const { email, name, consent } = body
+    const { email, name, consent, source } = body
 
     if (!email || typeof email !== 'string') {
       return NextResponse.json({ error: 'Email is required' }, { status: 400 })
@@ -18,7 +18,8 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'You must agree to receive email alerts to subscribe.' }, { status: 400 })
     }
 
-    const result = await addSubscriber(email, name || null, new Date().toISOString())
+    const safeSource = typeof source === 'string' && source.startsWith('/') ? source.split('?')[0].slice(0, 200) : null
+    const result = await addSubscriber(email, name || null, new Date().toISOString(), safeSource)
     if (!result.success) {
       return NextResponse.json({ error: result.message }, { status: 409 })
     }

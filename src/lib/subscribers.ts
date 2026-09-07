@@ -33,17 +33,28 @@ export async function addSubscriber(
   email: string,
   name: string | null = null,
   consentGivenAt: string = new Date().toISOString(),
+  source: string | null = null,
 ): Promise<{ success: boolean; message: string; token?: string }> {
-  const { data, error } = await supabaseAdmin
+  const base = {
+    email: email.toLowerCase().trim(),
+    name,
+    confirmed: true,
+    consent_given_at: consentGivenAt,
+  }
+  // `source` = the page they signed up on (e.g. /topics/best-ai-film-festivals-for-pika-users).
+  // The column only exists after the 2026-09-07 migration, so retry without it.
+  let { data, error } = await supabaseAdmin
     .from('subscribers')
-    .insert({
-      email: email.toLowerCase().trim(),
-      name,
-      confirmed: true,
-      consent_given_at: consentGivenAt,
-    })
+    .insert(source ? { ...base, source: source.slice(0, 200) } : base)
     .select('unsubscribe_token')
     .single()
+  if (error && source && /source|schema cache|column/i.test(error.message)) {
+    ;({ data, error } = await supabaseAdmin
+      .from('subscribers')
+      .insert(base)
+      .select('unsubscribe_token')
+      .single())
+  }
 
   if (error) {
     if (error.code === '23505') {

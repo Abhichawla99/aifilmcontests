@@ -19,6 +19,8 @@ function rowToContest(row: Record<string, unknown>): Contest {
     eligibility: row.eligibility as string,
     entryFee: row.entry_fee as string,
     featured: row.featured as boolean,
+    featuredUntil: (row.featured_until as string | null) ?? undefined,
+    featuredPaidAt: (row.featured_paid_at as string | null) ?? undefined,
     tags: row.tags as string[],
     location: row.location as string | undefined,
     eventDate: row.event_date as string | undefined,

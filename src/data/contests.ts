@@ -17,6 +17,9 @@ export interface Contest {
   eligibility: string
   entryFee: string
   featured: boolean
+  /** Set only by a paid featured listing (Stripe). Editorial `featured` stays a curation flag. */
+  featuredUntil?: string
+  featuredPaidAt?: string
   tags: string[]
   location?: string
   eventDate?: string
