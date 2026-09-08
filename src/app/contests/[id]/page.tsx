@@ -132,7 +132,7 @@ export default async function ContestPage({ params }: { params: Promise<{ id: st
         dangerouslySetInnerHTML={{ __html: JSON.stringify([jsonLdEvent, jsonLdBreadcrumb]) }}
       />
 
-      <div style={{ background: '#080810', minHeight: '100vh' }}>
+      <div style={{ background: '#FBFAF8', minHeight: '100vh' }}>
 
         {/* ── Nav ── */}
         <header style={{ borderBottom: '1px solid rgba(27,25,22,0.06)' }}>

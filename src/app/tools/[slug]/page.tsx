@@ -213,7 +213,7 @@ export default async function ToolPage({ params }: { params: Promise<{ slug: str
     <>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
 
-      <div style={{ background: '#080810', minHeight: '100vh' }}>
+      <div style={{ background: '#FBFAF8', minHeight: '100vh' }}>
         <header style={{ borderBottom: '1px solid rgba(27,25,22,0.06)' }}>
           <div className="max-w-4xl mx-auto px-5 py-4 flex items-center justify-between">
             <Link href="/" style={{ textDecoration: 'none', display: 'flex', alignItems: 'center', gap: 10 }}>

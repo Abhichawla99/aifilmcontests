@@ -31,7 +31,7 @@ interface InnerLayoutProps {
 
 export default function InnerLayout({ children }: InnerLayoutProps) {
   return (
-    <div style={{ background: '#080810', minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
+    <div style={{ background: '#FBFAF8', minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
       {/* Sticky Nav */}
       <header style={{
         position: 'sticky',

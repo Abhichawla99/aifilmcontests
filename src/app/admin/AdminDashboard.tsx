@@ -108,7 +108,7 @@ function EditModal({
       style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.75)', zIndex: 1000, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '20px' }}
       onClick={e => { if (e.target === e.currentTarget) onClose() }}
     >
-      <div style={{ background: '#0f0f18', border: '1px solid rgba(27,25,22,0.1)', borderRadius: '14px', width: '100%', maxWidth: '640px', maxHeight: '90vh', overflow: 'auto', padding: '28px' }}>
+      <div style={{ background: '#FFFFFF', border: '1px solid rgba(27,25,22,0.1)', borderRadius: '14px', width: '100%', maxWidth: '640px', maxHeight: '90vh', overflow: 'auto', padding: '28px' }}>
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '24px' }}>
           <div style={{ fontSize: '15px', fontWeight: 600, color: '#26231E' }}>Edit Contest</div>
           <button onClick={onClose} style={{ background: 'none', border: 'none', color: '#8B867C', fontSize: '20px', cursor: 'pointer', lineHeight: 1 }}>×</button>
@@ -324,7 +324,7 @@ export default function AdminDashboard({ contests: initial, stats }: { contests:
   const isLoading = (a: string) => loadingAction === a
 
   return (
-    <div style={{ minHeight: '100vh', background: '#080810', color: '#26231E' }}>
+    <div style={{ minHeight: '100vh', background: '#FBFAF8', color: '#26231E' }}>
 
       {/* Edit modal */}
       {editingContest && (

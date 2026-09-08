@@ -114,7 +114,7 @@ export default async function CategoryPage({ params }: { params: Promise<{ slug:
     <>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
 
-      <div style={{ background: '#080810', minHeight: '100vh' }}>
+      <div style={{ background: '#FBFAF8', minHeight: '100vh' }}>
 
         {/* Nav */}
         <header style={{ borderBottom: '1px solid rgba(27,25,22,0.06)' }}>
