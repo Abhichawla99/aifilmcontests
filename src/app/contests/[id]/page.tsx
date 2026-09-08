@@ -135,7 +135,7 @@ export default async function ContestPage({ params }: { params: Promise<{ id: st
       <div style={{ background: '#080810', minHeight: '100vh' }}>
 
         {/* ── Nav ── */}
-        <header style={{ borderBottom: '1px solid rgba(255,255,255,0.06)' }}>
+        <header style={{ borderBottom: '1px solid rgba(27,25,22,0.06)' }}>
           <div className="max-w-4xl mx-auto px-5 py-4 flex items-center justify-between">
             <Link href="/" style={{ textDecoration: 'none', display: 'flex', alignItems: 'center', gap: 10 }}>
               <div style={{
@@ -146,7 +146,7 @@ export default async function ContestPage({ params }: { params: Promise<{ id: st
               }}>
                 AI
               </div>
-              <span style={{ fontFamily: 'Space Grotesk, sans-serif', fontWeight: 600, fontSize: 15, color: '#e4e4e7' }}>
+              <span style={{ fontFamily: 'Space Grotesk, sans-serif', fontWeight: 600, fontSize: 15, color: '#26231E' }}>
                 AI Film Contests
               </span>
             </Link>
@@ -160,10 +160,10 @@ export default async function ContestPage({ params }: { params: Promise<{ id: st
         <main className="max-w-4xl mx-auto px-5 py-12">
 
           {/* Breadcrumb */}
-          <p style={{ fontSize: 12, color: '#3f3f46', marginBottom: 24 }}>
+          <p style={{ fontSize: 12, color: '#A8A296', marginBottom: 24 }}>
             <Link href="/" className="link-muted">AI Film Contests</Link>
             <span style={{ margin: '0 6px' }}>›</span>
-            <span style={{ color: '#52525b' }}>{contest.name}</span>
+            <span style={{ color: '#8B867C' }}>{contest.name}</span>
           </p>
 
           {/* ── Header ── */}
@@ -176,15 +176,15 @@ export default async function ContestPage({ params }: { params: Promise<{ id: st
                 fontFamily: 'Space Grotesk, sans-serif',
                 fontSize: 13,
                 fontWeight: 600,
-                color: isOpen ? '#22c55e' : isClosed ? '#52525b' : '#f59e0b',
+                color: isOpen ? '#22c55e' : isClosed ? '#8B867C' : '#f59e0b',
               }}>
                 {isOpen ? 'Open Now' : isClosed ? 'Closed' : 'Coming Soon'}
               </span>
               {contest.entryFee === 'Free' && !isClosed && (
                 <span style={{
                   fontSize: 11,
-                  color: '#52525b',
-                  border: '1px solid rgba(255,255,255,0.08)',
+                  color: '#8B867C',
+                  border: '1px solid rgba(27,25,22,0.08)',
                   borderRadius: 4,
                   padding: '1px 6px',
                   fontFamily: 'Space Grotesk, sans-serif',
@@ -200,17 +200,17 @@ export default async function ContestPage({ params }: { params: Promise<{ id: st
               fontWeight: 700,
               lineHeight: 1.1,
               letterSpacing: '-0.025em',
-              color: '#f4f4f5',
+              color: '#1B1916',
               marginBottom: 10,
             }}>
               {contest.name}
             </h1>
 
-            <p style={{ fontSize: 13, color: '#52525b', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: 14 }}>
+            <p style={{ fontSize: 13, color: '#8B867C', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: 14 }}>
               {contest.organizer}
             </p>
 
-            <p style={{ fontSize: 16, color: '#a1a1aa', lineHeight: 1.7, maxWidth: 640 }}>
+            <p style={{ fontSize: 16, color: '#6F6A61', lineHeight: 1.7, maxWidth: 640 }}>
               {contest.description}
             </p>
           </div>
@@ -218,10 +218,10 @@ export default async function ContestPage({ params }: { params: Promise<{ id: st
           {/* ── Deadline & Apply ── */}
           {!isClosed && (
             <div style={{
-              border: isUrgent ? '1px solid rgba(239,68,68,0.25)' : '1px solid rgba(255,255,255,0.08)',
+              border: isUrgent ? '1px solid rgba(239,68,68,0.25)' : '1px solid rgba(27,25,22,0.08)',
               borderRadius: 12,
               padding: '20px 24px',
-              background: isUrgent ? 'rgba(239,68,68,0.04)' : 'rgba(255,255,255,0.02)',
+              background: isUrgent ? 'rgba(239,68,68,0.04)' : 'rgba(27,25,22,0.02)',
               marginBottom: 32,
               display: 'flex',
               flexWrap: 'wrap',
@@ -230,19 +230,19 @@ export default async function ContestPage({ params }: { params: Promise<{ id: st
               gap: 16,
             }}>
               <div>
-                <div style={{ fontSize: 11, color: '#52525b', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 4 }}>
+                <div style={{ fontSize: 11, color: '#8B867C', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 4 }}>
                   {isOpen ? 'Submission deadline' : 'Expected deadline'}
                 </div>
-                <div style={{ fontFamily: 'Space Grotesk, sans-serif', fontSize: 22, fontWeight: 700, color: isUrgent ? '#f97316' : '#f4f4f5' }}>
+                <div style={{ fontFamily: 'Space Grotesk, sans-serif', fontSize: 22, fontWeight: 700, color: isUrgent ? '#f97316' : '#1B1916' }}>
                   {fmt(contest.deadline)}
                 </div>
                 {isOpen && dl > 0 && (
-                  <div style={{ fontSize: 13, color: isUrgent ? '#f97316' : '#71717a', marginTop: 3 }}>
+                  <div style={{ fontSize: 13, color: isUrgent ? '#f97316' : '#7A7469', marginTop: 3 }}>
                     {dl} day{dl !== 1 ? 's' : ''} remaining
                   </div>
                 )}
                 {isOpen && dl <= 0 && (
-                  <div style={{ fontSize: 13, color: '#ef4444', marginTop: 3 }}>Closes today</div>
+                  <div style={{ fontSize: 13, color: '#DC2626', marginTop: 3 }}>Closes today</div>
                 )}
               </div>
               <a
@@ -267,13 +267,13 @@ export default async function ContestPage({ params }: { params: Promise<{ id: st
 
             {/* Prize */}
             <InfoBlock label="Prize">
-              <div style={{ fontFamily: 'Space Grotesk, sans-serif', fontSize: 18, fontWeight: 700, color: '#a5b4fc', marginBottom: 10 }}>
+              <div style={{ fontFamily: 'Space Grotesk, sans-serif', fontSize: 18, fontWeight: 700, color: '#4338CA', marginBottom: 10 }}>
                 {contest.prize}
               </div>
               {contest.prizeDetails && contest.prizeDetails.length > 0 && (
                 <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: 6 }}>
                   {contest.prizeDetails.map((detail, i) => (
-                    <li key={i} style={{ display: 'flex', alignItems: 'flex-start', gap: 8, fontSize: 13, color: '#71717a', lineHeight: 1.5 }}>
+                    <li key={i} style={{ display: 'flex', alignItems: 'flex-start', gap: 8, fontSize: 13, color: '#7A7469', lineHeight: 1.5 }}>
                       <span style={{ color: '#4f46e5', marginTop: 2, flexShrink: 0 }}>›</span>
                       {detail}
                     </li>
@@ -287,27 +287,27 @@ export default async function ContestPage({ params }: { params: Promise<{ id: st
               {contest.aiToolsAllowed && contest.aiToolsAllowed.length > 0 ? (
                 <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: 6 }}>
                   {contest.aiToolsAllowed.map((tool, i) => (
-                    <li key={i} style={{ display: 'flex', alignItems: 'flex-start', gap: 8, fontSize: 13, color: '#71717a', lineHeight: 1.5 }}>
+                    <li key={i} style={{ display: 'flex', alignItems: 'flex-start', gap: 8, fontSize: 13, color: '#7A7469', lineHeight: 1.5 }}>
                       <span style={{ color: '#22c55e', marginTop: 2, flexShrink: 0 }}>✓</span>
                       {tool}
                     </li>
                   ))}
                 </ul>
               ) : (
-                <span style={{ fontSize: 13, color: '#52525b' }}>Any AI tools</span>
+                <span style={{ fontSize: 13, color: '#8B867C' }}>Any AI tools</span>
               )}
             </InfoBlock>
 
             {/* Eligibility */}
             <InfoBlock label="Eligibility">
-              <p style={{ fontSize: 13, color: '#71717a', lineHeight: 1.6 }}>
+              <p style={{ fontSize: 13, color: '#7A7469', lineHeight: 1.6 }}>
                 {contest.eligibility || 'Open worldwide'}
               </p>
             </InfoBlock>
 
             {/* Entry Fee */}
             <InfoBlock label="Entry Fee">
-              <div style={{ fontFamily: 'Space Grotesk, sans-serif', fontSize: 16, fontWeight: 600, color: contest.entryFee === 'Free' ? '#22c55e' : '#e4e4e7' }}>
+              <div style={{ fontFamily: 'Space Grotesk, sans-serif', fontSize: 16, fontWeight: 600, color: contest.entryFee === 'Free' ? '#22c55e' : '#26231E' }}>
                 {contest.entryFee || 'See website'}
               </div>
             </InfoBlock>
@@ -319,9 +319,9 @@ export default async function ContestPage({ params }: { params: Promise<{ id: st
                   {contest.categories.map(cat => (
                     <span key={cat} style={{
                       fontSize: 12,
-                      color: '#a1a1aa',
-                      background: 'rgba(255,255,255,0.05)',
-                      border: '1px solid rgba(255,255,255,0.08)',
+                      color: '#6F6A61',
+                      background: 'rgba(27,25,22,0.05)',
+                      border: '1px solid rgba(27,25,22,0.08)',
                       borderRadius: 5,
                       padding: '3px 8px',
                       fontFamily: 'Space Grotesk, sans-serif',
@@ -363,7 +363,7 @@ export default async function ContestPage({ params }: { params: Promise<{ id: st
               >
                 Apply on official site →
               </a>
-              <p style={{ fontSize: 12, color: '#3f3f46', marginTop: 10 }}>
+              <p style={{ fontSize: 12, color: '#A8A296', marginTop: 10 }}>
                 Opens {contest.url.replace(/^https?:\/\//, '')}
               </p>
             </div>
@@ -371,10 +371,10 @@ export default async function ContestPage({ params }: { params: Promise<{ id: st
 
           {/* Tags */}
           {contest.tags && contest.tags.length > 0 && (
-            <div style={{ borderTop: '1px solid rgba(255,255,255,0.05)', paddingTop: 20, marginBottom: 40 }}>
+            <div style={{ borderTop: '1px solid rgba(27,25,22,0.05)', paddingTop: 20, marginBottom: 40 }}>
               <div className="flex flex-wrap gap-1.5">
                 {contest.tags.map(tag => (
-                  <span key={tag} style={{ fontSize: 11, color: '#3f3f46', background: 'rgba(255,255,255,0.025)', border: '1px solid rgba(255,255,255,0.05)', borderRadius: 4, padding: '2px 7px' }}>
+                  <span key={tag} style={{ fontSize: 11, color: '#A8A296', background: 'rgba(27,25,22,0.025)', border: '1px solid rgba(27,25,22,0.05)', borderRadius: 4, padding: '2px 7px' }}>
                     #{tag}
                   </span>
                 ))}
@@ -390,19 +390,19 @@ export default async function ContestPage({ params }: { params: Promise<{ id: st
         </main>
 
         {/* ── Footer ── */}
-        <footer style={{ borderTop: '1px solid rgba(255,255,255,0.05)', padding: '24px 0' }}>
+        <footer style={{ borderTop: '1px solid rgba(27,25,22,0.05)', padding: '24px 0' }}>
           <div className="max-w-4xl mx-auto px-5 flex flex-col sm:flex-row items-center justify-between gap-3">
-            <span style={{ fontFamily: 'Space Grotesk, sans-serif', fontSize: 13, fontWeight: 600, color: '#52525b' }}>
+            <span style={{ fontFamily: 'Space Grotesk, sans-serif', fontSize: 13, fontWeight: 600, color: '#8B867C' }}>
               AI Film Contests
             </span>
-            <span style={{ fontSize: 12, color: '#3f3f46' }}>
+            <span style={{ fontSize: 12, color: '#A8A296' }}>
               Tracking every AI film competition · Updated daily
             </span>
             <div className="flex items-center gap-4" style={{ fontSize: 12 }}>
               <a href="/submit" className="link-muted">Submit a Contest</a>
-              <span style={{ color: '#27272a' }}>·</span>
+              <span style={{ color: '#E7E4DC' }}>·</span>
               <Link href={`/feature?contest=${contest.id}`} className="link-muted">Organizer? Feature this contest</Link>
-              <span style={{ color: '#27272a' }}>·</span>
+              <span style={{ color: '#E7E4DC' }}>·</span>
               <Link href="/" className="link-muted">Browse All</Link>
             </div>
           </div>
@@ -417,12 +417,12 @@ export default async function ContestPage({ params }: { params: Promise<{ id: st
 function InfoBlock({ label, children }: { label: string; children: React.ReactNode }) {
   return (
     <div style={{
-      border: '1px solid rgba(255,255,255,0.07)',
+      border: '1px solid rgba(27,25,22,0.07)',
       borderRadius: 10,
       padding: '18px 20px',
-      background: 'rgba(255,255,255,0.02)',
+      background: 'rgba(27,25,22,0.02)',
     }}>
-      <div style={{ fontSize: 10, color: '#52525b', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: 10, fontFamily: 'Space Grotesk, sans-serif', fontWeight: 600 }}>
+      <div style={{ fontSize: 10, color: '#8B867C', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: 10, fontFamily: 'Space Grotesk, sans-serif', fontWeight: 600 }}>
         {label}
       </div>
       {children}
@@ -433,8 +433,8 @@ function InfoBlock({ label, children }: { label: string; children: React.ReactNo
 function DateRow({ label, value }: { label: string; value: string }) {
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
-      <span style={{ fontSize: 11, color: '#3f3f46', textTransform: 'uppercase', letterSpacing: '0.06em' }}>{label}</span>
-      <span style={{ fontSize: 13, color: '#a1a1aa' }}>{value}</span>
+      <span style={{ fontSize: 11, color: '#A8A296', textTransform: 'uppercase', letterSpacing: '0.06em' }}>{label}</span>
+      <span style={{ fontSize: 13, color: '#6F6A61' }}>{value}</span>
     </div>
   )
 }

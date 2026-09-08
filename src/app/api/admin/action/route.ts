@@ -153,19 +153,19 @@ export async function POST(request: NextRequest) {
 
     const htmlBody = body
       .split('\n')
-      .map((line: string) => line.trim() ? `<p style="color:#a1a1aa;font-size:15px;line-height:1.65;margin:0 0 14px 0;">${line}</p>` : '<br>')
+      .map((line: string) => line.trim() ? `<p style="color:#6F6A61;font-size:15px;line-height:1.65;margin:0 0 14px 0;">${line}</p>` : '<br>')
       .join('')
 
     const html = `<!DOCTYPE html><html><head><meta charset="utf-8"></head>
-<body style="background:#09090f;color:#fff;font-family:-apple-system,sans-serif;margin:0;padding:0;">
+<body style="background:#FBFAF8;color:#fff;font-family:-apple-system,sans-serif;margin:0;padding:0;">
 <div style="max-width:580px;margin:0 auto;padding:40px 24px;">
   <div style="margin-bottom:32px;"><span style="font-size:15px;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;color:#4f46e5;">AI Film Contests</span></div>
   ${htmlBody}
-  <hr style="border:none;border-top:1px solid rgba(255,255,255,0.07);margin:32px 0;">
-  <div style="color:#3f3f46;font-size:12px;text-align:center;">
-    <a href="${SITE_URL}" style="color:#3f3f46;text-decoration:none;">${SITE_URL}</a>
+  <hr style="border:none;border-top:1px solid rgba(27,25,22,0.07);margin:32px 0;">
+  <div style="color:#A8A296;font-size:12px;text-align:center;">
+    <a href="${SITE_URL}" style="color:#A8A296;text-decoration:none;">${SITE_URL}</a>
     &nbsp;·&nbsp;
-    <a href="${SITE_URL}/unsubscribe" style="color:#3f3f46;text-decoration:underline;">Unsubscribe</a>
+    <a href="${SITE_URL}/unsubscribe" style="color:#A8A296;text-decoration:underline;">Unsubscribe</a>
   </div>
 </div></body></html>`
 

@@ -45,16 +45,16 @@ function daysLeft(d: string) {
 const STATUS_COLORS: Record<string, string> = {
   open: '#22c55e',
   upcoming: '#f59e0b',
-  closed: '#3f3f46',
+  closed: '#A8A296',
 }
 
 // ── Inline style constants ─────────────────────────────────────────────────────
 const inputStyle: React.CSSProperties = {
   width: '100%',
-  background: 'rgba(255,255,255,0.04)',
-  border: '1px solid rgba(255,255,255,0.1)',
+  background: 'rgba(27,25,22,0.04)',
+  border: '1px solid rgba(27,25,22,0.1)',
   borderRadius: '7px',
-  color: '#e4e4e7',
+  color: '#26231E',
   fontSize: '13px',
   padding: '8px 10px',
   boxSizing: 'border-box',
@@ -62,7 +62,7 @@ const inputStyle: React.CSSProperties = {
 }
 const labelStyle: React.CSSProperties = {
   fontSize: '11px',
-  color: '#52525b',
+  color: '#8B867C',
   textTransform: 'uppercase',
   letterSpacing: '0.06em',
   marginBottom: '4px',
@@ -108,10 +108,10 @@ function EditModal({
       style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.75)', zIndex: 1000, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '20px' }}
       onClick={e => { if (e.target === e.currentTarget) onClose() }}
     >
-      <div style={{ background: '#0f0f18', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '14px', width: '100%', maxWidth: '640px', maxHeight: '90vh', overflow: 'auto', padding: '28px' }}>
+      <div style={{ background: '#0f0f18', border: '1px solid rgba(27,25,22,0.1)', borderRadius: '14px', width: '100%', maxWidth: '640px', maxHeight: '90vh', overflow: 'auto', padding: '28px' }}>
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '24px' }}>
-          <div style={{ fontSize: '15px', fontWeight: 600, color: '#e4e4e7' }}>Edit Contest</div>
-          <button onClick={onClose} style={{ background: 'none', border: 'none', color: '#52525b', fontSize: '20px', cursor: 'pointer', lineHeight: 1 }}>×</button>
+          <div style={{ fontSize: '15px', fontWeight: 600, color: '#26231E' }}>Edit Contest</div>
+          <button onClick={onClose} style={{ background: 'none', border: 'none', color: '#8B867C', fontSize: '20px', cursor: 'pointer', lineHeight: 1 }}>×</button>
         </div>
 
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '14px' }}>
@@ -198,7 +198,7 @@ function EditModal({
               onChange={e => set('featured', e.target.checked)}
               style={{ width: '15px', height: '15px', cursor: 'pointer', accentColor: '#4f46e5' }}
             />
-            <label htmlFor="featured" style={{ ...labelStyle, margin: 0, cursor: 'pointer', textTransform: 'none', fontSize: '13px', color: '#a1a1aa', letterSpacing: 'normal' }}>
+            <label htmlFor="featured" style={{ ...labelStyle, margin: 0, cursor: 'pointer', textTransform: 'none', fontSize: '13px', color: '#6F6A61', letterSpacing: 'normal' }}>
               Featured (shown prominently — use for prizes &gt; $10k or major sponsors)
             </label>
           </div>
@@ -207,7 +207,7 @@ function EditModal({
         <div style={{ display: 'flex', gap: '10px', marginTop: '24px', justifyContent: 'flex-end' }}>
           <button
             onClick={onClose}
-            style={{ padding: '9px 18px', fontSize: '13px', background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '7px', color: '#71717a', cursor: 'pointer' }}
+            style={{ padding: '9px 18px', fontSize: '13px', background: 'rgba(27,25,22,0.04)', border: '1px solid rgba(27,25,22,0.1)', borderRadius: '7px', color: '#7A7469', cursor: 'pointer' }}
           >
             Cancel
           </button>
@@ -324,7 +324,7 @@ export default function AdminDashboard({ contests: initial, stats }: { contests:
   const isLoading = (a: string) => loadingAction === a
 
   return (
-    <div style={{ minHeight: '100vh', background: '#080810', color: '#e4e4e7' }}>
+    <div style={{ minHeight: '100vh', background: '#080810', color: '#26231E' }}>
 
       {/* Edit modal */}
       {editingContest && (
@@ -336,16 +336,16 @@ export default function AdminDashboard({ contests: initial, stats }: { contests:
       )}
 
       {/* Header */}
-      <header style={{ borderBottom: '1px solid rgba(255,255,255,0.06)' }}>
+      <header style={{ borderBottom: '1px solid rgba(27,25,22,0.06)' }}>
         <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '14px 24px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
             <Link href="/" style={{ fontFamily: 'Space Grotesk, sans-serif', fontSize: '14px', fontWeight: 700, color: '#4f46e5', textDecoration: 'none', letterSpacing: '0.06em', textTransform: 'uppercase' }}>
               AI Film Contests
             </Link>
-            <span style={{ color: '#27272a', fontSize: '12px' }}>›</span>
-            <span style={{ fontSize: '13px', color: '#52525b' }}>Admin</span>
+            <span style={{ color: '#E7E4DC', fontSize: '12px' }}>›</span>
+            <span style={{ fontSize: '13px', color: '#8B867C' }}>Admin</span>
           </div>
-          <button onClick={logout} style={{ fontSize: '12px', color: '#52525b', background: 'none', border: 'none', cursor: 'pointer' }}>
+          <button onClick={logout} style={{ fontSize: '12px', color: '#8B867C', background: 'none', border: 'none', cursor: 'pointer' }}>
             Sign out
           </button>
         </div>
@@ -358,12 +358,12 @@ export default function AdminDashboard({ contests: initial, stats }: { contests:
           {[
             { label: 'Open', value: stats.open, color: '#22c55e' },
             { label: 'Upcoming', value: stats.upcoming, color: '#f59e0b' },
-            { label: 'Closed', value: stats.closed, color: '#3f3f46' },
-            { label: 'Total', value: stats.total, color: '#a1a1aa' },
-            { label: 'Subscribers', value: stats.confirmedSubs, color: '#818cf8' },
+            { label: 'Closed', value: stats.closed, color: '#A8A296' },
+            { label: 'Total', value: stats.total, color: '#6F6A61' },
+            { label: 'Subscribers', value: stats.confirmedSubs, color: '#4F46E5' },
           ].map(s => (
-            <div key={s.label} style={{ border: '1px solid rgba(255,255,255,0.07)', borderRadius: '10px', padding: '16px 18px', background: 'rgba(255,255,255,0.02)' }}>
-              <div style={{ fontSize: '11px', color: '#52525b', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '6px', fontFamily: 'Space Grotesk, sans-serif' }}>{s.label}</div>
+            <div key={s.label} style={{ border: '1px solid rgba(27,25,22,0.07)', borderRadius: '10px', padding: '16px 18px', background: 'rgba(27,25,22,0.02)' }}>
+              <div style={{ fontSize: '11px', color: '#8B867C', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '6px', fontFamily: 'Space Grotesk, sans-serif' }}>{s.label}</div>
               <div style={{ fontFamily: 'Space Grotesk, sans-serif', fontSize: '26px', fontWeight: 700, color: s.color }}>{s.value}</div>
             </div>
           ))}
@@ -379,10 +379,10 @@ export default function AdminDashboard({ contests: initial, stats }: { contests:
 
         {/* Activity log */}
         {logs.length > 0 && (
-          <div style={{ border: '1px solid rgba(255,255,255,0.07)', borderRadius: '10px', padding: '14px 18px', marginBottom: '24px', background: 'rgba(0,0,0,0.2)' }}>
-            <div style={{ fontSize: '11px', color: '#52525b', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '10px', fontFamily: 'Space Grotesk, sans-serif' }}>Activity</div>
+          <div style={{ border: '1px solid rgba(27,25,22,0.07)', borderRadius: '10px', padding: '14px 18px', marginBottom: '24px', background: 'rgba(0,0,0,0.2)' }}>
+            <div style={{ fontSize: '11px', color: '#8B867C', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '10px', fontFamily: 'Space Grotesk, sans-serif' }}>Activity</div>
             {logs.map((l, i) => (
-              <div key={i} style={{ fontSize: '13px', color: l.type === 'error' ? '#f87171' : l.type === 'success' ? '#86efac' : '#a1a1aa', padding: '3px 0', borderBottom: i < logs.length - 1 ? '1px solid rgba(255,255,255,0.04)' : 'none' }}>
+              <div key={i} style={{ fontSize: '13px', color: l.type === 'error' ? '#C2410C' : l.type === 'success' ? '#86efac' : '#6F6A61', padding: '3px 0', borderBottom: i < logs.length - 1 ? '1px solid rgba(27,25,22,0.04)' : 'none' }}>
                 {l.type === 'error' ? '✕' : l.type === 'success' ? '✓' : '·'} {l.msg}
               </div>
             ))}
@@ -390,7 +390,7 @@ export default function AdminDashboard({ contests: initial, stats }: { contests:
         )}
 
         {/* Tabs */}
-        <div style={{ display: 'flex', gap: '4px', marginBottom: '20px', borderBottom: '1px solid rgba(255,255,255,0.06)' }}>
+        <div style={{ display: 'flex', gap: '4px', marginBottom: '20px', borderBottom: '1px solid rgba(27,25,22,0.06)' }}>
           {(['contests', 'email', 'research'] as const).map(tab => (
             <button
               key={tab}
@@ -398,7 +398,7 @@ export default function AdminDashboard({ contests: initial, stats }: { contests:
               style={{
                 fontSize: '13px', fontWeight: 500, padding: '8px 16px', background: 'none', border: 'none',
                 borderBottom: activeTab === tab ? '2px solid #4f46e5' : '2px solid transparent',
-                color: activeTab === tab ? '#e4e4e7' : '#52525b', cursor: 'pointer', textTransform: 'capitalize', marginBottom: '-1px',
+                color: activeTab === tab ? '#26231E' : '#8B867C', cursor: 'pointer', textTransform: 'capitalize', marginBottom: '-1px',
               }}
             >
               {tab === 'contests' ? `Contests (${contests.length})` : tab === 'email' ? 'Email' : 'Research'}
@@ -408,12 +408,12 @@ export default function AdminDashboard({ contests: initial, stats }: { contests:
 
         {/* ── Contests table ───────────────────────────────────────────────────── */}
         {activeTab === 'contests' && (
-          <div style={{ border: '1px solid rgba(255,255,255,0.07)', borderRadius: '10px', overflow: 'hidden' }}>
+          <div style={{ border: '1px solid rgba(27,25,22,0.07)', borderRadius: '10px', overflow: 'hidden' }}>
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
               <thead>
-                <tr style={{ borderBottom: '1px solid rgba(255,255,255,0.07)', background: 'rgba(255,255,255,0.02)' }}>
+                <tr style={{ borderBottom: '1px solid rgba(27,25,22,0.07)', background: 'rgba(27,25,22,0.02)' }}>
                   {['Status', 'Name', 'Organizer', 'Prize', 'Deadline', 'Added', 'Actions'].map(h => (
-                    <th key={h} style={{ padding: '10px 14px', textAlign: 'left', color: '#52525b', fontWeight: 600, fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.06em', whiteSpace: 'nowrap' }}>{h}</th>
+                    <th key={h} style={{ padding: '10px 14px', textAlign: 'left', color: '#8B867C', fontWeight: 600, fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.06em', whiteSpace: 'nowrap' }}>{h}</th>
                   ))}
                 </tr>
               </thead>
@@ -422,14 +422,14 @@ export default function AdminDashboard({ contests: initial, stats }: { contests:
                   const dl = daysLeft(c.deadline)
                   const isUrgent = c.status === 'open' && dl <= 7
                   return (
-                    <tr key={c.id} style={{ borderBottom: i < contests.length - 1 ? '1px solid rgba(255,255,255,0.04)' : 'none' }}>
+                    <tr key={c.id} style={{ borderBottom: i < contests.length - 1 ? '1px solid rgba(27,25,22,0.04)' : 'none' }}>
 
                       {/* Status dropdown */}
                       <td style={{ padding: '10px 14px' }}>
                         <select
                           value={c.status}
                           onChange={e => updateStatus(c.id, e.target.value)}
-                          style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '5px', color: STATUS_COLORS[c.status], fontSize: '12px', fontWeight: 600, padding: '3px 6px', cursor: 'pointer' }}
+                          style={{ background: 'rgba(27,25,22,0.04)', border: '1px solid rgba(27,25,22,0.1)', borderRadius: '5px', color: STATUS_COLORS[c.status], fontSize: '12px', fontWeight: 600, padding: '3px 6px', cursor: 'pointer' }}
                         >
                           <option value="open">Open</option>
                           <option value="upcoming">Upcoming</option>
@@ -439,26 +439,26 @@ export default function AdminDashboard({ contests: initial, stats }: { contests:
 
                       {/* Name */}
                       <td style={{ padding: '10px 14px' }}>
-                        <div style={{ fontWeight: 500, color: '#e4e4e7', maxWidth: '220px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
-                          {c.featured && <span style={{ fontSize: '10px', color: '#818cf8', marginRight: '5px' }}>★</span>}
+                        <div style={{ fontWeight: 500, color: '#26231E', maxWidth: '220px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                          {c.featured && <span style={{ fontSize: '10px', color: '#4F46E5', marginRight: '5px' }}>★</span>}
                           {c.name}
                         </div>
                       </td>
 
                       {/* Organizer */}
-                      <td style={{ padding: '10px 14px', color: '#71717a', maxWidth: '130px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{c.organizer}</td>
+                      <td style={{ padding: '10px 14px', color: '#7A7469', maxWidth: '130px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{c.organizer}</td>
 
                       {/* Prize */}
-                      <td style={{ padding: '10px 14px', color: '#a5b4fc', whiteSpace: 'nowrap', maxWidth: '130px', overflow: 'hidden', textOverflow: 'ellipsis' }}>{c.prize}</td>
+                      <td style={{ padding: '10px 14px', color: '#4338CA', whiteSpace: 'nowrap', maxWidth: '130px', overflow: 'hidden', textOverflow: 'ellipsis' }}>{c.prize}</td>
 
                       {/* Deadline */}
                       <td style={{ padding: '10px 14px', whiteSpace: 'nowrap' }}>
-                        <span style={{ color: isUrgent ? '#f87171' : '#71717a' }}>{fmt(c.deadline)}</span>
-                        {c.status === 'open' && <span style={{ fontSize: '11px', color: isUrgent ? '#f87171' : '#3f3f46', marginLeft: '6px' }}>{dl}d</span>}
+                        <span style={{ color: isUrgent ? '#C2410C' : '#7A7469' }}>{fmt(c.deadline)}</span>
+                        {c.status === 'open' && <span style={{ fontSize: '11px', color: isUrgent ? '#C2410C' : '#A8A296', marginLeft: '6px' }}>{dl}d</span>}
                       </td>
 
                       {/* Date Added */}
-                      <td style={{ padding: '10px 14px', whiteSpace: 'nowrap', color: '#3f3f46', fontSize: '12px' }}>
+                      <td style={{ padding: '10px 14px', whiteSpace: 'nowrap', color: '#A8A296', fontSize: '12px' }}>
                         {c.created_at ? fmtShort(c.created_at) : '—'}
                       </td>
 
@@ -467,15 +467,15 @@ export default function AdminDashboard({ contests: initial, stats }: { contests:
                         <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
                           <button
                             onClick={() => setEditingContest(c)}
-                            style={{ fontSize: '12px', color: '#818cf8', background: 'none', border: 'none', cursor: 'pointer', padding: 0, fontWeight: 500 }}
+                            style={{ fontSize: '12px', color: '#4F46E5', background: 'none', border: 'none', cursor: 'pointer', padding: 0, fontWeight: 500 }}
                           >
                             Edit
                           </button>
-                          <span style={{ color: '#27272a' }}>·</span>
-                          <a href={`/contests/${c.id}`} target="_blank" style={{ fontSize: '12px', color: '#52525b', textDecoration: 'none' }}>View</a>
-                          <span style={{ color: '#27272a' }}>·</span>
-                          <a href={c.url} target="_blank" rel="noopener noreferrer" style={{ fontSize: '12px', color: '#52525b', textDecoration: 'none' }}>Site</a>
-                          <span style={{ color: '#27272a' }}>·</span>
+                          <span style={{ color: '#E7E4DC' }}>·</span>
+                          <a href={`/contests/${c.id}`} target="_blank" style={{ fontSize: '12px', color: '#8B867C', textDecoration: 'none' }}>View</a>
+                          <span style={{ color: '#E7E4DC' }}>·</span>
+                          <a href={c.url} target="_blank" rel="noopener noreferrer" style={{ fontSize: '12px', color: '#8B867C', textDecoration: 'none' }}>Site</a>
+                          <span style={{ color: '#E7E4DC' }}>·</span>
                           <button onClick={() => deleteContest(c.id, c.name)} style={{ fontSize: '12px', color: '#7f1d1d', background: 'none', border: 'none', cursor: 'pointer', padding: 0 }}>Delete</button>
                         </div>
                       </td>
@@ -490,8 +490,8 @@ export default function AdminDashboard({ contests: initial, stats }: { contests:
         {/* ── Email composer ───────────────────────────────────────────────────── */}
         {activeTab === 'email' && (
           <div style={{ maxWidth: '640px' }}>
-            <p style={{ fontSize: '14px', color: '#71717a', marginBottom: '20px', lineHeight: 1.6 }}>
-              Write a custom email to all <strong style={{ color: '#e4e4e7' }}>{stats.confirmedSubs}</strong> confirmed subscribers.
+            <p style={{ fontSize: '14px', color: '#7A7469', marginBottom: '20px', lineHeight: 1.6 }}>
+              Write a custom email to all <strong style={{ color: '#26231E' }}>{stats.confirmedSubs}</strong> confirmed subscribers.
             </p>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
               <input type="text" placeholder="Subject line" value={emailSubject} onChange={e => setEmailSubject(e.target.value)} className="input" style={{ fontSize: '14px' }} />
@@ -511,28 +511,28 @@ export default function AdminDashboard({ contests: initial, stats }: { contests:
         {/* ── Research tab ─────────────────────────────────────────────────────── */}
         {activeTab === 'research' && (
           <div style={{ maxWidth: '660px' }}>
-            <p style={{ fontSize: '14px', color: '#71717a', marginBottom: '24px', lineHeight: 1.65 }}>
+            <p style={{ fontSize: '14px', color: '#7A7469', marginBottom: '24px', lineHeight: 1.65 }}>
               Three-phase research agent. Discovers contests, fetches actual pages, extracts real data — never guesses.
             </p>
-            <div style={{ border: '1px solid rgba(255,255,255,0.07)', borderRadius: '10px', padding: '20px 22px', marginBottom: '20px', background: 'rgba(255,255,255,0.02)' }}>
-              <div style={{ fontSize: '12px', color: '#52525b', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: '14px', fontFamily: 'Space Grotesk, sans-serif' }}>How it works</div>
+            <div style={{ border: '1px solid rgba(27,25,22,0.07)', borderRadius: '10px', padding: '20px 22px', marginBottom: '20px', background: 'rgba(27,25,22,0.02)' }}>
+              <div style={{ fontSize: '12px', color: '#8B867C', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: '14px', fontFamily: 'Space Grotesk, sans-serif' }}>How it works</div>
               <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
                 {[
-                  { phase: 'Phase 1', color: '#818cf8', detail: 'Perplexity Sonar Pro searches 6 queries and returns up to 15 candidate contest URLs' },
+                  { phase: 'Phase 1', color: '#4F46E5', detail: 'Perplexity Sonar Pro searches 6 queries and returns up to 15 candidate contest URLs' },
                   { phase: 'Phase 2', color: '#34d399', detail: 'Each URL is fetched directly via HTTP — we read the actual page HTML, not search snippets' },
                   { phase: 'Phase 3', color: '#f59e0b', detail: 'GPT-4o-mini extracts deadline, prize, eligibility from the real page text — can only write what it reads' },
                 ].map(p => (
                   <div key={p.phase} style={{ display: 'flex', gap: '12px', alignItems: 'flex-start' }}>
                     <span style={{ fontSize: '11px', fontWeight: 700, color: p.color, fontFamily: 'Space Grotesk, sans-serif', whiteSpace: 'nowrap', marginTop: '1px', minWidth: '52px' }}>{p.phase}</span>
-                    <span style={{ fontSize: '13px', color: '#71717a', lineHeight: 1.55 }}>{p.detail}</span>
+                    <span style={{ fontSize: '13px', color: '#7A7469', lineHeight: 1.55 }}>{p.detail}</span>
                   </div>
                 ))}
-                <div style={{ borderTop: '1px solid rgba(255,255,255,0.06)', paddingTop: '10px', marginTop: '2px', fontSize: '12px', color: '#3f3f46', lineHeight: 1.7 }}>
-                  ✦ Deduplicates by ID, name, and URL against all existing contests<br />
-                  ✦ Validates deadline is in the future, prize is explicit on the page<br />
-                  ✦ Sanitizes fields before writing — no schema mismatches<br />
-                  ✦ Emails subscribers automatically when new contests are added<br />
-                  ✦ Cost: ~$0.08–0.12 per run
+                <div style={{ borderTop: '1px solid rgba(27,25,22,0.06)', paddingTop: '10px', marginTop: '2px', fontSize: '12px', color: '#A8A296', lineHeight: 1.7 }}>
+                  ❋ Deduplicates by ID, name, and URL against all existing contests<br />
+                  ❋ Validates deadline is in the future, prize is explicit on the page<br />
+                  ❋ Sanitizes fields before writing — no schema mismatches<br />
+                  ❋ Emails subscribers automatically when new contests are added<br />
+                  ❋ Cost: ~$0.08–0.12 per run
                 </div>
               </div>
             </div>
@@ -544,7 +544,7 @@ export default function AdminDashboard({ contests: initial, stats }: { contests:
             >
               {isLoading('research') ? '🔍 Researching… (30–90s)' : '🔍 Run Research Now'}
             </button>
-            <p style={{ fontSize: '12px', color: '#3f3f46', marginTop: '10px' }}>Also runs automatically at 8:15 AM UTC every day via Vercel Cron.</p>
+            <p style={{ fontSize: '12px', color: '#A8A296', marginTop: '10px' }}>Also runs automatically at 8:15 AM UTC every day via Vercel Cron.</p>
           </div>
         )}
 
@@ -562,9 +562,9 @@ function ActionBtn({ label, onClick, disabled, color }: {
       disabled={disabled}
       style={{
         padding: '8px 16px', fontSize: '13px', fontWeight: 500, fontFamily: 'Space Grotesk, sans-serif',
-        borderRadius: '7px', border: '1px solid rgba(255,255,255,0.1)',
-        background: color === 'indigo' ? '#4f46e5' : 'rgba(255,255,255,0.04)',
-        color: color === 'indigo' ? '#fff' : '#a1a1aa',
+        borderRadius: '7px', border: '1px solid rgba(27,25,22,0.1)',
+        background: color === 'indigo' ? '#4f46e5' : 'rgba(27,25,22,0.04)',
+        color: color === 'indigo' ? '#fff' : '#6F6A61',
         cursor: disabled ? 'not-allowed' : 'pointer',
         opacity: disabled ? 0.5 : 1,
         transition: 'opacity 0.15s',

@@ -3,23 +3,7 @@
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import { Contest } from '@/data/contests'
-
-const categoryLabels: Record<string, string> = {
-  'short-film':  'Short Film',
-  feature:       'Feature',
-  animation:     'Animation',
-  experimental:  'Experimental',
-  documentary:   'Documentary',
-  'music-video': 'Music Video',
-  advertising:   'Advertising',
-  commercial:    'Commercial',
-}
-
-const statusAccent: Record<string, string> = {
-  open:     'rgba(34,197,94,0.55)',
-  upcoming: 'rgba(245,158,11,0.45)',
-  closed:   'rgba(39,39,42,0.4)',
-}
+import { categoryStyle, closedStyle, normalizeCategory } from '@/lib/theme'
 
 function useCountdown(deadline: string, status: string) {
   const calc = () => {
@@ -55,71 +39,41 @@ export default function ContestCard({ contest }: { contest: Contest }) {
   const isClosed = contest.status === 'closed'
   const isUrgent = isOpen && cd && cd.days <= 7
 
-  const handleMouseMove = (e: React.MouseEvent<HTMLAnchorElement>) => {
-    const el   = e.currentTarget
-    const rect = el.getBoundingClientRect()
-    const px   = (e.clientX - rect.left) / rect.width
-    const py   = (e.clientY - rect.top)  / rect.height
-    el.style.setProperty('--mx', `${px * 100}%`)
-    el.style.setProperty('--my', `${py * 100}%`)
-    const tx = (py - 0.5) * -7
-    const ty = (px - 0.5) *  7
-    el.style.setProperty('--tx',   `${tx}deg`)
-    el.style.setProperty('--ty',   `${ty}deg`)
-    el.style.setProperty('--lift', '-5px')
-    el.style.transition = 'border-color 0.2s, background 0.2s, box-shadow 0.2s'
-  }
-
-  const handleMouseLeave = (e: React.MouseEvent<HTMLAnchorElement>) => {
-    const el = e.currentTarget
-    el.style.setProperty('--tx',   '0deg')
-    el.style.setProperty('--ty',   '0deg')
-    el.style.setProperty('--lift', '0px')
-    el.style.transition = 'border-color 0.2s, background 0.2s, box-shadow 0.2s, transform 0.35s cubic-bezier(0.23,1,0.32,1)'
-  }
+  /* The first category gives the card its identity: emoji + pastel tint. */
+  const tint = isClosed ? closedStyle : contest.categories?.[0] ? normalizeCategory(contest.categories[0]) : categoryStyle()
 
   return (
     <Link
       href={`/contests/${contest.id}`}
       className={`card group ${isUrgent ? 'urgent-card' : ''}`}
-      onMouseMove={handleMouseMove}
-      onMouseLeave={handleMouseLeave}
+      style={{ background: tint.bg, borderColor: tint.border }}
     >
-      {/* Left status accent strip */}
-      <div aria-hidden style={{
-        position: 'absolute',
-        left: 0, top: '18%', bottom: '18%',
-        width: 2,
-        borderRadius: '0 2px 2px 0',
-        background: statusAccent[contest.status] ?? 'transparent',
-        opacity: isClosed ? 0.4 : 0.7,
-      }} />
+      <div className={`flex flex-col flex-1 p-5 gap-3 ${isClosed ? 'opacity-70' : ''}`}>
 
-      <div aria-hidden className="card-shimmer" />
-
-      <div className={`flex flex-col flex-1 p-5 gap-3 ${isClosed ? 'opacity-50' : ''}`}>
-
-        {/* Row 1: status + deadline */}
-        <div className="flex items-center justify-between gap-2">
-          <div className="flex items-center gap-2">
-            <span className={`dot ${isOpen ? 'dot-open' : isClosed ? 'dot-closed' : 'dot-upcoming'} ${isOpen && !isUrgent ? 'live' : ''}`} />
-            <span style={{
-              fontSize: 11, fontFamily: 'Space Grotesk, sans-serif', fontWeight: 600,
-              color: isOpen ? '#4ade80' : isClosed ? '#52525b' : '#fbbf24',
-              letterSpacing: '0.04em', textTransform: 'uppercase',
-            }}>
-              {isOpen ? 'Open' : isClosed ? 'Closed' : 'Coming Soon'}
-            </span>
-            {contest.entryFee === 'Free' && !isClosed && (
+        {/* Row 1: emoji identity + status | deadline figure */}
+        <div className="flex items-start justify-between gap-2">
+          <div className="flex items-center gap-2.5">
+            <span aria-hidden style={{ fontSize: 26, lineHeight: 1 }}>{tint.emoji}</span>
+            <div className="flex items-center gap-2">
+              <span className={`dot ${isOpen ? 'dot-open' : isClosed ? 'dot-closed' : 'dot-upcoming'} ${isOpen && !isUrgent ? 'live' : ''}`} />
               <span style={{
-                fontSize: 9, color: '#4ade80',
-                border: '1px solid rgba(34,197,94,0.25)',
-                borderRadius: 4, padding: '1px 6px',
-                fontFamily: 'Space Grotesk, sans-serif', fontWeight: 700,
-                letterSpacing: '0.06em', textTransform: 'uppercase',
-                background: 'rgba(34,197,94,0.07)',
-              }}>Free</span>
-            )}
+                fontSize: 11, fontFamily: 'Space Grotesk, sans-serif', fontWeight: 600,
+                color: isOpen ? '#15803D' : isClosed ? '#8B867C' : '#B45309',
+                letterSpacing: '0.04em', textTransform: 'uppercase',
+              }}>
+                {isOpen ? 'Open' : isClosed ? 'Closed' : 'Coming Soon'}
+              </span>
+              {contest.entryFee === 'Free' && !isClosed && (
+                <span style={{
+                  fontSize: 9, color: '#15803D',
+                  border: '1px solid rgba(22,163,74,0.35)',
+                  borderRadius: 4, padding: '1px 6px',
+                  fontFamily: 'Space Grotesk, sans-serif', fontWeight: 700,
+                  letterSpacing: '0.06em', textTransform: 'uppercase',
+                  background: 'rgba(255,255,255,0.6)',
+                }}>Free</span>
+              )}
+            </div>
           </div>
 
           <div className="text-right flex-shrink-0">
@@ -129,12 +83,12 @@ export default function ContestCard({ contest }: { contest: Contest }) {
               fontVariantNumeric: 'tabular-nums',
               letterSpacing: '-0.01em',
               lineHeight: 1.15,
-              color: isClosed ? '#52525b' : isUrgent ? '#f87171' : '#d4d4d8',
+              color: isClosed ? '#8B867C' : isUrgent ? '#C2410C' : '#1B1916',
             }}>
               {isOpen && cd ? timeLeft(cd) : fmt(contest.deadline)}
             </div>
             <div style={{
-              fontSize: 9.5, color: '#52525b',
+              fontSize: 9.5, color: '#8B867C',
               fontFamily: 'Space Grotesk, sans-serif', fontWeight: 500,
               fontVariantNumeric: 'tabular-nums',
               letterSpacing: '0.07em', textTransform: 'uppercase',
@@ -150,7 +104,7 @@ export default function ContestCard({ contest }: { contest: Contest }) {
           <h3 className="card-title" style={{
             fontSize: 15, fontWeight: 600,
             fontFamily: 'Space Grotesk, sans-serif',
-            color: '#e4e4e7',
+            color: '#1B1916',
             lineHeight: 1.3, marginBottom: 4,
             letterSpacing: '-0.01em',
             transition: 'color 0.15s',
@@ -158,7 +112,7 @@ export default function ContestCard({ contest }: { contest: Contest }) {
             {contest.name}
           </h3>
           <p style={{
-            fontSize: 11, color: '#71717a',
+            fontSize: 11, color: '#7A7469',
             fontFamily: 'Space Grotesk, sans-serif',
             fontWeight: 500, letterSpacing: '0.05em',
             textTransform: 'uppercase',
@@ -169,7 +123,7 @@ export default function ContestCard({ contest }: { contest: Contest }) {
 
         {/* Row 3: description */}
         <p style={{
-          fontSize: 13, color: '#a1a1aa',
+          fontSize: 13, color: '#57524A',
           lineHeight: 1.7,
           display: '-webkit-box',
           WebkitLineClamp: 2,
@@ -180,30 +134,30 @@ export default function ContestCard({ contest }: { contest: Contest }) {
           {contest.description}
         </p>
 
-        {/* Row 4: category tags */}
+        {/* Row 4: category chips (white on the tint, labelled by their own emoji) */}
         <div className="flex flex-wrap gap-1.5">
-          {contest.categories.slice(0, 4).map(cat => (
-            <span key={cat} style={{
-              fontSize: 10,
-              color: '#71717a',
-              border: '1px solid rgba(255,255,255,0.07)',
-              borderRadius: 4, padding: '2px 7px',
-              fontFamily: 'Space Grotesk, sans-serif',
-              fontWeight: 500, letterSpacing: '0.04em',
-              textTransform: 'uppercase',
-              background: 'rgba(255,255,255,0.03)',
-            }}>
-              {categoryLabels[cat] ?? cat}
-            </span>
+          {Array.from(new Map((contest.categories ?? []).map(cat => { const c = normalizeCategory(cat); return [c.label, c] as const })).values()).slice(0, 4).map(c => (
+              <span key={c.label} style={{
+                fontSize: 10,
+                color: c.text,
+                border: `1px solid ${c.border}`,
+                borderRadius: 5, padding: '2px 7px',
+                fontFamily: 'Space Grotesk, sans-serif',
+                fontWeight: 500, letterSpacing: '0.04em',
+                textTransform: 'uppercase',
+                background: 'rgba(255,255,255,0.72)',
+              }}>
+                {c.emoji}&nbsp;{c.label}
+              </span>
           ))}
         </div>
 
         {/* Row 5: prize + CTA */}
-        <hr className="rule" />
+        <hr style={{ border: 'none', borderTop: `1px solid ${tint.border}` }} />
         <div className="flex items-center justify-between gap-3">
           <div>
             <div style={{
-              fontSize: 10, color: '#52525b',
+              fontSize: 10, color: '#8B867C',
               textTransform: 'uppercase', letterSpacing: '0.08em',
               fontFamily: 'Space Grotesk, sans-serif', fontWeight: 600,
               marginBottom: 4,
@@ -212,7 +166,7 @@ export default function ContestCard({ contest }: { contest: Contest }) {
               fontSize: 14, fontWeight: 700,
               fontFamily: 'Space Grotesk, sans-serif',
               fontVariantNumeric: 'tabular-nums',
-              color: '#c4b5fd', lineHeight: 1.2,
+              color: tint.text, lineHeight: 1.2,
             }}>
               {contest.prize}
             </div>
@@ -221,7 +175,7 @@ export default function ContestCard({ contest }: { contest: Contest }) {
             <span className="card-cta" style={{
               fontSize: 12, fontWeight: 500,
               fontFamily: 'Space Grotesk, sans-serif',
-              color: '#818cf8',
+              color: '#4F46E5',
               display: 'flex', alignItems: 'center', gap: 5,
               flexShrink: 0,
               transition: 'color 0.15s',

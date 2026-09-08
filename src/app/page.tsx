@@ -1,6 +1,7 @@
 import { getAllContests } from '@/lib/contests-db'
 import { Contest } from '@/data/contests'
 import ContestBrowser from '@/components/ContestBrowser'
+import { ClapperDrawing, CalendarDrawing, EnvelopeDrawing, FilmmakerDoodle } from '@/components/Illustrations'
 import EmailSubscribe from '@/components/EmailSubscribe'
 import BackgroundFX from '@/components/BackgroundFX'
 import MouseOrbs from '@/components/MouseOrbs'
@@ -75,7 +76,7 @@ export default async function Home() {
   }
 
   return (
-    <div style={{ background: '#050508', minHeight: '100vh', position: 'relative' }}>
+    <div style={{ background: '#FBFAF8', minHeight: '100vh', position: 'relative' }}>
 
       <script
         type="application/ld+json"
@@ -93,10 +94,10 @@ export default async function Home() {
 
         {/* ── Nav ── */}
         <header style={{
-          borderBottom: '1px solid rgba(255,255,255,0.05)',
+          borderBottom: '1px solid rgba(27,25,22,0.05)',
           backdropFilter: 'blur(16px)',
           WebkitBackdropFilter: 'blur(16px)',
-          background: 'rgba(5,5,8,0.6)',
+          background: 'rgba(251,250,248,0.85)',
           position: 'sticky',
           top: 0,
           zIndex: 50,
@@ -111,21 +112,21 @@ export default async function Home() {
                     <stop offset="100%" stopColor="#5b21b6"/>
                   </linearGradient>
                   <linearGradient id="navshine" x1="0" y1="0" x2="1" y2="1">
-                    <stop offset="0%" stopColor="rgba(255,255,255,0.12)"/>
-                    <stop offset="100%" stopColor="rgba(255,255,255,0)"/>
+                    <stop offset="0%" stopColor="rgba(27,25,22,0.12)"/>
+                    <stop offset="100%" stopColor="rgba(27,25,22,0)"/>
                   </linearGradient>
                 </defs>
                 <rect width="32" height="32" rx="7.5" fill="url(#navbg)"/>
                 <rect width="32" height="32" rx="7.5" fill="url(#navshine)"/>
-                <rect x="3.5" y="3.5" width="3.2" height="3.2" rx="0.7" fill="rgba(255,255,255,0.22)"/>
-                <rect x="25.3" y="3.5" width="3.2" height="3.2" rx="0.7" fill="rgba(255,255,255,0.22)"/>
-                <rect x="3.5" y="25.3" width="3.2" height="3.2" rx="0.7" fill="rgba(255,255,255,0.22)"/>
-                <rect x="25.3" y="25.3" width="3.2" height="3.2" rx="0.7" fill="rgba(255,255,255,0.22)"/>
+                <rect x="3.5" y="3.5" width="3.2" height="3.2" rx="0.7" fill="rgba(27,25,22,0.22)"/>
+                <rect x="25.3" y="3.5" width="3.2" height="3.2" rx="0.7" fill="rgba(27,25,22,0.22)"/>
+                <rect x="3.5" y="25.3" width="3.2" height="3.2" rx="0.7" fill="rgba(27,25,22,0.22)"/>
+                <rect x="25.3" y="25.3" width="3.2" height="3.2" rx="0.7" fill="rgba(27,25,22,0.22)"/>
                 <path d="M12.5 10.2L22.5 16L12.5 21.8V10.2Z" fill="white" opacity="0.92"/>
               </svg>
               <span style={{
                 fontFamily: 'Space Grotesk, sans-serif', fontWeight: 700,
-                fontSize: 15, color: '#e4e4e7', letterSpacing: '-0.01em',
+                fontSize: 15, color: '#26231E', letterSpacing: '-0.01em',
               }}>
                 AI Film Contests
               </span>
@@ -146,8 +147,8 @@ export default async function Home() {
         {/* ── Ticker ── */}
         {ticker.length > 0 && (
           <div className="ticker-wrap" style={{
-            borderBottom: '1px solid rgba(255,255,255,0.04)',
-            background: 'rgba(255,255,255,0.01)',
+            borderBottom: '1px solid rgba(27,25,22,0.04)',
+            background: 'rgba(27,25,22,0.01)',
             padding: '9px 0',
           }}>
             <div className="ticker-track">
@@ -163,14 +164,14 @@ export default async function Home() {
                     className="inline-flex items-center gap-2 px-6 hover:opacity-60 transition-opacity"
                     style={{ textDecoration: 'none' }}
                   >
-                    <span className="dot" style={{ background: urgent ? '#ef4444' : '#22c55e', boxShadow: urgent ? '0 0 6px rgba(239,68,68,0.6)' : '0 0 6px rgba(34,197,94,0.5)' }} />
-                    <span style={{ fontSize: 12, color: '#71717a', fontFamily: 'Space Grotesk, sans-serif' }}>{c.name}</span>
-                    <span style={{ fontSize: 12, color: urgent ? '#f87171' : '#3f3f46', fontFamily: 'Space Grotesk, sans-serif', fontWeight: 600 }}>
+                    <span className="dot" style={{ background: urgent ? '#DC2626' : '#22c55e', boxShadow: urgent ? '0 0 6px rgba(239,68,68,0.6)' : '0 0 6px rgba(34,197,94,0.5)' }} />
+                    <span style={{ fontSize: 12, color: '#7A7469', fontFamily: 'Space Grotesk, sans-serif' }}>{c.name}</span>
+                    <span style={{ fontSize: 12, color: urgent ? '#C2410C' : '#A8A296', fontFamily: 'Space Grotesk, sans-serif', fontWeight: 600 }}>
                       {d <= 0 ? 'today' : `${d}d`}
                     </span>
-                    <span style={{ color: '#1a1a24', fontSize: 11 }}>·</span>
-                    <span style={{ fontSize: 11, color: '#27272a' }}>{fmtShort(c.deadline)}</span>
-                    <span style={{ color: '#14141c', fontSize: 14, marginLeft: 12 }}>⎮</span>
+                    <span style={{ color: '#C9C4B8', fontSize: 11 }}>·</span>
+                    <span style={{ fontSize: 11, color: '#E7E4DC' }}>{fmtShort(c.deadline)}</span>
+                    <span style={{ color: '#C9C4B8', fontSize: 14, marginLeft: 12 }}>⎮</span>
                   </a>
                 )
               })}
@@ -207,7 +208,7 @@ export default async function Home() {
                     background: 'rgba(34,197,94,0.05)',
                   }}>
                     <span className="dot dot-open live" style={{ width: 5, height: 5 }} />
-                    <span style={{ fontSize: 12, color: '#4ade80', fontFamily: 'Space Grotesk, sans-serif', fontWeight: 500, letterSpacing: '0.02em' }}>
+                    <span style={{ fontSize: 12, color: '#15803D', fontFamily: 'Space Grotesk, sans-serif', fontWeight: 500, letterSpacing: '0.02em' }}>
                       {open.length} contests open · updated daily
                     </span>
                   </div>
@@ -219,10 +220,10 @@ export default async function Home() {
                     rel="noopener noreferrer"
                     className="presented-by-badge"
                   >
-                    <span style={{ fontSize: 11, color: '#52525b', fontFamily: 'Space Grotesk, sans-serif', fontWeight: 500 }}>
+                    <span style={{ fontSize: 11, color: '#8B867C', fontFamily: 'Space Grotesk, sans-serif', fontWeight: 500 }}>
                       Presented by
                     </span>
-                    <span style={{ fontSize: 12, color: '#a5b4fc', fontFamily: 'Space Grotesk, sans-serif', fontWeight: 700, letterSpacing: '-0.01em' }}>
+                    <span style={{ fontSize: 12, color: '#4338CA', fontFamily: 'Space Grotesk, sans-serif', fontWeight: 700, letterSpacing: '-0.01em' }}>
                       Ruminatex
                     </span>
                     <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="rgba(165,180,252,0.5)" strokeWidth="2.5">
@@ -238,7 +239,7 @@ export default async function Home() {
                   fontWeight: 700,
                   lineHeight: 1.0,
                   letterSpacing: '-0.04em',
-                  color: '#f4f4f5',
+                  color: '#1B1916',
                   marginBottom: 22,
                   maxWidth: 680,
                 }}>
@@ -248,7 +249,7 @@ export default async function Home() {
 
                 <p style={{
                   fontSize: 'clamp(14px, 1.8vw, 17px)',
-                  color: '#71717a',
+                  color: '#7A7469',
                   lineHeight: 1.8,
                   marginBottom: 40,
                   maxWidth: 500,
@@ -262,23 +263,23 @@ export default async function Home() {
                   display: 'flex', alignItems: 'center', gap: 0,
                   flexWrap: 'wrap',
                   marginBottom: 44,
-                  border: '1px solid rgba(255,255,255,0.06)',
+                  border: '1px solid rgba(27,25,22,0.06)',
                   borderRadius: 12,
                   overflow: 'hidden',
-                  background: 'rgba(255,255,255,0.02)',
+                  background: 'rgba(27,25,22,0.02)',
                   backdropFilter: 'blur(8px)',
                   width: 'fit-content',
                   maxWidth: '100%',
                 }}>
                   {[
-                    { n: open.length,     label: 'Open now',    color: '#4ade80' },
-                    { n: upcoming.length, label: 'Coming soon', color: '#fbbf24' },
-                    { n: `$${(totalPrize / 1000).toFixed(0)}K+`, label: 'In prizes', color: '#a5b4fc' },
-                    { n: allContests.filter(c => c.status !== 'closed').length, label: 'Active', color: '#71717a' },
+                    { n: open.length,     label: 'Open now',    color: '#15803D' },
+                    { n: upcoming.length, label: 'Coming soon', color: '#B45309' },
+                    { n: totalPrize >= 1_000_000 ? `$${(totalPrize / 1_000_000).toFixed(1)}M+` : `$${Math.round(totalPrize / 1000)}K+`, label: 'In prizes', color: '#4338CA' },
+                    { n: allContests.filter(c => c.status !== 'closed').length, label: 'Active', color: '#7A7469' },
                   ].map((s, i) => (
                     <div key={s.label} style={{
                       padding: '14px 22px',
-                      borderRight: i < 3 ? '1px solid rgba(255,255,255,0.05)' : 'none',
+                      borderRight: i < 3 ? '1px solid rgba(27,25,22,0.05)' : 'none',
                       display: 'flex', flexDirection: 'column', gap: 3,
                     }}>
                       <span style={{
@@ -288,7 +289,7 @@ export default async function Home() {
                       }}>
                         {s.n}
                       </span>
-                      <span style={{ fontSize: 10, color: '#3f3f46', textTransform: 'uppercase', letterSpacing: '0.06em', fontFamily: 'Space Grotesk, sans-serif' }}>
+                      <span style={{ fontSize: 10, color: '#A8A296', textTransform: 'uppercase', letterSpacing: '0.06em', fontFamily: 'Space Grotesk, sans-serif' }}>
                         {s.label}
                       </span>
                     </div>
@@ -298,21 +299,21 @@ export default async function Home() {
                 {/* Subscribe card */}
                 <div id="subscribe" style={{ maxWidth: 420 }}>
                   <div style={{
-                    border: '1px solid rgba(255,255,255,0.08)',
+                    border: '1px solid rgba(27,25,22,0.08)',
                     borderRadius: 16,
                     padding: '24px 24px',
-                    background: 'rgba(10,9,22,0.7)',
+                    background: '#FFFFFF',
                     backdropFilter: 'blur(20px)',
                     WebkitBackdropFilter: 'blur(20px)',
-                    boxShadow: '0 0 0 1px rgba(99,102,241,0.06), 0 24px 48px -12px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,255,255,0.04)',
+                    boxShadow: '0 0 0 1px rgba(99,102,241,0.06), 0 24px 48px -12px rgba(0,0,0,0.6), inset 0 1px 0 rgba(27,25,22,0.04)',
                   }}>
                     <div style={{ fontSize: 10, color: '#4f46e5', fontFamily: 'Space Grotesk, sans-serif', fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: 8 }}>
                       Free alerts
                     </div>
-                    <h2 style={{ fontFamily: 'Space Grotesk, sans-serif', fontSize: 17, fontWeight: 700, color: '#f4f4f5', marginBottom: 5, letterSpacing: '-0.02em' }}>
+                    <h2 style={{ fontFamily: 'Space Grotesk, sans-serif', fontSize: 17, fontWeight: 700, color: '#1B1916', marginBottom: 5, letterSpacing: '-0.02em' }}>
                       Never miss a deadline
                     </h2>
-                    <p style={{ fontSize: 13, color: '#a1a1aa', marginBottom: 18, lineHeight: 1.7 }}>
+                    <p style={{ fontSize: 13, color: '#6F6A61', marginBottom: 18, lineHeight: 1.7 }}>
                       Get notified when new contests open and 7 days before any deadline closes.
                     </p>
                     <EmailSubscribe />
@@ -332,7 +333,49 @@ export default async function Home() {
         </section>
 
         {/* ── Divider ── */}
-        <div style={{ borderTop: '1px solid rgba(255,255,255,0.04)', margin: '0 auto', maxWidth: 1152 }} />
+        <div style={{ borderTop: '1px solid rgba(27,25,22,0.06)', margin: '0 auto', maxWidth: 1152 }} />
+
+        {/* ── What this is: three drawings, three true statements ── */}
+        <section className="max-w-6xl mx-auto px-5 pt-14 pb-2">
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: 18 }}>
+            {[
+              {
+                art: <ClapperDrawing />, bg: '#E7F1F8', border: '#CFE2EF', ink: '#31536B',
+                title: 'Every contest, one place',
+                body: `${allContests.length} tracked and ${open.length} open right now — festivals, studio challenges, grants and brand briefs, not just the famous ones.`,
+              },
+              {
+                art: <CalendarDrawing />, bg: '#FBF4DE', border: '#F0E3BC', ink: '#6B5A22',
+                title: 'Deadlines you can trust',
+                body: 'An agent re-reads the official page every morning. When a festival extends or quietly closes, the date here changes that day.',
+              },
+              {
+                art: <EnvelopeDrawing />, bg: '#FDEEEC', border: '#F5D9D5', ink: '#7C3A31',
+                title: 'Told before it closes',
+                body: 'One email when new contests open, one last call three days before a deadline. Never more than that.',
+              },
+            ].map(c => (
+              <div key={c.title} style={{
+                background: c.bg, border: `1px solid ${c.border}`, borderRadius: 14,
+                padding: 20, display: 'flex', flexDirection: 'column', gap: 14,
+              }}>
+                <div style={{
+                  background: 'rgba(255,255,255,0.72)', border: `1px solid ${c.border}`,
+                  borderRadius: 10, height: 132, padding: 8,
+                }}>
+                  {c.art}
+                </div>
+                <div>
+                  <h3 style={{
+                    fontFamily: 'Space Grotesk, sans-serif', fontSize: 17, fontWeight: 700,
+                    color: '#1B1916', letterSpacing: '-0.02em', marginBottom: 6,
+                  }}>{c.title}</h3>
+                  <p style={{ fontSize: 13.5, lineHeight: 1.65, color: c.ink, margin: 0 }}>{c.body}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
 
         {/* ── Browse ── */}
         <section id="contests" className="max-w-6xl mx-auto px-5 py-14">
@@ -342,13 +385,13 @@ export default async function Home() {
                 fontFamily: 'Space Grotesk, sans-serif',
                 fontSize: 'clamp(20px, 3vw, 28px)',
                 fontWeight: 700,
-                color: '#f4f4f5',
+                color: '#1B1916',
                 marginBottom: 6,
                 letterSpacing: '-0.03em',
               }}>
                 Browse Competitions
               </h2>
-              <p style={{ fontSize: 13, color: '#71717a' }}>
+              <p style={{ fontSize: 13, color: '#7A7469' }}>
                 {open.length + upcoming.length} active · verified against live sources daily
               </p>
             </div>
@@ -361,10 +404,10 @@ export default async function Home() {
               backdropFilter: 'blur(8px)',
             }}>
               <span className="dot dot-open live" style={{ width: 6, height: 6 }} />
-              <span style={{ fontFamily: 'Space Grotesk, sans-serif', fontWeight: 600, color: '#4ade80', letterSpacing: '0.01em' }}>
+              <span style={{ fontFamily: 'Space Grotesk, sans-serif', fontWeight: 600, color: '#15803D', letterSpacing: '0.01em' }}>
                 Research agent running daily
               </span>
-              <span style={{ fontSize: 10, color: '#4ade80', fontFamily: 'Space Grotesk, sans-serif', fontWeight: 400, opacity: 0.6 }}>
+              <span style={{ fontSize: 10, color: '#15803D', fontFamily: 'Space Grotesk, sans-serif', fontWeight: 400, opacity: 0.6 }}>
                 · fresh contests added 24/7
               </span>
             </div>
@@ -376,10 +419,10 @@ export default async function Home() {
         {/* ── Ruminatex / Cinematic AI advertising callout ── */}
         <section className="max-w-6xl mx-auto px-5 pb-12">
           <div style={{
-            border: '1px solid rgba(255,255,255,0.05)',
+            border: '1px solid rgba(27,25,22,0.05)',
             borderRadius: 16,
             padding: '24px 28px',
-            background: 'rgba(255,255,255,0.015)',
+            background: 'rgba(27,25,22,0.015)',
             backdropFilter: 'blur(8px)',
             display: 'flex',
             flexWrap: 'wrap',
@@ -401,12 +444,12 @@ export default async function Home() {
                 </svg>
               </div>
               <div>
-                <p style={{ fontSize: 13, color: '#a1a1aa', lineHeight: 1.6 }}>
+                <p style={{ fontSize: 13, color: '#6F6A61', lineHeight: 1.6 }}>
                   Looking to create{' '}
-                  <span style={{ color: '#d4d4d8', fontWeight: 500 }}>cinematic AI content</span> for your brand?{' '}
+                  <span style={{ color: '#3E3A33', fontWeight: 500 }}>cinematic AI content</span> for your brand?{' '}
                   <a
                     href="/cinematic-ads"
-                    style={{ color: '#818cf8', textDecoration: 'none', fontWeight: 500 }}
+                    style={{ color: '#4F46E5', textDecoration: 'none', fontWeight: 500 }}
                     onMouseEnter={undefined}
                   >
                     Explore how AI is reshaping brand filmmaking →
@@ -420,12 +463,12 @@ export default async function Home() {
               rel="noopener noreferrer"
               style={{
                 fontSize: 12,
-                color: '#3f3f46',
+                color: '#A8A296',
                 textDecoration: 'none',
                 fontFamily: 'Space Grotesk, sans-serif',
                 fontWeight: 500,
                 letterSpacing: '0.02em',
-                border: '1px solid rgba(255,255,255,0.05)',
+                border: '1px solid rgba(27,25,22,0.05)',
                 borderRadius: 8,
                 padding: '6px 14px',
                 transition: 'color 0.15s, border-color 0.15s',
@@ -440,44 +483,38 @@ export default async function Home() {
         {/* ── Bottom CTA ── */}
         <section className="max-w-6xl mx-auto px-5 pb-24">
           <div style={{
-            border: '1px solid rgba(99,102,241,0.15)',
-            borderRadius: 20,
-            padding: 'clamp(32px, 5vw, 56px)',
+            border: '1px solid #E1DAF0',
+            borderRadius: 16,
+            padding: 'clamp(28px, 4vw, 44px)',
             display: 'flex',
             flexWrap: 'wrap',
             alignItems: 'center',
             justifyContent: 'space-between',
-            gap: 36,
-            background: 'linear-gradient(135deg, rgba(79,70,229,0.07) 0%, rgba(109,40,217,0.05) 50%, rgba(10,9,22,0.6) 100%)',
-            backdropFilter: 'blur(16px)',
-            WebkitBackdropFilter: 'blur(16px)',
-            boxShadow: '0 0 0 1px rgba(99,102,241,0.08), 0 32px 64px -16px rgba(0,0,0,0.5)',
+            gap: 32,
+            background: '#F3F0F9',
             position: 'relative',
-            overflow: 'hidden',
           }}>
-            {/* Decorative gradient */}
-            <div style={{
-              position: 'absolute', top: -80, right: -80, width: 320, height: 320, borderRadius: '50%',
-              background: 'radial-gradient(circle, rgba(99,102,241,0.12) 0%, transparent 70%)',
-              pointerEvents: 'none',
-            }} />
+            {/* the filmmaker, watching for the next one */}
+            <div aria-hidden style={{ position: 'absolute', right: 26, bottom: 0, width: 116, height: 126, opacity: 0.9, pointerEvents: 'none' }} className="hidden lg:block">
+              <FilmmakerDoodle />
+            </div>
 
             <div style={{ maxWidth: 460, position: 'relative' }}>
-              <div style={{ fontSize: 11, color: '#6366f1', fontFamily: 'Space Grotesk, sans-serif', fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: 14 }}>
+              <div style={{ fontSize: 11, color: '#4C3F72', fontFamily: 'Space Grotesk, sans-serif', fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: 14 }}>
                 Always current
               </div>
               <h2 style={{
                 fontFamily: 'Space Grotesk, sans-serif',
                 fontSize: 'clamp(22px, 3.5vw, 34px)',
                 fontWeight: 700,
-                color: '#f4f4f5',
+                color: '#1B1916',
                 marginBottom: 12,
                 letterSpacing: '-0.03em',
                 lineHeight: 1.15,
               }}>
                 Know before the deadline.
               </h2>
-              <p style={{ fontSize: 14, color: '#a1a1aa', lineHeight: 1.8 }}>
+              <p style={{ fontSize: 14, color: '#6F6A61', lineHeight: 1.8 }}>
                 An AI agent searches the web daily, visits each contest URL, and verifies every deadline against the live page — so you never act on stale information.
               </p>
             </div>
@@ -489,35 +526,35 @@ export default async function Home() {
 
         {/* ── Footer ── */}
         <footer style={{
-          borderTop: '1px solid rgba(255,255,255,0.04)',
+          borderTop: '1px solid rgba(27,25,22,0.04)',
           padding: '28px 0',
-          background: 'rgba(5,5,8,0.8)',
+          background: 'rgba(251,250,248,0.8)',
           backdropFilter: 'blur(8px)',
         }}>
           <div className="max-w-6xl mx-auto px-5 flex flex-col sm:flex-row items-center justify-between gap-4">
             <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
               <div style={{
                 width: 22, height: 22, borderRadius: 5,
-                background: 'linear-gradient(135deg, #4f46e5, #7c3aed)',
+                background: '#4F46E5',
                 display: 'flex', alignItems: 'center', justifyContent: 'center',
                 fontSize: 8, fontWeight: 800, color: '#fff',
               }}>AI</div>
-              <span style={{ fontFamily: 'Space Grotesk, sans-serif', fontSize: 13, fontWeight: 600, color: '#3f3f46' }}>
+              <span style={{ fontFamily: 'Space Grotesk, sans-serif', fontSize: 13, fontWeight: 600, color: '#A8A296' }}>
                 AI Film Contests
               </span>
             </div>
 
-            <span style={{ fontSize: 12, color: '#52525b' }}>
+            <span style={{ fontSize: 12, color: '#8B867C' }}>
               Tracking every AI film competition · Updated daily
             </span>
 
             <div className="flex items-center gap-4" style={{ fontSize: 12 }}>
               <a href="/submit" className="link-muted">Submit a Contest</a>
-              <span style={{ color: '#1c1c28' }}>·</span>
+              <span style={{ color: '#D8D4C9' }}>·</span>
               <a href="/cinematic-ads" className="link-muted">Cinematic AI Ads</a>
-              <span style={{ color: '#1c1c28' }}>·</span>
+              <span style={{ color: '#D8D4C9' }}>·</span>
               <a href="/creators" className="link-muted">Featured Creators</a>
-              <span style={{ color: '#1c1c28' }}>·</span>
+              <span style={{ color: '#D8D4C9' }}>·</span>
               <a
                 href="https://ruminatex.com"
                 target="_blank"

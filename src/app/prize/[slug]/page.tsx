@@ -135,12 +135,12 @@ export default async function PrizePage({ params }: { params: Promise<{ slug: st
       <div className="max-w-4xl mx-auto px-5 py-12">
 
         {/* Breadcrumb */}
-        <p style={{ fontSize: 12, color: '#3f3f46', marginBottom: 28 }}>
+        <p style={{ fontSize: 12, color: '#A8A296', marginBottom: 28 }}>
           <Link href="/" className="link-muted">AI Film Contests</Link>
           <span style={{ margin: '0 6px' }}>›</span>
           <span className="link-muted" style={{ cursor: 'default' }}>By Prize</span>
           <span style={{ margin: '0 6px' }}>›</span>
-          <span style={{ color: '#52525b' }}>{page.label}</span>
+          <span style={{ color: '#8B867C' }}>{page.label}</span>
         </p>
 
         {/* Header */}
@@ -151,15 +151,15 @@ export default async function PrizePage({ params }: { params: Promise<{ slug: st
             fontWeight: 700,
             lineHeight: 1.1,
             letterSpacing: '-0.02em',
-            color: '#f4f4f5',
+            color: '#1B1916',
             marginBottom: 16,
           }}>
             {page.label}
           </h1>
-          <p style={{ fontSize: 16, color: '#71717a', lineHeight: 1.7, maxWidth: 680, marginBottom: 16 }}>
+          <p style={{ fontSize: 16, color: '#7A7469', lineHeight: 1.7, maxWidth: 680, marginBottom: 16 }}>
             {page.body}
           </p>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 20, fontSize: 13, color: '#52525b' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 20, fontSize: 13, color: '#8B867C' }}>
             <span><strong style={{ color: '#22c55e' }}>{displayOpen.length}</strong> open now</span>
             <span>·</span>
             <span><strong style={{ color: '#f59e0b' }}>{displayUpcoming.length}</strong> coming soon</span>
@@ -173,7 +173,7 @@ export default async function PrizePage({ params }: { params: Promise<{ slug: st
               fontFamily: 'Space Grotesk, sans-serif',
               fontSize: 13,
               fontWeight: 600,
-              color: '#52525b',
+              color: '#8B867C',
               textTransform: 'uppercase',
               letterSpacing: '0.08em',
               marginBottom: 16,
@@ -190,17 +190,17 @@ export default async function PrizePage({ params }: { params: Promise<{ slug: st
                       <div style={{ flex: 1, minWidth: 0 }}>
                         <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 4 }}>
                           <span className="dot dot-open live" />
-                          {isUrgent && <span style={{ fontSize: 11, color: '#ef4444', fontWeight: 700 }}>{dl}d left</span>}
+                          {isUrgent && <span style={{ fontSize: 11, color: '#DC2626', fontWeight: 700 }}>{dl}d left</span>}
                         </div>
-                        <div style={{ fontFamily: 'Space Grotesk, sans-serif', fontWeight: 600, fontSize: 15, color: '#f4f4f5', marginBottom: 2 }}>{c.name}</div>
-                        <div style={{ fontSize: 12, color: '#52525b' }}>{c.organizer}</div>
+                        <div style={{ fontFamily: 'Space Grotesk, sans-serif', fontWeight: 600, fontSize: 15, color: '#1B1916', marginBottom: 2 }}>{c.name}</div>
+                        <div style={{ fontSize: 12, color: '#8B867C' }}>{c.organizer}</div>
                         {c.entryFee && (
-                          <div style={{ fontSize: 11, color: '#3f3f46', marginTop: 3 }}>Entry: {c.entryFee}</div>
+                          <div style={{ fontSize: 11, color: '#A8A296', marginTop: 3 }}>Entry: {c.entryFee}</div>
                         )}
                       </div>
                       <div style={{ textAlign: 'right', flexShrink: 0 }}>
-                        <div style={{ fontWeight: 700, color: '#a5b4fc', fontSize: 14 }}>{c.prize}</div>
-                        <div style={{ fontSize: 12, color: '#52525b', marginTop: 2 }}>Due {fmt(c.deadline)}</div>
+                        <div style={{ fontWeight: 700, color: '#4338CA', fontSize: 14 }}>{c.prize}</div>
+                        <div style={{ fontSize: 12, color: '#8B867C', marginTop: 2 }}>Due {fmt(c.deadline)}</div>
                       </div>
                     </div>
                   </Link>
@@ -217,7 +217,7 @@ export default async function PrizePage({ params }: { params: Promise<{ slug: st
               fontFamily: 'Space Grotesk, sans-serif',
               fontSize: 13,
               fontWeight: 600,
-              color: '#52525b',
+              color: '#8B867C',
               textTransform: 'uppercase',
               letterSpacing: '0.08em',
               marginBottom: 16,
@@ -233,12 +233,12 @@ export default async function PrizePage({ params }: { params: Promise<{ slug: st
                         <span className="dot dot-upcoming" />
                         <span style={{ fontSize: 11, color: '#f59e0b', fontWeight: 600 }}>Coming Soon</span>
                       </div>
-                      <div style={{ fontFamily: 'Space Grotesk, sans-serif', fontWeight: 600, fontSize: 15, color: '#f4f4f5', marginBottom: 2 }}>{c.name}</div>
-                      <div style={{ fontSize: 12, color: '#52525b' }}>{c.organizer}</div>
+                      <div style={{ fontFamily: 'Space Grotesk, sans-serif', fontWeight: 600, fontSize: 15, color: '#1B1916', marginBottom: 2 }}>{c.name}</div>
+                      <div style={{ fontSize: 12, color: '#8B867C' }}>{c.organizer}</div>
                     </div>
                     <div style={{ textAlign: 'right', flexShrink: 0 }}>
-                      <div style={{ fontWeight: 700, color: '#a5b4fc', fontSize: 14 }}>{c.prize}</div>
-                      <div style={{ fontSize: 12, color: '#52525b', marginTop: 2 }}>Est. {fmt(c.deadline)}</div>
+                      <div style={{ fontWeight: 700, color: '#4338CA', fontSize: 14 }}>{c.prize}</div>
+                      <div style={{ fontSize: 12, color: '#8B867C', marginTop: 2 }}>Est. {fmt(c.deadline)}</div>
                     </div>
                   </div>
                 </Link>
@@ -248,12 +248,12 @@ export default async function PrizePage({ params }: { params: Promise<{ slug: st
         )}
 
         {/* Other prize pages */}
-        <section style={{ borderTop: '1px solid rgba(255,255,255,0.05)', paddingTop: 32, marginBottom: 40 }}>
+        <section style={{ borderTop: '1px solid rgba(27,25,22,0.05)', paddingTop: 32, marginBottom: 40 }}>
           <h2 style={{
             fontFamily: 'Space Grotesk, sans-serif',
             fontSize: 13,
             fontWeight: 600,
-            color: '#52525b',
+            color: '#8B867C',
             textTransform: 'uppercase',
             letterSpacing: '0.08em',
             marginBottom: 16,
@@ -264,9 +264,9 @@ export default async function PrizePage({ params }: { params: Promise<{ slug: st
             {Object.entries(PRIZE_PAGES).filter(([s]) => s !== slug).map(([s, p]) => (
               <Link key={s} href={`/prize/${s}`} style={{
                 fontSize: 13,
-                color: '#71717a',
-                background: 'rgba(255,255,255,0.03)',
-                border: '1px solid rgba(255,255,255,0.07)',
+                color: '#7A7469',
+                background: 'rgba(27,25,22,0.03)',
+                border: '1px solid rgba(27,25,22,0.07)',
                 borderRadius: 6,
                 padding: '5px 12px',
                 textDecoration: 'none',

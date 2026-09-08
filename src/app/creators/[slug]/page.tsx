@@ -35,7 +35,7 @@ const sectionLabel: React.CSSProperties = {
   fontFamily: 'Space Grotesk, sans-serif',
   fontSize: 13,
   fontWeight: 600,
-  color: '#52525b',
+  color: '#8B867C',
   textTransform: 'uppercase',
   letterSpacing: '0.08em',
   marginBottom: 16,
@@ -79,12 +79,12 @@ export default async function CreatorProfile({ params }: { params: Promise<{ slu
       <div className="max-w-4xl mx-auto px-5 py-12">
 
         {/* Breadcrumb */}
-        <p style={{ fontSize: 12, color: '#3f3f46', marginBottom: 28 }}>
+        <p style={{ fontSize: 12, color: '#A8A296', marginBottom: 28 }}>
           <Link href="/" className="link-muted">AI Film Contests</Link>
           <span style={{ margin: '0 6px' }}>›</span>
           <Link href="/creators" className="link-muted">Featured Creators</Link>
           <span style={{ margin: '0 6px' }}>›</span>
-          <span style={{ color: '#52525b' }}>{c.name}</span>
+          <span style={{ color: '#8B867C' }}>{c.name}</span>
         </p>
 
         {/* Header */}
@@ -95,7 +95,7 @@ export default async function CreatorProfile({ params }: { params: Promise<{ slu
             fontWeight: 700,
             letterSpacing: '0.08em',
             textTransform: 'uppercase',
-            color: '#a5b4fc',
+            color: '#4338CA',
             background: 'rgba(99,102,241,0.12)',
             border: '1px solid rgba(99,102,241,0.22)',
             borderRadius: 999,
@@ -112,13 +112,13 @@ export default async function CreatorProfile({ params }: { params: Promise<{ slu
             fontWeight: 700,
             lineHeight: 1.1,
             letterSpacing: '-0.02em',
-            color: '#f4f4f5',
+            color: '#1B1916',
             marginBottom: 12,
           }}>
             {c.name}
           </h1>
 
-          <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: 12, fontSize: 13, color: '#52525b', marginBottom: 18 }}>
+          <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: 12, fontSize: 13, color: '#8B867C', marginBottom: 18 }}>
             <span>{c.type === 'studio' ? 'Studio' : 'Filmmaker'}</span>
             <span>·</span>
             <span>{c.location}</span>
@@ -126,7 +126,7 @@ export default async function CreatorProfile({ params }: { params: Promise<{ slu
             <span>Featured since {fmt(c.featuredSince)}</span>
           </div>
 
-          <p style={{ fontSize: 16, color: '#a1a1aa', lineHeight: 1.75, maxWidth: 680, marginBottom: 20 }}>
+          <p style={{ fontSize: 16, color: '#6F6A61', lineHeight: 1.75, maxWidth: 680, marginBottom: 20 }}>
             {c.bio}
           </p>
 
@@ -140,13 +140,13 @@ export default async function CreatorProfile({ params }: { params: Promise<{ slu
               gap: 8,
               padding: '12px 22px',
               borderRadius: 10,
-              background: 'linear-gradient(135deg, #4f46e5 0%, #6d28d9 100%)',
+              background: '#4F46E5',
               color: '#fff',
               fontWeight: 600,
               fontSize: 14,
               textDecoration: 'none',
               fontFamily: 'Space Grotesk, sans-serif',
-              boxShadow: '0 0 24px -4px rgba(99,102,241,0.45)',
+              boxShadow: 'none',
             }}
           >
             Visit {c.website.replace(/^https?:\/\//, '').replace(/\/$/, '')} →
@@ -159,9 +159,9 @@ export default async function CreatorProfile({ params }: { params: Promise<{ slu
             {c.tags.map(t => (
               <span key={t} style={{
                 fontSize: 12,
-                color: '#71717a',
-                background: 'rgba(255,255,255,0.03)',
-                border: '1px solid rgba(255,255,255,0.07)',
+                color: '#7A7469',
+                background: 'rgba(27,25,22,0.03)',
+                border: '1px solid rgba(27,25,22,0.07)',
                 borderRadius: 6,
                 padding: '5px 12px',
               }}>
@@ -180,12 +180,12 @@ export default async function CreatorProfile({ params }: { params: Promise<{ slu
                 <a key={w.url} href={w.url} target="_blank" rel="noopener" style={{ textDecoration: 'none' }}>
                   <div className="card" style={{ padding: '16px 20px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 16, flexWrap: 'wrap' }}>
                     <div style={{ minWidth: 0 }}>
-                      <div className="card-title" style={{ fontFamily: 'Space Grotesk, sans-serif', fontWeight: 600, fontSize: 15, color: '#f4f4f5' }}>
+                      <div className="card-title" style={{ fontFamily: 'Space Grotesk, sans-serif', fontWeight: 600, fontSize: 15, color: '#1B1916' }}>
                         {w.title}
                       </div>
-                      {w.client && <div style={{ fontSize: 12, color: '#52525b', marginTop: 2 }}>{w.client}</div>}
+                      {w.client && <div style={{ fontSize: 12, color: '#8B867C', marginTop: 2 }}>{w.client}</div>}
                     </div>
-                    <span className="card-cta" style={{ fontSize: 13, fontWeight: 600, color: '#818cf8', whiteSpace: 'nowrap' }}>
+                    <span className="card-cta" style={{ fontSize: 13, fontWeight: 600, color: '#4F46E5', whiteSpace: 'nowrap' }}>
                       Watch <span className="card-arrow" style={{ display: 'inline-block' }}>→</span>
                     </span>
                   </div>
@@ -204,10 +204,10 @@ export default async function CreatorProfile({ params }: { params: Promise<{ slu
                 <Link key={ct.id} href={`/contests/${ct.id}`} style={{ textDecoration: 'none' }}>
                   <div className="card" style={{ padding: '16px 20px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 16, flexWrap: 'wrap' }}>
                     <div style={{ minWidth: 0 }}>
-                      <div className="card-title" style={{ fontFamily: 'Space Grotesk, sans-serif', fontWeight: 600, fontSize: 15, color: '#f4f4f5' }}>{ct.name}</div>
-                      <div style={{ fontSize: 12, color: '#52525b', marginTop: 2 }}>{ct.organizer}</div>
+                      <div className="card-title" style={{ fontFamily: 'Space Grotesk, sans-serif', fontWeight: 600, fontSize: 15, color: '#1B1916' }}>{ct.name}</div>
+                      <div style={{ fontSize: 12, color: '#8B867C', marginTop: 2 }}>{ct.organizer}</div>
                     </div>
-                    <span className="card-cta" style={{ fontSize: 13, fontWeight: 600, color: '#818cf8', whiteSpace: 'nowrap' }}>
+                    <span className="card-cta" style={{ fontSize: 13, fontWeight: 600, color: '#4F46E5', whiteSpace: 'nowrap' }}>
                       View contest <span className="card-arrow" style={{ display: 'inline-block' }}>→</span>
                     </span>
                   </div>
@@ -220,7 +220,7 @@ export default async function CreatorProfile({ params }: { params: Promise<{ slu
         {/* Get featured */}
         <section className="card" style={{ padding: '24px 26px', marginBottom: 40 }}>
           <h2 style={{ ...sectionLabel, marginBottom: 10 }}>Get featured</h2>
-          <p style={{ fontSize: 14, color: '#a1a1aa', lineHeight: 1.7, margin: '0 0 16px', maxWidth: 620 }}>
+          <p style={{ fontSize: 14, color: '#6F6A61', lineHeight: 1.7, margin: '0 0 16px', maxWidth: 620 }}>
             Want a profile like this one? Send your site and two or three links to finished
             pieces. Profiles are free and written from your own site.
           </p>
@@ -230,9 +230,9 @@ export default async function CreatorProfile({ params }: { params: Promise<{ slu
             gap: 8,
             padding: '12px 22px',
             borderRadius: 10,
-            background: 'rgba(255,255,255,0.06)',
-            border: '1px solid rgba(255,255,255,0.09)',
-            color: '#d4d4d8',
+            background: 'rgba(27,25,22,0.06)',
+            border: '1px solid rgba(27,25,22,0.09)',
+            color: '#3E3A33',
             fontWeight: 600,
             fontSize: 14,
             textDecoration: 'none',
@@ -243,7 +243,7 @@ export default async function CreatorProfile({ params }: { params: Promise<{ slu
         </section>
 
         {/* Subscribe */}
-        <section style={{ borderTop: '1px solid rgba(255,255,255,0.05)', paddingTop: 32, marginBottom: 32 }}>
+        <section style={{ borderTop: '1px solid rgba(27,25,22,0.05)', paddingTop: 32, marginBottom: 32 }}>
           <h2 style={sectionLabel}>Never miss a deadline</h2>
           <EmailSubscribe compact />
         </section>

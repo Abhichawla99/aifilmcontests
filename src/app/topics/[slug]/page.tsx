@@ -634,12 +634,12 @@ export default async function TopicPage({ params }: { params: Promise<{ slug: st
       <div className="max-w-4xl mx-auto px-5 py-12">
 
         {/* Breadcrumb */}
-        <p style={{ fontSize: 12, color: '#3f3f46', marginBottom: 28 }}>
+        <p style={{ fontSize: 12, color: '#A8A296', marginBottom: 28 }}>
           <Link href="/" className="link-muted">AI Film Contests</Link>
           <span style={{ margin: '0 6px' }}>Ã¢ÂÂº</span>
           <span className="link-muted" style={{ cursor: 'default' }}>Topics</span>
           <span style={{ margin: '0 6px' }}>Ã¢ÂÂº</span>
-          <span style={{ color: '#52525b' }}>{topic.title}</span>
+          <span style={{ color: '#8B867C' }}>{topic.title}</span>
         </p>
 
         {/* Header */}
@@ -650,7 +650,7 @@ export default async function TopicPage({ params }: { params: Promise<{ slug: st
             fontWeight: 700,
             lineHeight: 1.1,
             letterSpacing: '-0.02em',
-            color: '#f4f4f5',
+            color: '#1B1916',
             marginBottom: 16,
           }}>
             {topic.title}
@@ -664,7 +664,7 @@ export default async function TopicPage({ params }: { params: Promise<{ slug: st
                   fontSize: 22,
                   fontWeight: 700,
                   letterSpacing: '-0.01em',
-                  color: '#f4f4f5',
+                  color: '#1B1916',
                   marginTop: 28,
                   marginBottom: 12,
                   maxWidth: 720,
@@ -672,7 +672,7 @@ export default async function TopicPage({ params }: { params: Promise<{ slug: st
               )
             }
             return (
-              <p key={i} style={{ fontSize: 16, color: '#71717a', lineHeight: 1.75, maxWidth: 720, marginBottom: 16 }}>
+              <p key={i} style={{ fontSize: 16, color: '#7A7469', lineHeight: 1.75, maxWidth: 720, marginBottom: 16 }}>
                 {trimmed}
               </p>
             )
@@ -682,12 +682,12 @@ export default async function TopicPage({ params }: { params: Promise<{ slug: st
         {/* Tool chips */}
         {topic.relatedTools.length > 0 && (
           <div style={{ marginBottom: 32 }}>
-            <p style={{ fontSize: 12, color: '#52525b', marginBottom: 10, textTransform: 'uppercase', letterSpacing: '0.07em', fontWeight: 600 }}>Tools</p>
+            <p style={{ fontSize: 12, color: '#8B867C', marginBottom: 10, textTransform: 'uppercase', letterSpacing: '0.07em', fontWeight: 600 }}>Tools</p>
             <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
               {topic.relatedTools.map(t => (
                 <Link key={t} href={`/tools/${t}`} style={{
                   fontSize: 13,
-                  color: '#a5b4fc',
+                  color: '#4338CA',
                   background: 'rgba(99,102,241,0.08)',
                   border: '1px solid rgba(99,102,241,0.2)',
                   borderRadius: 6,
@@ -704,14 +704,14 @@ export default async function TopicPage({ params }: { params: Promise<{ slug: st
         {/* Category chips */}
         {topic.relatedCategories.length > 0 && (
           <div style={{ marginBottom: 48 }}>
-            <p style={{ fontSize: 12, color: '#52525b', marginBottom: 10, textTransform: 'uppercase', letterSpacing: '0.07em', fontWeight: 600 }}>Categories</p>
+            <p style={{ fontSize: 12, color: '#8B867C', marginBottom: 10, textTransform: 'uppercase', letterSpacing: '0.07em', fontWeight: 600 }}>Categories</p>
             <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
               {topic.relatedCategories.map(c => (
                 <Link key={c} href={`/categories/${c}`} style={{
                   fontSize: 13,
-                  color: '#71717a',
-                  background: 'rgba(255,255,255,0.03)',
-                  border: '1px solid rgba(255,255,255,0.07)',
+                  color: '#7A7469',
+                  background: 'rgba(27,25,22,0.03)',
+                  border: '1px solid rgba(27,25,22,0.07)',
                   borderRadius: 6,
                   padding: '5px 12px',
                   textDecoration: 'none',
@@ -732,14 +732,14 @@ export default async function TopicPage({ params }: { params: Promise<{ slug: st
             padding: '24px 28px',
             marginBottom: 48,
           }}>
-            <p style={{ fontSize: 13, color: '#71717a', lineHeight: 1.65, marginBottom: 12 }}>
+            <p style={{ fontSize: 13, color: '#7A7469', lineHeight: 1.65, marginBottom: 12 }}>
               {topic.ruminatexNote}
             </p>
             <a
               href="https://ruminatex.com"
               target="_blank"
               rel="noopener noreferrer"
-              style={{ fontSize: 13, fontWeight: 600, color: '#a5b4fc', textDecoration: 'none' }}
+              style={{ fontSize: 13, fontWeight: 600, color: '#4338CA', textDecoration: 'none' }}
             >
               Visit Ruminatex Ã¢ÂÂ
             </a>
@@ -753,7 +753,7 @@ export default async function TopicPage({ params }: { params: Promise<{ slug: st
               fontFamily: 'Space Grotesk, sans-serif',
               fontSize: 13,
               fontWeight: 600,
-              color: '#52525b',
+              color: '#8B867C',
               textTransform: 'uppercase',
               letterSpacing: '0.08em',
               marginBottom: 16,
@@ -770,14 +770,14 @@ export default async function TopicPage({ params }: { params: Promise<{ slug: st
                       <div style={{ flex: 1, minWidth: 0 }}>
                         <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 4 }}>
                           <span className="dot dot-open live" />
-                          {isUrgent && <span style={{ fontSize: 11, color: '#ef4444', fontWeight: 700 }}>{dl}d left</span>}
+                          {isUrgent && <span style={{ fontSize: 11, color: '#DC2626', fontWeight: 700 }}>{dl}d left</span>}
                         </div>
-                        <div style={{ fontFamily: 'Space Grotesk, sans-serif', fontWeight: 600, fontSize: 15, color: '#f4f4f5', marginBottom: 2 }}>{c.name}</div>
-                        <div style={{ fontSize: 12, color: '#52525b' }}>{c.organizer}</div>
+                        <div style={{ fontFamily: 'Space Grotesk, sans-serif', fontWeight: 600, fontSize: 15, color: '#1B1916', marginBottom: 2 }}>{c.name}</div>
+                        <div style={{ fontSize: 12, color: '#8B867C' }}>{c.organizer}</div>
                       </div>
                       <div style={{ textAlign: 'right', flexShrink: 0 }}>
-                        <div style={{ fontWeight: 700, color: '#a5b4fc', fontSize: 14 }}>{c.prize}</div>
-                        <div style={{ fontSize: 12, color: '#52525b', marginTop: 2 }}>Due {fmt(c.deadline)}</div>
+                        <div style={{ fontWeight: 700, color: '#4338CA', fontSize: 14 }}>{c.prize}</div>
+                        <div style={{ fontSize: 12, color: '#8B867C', marginTop: 2 }}>Due {fmt(c.deadline)}</div>
                       </div>
                     </div>
                   </Link>
@@ -797,7 +797,7 @@ export default async function TopicPage({ params }: { params: Promise<{ slug: st
               fontFamily: 'Space Grotesk, sans-serif',
               fontSize: 13,
               fontWeight: 600,
-              color: '#52525b',
+              color: '#8B867C',
               textTransform: 'uppercase',
               letterSpacing: '0.08em',
               marginBottom: 16,
@@ -807,17 +807,17 @@ export default async function TopicPage({ params }: { params: Promise<{ slug: st
             <div style={{ display: 'flex', flexDirection: 'column', gap: 18 }}>
               {faqs.map((f, i) => (
                 <div key={i} style={{
-                  borderTop: '1px solid rgba(255,255,255,0.05)',
+                  borderTop: '1px solid rgba(27,25,22,0.05)',
                   paddingTop: 18,
                 }}>
                   <h3 style={{
                     fontFamily: 'Space Grotesk, sans-serif',
                     fontSize: 16,
                     fontWeight: 600,
-                    color: '#f4f4f5',
+                    color: '#1B1916',
                     marginBottom: 8,
                   }}>{f.q}</h3>
-                  <p style={{ fontSize: 14, color: '#a1a1aa', lineHeight: 1.7, maxWidth: 720 }}>{f.a}</p>
+                  <p style={{ fontSize: 14, color: '#6F6A61', lineHeight: 1.7, maxWidth: 720 }}>{f.a}</p>
                 </div>
               ))}
             </div>
@@ -831,7 +831,7 @@ export default async function TopicPage({ params }: { params: Promise<{ slug: st
               fontFamily: 'Space Grotesk, sans-serif',
               fontSize: 13,
               fontWeight: 600,
-              color: '#52525b',
+              color: '#8B867C',
               textTransform: 'uppercase',
               letterSpacing: '0.08em',
               marginBottom: 16,
@@ -842,7 +842,7 @@ export default async function TopicPage({ params }: { params: Promise<{ slug: st
               {topic.relatedGuides.map(g => (
                 <Link key={g.href} href={g.href} style={{
                   fontSize: 13,
-                  color: '#a5b4fc',
+                  color: '#4338CA',
                   background: 'rgba(99,102,241,0.08)',
                   border: '1px solid rgba(99,102,241,0.2)',
                   borderRadius: 6,
@@ -862,12 +862,12 @@ export default async function TopicPage({ params }: { params: Promise<{ slug: st
         </section>
 
         {/* Other topics */}
-        <section style={{ borderTop: '1px solid rgba(255,255,255,0.05)', paddingTop: 32, marginBottom: 40 }}>
+        <section style={{ borderTop: '1px solid rgba(27,25,22,0.05)', paddingTop: 32, marginBottom: 40 }}>
           <h2 style={{
             fontFamily: 'Space Grotesk, sans-serif',
             fontSize: 13,
             fontWeight: 600,
-            color: '#52525b',
+            color: '#8B867C',
             textTransform: 'uppercase',
             letterSpacing: '0.08em',
             marginBottom: 16,
@@ -878,9 +878,9 @@ export default async function TopicPage({ params }: { params: Promise<{ slug: st
             {Object.entries(TOPICS).filter(([s]) => s !== slug).map(([s, t]) => (
               <Link key={s} href={`/topics/${s}`} style={{
                 fontSize: 13,
-                color: '#71717a',
-                background: 'rgba(255,255,255,0.03)',
-                border: '1px solid rgba(255,255,255,0.07)',
+                color: '#7A7469',
+                background: 'rgba(27,25,22,0.03)',
+                border: '1px solid rgba(27,25,22,0.07)',
                 borderRadius: 6,
                 padding: '5px 12px',
                 textDecoration: 'none',

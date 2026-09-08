@@ -79,7 +79,7 @@ function UnsubscribeContent() {
         {status === 'loading' && (
           <div>
             <h1 style={{ fontSize: '22px', fontWeight: 700, marginBottom: '8px' }}>Unsubscribing…</h1>
-            <p style={{ color: '#71717a', fontSize: '14px' }}>Just a moment.</p>
+            <p style={{ color: '#7A7469', fontSize: '14px' }}>Just a moment.</p>
           </div>
         )}
 
@@ -90,7 +90,7 @@ function UnsubscribeContent() {
               ✓
             </div>
             <h1 style={{ fontSize: '22px', fontWeight: 700, marginBottom: '8px' }}>You&apos;re unsubscribed.</h1>
-            <p style={{ color: '#71717a', fontSize: '14px', lineHeight: 1.6, marginBottom: '28px' }}>
+            <p style={{ color: '#7A7469', fontSize: '14px', lineHeight: 1.6, marginBottom: '28px' }}>
               {message || "You won't receive any more emails from us."} If you change your mind, you can always re-subscribe on the homepage.
             </p>
             <Link
@@ -106,7 +106,7 @@ function UnsubscribeContent() {
         {status === 'error' && (
           <div>
             <h1 style={{ fontSize: '22px', fontWeight: 700, marginBottom: '8px' }}>Something went wrong.</h1>
-            <p style={{ color: '#71717a', fontSize: '14px', marginBottom: '24px' }}>{message}</p>
+            <p style={{ color: '#7A7469', fontSize: '14px', marginBottom: '24px' }}>{message}</p>
             <button
               onClick={() => { setStatus('idle') }}
               style={{ color: '#4f46e5', fontSize: '13px', fontWeight: 600, background: 'none', border: 'none', cursor: 'pointer', padding: 0 }}
@@ -120,7 +120,7 @@ function UnsubscribeContent() {
         {status === 'idle' && (
           <div>
             <h1 style={{ fontSize: '22px', fontWeight: 700, marginBottom: '8px' }}>Unsubscribe</h1>
-            <p style={{ color: '#71717a', fontSize: '14px', lineHeight: 1.6, marginBottom: '24px' }}>
+            <p style={{ color: '#7A7469', fontSize: '14px', lineHeight: 1.6, marginBottom: '24px' }}>
               Enter your email address and we&apos;ll remove you immediately.
             </p>
             <form onSubmit={handleEmailUnsubscribe} style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
@@ -137,7 +137,7 @@ function UnsubscribeContent() {
               </button>
             </form>
             <div style={{ marginTop: '20px' }}>
-              <Link href="/" style={{ color: '#3f3f46', fontSize: '13px', textDecoration: 'none' }}>
+              <Link href="/" style={{ color: '#A8A296', fontSize: '13px', textDecoration: 'none' }}>
                 ← Back to contests
               </Link>
             </div>
@@ -153,7 +153,7 @@ export default function UnsubscribePage() {
   return (
     <Suspense fallback={
       <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-        <span style={{ color: '#52525b', fontSize: '14px' }}>Loading…</span>
+        <span style={{ color: '#8B867C', fontSize: '14px' }}>Loading…</span>
       </div>
     }>
       <UnsubscribeContent />

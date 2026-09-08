@@ -32,7 +32,7 @@ const sectionLabel: React.CSSProperties = {
   fontFamily: 'Space Grotesk, sans-serif',
   fontSize: 13,
   fontWeight: 600,
-  color: '#52525b',
+  color: '#8B867C',
   textTransform: 'uppercase',
   letterSpacing: '0.08em',
   marginBottom: 16,
@@ -61,10 +61,10 @@ export default function CreatorsPage() {
       <div className="max-w-4xl mx-auto px-5 py-12">
 
         {/* Breadcrumb */}
-        <p style={{ fontSize: 12, color: '#3f3f46', marginBottom: 28 }}>
+        <p style={{ fontSize: 12, color: '#A8A296', marginBottom: 28 }}>
           <Link href="/" className="link-muted">AI Film Contests</Link>
           <span style={{ margin: '0 6px' }}>›</span>
-          <span style={{ color: '#52525b' }}>Featured Creators</span>
+          <span style={{ color: '#8B867C' }}>Featured Creators</span>
         </p>
 
         {/* Header */}
@@ -75,12 +75,12 @@ export default function CreatorsPage() {
             fontWeight: 700,
             lineHeight: 1.1,
             letterSpacing: '-0.02em',
-            color: '#f4f4f5',
+            color: '#1B1916',
             marginBottom: 16,
           }}>
             Featured AI filmmakers &amp; studios
           </h1>
-          <p style={{ fontSize: 16, color: '#71717a', lineHeight: 1.7, maxWidth: 680 }}>
+          <p style={{ fontSize: 16, color: '#7A7469', lineHeight: 1.7, maxWidth: 680 }}>
             The contests are one half of this site. These are the people entering them —
             studios and independent filmmakers working with generative video, with a page you can
             actually send someone. Every profile is written from the creator&apos;s own site.
@@ -106,7 +106,7 @@ export default function CreatorsPage() {
                     fontWeight: 700,
                     letterSpacing: '0.08em',
                     textTransform: 'uppercase',
-                    color: '#a5b4fc',
+                    color: '#4338CA',
                     background: 'rgba(99,102,241,0.12)',
                     border: '1px solid rgba(99,102,241,0.22)',
                     borderRadius: 999,
@@ -115,12 +115,12 @@ export default function CreatorsPage() {
                   }}>
                     {c.type === 'studio' ? 'Studio' : 'Filmmaker'}
                   </span>
-                  <div className="card-title" style={{ fontFamily: 'Space Grotesk, sans-serif', fontWeight: 600, fontSize: 17, color: '#f4f4f5' }}>
+                  <div className="card-title" style={{ fontFamily: 'Space Grotesk, sans-serif', fontWeight: 600, fontSize: 17, color: '#1B1916' }}>
                     {c.name}
                   </div>
-                  <div style={{ fontSize: 12, color: '#52525b' }}>{c.location}</div>
-                  <p style={{ fontSize: 13, color: '#a1a1aa', lineHeight: 1.6, margin: 0, flex: 1 }}>{c.oneLiner}</p>
-                  <span className="card-cta" style={{ fontSize: 13, fontWeight: 600, color: '#818cf8' }}>
+                  <div style={{ fontSize: 12, color: '#8B867C' }}>{c.location}</div>
+                  <p style={{ fontSize: 13, color: '#6F6A61', lineHeight: 1.6, margin: 0, flex: 1 }}>{c.oneLiner}</p>
+                  <span className="card-cta" style={{ fontSize: 13, fontWeight: 600, color: '#4F46E5' }}>
                     View profile <span className="card-arrow" style={{ display: 'inline-block' }}>→</span>
                   </span>
                 </div>
@@ -132,7 +132,7 @@ export default function CreatorsPage() {
         {/* Get featured */}
         <section className="card" style={{ padding: '24px 26px', marginBottom: 44 }}>
           <h2 style={{ ...sectionLabel, marginBottom: 10 }}>Get featured</h2>
-          <p style={{ fontSize: 14, color: '#a1a1aa', lineHeight: 1.7, margin: '0 0 16px', maxWidth: 620 }}>
+          <p style={{ fontSize: 14, color: '#6F6A61', lineHeight: 1.7, margin: '0 0 16px', maxWidth: 620 }}>
             Making AI film work and want a profile here? Send us your site and two or three
             links to finished pieces. Profiles are free and written from your own site — we
             don&apos;t make anything up.
@@ -143,20 +143,20 @@ export default function CreatorsPage() {
             gap: 8,
             padding: '12px 22px',
             borderRadius: 10,
-            background: 'linear-gradient(135deg, #4f46e5 0%, #6d28d9 100%)',
+            background: '#4F46E5',
             color: '#fff',
             fontWeight: 600,
             fontSize: 14,
             textDecoration: 'none',
             fontFamily: 'Space Grotesk, sans-serif',
-            boxShadow: '0 0 24px -4px rgba(99,102,241,0.45)',
+            boxShadow: 'none',
           }}>
             Get featured →
           </a>
         </section>
 
         {/* Subscribe */}
-        <section style={{ borderTop: '1px solid rgba(255,255,255,0.05)', paddingTop: 32, marginBottom: 32 }}>
+        <section style={{ borderTop: '1px solid rgba(27,25,22,0.05)', paddingTop: 32, marginBottom: 32 }}>
           <h2 style={sectionLabel}>Never miss a deadline</h2>
           <EmailSubscribe compact />
         </section>

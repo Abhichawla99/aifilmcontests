@@ -36,8 +36,8 @@ function LoginForm() {
           <span style={{ fontFamily: 'Space Grotesk, sans-serif', fontSize: '13px', fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase', color: '#4f46e5' }}>
             AI Film Contests
           </span>
-          <h1 style={{ fontFamily: 'Space Grotesk, sans-serif', fontSize: '22px', fontWeight: 700, color: '#f4f4f5', marginTop: '12px', marginBottom: '4px' }}>Admin</h1>
-          <p style={{ fontSize: '13px', color: '#52525b' }}>Enter your password to continue</p>
+          <h1 style={{ fontFamily: 'Space Grotesk, sans-serif', fontSize: '22px', fontWeight: 700, color: '#1B1916', marginTop: '12px', marginBottom: '4px' }}>Admin</h1>
+          <p style={{ fontSize: '13px', color: '#8B867C' }}>Enter your password to continue</p>
         </div>
 
         <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
@@ -55,7 +55,7 @@ function LoginForm() {
             {loading ? 'Signing in…' : 'Sign in'}
           </button>
         </form>
-        {error && <p style={{ marginTop: '10px', fontSize: '13px', color: '#ef4444' }}>{error}</p>}
+        {error && <p style={{ marginTop: '10px', fontSize: '13px', color: '#DC2626' }}>{error}</p>}
       </div>
     </div>
   )

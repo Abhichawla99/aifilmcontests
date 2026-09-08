@@ -13,12 +13,12 @@ function LogoMark() {
       </defs>
       <rect width="30" height="30" rx="7" fill="url(#ig)" />
       {/* Perforation marks */}
-      <rect x="3" y="4" width="3" height="4" rx="0.8" fill="rgba(255,255,255,0.22)" />
-      <rect x="3" y="11" width="3" height="4" rx="0.8" fill="rgba(255,255,255,0.22)" />
-      <rect x="3" y="18" width="3" height="4" rx="0.8" fill="rgba(255,255,255,0.22)" />
-      <rect x="24" y="4" width="3" height="4" rx="0.8" fill="rgba(255,255,255,0.22)" />
-      <rect x="24" y="11" width="3" height="4" rx="0.8" fill="rgba(255,255,255,0.22)" />
-      <rect x="24" y="18" width="3" height="4" rx="0.8" fill="rgba(255,255,255,0.22)" />
+      <rect x="3" y="4" width="3" height="4" rx="0.8" fill="rgba(27,25,22,0.22)" />
+      <rect x="3" y="11" width="3" height="4" rx="0.8" fill="rgba(27,25,22,0.22)" />
+      <rect x="3" y="18" width="3" height="4" rx="0.8" fill="rgba(27,25,22,0.22)" />
+      <rect x="24" y="4" width="3" height="4" rx="0.8" fill="rgba(27,25,22,0.22)" />
+      <rect x="24" y="11" width="3" height="4" rx="0.8" fill="rgba(27,25,22,0.22)" />
+      <rect x="24" y="18" width="3" height="4" rx="0.8" fill="rgba(27,25,22,0.22)" />
       {/* Play triangle */}
       <polygon points="12,9 22,15 12,21" fill="white" />
     </svg>
@@ -39,14 +39,14 @@ export default function InnerLayout({ children }: InnerLayoutProps) {
         zIndex: 50,
         backdropFilter: 'blur(16px)',
         WebkitBackdropFilter: 'blur(16px)',
-        background: 'rgba(5,5,8,0.7)',
-        borderBottom: '1px solid rgba(255,255,255,0.06)',
+        background: 'rgba(251,250,248,0.7)',
+        borderBottom: '1px solid rgba(27,25,22,0.06)',
       }}>
         <div className="max-w-4xl mx-auto px-5 py-4 flex items-center justify-between gap-4" style={{ flexWrap: 'wrap' }}>
           {/* Logo */}
           <Link href="/" style={{ textDecoration: 'none', display: 'flex', alignItems: 'center', gap: 10 }}>
             <LogoMark />
-            <span style={{ fontFamily: 'Space Grotesk, sans-serif', fontWeight: 600, fontSize: 15, color: '#e4e4e7' }}>AI Film Contests</span>
+            <span style={{ fontFamily: 'Space Grotesk, sans-serif', fontWeight: 600, fontSize: 15, color: '#26231E' }}>AI Film Contests</span>
           </Link>
 
           {/* Nav links */}
@@ -66,16 +66,16 @@ export default function InnerLayout({ children }: InnerLayoutProps) {
       </main>
 
       {/* Footer */}
-      <footer style={{ borderTop: '1px solid rgba(255,255,255,0.05)', padding: '28px 0', marginTop: 'auto' }}>
+      <footer style={{ borderTop: '1px solid rgba(27,25,22,0.05)', padding: '28px 0', marginTop: 'auto' }}>
         <div className="max-w-4xl mx-auto px-5" style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', justifyContent: 'space-between', gap: 16 }}>
           {/* Left: logo + name */}
           <Link href="/" style={{ textDecoration: 'none', display: 'flex', alignItems: 'center', gap: 8 }}>
             <LogoMark />
-            <span style={{ fontFamily: 'Space Grotesk, sans-serif', fontWeight: 600, fontSize: 13, color: '#52525b' }}>AI Film Contests</span>
+            <span style={{ fontFamily: 'Space Grotesk, sans-serif', fontWeight: 600, fontSize: 13, color: '#8B867C' }}>AI Film Contests</span>
           </Link>
 
           {/* Center */}
-          <span style={{ fontSize: 12, color: '#3f3f46', textAlign: 'center' }}>Tracking every AI film competition · Updated daily</span>
+          <span style={{ fontSize: 12, color: '#A8A296', textAlign: 'center' }}>Tracking every AI film competition · Updated daily</span>
 
           {/* Right: links */}
           <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>

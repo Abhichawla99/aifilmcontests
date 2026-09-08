@@ -59,7 +59,7 @@ export default async function CinematicAdsPage() {
   ).slice(0, 4)
 
   return (
-    <div style={{ background: '#050508', minHeight: '100vh', position: 'relative' }}>
+    <div style={{ background: '#FBFAF8', minHeight: '100vh', position: 'relative' }}>
       <BackgroundFX />
 
       {/* ── Dimmed orb for this page ── */}
@@ -76,10 +76,10 @@ export default async function CinematicAdsPage() {
 
         {/* ── Nav ── */}
         <header style={{
-          borderBottom: '1px solid rgba(255,255,255,0.05)',
+          borderBottom: '1px solid rgba(27,25,22,0.05)',
           backdropFilter: 'blur(16px)',
           WebkitBackdropFilter: 'blur(16px)',
-          background: 'rgba(5,5,8,0.6)',
+          background: 'rgba(251,250,248,0.85)',
           position: 'sticky', top: 0, zIndex: 50,
         }}>
           <div className="max-w-5xl mx-auto px-5 py-4 flex items-center justify-between">
@@ -88,12 +88,12 @@ export default async function CinematicAdsPage() {
             }}>
               <div style={{
                 width: 28, height: 28, borderRadius: 7,
-                background: 'linear-gradient(135deg, #4f46e5, #7c3aed)',
+                background: '#4F46E5',
                 display: 'flex', alignItems: 'center', justifyContent: 'center',
                 fontSize: 10, fontWeight: 800, color: '#fff',
-                boxShadow: '0 0 12px rgba(99,102,241,0.35)',
+                boxShadow: '0 0 12px rgba(79,70,229,0.14)',
               }}>AI</div>
-              <span style={{ fontFamily: 'Space Grotesk, sans-serif', fontWeight: 600, fontSize: 14, color: '#71717a' }}>
+              <span style={{ fontFamily: 'Space Grotesk, sans-serif', fontWeight: 600, fontSize: 14, color: '#7A7469' }}>
                 AI Film Contests
               </span>
             </Link>
@@ -124,10 +124,10 @@ export default async function CinematicAdsPage() {
               background: 'rgba(99,102,241,0.06)',
               marginBottom: 30,
             }}>
-              <svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="#818cf8" strokeWidth="2.5">
+              <svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="#4F46E5" strokeWidth="2.5">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M15.59 14.37a6 6 0 01-5.84 7.38v-4.82m5.84-2.56a14.98 14.98 0 006.16-12.12A14.98 14.98 0 009.631 8.41m5.96 5.96a14.926 14.926 0 01-5.841 2.58m-.119-8.54a6 6 0 00-7.381 5.84h4.82m2.56-5.84a14.927 14.927 0 00-2.58 5.84m2.699 2.7c-.103.021-.207.041-.311.06a15.09 15.09 0 01-2.448-2.448 14.9 14.9 0 01.06-.312m-2.24 2.39a4.493 4.493 0 00-1.757 4.306 4.493 4.493 0 004.306-1.758M16.5 9a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0z" />
               </svg>
-              <span style={{ fontSize: 11, color: '#818cf8', fontFamily: 'Space Grotesk, sans-serif', fontWeight: 600, letterSpacing: '0.07em', textTransform: 'uppercase' }}>
+              <span style={{ fontSize: 11, color: '#4F46E5', fontFamily: 'Space Grotesk, sans-serif', fontWeight: 600, letterSpacing: '0.07em', textTransform: 'uppercase' }}>
                 Cinematic AI · Brand Filmmaking
               </span>
             </div>
@@ -138,7 +138,7 @@ export default async function CinematicAdsPage() {
               fontWeight: 700,
               lineHeight: 1.05,
               letterSpacing: '-0.04em',
-              color: '#f4f4f5',
+              color: '#1B1916',
               marginBottom: 24,
               maxWidth: 820,
             }}>
@@ -148,7 +148,7 @@ export default async function CinematicAdsPage() {
 
             <p style={{
               fontSize: 'clamp(15px, 1.8vw, 18px)',
-              color: '#52525b',
+              color: '#8B867C',
               lineHeight: 1.8,
               maxWidth: 620,
               marginBottom: 40,
@@ -174,7 +174,7 @@ export default async function CinematicAdsPage() {
                 href="/#contests"
                 style={{
                   display: 'inline-flex', alignItems: 'center', gap: 6,
-                  fontSize: 13, color: '#52525b', textDecoration: 'none',
+                  fontSize: 13, color: '#8B867C', textDecoration: 'none',
                   fontFamily: 'Space Grotesk, sans-serif', fontWeight: 500,
                   transition: 'color 0.15s',
                 }}
@@ -196,11 +196,11 @@ export default async function CinematicAdsPage() {
                 fontFamily: 'Space Grotesk, sans-serif',
                 fontSize: 'clamp(24px, 3.5vw, 38px)',
                 fontWeight: 700, letterSpacing: '-0.03em',
-                color: '#f4f4f5', marginBottom: 12,
+                color: '#1B1916', marginBottom: 12,
               }}>
                 The case for cinematic AI
               </h2>
-              <p style={{ fontSize: 15, color: '#52525b', maxWidth: 520, lineHeight: 1.75 }}>
+              <p style={{ fontSize: 15, color: '#8B867C', maxWidth: 520, lineHeight: 1.75 }}>
                 Not cheaper content. Better content — at a pace and scale traditional production simply can&apos;t match.
               </p>
             </div>
@@ -212,10 +212,10 @@ export default async function CinematicAdsPage() {
             }}>
               {WHY.map(item => (
                 <div key={item.title} style={{
-                  border: '1px solid rgba(255,255,255,0.06)',
+                  border: '1px solid rgba(27,25,22,0.06)',
                   borderRadius: 14,
                   padding: '24px',
-                  background: 'rgba(255,255,255,0.02)',
+                  background: 'rgba(27,25,22,0.02)',
                   backdropFilter: 'blur(8px)',
                   transition: 'border-color 0.2s',
                 }}>
@@ -223,11 +223,11 @@ export default async function CinematicAdsPage() {
                   <h3 style={{
                     fontFamily: 'Space Grotesk, sans-serif',
                     fontSize: 15, fontWeight: 700,
-                    color: '#e4e4e7', marginBottom: 8, letterSpacing: '-0.01em',
+                    color: '#26231E', marginBottom: 8, letterSpacing: '-0.01em',
                   }}>
                     {item.title}
                   </h3>
-                  <p style={{ fontSize: 13, color: '#52525b', lineHeight: 1.7 }}>{item.body}</p>
+                  <p style={{ fontSize: 13, color: '#8B867C', lineHeight: 1.7 }}>{item.body}</p>
                 </div>
               ))}
             </div>
@@ -241,7 +241,7 @@ export default async function CinematicAdsPage() {
               border: '1px solid rgba(99,102,241,0.18)',
               borderRadius: 20,
               padding: 'clamp(32px, 5vw, 56px)',
-              background: 'linear-gradient(135deg, rgba(79,70,229,0.08) 0%, rgba(109,40,217,0.05) 60%, rgba(10,9,22,0.6) 100%)',
+              background: 'linear-gradient(135deg, rgba(79,70,229,0.08) 0%, rgba(109,40,217,0.05) 60%, #FFFFFF 100%)',
               backdropFilter: 'blur(16px)',
               WebkitBackdropFilter: 'blur(16px)',
               position: 'relative',
@@ -266,7 +266,7 @@ export default async function CinematicAdsPage() {
                   borderRadius: 100, padding: '4px 12px',
                   background: 'rgba(99,102,241,0.08)',
                 }}>
-                  <span style={{ fontSize: 10, color: '#a5b4fc', fontFamily: 'Space Grotesk, sans-serif', fontWeight: 600, letterSpacing: '0.08em', textTransform: 'uppercase' }}>
+                  <span style={{ fontSize: 10, color: '#4338CA', fontFamily: 'Space Grotesk, sans-serif', fontWeight: 600, letterSpacing: '0.08em', textTransform: 'uppercase' }}>
                     Featured Studio
                   </span>
                 </div>
@@ -275,17 +275,17 @@ export default async function CinematicAdsPage() {
                   fontFamily: 'Space Grotesk, sans-serif',
                   fontSize: 'clamp(26px, 4vw, 40px)',
                   fontWeight: 700, letterSpacing: '-0.03em', lineHeight: 1.1,
-                  color: '#f4f4f5', marginBottom: 16,
+                  color: '#1B1916', marginBottom: 16,
                 }}>
                   Ruminatex
                 </h2>
 
-                <p style={{ fontSize: 15, color: '#71717a', lineHeight: 1.8, marginBottom: 12 }}>
+                <p style={{ fontSize: 15, color: '#7A7469', lineHeight: 1.8, marginBottom: 12 }}>
                   A cinematic AI advertising agency built for brands that want to move at the speed of culture.
                   Ruminatex combines generative AI tools with a director&apos;s eye to produce brand films,
                   campaign visuals, and commercial content that looks and feels like it cost 10× more to make.
                 </p>
-                <p style={{ fontSize: 14, color: '#52525b', lineHeight: 1.8, marginBottom: 28 }}>
+                <p style={{ fontSize: 14, color: '#8B867C', lineHeight: 1.8, marginBottom: 28 }}>
                   If your brand wants to compete in the growing space of AI-native visual content —
                   from social campaigns to long-form brand narratives — Ruminatex is where to start.
                 </p>
@@ -318,11 +318,11 @@ export default async function CinematicAdsPage() {
                 fontFamily: 'Space Grotesk, sans-serif',
                 fontSize: 'clamp(22px, 3vw, 34px)',
                 fontWeight: 700, letterSpacing: '-0.03em',
-                color: '#f4f4f5', marginBottom: 10,
+                color: '#1B1916', marginBottom: 10,
               }}>
                 Tools powering cinematic AI
               </h2>
-              <p style={{ fontSize: 14, color: '#52525b', lineHeight: 1.7 }}>
+              <p style={{ fontSize: 14, color: '#8B867C', lineHeight: 1.7 }}>
                 The professional toolkit used for high-end AI brand and commercial content.
               </p>
             </div>
@@ -334,19 +334,19 @@ export default async function CinematicAdsPage() {
             }}>
               {TOOLS.map(t => (
                 <div key={t.name} style={{
-                  border: '1px solid rgba(255,255,255,0.05)',
+                  border: '1px solid rgba(27,25,22,0.05)',
                   borderRadius: 12,
                   padding: '18px 20px',
-                  background: 'rgba(255,255,255,0.015)',
+                  background: 'rgba(27,25,22,0.015)',
                 }}>
                   <div style={{
                     fontFamily: 'Space Grotesk, sans-serif',
                     fontSize: 13, fontWeight: 700,
-                    color: '#c4b5fd', marginBottom: 7,
+                    color: '#6D28D9', marginBottom: 7,
                   }}>
                     {t.name}
                   </div>
-                  <p style={{ fontSize: 12, color: '#52525b', lineHeight: 1.65 }}>{t.desc}</p>
+                  <p style={{ fontSize: 12, color: '#8B867C', lineHeight: 1.65 }}>{t.desc}</p>
                 </div>
               ))}
             </div>
@@ -365,15 +365,15 @@ export default async function CinematicAdsPage() {
                   <h2 style={{
                     fontFamily: 'Space Grotesk, sans-serif',
                     fontSize: 'clamp(20px, 2.8vw, 30px)',
-                    fontWeight: 700, letterSpacing: '-0.03em', color: '#f4f4f5',
+                    fontWeight: 700, letterSpacing: '-0.03em', color: '#1B1916',
                   }}>
                     Open competitions in commercial AI
                   </h2>
                 </div>
                 <Link href="/#contests" style={{
-                  fontSize: 13, color: '#52525b', textDecoration: 'none',
+                  fontSize: 13, color: '#8B867C', textDecoration: 'none',
                   fontFamily: 'Space Grotesk, sans-serif', fontWeight: 500,
-                  border: '1px solid rgba(255,255,255,0.06)',
+                  border: '1px solid rgba(27,25,22,0.06)',
                   borderRadius: 8, padding: '6px 14px',
                   transition: 'color 0.15s',
                   whiteSpace: 'nowrap',
@@ -389,9 +389,9 @@ export default async function CinematicAdsPage() {
                   return (
                     <Link key={c.id} href={`/contests/${c.id}`} style={{
                       display: 'block', textDecoration: 'none',
-                      border: '1px solid rgba(255,255,255,0.06)',
+                      border: '1px solid rgba(27,25,22,0.06)',
                       borderRadius: 12, padding: '20px',
-                      background: 'rgba(255,255,255,0.02)',
+                      background: 'rgba(27,25,22,0.02)',
                       transition: 'border-color 0.2s, transform 0.18s',
                     }}
                       onMouseEnter={undefined}
@@ -399,7 +399,7 @@ export default async function CinematicAdsPage() {
                       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 10 }}>
                         <span style={{
                           fontSize: 10, fontFamily: 'Space Grotesk, sans-serif', fontWeight: 600,
-                          color: c.status === 'open' ? '#4ade80' : '#fbbf24',
+                          color: c.status === 'open' ? '#15803D' : '#B45309',
                           background: c.status === 'open' ? 'rgba(34,197,94,0.08)' : 'rgba(245,158,11,0.08)',
                           border: `1px solid ${c.status === 'open' ? 'rgba(34,197,94,0.2)' : 'rgba(245,158,11,0.2)'}`,
                           borderRadius: 6, padding: '2px 8px',
@@ -407,19 +407,19 @@ export default async function CinematicAdsPage() {
                         }}>
                           {c.status === 'open' ? 'Open' : 'Coming Soon'}
                         </span>
-                        <span style={{ fontSize: 11, color: days <= 7 ? '#f87171' : '#52525b', fontFamily: 'Space Grotesk, sans-serif' }}>
+                        <span style={{ fontSize: 11, color: days <= 7 ? '#C2410C' : '#8B867C', fontFamily: 'Space Grotesk, sans-serif' }}>
                           {days > 0 ? `${days}d left` : 'Closes today'}
                         </span>
                       </div>
                       <h3 style={{
                         fontFamily: 'Space Grotesk, sans-serif',
-                        fontSize: 14, fontWeight: 700, color: '#e4e4e7',
+                        fontSize: 14, fontWeight: 700, color: '#26231E',
                         marginBottom: 4, letterSpacing: '-0.01em', lineHeight: 1.3,
                       }}>
                         {c.name}
                       </h3>
-                      <p style={{ fontSize: 11, color: '#3f3f46', fontFamily: 'Space Grotesk, sans-serif', marginBottom: 12 }}>{c.organizer}</p>
-                      <div style={{ fontSize: 13, fontWeight: 700, color: '#a5b4fc', fontFamily: 'Space Grotesk, sans-serif' }}>{c.prize}</div>
+                      <p style={{ fontSize: 11, color: '#A8A296', fontFamily: 'Space Grotesk, sans-serif', marginBottom: 12 }}>{c.organizer}</p>
+                      <div style={{ fontSize: 13, fontWeight: 700, color: '#4338CA', fontFamily: 'Space Grotesk, sans-serif' }}>{c.prize}</div>
                     </Link>
                   )
                 })}
@@ -430,10 +430,10 @@ export default async function CinematicAdsPage() {
 
         {/* ── Footer ── */}
         <footer style={{
-          borderTop: '1px solid rgba(255,255,255,0.04)',
+          borderTop: '1px solid rgba(27,25,22,0.04)',
           padding: '28px 0',
           marginTop: 40,
-          background: 'rgba(5,5,8,0.8)',
+          background: 'rgba(251,250,248,0.8)',
           backdropFilter: 'blur(8px)',
         }}>
           <div className="max-w-5xl mx-auto px-5 flex flex-col sm:flex-row items-center justify-between gap-4">
@@ -442,20 +442,20 @@ export default async function CinematicAdsPage() {
             }}>
               <div style={{
                 width: 20, height: 20, borderRadius: 4,
-                background: 'linear-gradient(135deg, #4f46e5, #7c3aed)',
+                background: '#4F46E5',
                 display: 'flex', alignItems: 'center', justifyContent: 'center',
                 fontSize: 7, fontWeight: 800, color: '#fff',
               }}>AI</div>
-              <span style={{ fontFamily: 'Space Grotesk, sans-serif', fontSize: 12, fontWeight: 600, color: '#3f3f46' }}>
+              <span style={{ fontFamily: 'Space Grotesk, sans-serif', fontSize: 12, fontWeight: 600, color: '#A8A296' }}>
                 AI Film Contests
               </span>
             </Link>
-            <span style={{ fontSize: 12, color: '#1c1c28', textAlign: 'center' }}>
+            <span style={{ fontSize: 12, color: '#D8D4C9', textAlign: 'center' }}>
               Every AI film competition · Updated daily by an agent
             </span>
             <div style={{ display: 'flex', gap: 16, alignItems: 'center', fontSize: 12 }}>
               <Link href="/#contests" className="link-muted">Browse Contests</Link>
-              <span style={{ color: '#1c1c28' }}>·</span>
+              <span style={{ color: '#D8D4C9' }}>·</span>
               <a href="https://ruminatex.com" target="_blank" rel="noopener noreferrer" className="link-muted">
                 Ruminatex ↗
               </a>

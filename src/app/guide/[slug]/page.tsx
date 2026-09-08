@@ -1164,12 +1164,12 @@ export default async function GuidePage({ params }: { params: Promise<{ slug: st
       <div className="max-w-4xl mx-auto px-5 py-12">
 
         {/* Breadcrumb */}
-        <p style={{ fontSize: 12, color: '#3f3f46', marginBottom: 28 }}>
+        <p style={{ fontSize: 12, color: '#A8A296', marginBottom: 28 }}>
           <Link href="/" className="link-muted">AI Film Contests</Link>
           <span style={{ margin: '0 6px' }}>ÃÂ¢ÃÂÃÂº</span>
           <span className="link-muted" style={{ cursor: 'default' }}>Guides</span>
           <span style={{ margin: '0 6px' }}>ÃÂ¢ÃÂÃÂº</span>
-          <span style={{ color: '#52525b' }}>{guide.title}</span>
+          <span style={{ color: '#8B867C' }}>{guide.title}</span>
         </p>
 
         {/* Header */}
@@ -1180,12 +1180,12 @@ export default async function GuidePage({ params }: { params: Promise<{ slug: st
             fontWeight: 700,
             lineHeight: 1.1,
             letterSpacing: '-0.02em',
-            color: '#f4f4f5',
+            color: '#1B1916',
             marginBottom: 16,
           }}>
             {guide.title}
           </h1>
-          <p style={{ fontSize: 16, color: '#71717a', lineHeight: 1.7, maxWidth: 680 }}>
+          <p style={{ fontSize: 16, color: '#7A7469', lineHeight: 1.7, maxWidth: 680 }}>
             {guide.intro}
           </p>
         </div>
@@ -1198,13 +1198,13 @@ export default async function GuidePage({ params }: { params: Promise<{ slug: st
                 fontFamily: 'Space Grotesk, sans-serif',
                 fontSize: 20,
                 fontWeight: 700,
-                color: '#f4f4f5',
+                color: '#1B1916',
                 marginBottom: 12,
                 letterSpacing: '-0.01em',
               }}>
                 {section.h}
               </h2>
-              <p style={{ fontSize: 15, color: '#71717a', lineHeight: 1.75 }}>
+              <p style={{ fontSize: 15, color: '#7A7469', lineHeight: 1.75 }}>
                 {section.body}
               </p>
             </section>
@@ -1213,12 +1213,12 @@ export default async function GuidePage({ params }: { params: Promise<{ slug: st
 
         {/* FAQ */}
         {guide.faqs && guide.faqs.length > 0 && (
-          <section style={{ borderTop: '1px solid rgba(255,255,255,0.05)', paddingTop: 32, marginBottom: 48 }}>
+          <section style={{ borderTop: '1px solid rgba(27,25,22,0.05)', paddingTop: 32, marginBottom: 48 }}>
             <h2 style={{
               fontFamily: 'Space Grotesk, sans-serif',
               fontSize: 22,
               fontWeight: 700,
-              color: '#f4f4f5',
+              color: '#1B1916',
               marginBottom: 24,
               letterSpacing: '-0.01em',
             }}>
@@ -1231,12 +1231,12 @@ export default async function GuidePage({ params }: { params: Promise<{ slug: st
                     fontFamily: 'Space Grotesk, sans-serif',
                     fontSize: 16,
                     fontWeight: 600,
-                    color: '#e4e4e7',
+                    color: '#26231E',
                     marginBottom: 8,
                   }}>
                     {f.q}
                   </h3>
-                  <p style={{ fontSize: 14, color: '#71717a', lineHeight: 1.7 }}>
+                  <p style={{ fontSize: 14, color: '#7A7469', lineHeight: 1.7 }}>
                     {f.a}
                   </p>
                 </div>
@@ -1254,7 +1254,7 @@ export default async function GuidePage({ params }: { params: Promise<{ slug: st
             padding: '24px 28px',
             marginBottom: 56,
           }}>
-            <p style={{ fontSize: 13, color: '#71717a', lineHeight: 1.65, marginBottom: 12 }}>
+            <p style={{ fontSize: 13, color: '#7A7469', lineHeight: 1.65, marginBottom: 12 }}>
               {guide.ruminatexNote}
             </p>
             <a
@@ -1264,7 +1264,7 @@ export default async function GuidePage({ params }: { params: Promise<{ slug: st
               style={{
                 fontSize: 13,
                 fontWeight: 600,
-                color: '#a5b4fc',
+                color: '#4338CA',
                 textDecoration: 'none',
                 display: 'inline-flex',
                 alignItems: 'center',
@@ -1283,7 +1283,7 @@ export default async function GuidePage({ params }: { params: Promise<{ slug: st
               fontFamily: 'Space Grotesk, sans-serif',
               fontSize: 13,
               fontWeight: 600,
-              color: '#52525b',
+              color: '#8B867C',
               textTransform: 'uppercase',
               letterSpacing: '0.08em',
               marginBottom: 16,
@@ -1300,14 +1300,14 @@ export default async function GuidePage({ params }: { params: Promise<{ slug: st
                       <div style={{ flex: 1, minWidth: 0 }}>
                         <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 4 }}>
                           <span className="dot dot-open live" />
-                          {isUrgent && <span style={{ fontSize: 11, color: '#ef4444', fontWeight: 700 }}>{dl}d left</span>}
+                          {isUrgent && <span style={{ fontSize: 11, color: '#DC2626', fontWeight: 700 }}>{dl}d left</span>}
                         </div>
-                        <div style={{ fontFamily: 'Space Grotesk, sans-serif', fontWeight: 600, fontSize: 15, color: '#f4f4f5', marginBottom: 2 }}>{c.name}</div>
-                        <div style={{ fontSize: 12, color: '#52525b' }}>{c.organizer}</div>
+                        <div style={{ fontFamily: 'Space Grotesk, sans-serif', fontWeight: 600, fontSize: 15, color: '#1B1916', marginBottom: 2 }}>{c.name}</div>
+                        <div style={{ fontSize: 12, color: '#8B867C' }}>{c.organizer}</div>
                       </div>
                       <div style={{ textAlign: 'right', flexShrink: 0 }}>
-                        <div style={{ fontWeight: 700, color: '#a5b4fc', fontSize: 14 }}>{c.prize}</div>
-                        <div style={{ fontSize: 12, color: '#52525b', marginTop: 2 }}>Due {fmt(c.deadline)}</div>
+                        <div style={{ fontWeight: 700, color: '#4338CA', fontSize: 14 }}>{c.prize}</div>
+                        <div style={{ fontSize: 12, color: '#8B867C', marginTop: 2 }}>Due {fmt(c.deadline)}</div>
                       </div>
                     </div>
                   </Link>
@@ -1321,12 +1321,12 @@ export default async function GuidePage({ params }: { params: Promise<{ slug: st
         )}
 
         {/* Related guides */}
-        <section style={{ borderTop: '1px solid rgba(255,255,255,0.05)', paddingTop: 32, marginBottom: 40 }}>
+        <section style={{ borderTop: '1px solid rgba(27,25,22,0.05)', paddingTop: 32, marginBottom: 40 }}>
           <h2 style={{
             fontFamily: 'Space Grotesk, sans-serif',
             fontSize: 13,
             fontWeight: 600,
-            color: '#52525b',
+            color: '#8B867C',
             textTransform: 'uppercase',
             letterSpacing: '0.08em',
             marginBottom: 16,

@@ -3,12 +3,12 @@
 import { useState } from 'react'
 
 const input: React.CSSProperties = {
-  width: '100%', padding: '11px 13px', borderRadius: 8, fontSize: 14, color: '#f4f4f5',
-  background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.09)', outline: 'none',
+  width: '100%', padding: '11px 13px', borderRadius: 8, fontSize: 14, color: '#1B1916',
+  background: 'rgba(27,25,22,0.03)', border: '1px solid rgba(27,25,22,0.09)', outline: 'none',
 }
 const label: React.CSSProperties = {
   display: 'block', fontSize: 11, fontWeight: 600, letterSpacing: '0.08em', textTransform: 'uppercase',
-  color: '#71717a', marginBottom: 6, fontFamily: 'Space Grotesk, sans-serif',
+  color: '#7A7469', marginBottom: 6, fontFamily: 'Space Grotesk, sans-serif',
 }
 
 export default function SubmitForm() {
@@ -31,8 +31,8 @@ export default function SubmitForm() {
   if (status === 'done') {
     return (
       <div style={{ border: '1px solid rgba(99,102,241,0.25)', borderRadius: 12, padding: '22px 24px', background: 'rgba(79,70,229,0.06)' }}>
-        <p style={{ fontFamily: 'Space Grotesk, sans-serif', fontSize: 17, fontWeight: 700, color: '#f4f4f5', margin: '0 0 8px' }}>Got it. Thank you.</p>
-        <p style={{ fontSize: 14, color: '#a1a1aa', lineHeight: 1.65, margin: 0 }}>
+        <p style={{ fontFamily: 'Space Grotesk, sans-serif', fontSize: 17, fontWeight: 700, color: '#1B1916', margin: '0 0 8px' }}>Got it. Thank you.</p>
+        <p style={{ fontSize: 14, color: '#6F6A61', lineHeight: 1.65, margin: 0 }}>
           We check every contest against its official page before it goes live, usually within a day.
           If anything is unclear we will reply to the email you gave.
         </p>
@@ -71,8 +71,8 @@ export default function SubmitForm() {
       <button type="submit" disabled={status === 'loading'} className="btn w-full justify-center" style={{ padding: '12px 18px' }}>
         {status === 'loading' ? 'Sending…' : 'Submit contest'}
       </button>
-      {status === 'error' && <p style={{ fontSize: 13, color: '#f87171', margin: 0 }}>{message}</p>}
-      <p style={{ fontSize: 12, color: '#52525b', lineHeight: 1.6, margin: 0 }}>
+      {status === 'error' && <p style={{ fontSize: 13, color: '#C2410C', margin: 0 }}>{message}</p>}
+      <p style={{ fontSize: 12, color: '#8B867C', lineHeight: 1.6, margin: 0 }}>
         Listing is free and stays free. We only list contests we can verify on an official page.
       </p>
     </form>

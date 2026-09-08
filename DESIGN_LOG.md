@@ -5,23 +5,74 @@ the next one, so the site converges on one voice instead of drifting.
 
 ## Principles
 
-- **Ground:** dark and cinematic, the `#050508` family, with a little warmth rather than
-  pure black. Off-white text (`#d4d4d8`), never full white for body copy.
-- **Type:** Space Grotesk for display, headings and figures; Inter for body. A real scale,
-  tight tracking at display sizes, generous body line-height. Tabular figures wherever
-  numbers stack — deadlines, prizes, counts — so digits line up down a column.
-- **Accent:** indigo `#4f46e5` / `#818cf8`, used sparingly. Green means open, amber means
-  coming soon, red is reserved for a deadline inside seven days. If everything is
-  accented, nothing is.
-- **Structure:** hairlines over boxes. Hierarchy carried by size, weight and spacing
-  rather than borders and shadows.
+*(Rewritten 2026-09-08 when the site moved from dark to paper. Entries above this date
+describe the old dark theme; the reasoning still applies, the colours do not.)*
+
+- **Ground:** warm paper `#FBFAF8`, never pure white. Ink `#1B1916` for headings,
+  `#3E3A33` for body. Two ultra-soft pastel washes sit behind everything (BackgroundFX).
+- **Colour carries meaning:** each contest category owns one pastel tint and one emoji,
+  defined once in `src/lib/theme.ts`. A card is tinted by its first category, so the grid
+  reads as a colour-coded index rather than 60 identical boxes. Closed contests go to a
+  muted paper grey. Never introduce a tint outside that file.
+- **Emoji as a private language:** 🎞️ short film, 📽️ feature, 🎠 animation, 🫧 experimental,
+  🗺️ documentary, 🪩 music video, 🏮 commercial, 🎟️ advertising. Chosen because no other AI
+  product uses them. Never 🚀 ✨ ⚡ 🔥 🎯, and never an emoji standing in for a UI icon.
+- **Type:** Space Grotesk for display, headings and figures; Inter for body. Tabular
+  figures wherever numbers stack — deadlines, prizes, counts.
+- **Accent:** indigo `#4F46E5`, flat. No gradient buttons, no glow shadows: they were
+  tuned for a dark ground and read as cheap on paper. Green means open, amber means
+  coming soon, burnt orange `#C2410C` is reserved for a deadline inside seven days.
+- **Structure:** hairlines over boxes, flat fills over blur and glass. Shadows only to
+  lift a card a little on hover.
+- **Illustration:** original hand-drawn line art in `src/components/Illustrations.tsx` —
+  2px ink strokes, slight wobble, halftone shading, one pastel spot fill. Film subjects,
+  never generic tech icons. If a new drawing is needed, draw it in that file in that
+  style. Never trace or copy another site's artwork.
 - **Density:** contest data set like a good festival programme. Specificity is the
   aesthetic — real deadlines, real prize figures, days-left counts.
-- **Motion:** only with purpose. Hover states that reveal, visible focus states, a
-  countdown that actually counts. No decoration doing nothing.
-- **375px must look intentional**, never squeezed.
+- **Motion:** only with purpose. The ticker, the countdown, hover reveals, visible focus
+  rings. Nothing that follows the cursor.
+- **375px must look intentional**, never squeezed. Verify it, do not assume it.
 
 ---
+
+## 2026-09-08 — Paper, pastel and a set of drawings
+
+**Changed** — the whole surface, at Abhi's request: light instead of dark, Notion-ish
+colour-coded cards, and hand-drawn illustrations. `globals.css` rewritten; every dark
+value mapped to a paper equivalent across 23 files; `src/lib/theme.ts` added as the one
+place category colour and emoji are defined; `ContestCard` rebuilt as a flat tinted tile
+led by its category emoji; `Illustrations.tsx` added with four original line drawings;
+a three-up illustrated row added to the homepage between the hero and the browse grid.
+
+**Why** — the dark theme leaned on the things that make a site read as machine-made:
+a WebGL nebula, animated film grain, cursor-chasing orbs, gradient text, glassmorphism,
+glow shadows on every button. All of it was decoration doing no work. Paper with one
+pastel per category does work: you can tell an animation contest from a documentary one
+at a glance, down a long grid, without reading a word.
+
+**Inspired by** — Notion's marketing pages, which Abhi sent: pastel cards each carrying a
+single line drawing, generous white space, and type doing the hierarchy. The drawings
+here are our own, in that spirit but film-subject and never traced.
+
+**Removed** — `BackgroundFX` is now two static pastel washes instead of a WebGL shader
+plus a per-frame grain canvas (two `requestAnimationFrame` loops gone). `MouseOrbs`
+renders nothing. Card 3D tilt, mouse-tracked spotlight and shimmer sweep are gone.
+The site got quieter and faster in the same change.
+
+**Kept deliberately** — the three-up row is a three-column feature grid, which the
+playbook warns against. It earns its place because the drawings are original, the copy
+is specific, and the first card states live counts from the database rather than filler.
+Do not replace it with icons and slogans; if it stops being true, delete it.
+
+**Also fixed** — the prize total formatted as "$1999K+" and now reads "$2.0M+".
+`normalizeCategory` folds the 140+ freeform category strings the research robot has
+written into the eight canonical ones, so chips stay legible and deduplicated; the
+research playbook now restricts `categories` to those eight and sends genres to `tags`.
+
+**Verified** — 1440px and a true 390px iPhone viewport, via the CDP screenshot tool
+described in the design playbook. `document.scrollWidth` equals `window.innerWidth` at
+390, so there is no horizontal overflow.
 
 ## 2026-09-08 — One deadline, spoken the same way on every card
 

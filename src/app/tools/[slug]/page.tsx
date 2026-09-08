@@ -192,15 +192,15 @@ export default async function ToolPage({ params }: { params: Promise<{ slug: str
           <div style={{ flex: 1, minWidth: 0 }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 4 }}>
               <span className={`dot ${c.status === 'open' ? 'dot-open' : 'dot-upcoming'} ${c.status === 'open' && !isUrgent ? 'live' : ''}`} />
-              {isUrgent && <span style={{ fontSize: 11, color: '#ef4444', fontWeight: 700 }}>{dl}d left</span>}
+              {isUrgent && <span style={{ fontSize: 11, color: '#DC2626', fontWeight: 700 }}>{dl}d left</span>}
               {c.status === 'upcoming' && <span style={{ fontSize: 11, color: '#f59e0b', fontWeight: 600 }}>Coming Soon</span>}
             </div>
-            <div style={{ fontFamily: 'Space Grotesk, sans-serif', fontWeight: 600, fontSize: 15, color: '#f4f4f5', marginBottom: 2 }}>{c.name}</div>
-            <div style={{ fontSize: 12, color: '#52525b' }}>{c.organizer}</div>
+            <div style={{ fontFamily: 'Space Grotesk, sans-serif', fontWeight: 600, fontSize: 15, color: '#1B1916', marginBottom: 2 }}>{c.name}</div>
+            <div style={{ fontSize: 12, color: '#8B867C' }}>{c.organizer}</div>
           </div>
           <div style={{ textAlign: 'right', flexShrink: 0 }}>
-            <div style={{ fontWeight: 700, color: '#a5b4fc', fontSize: 14 }}>{c.prize}</div>
-            <div style={{ fontSize: 12, color: '#52525b', marginTop: 2 }}>
+            <div style={{ fontWeight: 700, color: '#4338CA', fontSize: 14 }}>{c.prize}</div>
+            <div style={{ fontSize: 12, color: '#8B867C', marginTop: 2 }}>
               {c.status === 'open' ? `Due ${fmt(c.deadline)}` : `Est. ${fmt(c.deadline)}`}
             </div>
           </div>
@@ -214,11 +214,11 @@ export default async function ToolPage({ params }: { params: Promise<{ slug: str
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
 
       <div style={{ background: '#080810', minHeight: '100vh' }}>
-        <header style={{ borderBottom: '1px solid rgba(255,255,255,0.06)' }}>
+        <header style={{ borderBottom: '1px solid rgba(27,25,22,0.06)' }}>
           <div className="max-w-4xl mx-auto px-5 py-4 flex items-center justify-between">
             <Link href="/" style={{ textDecoration: 'none', display: 'flex', alignItems: 'center', gap: 10 }}>
               <div style={{ width: 30, height: 30, borderRadius: 7, background: '#4f46e5', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 12, fontWeight: 700, fontFamily: 'Space Grotesk, sans-serif', color: '#fff' }}>AI</div>
-              <span style={{ fontFamily: 'Space Grotesk, sans-serif', fontWeight: 600, fontSize: 15, color: '#e4e4e7' }}>AI Film Contests</span>
+              <span style={{ fontFamily: 'Space Grotesk, sans-serif', fontWeight: 600, fontSize: 15, color: '#26231E' }}>AI Film Contests</span>
             </Link>
             <Link href="/" className="link-muted" style={{ fontSize: 13 }}>← All contests</Link>
           </div>
@@ -226,22 +226,22 @@ export default async function ToolPage({ params }: { params: Promise<{ slug: str
 
         <main className="max-w-4xl mx-auto px-5 py-12">
 
-          <p style={{ fontSize: 12, color: '#3f3f46', marginBottom: 24 }}>
+          <p style={{ fontSize: 12, color: '#A8A296', marginBottom: 24 }}>
             <Link href="/" className="link-muted">AI Film Contests</Link>
             <span style={{ margin: '0 6px' }}>›</span>
             <Link href="/" className="link-muted">Tools</Link>
             <span style={{ margin: '0 6px' }}>›</span>
-            <span style={{ color: '#52525b' }}>{tool.name}</span>
+            <span style={{ color: '#8B867C' }}>{tool.name}</span>
           </p>
 
           <div style={{ marginBottom: 40 }}>
-            <h1 style={{ fontFamily: 'Space Grotesk, sans-serif', fontSize: 'clamp(24px, 4vw, 38px)', fontWeight: 700, lineHeight: 1.1, letterSpacing: '-0.02em', color: '#f4f4f5', marginBottom: 12 }}>
+            <h1 style={{ fontFamily: 'Space Grotesk, sans-serif', fontSize: 'clamp(24px, 4vw, 38px)', fontWeight: 700, lineHeight: 1.1, letterSpacing: '-0.02em', color: '#1B1916', marginBottom: 12 }}>
               {tool.name} Film Contests 2026
             </h1>
-            <p style={{ fontSize: 16, color: '#71717a', lineHeight: 1.65, maxWidth: 620, marginBottom: 20 }}>
+            <p style={{ fontSize: 16, color: '#7A7469', lineHeight: 1.65, maxWidth: 620, marginBottom: 20 }}>
               {tool.description}
             </p>
-            <div className="flex items-center gap-4" style={{ fontSize: 13, color: '#52525b' }}>
+            <div className="flex items-center gap-4" style={{ fontSize: 13, color: '#8B867C' }}>
               <span><strong style={{ color: '#22c55e' }}>{open.length}</strong> open now</span>
               <span>·</span>
               <span><strong style={{ color: '#f59e0b' }}>{upcoming.length}</strong> coming soon</span>
@@ -251,7 +251,7 @@ export default async function ToolPage({ params }: { params: Promise<{ slug: str
           {/* Specifically requires this tool */}
           {specific.filter(c => c.status !== 'closed').length > 0 && (
             <section style={{ marginBottom: 36 }}>
-              <h2 style={{ fontFamily: 'Space Grotesk, sans-serif', fontSize: 13, fontWeight: 600, color: '#52525b', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 16 }}>
+              <h2 style={{ fontFamily: 'Space Grotesk, sans-serif', fontSize: 13, fontWeight: 600, color: '#8B867C', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 16 }}>
                 {tool.name} Required or Featured
               </h2>
               <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
@@ -263,10 +263,10 @@ export default async function ToolPage({ params }: { params: Promise<{ slug: str
           {/* Any AI tools accepted (includes this tool) */}
           {anyTools.filter(c => c.status !== 'closed').length > 0 && (
             <section style={{ marginBottom: 36 }}>
-              <h2 style={{ fontFamily: 'Space Grotesk, sans-serif', fontSize: 13, fontWeight: 600, color: '#52525b', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 12 }}>
+              <h2 style={{ fontFamily: 'Space Grotesk, sans-serif', fontSize: 13, fontWeight: 600, color: '#8B867C', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 12 }}>
                 Also Accepts {tool.name}
               </h2>
-              <p style={{ fontSize: 13, color: '#3f3f46', marginBottom: 14 }}>These contests accept any AI tools — {tool.name} included.</p>
+              <p style={{ fontSize: 13, color: '#A8A296', marginBottom: 14 }}>These contests accept any AI tools — {tool.name} included.</p>
               <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
                 {anyTools.filter(c => c.status !== 'closed').slice(0, 8).map(c => <ContestRow key={c.id} c={c} />)}
               </div>
@@ -274,13 +274,13 @@ export default async function ToolPage({ params }: { params: Promise<{ slug: str
           )}
 
           {/* Other tools */}
-          <section style={{ borderTop: '1px solid rgba(255,255,255,0.05)', paddingTop: 32, marginTop: 8 }}>
-            <h2 style={{ fontFamily: 'Space Grotesk, sans-serif', fontSize: 13, fontWeight: 600, color: '#52525b', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 16 }}>
+          <section style={{ borderTop: '1px solid rgba(27,25,22,0.05)', paddingTop: 32, marginTop: 8 }}>
+            <h2 style={{ fontFamily: 'Space Grotesk, sans-serif', fontSize: 13, fontWeight: 600, color: '#8B867C', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 16 }}>
               Browse by AI Tool
             </h2>
             <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
               {Object.entries(TOOLS).filter(([s]) => s !== slug).map(([s, t]) => (
-                <Link key={s} href={`/tools/${s}`} style={{ fontSize: 13, color: '#71717a', background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.07)', borderRadius: 6, padding: '5px 12px', textDecoration: 'none' }}>
+                <Link key={s} href={`/tools/${s}`} style={{ fontSize: 13, color: '#7A7469', background: 'rgba(27,25,22,0.03)', border: '1px solid rgba(27,25,22,0.07)', borderRadius: 6, padding: '5px 12px', textDecoration: 'none' }}>
                   {t.name}
                 </Link>
               ))}
@@ -293,10 +293,10 @@ export default async function ToolPage({ params }: { params: Promise<{ slug: str
 
         </main>
 
-        <footer style={{ borderTop: '1px solid rgba(255,255,255,0.05)', padding: '24px 0' }}>
+        <footer style={{ borderTop: '1px solid rgba(27,25,22,0.05)', padding: '24px 0' }}>
           <div className="max-w-4xl mx-auto px-5 flex flex-col sm:flex-row items-center justify-between gap-3">
-            <span style={{ fontFamily: 'Space Grotesk, sans-serif', fontSize: 13, fontWeight: 600, color: '#52525b' }}>AI Film Contests</span>
-            <span style={{ fontSize: 12, color: '#3f3f46' }}>Tracking every AI film competition · Updated daily</span>
+            <span style={{ fontFamily: 'Space Grotesk, sans-serif', fontSize: 13, fontWeight: 600, color: '#8B867C' }}>AI Film Contests</span>
+            <span style={{ fontSize: 12, color: '#A8A296' }}>Tracking every AI film competition · Updated daily</span>
             <Link href="/" className="link-muted" style={{ fontSize: 12 }}>Browse All</Link>
           </div>
         </footer>

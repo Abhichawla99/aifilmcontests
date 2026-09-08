@@ -221,12 +221,12 @@ export default async function VSPage({ params }: { params: Promise<{ slug: strin
       <div className="max-w-4xl mx-auto px-5 py-12">
 
         {/* Breadcrumb */}
-        <p style={{ fontSize: 12, color: '#3f3f46', marginBottom: 28 }}>
+        <p style={{ fontSize: 12, color: '#A8A296', marginBottom: 28 }}>
           <Link href="/" className="link-muted">AI Film Contests</Link>
           <span style={{ margin: '0 6px' }}>›</span>
           <span className="link-muted" style={{ cursor: 'default' }}>Compare</span>
           <span style={{ margin: '0 6px' }}>›</span>
-          <span style={{ color: '#52525b' }}>{page.title}</span>
+          <span style={{ color: '#8B867C' }}>{page.title}</span>
         </p>
 
         {/* Header */}
@@ -237,12 +237,12 @@ export default async function VSPage({ params }: { params: Promise<{ slug: strin
             fontWeight: 700,
             lineHeight: 1.1,
             letterSpacing: '-0.02em',
-            color: '#f4f4f5',
+            color: '#1B1916',
             marginBottom: 16,
           }}>
             {page.title}
           </h1>
-          <p style={{ fontSize: 16, color: '#71717a', lineHeight: 1.7, maxWidth: 680 }}>
+          <p style={{ fontSize: 16, color: '#7A7469', lineHeight: 1.7, maxWidth: 680 }}>
             {page.description}
           </p>
         </div>
@@ -258,18 +258,18 @@ export default async function VSPage({ params }: { params: Promise<{ slug: strin
               marginBottom: 0,
               borderRadius: '14px 14px 0 0',
               overflow: 'hidden',
-              border: '1px solid rgba(255,255,255,0.06)',
+              border: '1px solid rgba(27,25,22,0.06)',
             }}>
-              <div style={{ background: 'rgba(255,255,255,0.02)', padding: '16px 20px', borderRight: '1px solid rgba(255,255,255,0.06)' }}>
-                <span style={{ fontSize: 12, color: '#52525b', textTransform: 'uppercase', letterSpacing: '0.07em' }}>Criteria</span>
+              <div style={{ background: 'rgba(27,25,22,0.02)', padding: '16px 20px', borderRight: '1px solid rgba(27,25,22,0.06)' }}>
+                <span style={{ fontSize: 12, color: '#8B867C', textTransform: 'uppercase', letterSpacing: '0.07em' }}>Criteria</span>
               </div>
               <div style={{
                 background: `rgba(${parseInt(page.toolA.color.slice(1, 3), 16)},${parseInt(page.toolA.color.slice(3, 5), 16)},${parseInt(page.toolA.color.slice(5, 7), 16)},0.12)`,
                 padding: '16px 20px',
-                borderRight: '1px solid rgba(255,255,255,0.06)',
+                borderRight: '1px solid rgba(27,25,22,0.06)',
                 textAlign: 'center',
               }}>
-                <Link href={`/tools/${page.toolA.slug}`} style={{ fontFamily: 'Space Grotesk, sans-serif', fontWeight: 700, fontSize: 15, color: '#f4f4f5', textDecoration: 'none' }}>
+                <Link href={`/tools/${page.toolA.slug}`} style={{ fontFamily: 'Space Grotesk, sans-serif', fontWeight: 700, fontSize: 15, color: '#1B1916', textDecoration: 'none' }}>
                   {page.toolA.name}
                 </Link>
               </div>
@@ -278,7 +278,7 @@ export default async function VSPage({ params }: { params: Promise<{ slug: strin
                 padding: '16px 20px',
                 textAlign: 'center',
               }}>
-                <Link href={`/tools/${page.toolB.slug}`} style={{ fontFamily: 'Space Grotesk, sans-serif', fontWeight: 700, fontSize: 15, color: '#f4f4f5', textDecoration: 'none' }}>
+                <Link href={`/tools/${page.toolB.slug}`} style={{ fontFamily: 'Space Grotesk, sans-serif', fontWeight: 700, fontSize: 15, color: '#1B1916', textDecoration: 'none' }}>
                   {page.toolB.name}
                 </Link>
               </div>
@@ -286,7 +286,7 @@ export default async function VSPage({ params }: { params: Promise<{ slug: strin
 
             {/* Comparison rows */}
             <div style={{
-              border: '1px solid rgba(255,255,255,0.06)',
+              border: '1px solid rgba(27,25,22,0.06)',
               borderTop: 'none',
               borderRadius: '0 0 14px 14px',
               overflow: 'hidden',
@@ -296,16 +296,16 @@ export default async function VSPage({ params }: { params: Promise<{ slug: strin
                 <div key={i} style={{
                   display: 'grid',
                   gridTemplateColumns: '1fr 1fr 1fr',
-                  borderTop: i > 0 ? '1px solid rgba(255,255,255,0.04)' : undefined,
+                  borderTop: i > 0 ? '1px solid rgba(27,25,22,0.04)' : undefined,
                 }}>
-                  <div style={{ padding: '16px 20px', background: 'rgba(255,255,255,0.01)', borderRight: '1px solid rgba(255,255,255,0.04)' }}>
-                    <span style={{ fontSize: 13, fontWeight: 600, color: '#71717a', fontFamily: 'Space Grotesk, sans-serif' }}>{row.label}</span>
+                  <div style={{ padding: '16px 20px', background: 'rgba(27,25,22,0.01)', borderRight: '1px solid rgba(27,25,22,0.04)' }}>
+                    <span style={{ fontSize: 13, fontWeight: 600, color: '#7A7469', fontFamily: 'Space Grotesk, sans-serif' }}>{row.label}</span>
                   </div>
-                  <div style={{ padding: '16px 20px', borderRight: '1px solid rgba(255,255,255,0.04)' }}>
-                    <p style={{ fontSize: 13, color: '#71717a', lineHeight: 1.6 }}>{row.a}</p>
+                  <div style={{ padding: '16px 20px', borderRight: '1px solid rgba(27,25,22,0.04)' }}>
+                    <p style={{ fontSize: 13, color: '#7A7469', lineHeight: 1.6 }}>{row.a}</p>
                   </div>
                   <div style={{ padding: '16px 20px' }}>
-                    <p style={{ fontSize: 13, color: '#71717a', lineHeight: 1.6 }}>{row.b}</p>
+                    <p style={{ fontSize: 13, color: '#7A7469', lineHeight: 1.6 }}>{row.b}</p>
                   </div>
                 </div>
               ))}
@@ -313,14 +313,14 @@ export default async function VSPage({ params }: { params: Promise<{ slug: strin
 
             {/* Verdict */}
             <div style={{
-              border: '1px solid rgba(255,255,255,0.08)',
+              border: '1px solid rgba(27,25,22,0.08)',
               borderRadius: 14,
-              background: 'rgba(255,255,255,0.02)',
+              background: 'rgba(27,25,22,0.02)',
               padding: '24px 28px',
               marginBottom: 48,
             }}>
-              <p style={{ fontSize: 12, color: '#52525b', textTransform: 'uppercase', letterSpacing: '0.07em', marginBottom: 10 }}>Verdict</p>
-              <p style={{ fontSize: 15, color: '#a1a1aa', lineHeight: 1.7 }}>{page.verdict}</p>
+              <p style={{ fontSize: 12, color: '#8B867C', textTransform: 'uppercase', letterSpacing: '0.07em', marginBottom: 10 }}>Verdict</p>
+              <p style={{ fontSize: 15, color: '#6F6A61', lineHeight: 1.7 }}>{page.verdict}</p>
             </div>
 
             {/* Tool links */}
@@ -328,7 +328,7 @@ export default async function VSPage({ params }: { params: Promise<{ slug: strin
               <Link href={`/tools/${page.toolA.slug}`} style={{
                 fontSize: 13,
                 fontWeight: 600,
-                color: '#a5b4fc',
+                color: '#4338CA',
                 background: 'rgba(99,102,241,0.08)',
                 border: '1px solid rgba(99,102,241,0.2)',
                 borderRadius: 8,
@@ -340,7 +340,7 @@ export default async function VSPage({ params }: { params: Promise<{ slug: strin
               <Link href={`/tools/${page.toolB.slug}`} style={{
                 fontSize: 13,
                 fontWeight: 600,
-                color: '#a5b4fc',
+                color: '#4338CA',
                 background: 'rgba(99,102,241,0.08)',
                 border: '1px solid rgba(99,102,241,0.2)',
                 borderRadius: 8,
@@ -356,16 +356,16 @@ export default async function VSPage({ params }: { params: Promise<{ slug: strin
         {/* Ranked list */}
         {page.type === 'ranked' && (
           <>
-            <p style={{ fontSize: 16, color: '#71717a', lineHeight: 1.75, maxWidth: 720, marginBottom: 40 }}>
+            <p style={{ fontSize: 16, color: '#7A7469', lineHeight: 1.75, maxWidth: 720, marginBottom: 40 }}>
               {page.body}
             </p>
 
             <div style={{ display: 'flex', flexDirection: 'column', gap: 12, marginBottom: 48 }}>
               {page.tools.map(tool => (
                 <div key={tool.rank} style={{
-                  border: '1px solid rgba(255,255,255,0.06)',
+                  border: '1px solid rgba(27,25,22,0.06)',
                   borderRadius: 14,
-                  background: 'rgba(10,9,22,0.6)',
+                  background: '#FFFFFF',
                   padding: '20px 24px',
                   display: 'flex',
                   alignItems: 'flex-start',
@@ -375,8 +375,8 @@ export default async function VSPage({ params }: { params: Promise<{ slug: strin
                     width: 36,
                     height: 36,
                     borderRadius: 8,
-                    background: tool.rank === 1 ? 'rgba(165,180,252,0.15)' : 'rgba(255,255,255,0.04)',
-                    border: tool.rank === 1 ? '1px solid rgba(165,180,252,0.3)' : '1px solid rgba(255,255,255,0.06)',
+                    background: tool.rank === 1 ? 'rgba(79,70,229,0.15)' : 'rgba(27,25,22,0.04)',
+                    border: tool.rank === 1 ? '1px solid rgba(79,70,229,0.25)' : '1px solid rgba(27,25,22,0.06)',
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
@@ -386,7 +386,7 @@ export default async function VSPage({ params }: { params: Promise<{ slug: strin
                       fontFamily: 'Space Grotesk, sans-serif',
                       fontWeight: 700,
                       fontSize: 15,
-                      color: tool.rank === 1 ? '#a5b4fc' : '#52525b',
+                      color: tool.rank === 1 ? '#4338CA' : '#8B867C',
                     }}>
                       {tool.rank}
                     </span>
@@ -397,17 +397,17 @@ export default async function VSPage({ params }: { params: Promise<{ slug: strin
                         fontFamily: 'Space Grotesk, sans-serif',
                         fontWeight: 700,
                         fontSize: 16,
-                        color: '#f4f4f5',
+                        color: '#1B1916',
                         textDecoration: 'none',
                       }}>
                         {tool.name}
                       </Link>
                     </div>
-                    <p style={{ fontSize: 14, color: '#71717a', lineHeight: 1.6 }}>{tool.why}</p>
+                    <p style={{ fontSize: 14, color: '#7A7469', lineHeight: 1.6 }}>{tool.why}</p>
                   </div>
                   <Link href={`/tools/${tool.slug}`} style={{
                     fontSize: 12,
-                    color: '#52525b',
+                    color: '#8B867C',
                     textDecoration: 'none',
                     flexShrink: 0,
                     marginTop: 4,
@@ -429,14 +429,14 @@ export default async function VSPage({ params }: { params: Promise<{ slug: strin
             padding: '24px 28px',
             marginBottom: 48,
           }}>
-            <p style={{ fontSize: 13, color: '#71717a', lineHeight: 1.65, marginBottom: 12 }}>
+            <p style={{ fontSize: 13, color: '#7A7469', lineHeight: 1.65, marginBottom: 12 }}>
               {page.ruminatexNote}
             </p>
             <a
               href="https://ruminatex.com"
               target="_blank"
               rel="noopener noreferrer"
-              style={{ fontSize: 13, fontWeight: 600, color: '#a5b4fc', textDecoration: 'none' }}
+              style={{ fontSize: 13, fontWeight: 600, color: '#4338CA', textDecoration: 'none' }}
             >
               Visit Ruminatex →
             </a>
@@ -450,7 +450,7 @@ export default async function VSPage({ params }: { params: Promise<{ slug: strin
               fontFamily: 'Space Grotesk, sans-serif',
               fontSize: 13,
               fontWeight: 600,
-              color: '#52525b',
+              color: '#8B867C',
               textTransform: 'uppercase',
               letterSpacing: '0.08em',
               marginBottom: 16,
@@ -467,14 +467,14 @@ export default async function VSPage({ params }: { params: Promise<{ slug: strin
                       <div style={{ flex: 1, minWidth: 0 }}>
                         <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 4 }}>
                           <span className="dot dot-open live" />
-                          {isUrgent && <span style={{ fontSize: 11, color: '#ef4444', fontWeight: 700 }}>{dl}d left</span>}
+                          {isUrgent && <span style={{ fontSize: 11, color: '#DC2626', fontWeight: 700 }}>{dl}d left</span>}
                         </div>
-                        <div style={{ fontFamily: 'Space Grotesk, sans-serif', fontWeight: 600, fontSize: 15, color: '#f4f4f5', marginBottom: 2 }}>{c.name}</div>
-                        <div style={{ fontSize: 12, color: '#52525b' }}>{c.organizer}</div>
+                        <div style={{ fontFamily: 'Space Grotesk, sans-serif', fontWeight: 600, fontSize: 15, color: '#1B1916', marginBottom: 2 }}>{c.name}</div>
+                        <div style={{ fontSize: 12, color: '#8B867C' }}>{c.organizer}</div>
                       </div>
                       <div style={{ textAlign: 'right', flexShrink: 0 }}>
-                        <div style={{ fontWeight: 700, color: '#a5b4fc', fontSize: 14 }}>{c.prize}</div>
-                        <div style={{ fontSize: 12, color: '#52525b', marginTop: 2 }}>Due {fmt(c.deadline)}</div>
+                        <div style={{ fontWeight: 700, color: '#4338CA', fontSize: 14 }}>{c.prize}</div>
+                        <div style={{ fontSize: 12, color: '#8B867C', marginTop: 2 }}>Due {fmt(c.deadline)}</div>
                       </div>
                     </div>
                   </Link>
@@ -488,12 +488,12 @@ export default async function VSPage({ params }: { params: Promise<{ slug: strin
         )}
 
         {/* Other comparisons */}
-        <section style={{ borderTop: '1px solid rgba(255,255,255,0.05)', paddingTop: 32, marginBottom: 40 }}>
+        <section style={{ borderTop: '1px solid rgba(27,25,22,0.05)', paddingTop: 32, marginBottom: 40 }}>
           <h2 style={{
             fontFamily: 'Space Grotesk, sans-serif',
             fontSize: 13,
             fontWeight: 600,
-            color: '#52525b',
+            color: '#8B867C',
             textTransform: 'uppercase',
             letterSpacing: '0.08em',
             marginBottom: 16,
@@ -504,9 +504,9 @@ export default async function VSPage({ params }: { params: Promise<{ slug: strin
             {Object.entries(VS_PAGES).filter(([s]) => s !== slug).map(([s, p]) => (
               <Link key={s} href={`/vs/${s}`} style={{
                 fontSize: 13,
-                color: '#71717a',
-                background: 'rgba(255,255,255,0.03)',
-                border: '1px solid rgba(255,255,255,0.07)',
+                color: '#7A7469',
+                background: 'rgba(27,25,22,0.03)',
+                border: '1px solid rgba(27,25,22,0.07)',
                 borderRadius: 6,
                 padding: '5px 12px',
                 textDecoration: 'none',
