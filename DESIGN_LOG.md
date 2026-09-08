@@ -36,6 +36,40 @@ describe the old dark theme; the reasoning still applies, the colours do not.)*
 
 ---
 
+## 2026-09-08 (4) — The remaining page types, and a card bug that broke six of them
+
+**Changed** — `/tools`, `/vs`, `/prize`, `/location`, `/categories`, `/creators/[slug]`
+and `/cinematic-ads`, plus `ContestCard` and the `.card` class.
+
+**The bug** — `.card` set `display: flex; flex-direction: column`. Six pages built
+horizontal contest rows with `className="card"` and inline `display:flex;
+justify-content:space-between`, which does not reset the direction, so every one of those
+rows silently rendered as a centred column with a wide empty gutter. It looked like a
+typography mistake and was actually a CSS inheritance one. `.card` no longer sets a
+direction; `ContestCard` opts in with `.card-v`.
+
+**Then the rows went away entirely.** Every one of those pages is a list of contests, so
+they now render the shared `ContestCard` in a `repeat(auto-fit, minmax(260px, 1fr))`
+grid. That is one component instead of six near-identical bespoke rows, and it carries
+the category tint and emoji everywhere.
+
+**Header bands everywhere.** `ArticleHeader` was generalised from Guide/Topic to any
+kind, with a default emoji per kind (🎛️ Tool, ⚖️ Compare, 🏆 Prize, 🗺️ Location, 🗂️
+Category, 🎥 Creator), an optional `meta` array for facts like "41 open now", and
+optional children for a call to action. Reading time is omitted on index pages, where it
+means nothing.
+
+**Also fixed** — `ContestCard`'s description clipped mid-word instead of ellipsing. The
+`flex: 1` sat on the clamped paragraph itself, letting it stretch past its line limit;
+the grow now lives on a wrapper and the clamp went from 2 lines to 3, which reads better
+in a three-column grid.
+
+**Removed** — a 🚀 in the cinematic-ads eyebrow and its ⚡/🔁/💰 feature icons, replaced
+with 🛫 🎞️ 🎠 🧾. The house rule against the everyone-uses-them emoji applies to marketing
+pages too.
+
+**Verified** — every converted page at 1440px and 390px, no horizontal overflow.
+
 ## 2026-09-08 (3) — Guides and topics, set as articles
 
 **Changed** — `src/app/guide/[slug]/page.tsx`, `src/app/topics/[slug]/page.tsx`, and a new

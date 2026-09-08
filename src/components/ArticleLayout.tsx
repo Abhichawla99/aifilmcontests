@@ -32,15 +32,25 @@ export function readingMinutes(text: string) {
 }
 
 export function ArticleHeader({
-  slug, kind, title, standfirst, updated, minutes,
+  slug, kind, emoji, title, standfirst, updated, minutes, meta, children,
 }: {
   slug: string
-  kind: 'Guide' | 'Topic'
+  kind: string
+  /** Defaults per kind; pass one for a new page type. Never a 🚀 or a ✨. */
+  emoji?: string
   title: string
   standfirst?: string
   updated?: string
-  minutes: number
+  /** Reading time is only meaningful for prose. Omit on index pages. */
+  minutes?: number
+  /** Extra facts for the meta row, e.g. "26 open now". */
+  meta?: string[]
+  children?: React.ReactNode
 }) {
+  const kindEmoji = emoji ?? ({
+    Guide: '📓', Topic: '🧭', Tool: '🎛️', Compare: '⚖️', Prize: '🏆',
+    Location: '🗺️', Category: '🗂️', Creator: '🎥',
+  } as Record<string, string>)[kind] ?? '🎬'
   const tint = tintForSlug(slug)
   return (
     <header style={{
@@ -55,7 +65,7 @@ export function ArticleHeader({
         background: 'rgba(255,255,255,0.72)', border: `1px solid ${tint.border}`,
         borderRadius: 100, padding: '4px 12px', marginBottom: 18,
       }}>
-        <span aria-hidden style={{ fontSize: 13, lineHeight: 1 }}>{kind === 'Guide' ? '📓' : '🧭'}</span>
+        <span aria-hidden style={{ fontSize: 13, lineHeight: 1 }}>{kindEmoji}</span>
         <span style={{
           fontSize: 11, fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase',
           color: tint.text, fontFamily: 'Space Grotesk, sans-serif',
@@ -85,12 +95,19 @@ export function ArticleHeader({
         fontSize: 12, color: tint.text, opacity: 0.85,
         fontFamily: 'Space Grotesk, sans-serif', fontWeight: 500,
       }}>
-        {updated && <span>Updated {updated}</span>}
-        {updated && <span aria-hidden style={{ opacity: 0.5 }}>·</span>}
-        <span>{minutes} min read</span>
-        <span aria-hidden style={{ opacity: 0.5 }}>·</span>
-        <span>Contest facts checked against live sources daily</span>
+        {[
+          ...(updated ? [`Updated ${updated}`] : []),
+          ...(minutes ? [`${minutes} min read`] : []),
+          ...(meta ?? []),
+          'Contest facts checked against live sources daily',
+        ].map((bit, i) => (
+          <React.Fragment key={bit}>
+            {i > 0 && <span aria-hidden style={{ opacity: 0.5 }}>·</span>}
+            <span>{bit}</span>
+          </React.Fragment>
+        ))}
       </div>
+      {children}
     </header>
   )
 }

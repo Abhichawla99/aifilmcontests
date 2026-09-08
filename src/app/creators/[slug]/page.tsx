@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import { ArticleHeader } from '@/components/ArticleLayout'
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
 import InnerLayout from '@/components/InnerLayout'
@@ -76,7 +77,7 @@ export default async function CreatorProfile({ params }: { params: Promise<{ slu
     <InnerLayout>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
 
-      <div className="max-w-4xl mx-auto px-5 py-12">
+      <div className="max-w-5xl mx-auto px-5 py-12">
 
         {/* Breadcrumb */}
         <p style={{ fontSize: 12, color: '#A8A296', marginBottom: 28 }}>
@@ -87,71 +88,23 @@ export default async function CreatorProfile({ params }: { params: Promise<{ slu
           <span style={{ color: '#8B867C' }}>{c.name}</span>
         </p>
 
-        {/* Header */}
-        <div style={{ marginBottom: 36 }}>
-          <span style={{
-            display: 'inline-block',
-            fontSize: 10,
-            fontWeight: 700,
-            letterSpacing: '0.08em',
-            textTransform: 'uppercase',
-            color: '#4338CA',
-            background: 'rgba(99,102,241,0.12)',
-            border: '1px solid rgba(99,102,241,0.22)',
-            borderRadius: 999,
-            padding: '4px 10px',
-            fontFamily: 'Space Grotesk, sans-serif',
-            marginBottom: 16,
-          }}>
-            Featured creator
-          </span>
-
-          <h1 style={{
-            fontFamily: 'Space Grotesk, sans-serif',
-            fontSize: 'clamp(24px, 4vw, 38px)',
-            fontWeight: 700,
-            lineHeight: 1.1,
-            letterSpacing: '-0.02em',
-            color: '#1B1916',
-            marginBottom: 12,
-          }}>
-            {c.name}
-          </h1>
-
-          <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: 12, fontSize: 13, color: '#8B867C', marginBottom: 18 }}>
-            <span>{c.type === 'studio' ? 'Studio' : 'Filmmaker'}</span>
-            <span>·</span>
-            <span>{c.location}</span>
-            <span>·</span>
-            <span>Featured since {fmt(c.featuredSince)}</span>
-          </div>
-
-          <p style={{ fontSize: 16, color: '#6F6A61', lineHeight: 1.75, maxWidth: 680, marginBottom: 20 }}>
-            {c.bio}
-          </p>
-
+        <ArticleHeader
+          slug={c.slug}
+          kind="Creator"
+          title={c.name}
+          standfirst={c.bio}
+          meta={[c.type === 'studio' ? 'Studio' : 'Filmmaker', c.location, `Featured since ${fmt(c.featuredSince)}`]}
+        >
           <a
             href={c.website}
             target="_blank"
             rel="noopener"
-            style={{
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: 8,
-              padding: '12px 22px',
-              borderRadius: 10,
-              background: '#4F46E5',
-              color: '#fff',
-              fontWeight: 600,
-              fontSize: 14,
-              textDecoration: 'none',
-              fontFamily: 'Space Grotesk, sans-serif',
-              boxShadow: 'none',
-            }}
+            className="btn"
+            style={{ marginTop: 20, padding: '11px 20px', fontSize: 14 }}
           >
             Visit {c.website.replace(/^https?:\/\//, '').replace(/\/$/, '')} →
           </a>
-        </div>
+        </ArticleHeader>
 
         {/* Tags */}
         {c.tags.length > 0 && (

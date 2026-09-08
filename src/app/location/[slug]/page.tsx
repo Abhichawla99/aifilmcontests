@@ -1,4 +1,6 @@
 import { notFound } from 'next/navigation'
+import ContestCard from '@/components/ContestCard'
+import { ArticleHeader } from '@/components/ArticleLayout'
 import { Metadata } from 'next'
 import Link from 'next/link'
 import { getAllContests } from '@/lib/contests-db'
@@ -111,7 +113,7 @@ export default async function LocationPage({ params }: { params: Promise<{ slug:
     <InnerLayout>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
 
-      <div className="max-w-4xl mx-auto px-5 py-12">
+      <div className="max-w-5xl mx-auto px-5 py-12">
 
         {/* Breadcrumb */}
         <p style={{ fontSize: 12, color: '#A8A296', marginBottom: 28 }}>
@@ -122,45 +124,14 @@ export default async function LocationPage({ params }: { params: Promise<{ slug:
           <span style={{ color: '#8B867C' }}>{loc.label}</span>
         </p>
 
-        {/* Header */}
-        <div style={{ marginBottom: 40 }}>
-          <h1 style={{
-            fontFamily: 'Space Grotesk, sans-serif',
-            fontSize: 'clamp(24px, 4vw, 38px)',
-            fontWeight: 700,
-            lineHeight: 1.1,
-            letterSpacing: '-0.02em',
-            color: '#1B1916',
-            marginBottom: 16,
-          }}>
-            AI Film Contests in {loc.label}
-          </h1>
-          <p style={{ fontSize: 16, color: '#7A7469', lineHeight: 1.7, maxWidth: 680, marginBottom: 16 }}>
-            {loc.description}
-          </p>
-          <div style={{
-            display: 'inline-flex',
-            alignItems: 'center',
-            gap: 8,
-            fontSize: 12,
-            color: '#8B867C',
-            background: 'rgba(27,25,22,0.03)',
-            border: '1px solid rgba(27,25,22,0.06)',
-            borderRadius: 8,
-            padding: '6px 12px',
-          }}>
-            <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
-              <circle cx="6" cy="6" r="5" stroke="#8B867C" strokeWidth="1.2"/>
-              <path d="M6 3v3l2 1.5" stroke="#8B867C" strokeWidth="1.2" strokeLinecap="round"/>
-            </svg>
-            Note: Always check individual contest eligibility requirements — {loc.filterNote}
-          </div>
-          <div style={{ marginTop: 20, display: 'flex', alignItems: 'center', gap: 20, fontSize: 13, color: '#8B867C' }}>
-            <span><strong style={{ color: '#22c55e' }}>{open.length}</strong> open now</span>
-            <span>·</span>
-            <span><strong style={{ color: '#f59e0b' }}>{upcoming.length}</strong> coming soon</span>
-          </div>
-        </div>
+        <ArticleHeader
+          slug={slug}
+          kind="Location"
+          title={`AI Film Contests in ${loc.label}`}
+          standfirst={loc.description}
+          meta={[`${open.length} open now`, `${upcoming.length} coming soon`]}
+        />
+
 
         {/* Open contests */}
         {open.length > 0 && (
@@ -176,33 +147,9 @@ export default async function LocationPage({ params }: { params: Promise<{ slug:
             }}>
               Open Now
             </h2>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
-              {open.map(c => {
-                const dl = daysLeft(c.deadline)
-                const isUrgent = dl <= 7
-                return (
-                  <Link key={c.id} href={`/contests/${c.id}`} style={{ textDecoration: 'none' }}>
-                    <div className="card" style={{ padding: '18px 20px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 16, flexWrap: 'wrap' }}>
-                      <div style={{ flex: 1, minWidth: 0 }}>
-                        <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 4 }}>
-                          <span className="dot dot-open live" />
-                          {isUrgent && <span style={{ fontSize: 11, color: '#DC2626', fontWeight: 700 }}>{dl}d left</span>}
-                        </div>
-                        <div style={{ fontFamily: 'Space Grotesk, sans-serif', fontWeight: 600, fontSize: 15, color: '#1B1916', marginBottom: 2 }}>{c.name}</div>
-                        <div style={{ fontSize: 12, color: '#8B867C' }}>{c.organizer}</div>
-                        {c.eligibility && (
-                          <div style={{ fontSize: 11, color: '#A8A296', marginTop: 3 }}>{c.eligibility}</div>
-                        )}
-                      </div>
-                      <div style={{ textAlign: 'right', flexShrink: 0 }}>
-                        <div style={{ fontWeight: 700, color: '#4338CA', fontSize: 14 }}>{c.prize}</div>
-                        <div style={{ fontSize: 12, color: '#8B867C', marginTop: 2 }}>Due {fmt(c.deadline)}</div>
-                      </div>
-                    </div>
-                  </Link>
-                )
-              })}
-            </div>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: 16 }}>
+                {open.map(c => <ContestCard key={c.id} contest={c} />)}
+              </div>
           </section>
         )}
 
@@ -220,26 +167,9 @@ export default async function LocationPage({ params }: { params: Promise<{ slug:
             }}>
               Coming Soon
             </h2>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
-              {upcoming.map(c => (
-                <Link key={c.id} href={`/contests/${c.id}`} style={{ textDecoration: 'none' }}>
-                  <div className="card" style={{ padding: '18px 20px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 16, flexWrap: 'wrap' }}>
-                    <div style={{ flex: 1, minWidth: 0 }}>
-                      <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 4 }}>
-                        <span className="dot dot-upcoming" />
-                        <span style={{ fontSize: 11, color: '#f59e0b', fontWeight: 600 }}>Coming Soon</span>
-                      </div>
-                      <div style={{ fontFamily: 'Space Grotesk, sans-serif', fontWeight: 600, fontSize: 15, color: '#1B1916', marginBottom: 2 }}>{c.name}</div>
-                      <div style={{ fontSize: 12, color: '#8B867C' }}>{c.organizer}</div>
-                    </div>
-                    <div style={{ textAlign: 'right', flexShrink: 0 }}>
-                      <div style={{ fontWeight: 700, color: '#4338CA', fontSize: 14 }}>{c.prize}</div>
-                      <div style={{ fontSize: 12, color: '#8B867C', marginTop: 2 }}>Est. {fmt(c.deadline)}</div>
-                    </div>
-                  </div>
-                </Link>
-              ))}
-            </div>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: 16 }}>
+                {upcoming.map(c => <ContestCard key={c.id} contest={c} />)}
+              </div>
           </section>
         )}
 

@@ -78,10 +78,12 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
   transition: border-color 0.15s, box-shadow 0.2s, transform 0.2s ease;
   text-decoration: none;
   color: inherit;
-  display: flex;
-  flex-direction: column;
   overflow: hidden;
 }
+
+/* The vertical variant. .card itself must NOT set a flex direction: several pages
+   build horizontal rows with it, and a forced column silently centred them. */
+.card-v { display: flex; flex-direction: column; }
 .card:hover {
   border-color: #D8D4C9;
   transform: translateY(-2px);

@@ -45,7 +45,7 @@ export default function ContestCard({ contest }: { contest: Contest }) {
   return (
     <Link
       href={`/contests/${contest.id}`}
-      className={`card group ${isUrgent ? 'urgent-card' : ''}`}
+      className={`card card-v group ${isUrgent ? 'urgent-card' : ''}`}
       style={{ background: tint.bg, borderColor: tint.border }}
     >
       <div className={`flex flex-col flex-1 p-5 gap-3 ${isClosed ? 'opacity-70' : ''}`}>
@@ -121,18 +121,21 @@ export default function ContestCard({ contest }: { contest: Contest }) {
           </p>
         </div>
 
-        {/* Row 3: description */}
-        <p style={{
-          fontSize: 13, color: '#57524A',
-          lineHeight: 1.7,
-          display: '-webkit-box',
-          WebkitLineClamp: 2,
-          WebkitBoxOrient: 'vertical',
-          overflow: 'hidden',
-          flex: 1,
-        }}>
-          {contest.description}
-        </p>
+        {/* Row 3: description. The grow lives on the wrapper — putting flex:1 on the
+             clamped paragraph itself lets it stretch past its line limit, which clipped
+             text mid-word instead of ellipsing. */}
+        <div style={{ flex: 1 }}>
+          <p style={{
+            fontSize: 13, color: '#57524A',
+            lineHeight: 1.7,
+            display: '-webkit-box',
+            WebkitLineClamp: 3,
+            WebkitBoxOrient: 'vertical',
+            overflow: 'hidden',
+          }}>
+            {contest.description}
+          </p>
+        </div>
 
         {/* Row 4: category chips (white on the tint, labelled by their own emoji) */}
         <div className="flex flex-wrap gap-1.5">

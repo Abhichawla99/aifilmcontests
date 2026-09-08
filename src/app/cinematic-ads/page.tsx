@@ -30,22 +30,22 @@ const TOOLS = [
 
 const WHY = [
   {
-    icon: '⚡',
+    icon: '🛫',
     title: 'Speed to market',
     body: 'What once took weeks of production can go from brief to final film in days. AI removes friction at every stage — from concept to delivery.',
   },
   {
-    icon: '🎬',
+    icon: '🎞️',
     title: 'Cinematic quality',
     body: 'Modern AI video models produce footage that rivals traditional production — with full control over lighting, mood, and motion.',
   },
   {
-    icon: '🔁',
+    icon: '🎠',
     title: 'Infinite iteration',
     body: "Brands can A/B test 10 versions of a spot instead of one, tuning creative in real time based on what's actually resonating.",
   },
   {
-    icon: '💰',
+    icon: '🧾',
     title: 'Cost efficiency',
     body: 'AI-assisted production slashes the cost of high-end commercial content by 60–80%, opening cinematic storytelling to more brands.',
   },

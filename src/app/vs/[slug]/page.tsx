@@ -1,4 +1,5 @@
 import { notFound } from 'next/navigation'
+import { ArticleHeader } from '@/components/ArticleLayout'
 import { Metadata } from 'next'
 import Link from 'next/link'
 import { getAllContests } from '@/lib/contests-db'
@@ -218,7 +219,7 @@ export default async function VSPage({ params }: { params: Promise<{ slug: strin
     <InnerLayout>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
 
-      <div className="max-w-4xl mx-auto px-5 py-12">
+      <div className="max-w-5xl mx-auto px-5 py-12">
 
         {/* Breadcrumb */}
         <p style={{ fontSize: 12, color: '#A8A296', marginBottom: 28 }}>
@@ -229,23 +230,12 @@ export default async function VSPage({ params }: { params: Promise<{ slug: strin
           <span style={{ color: '#8B867C' }}>{page.title}</span>
         </p>
 
-        {/* Header */}
-        <div style={{ marginBottom: 48 }}>
-          <h1 style={{
-            fontFamily: 'Space Grotesk, sans-serif',
-            fontSize: 'clamp(24px, 4vw, 38px)',
-            fontWeight: 700,
-            lineHeight: 1.1,
-            letterSpacing: '-0.02em',
-            color: '#1B1916',
-            marginBottom: 16,
-          }}>
-            {page.title}
-          </h1>
-          <p style={{ fontSize: 16, color: '#7A7469', lineHeight: 1.7, maxWidth: 680 }}>
-            {page.description}
-          </p>
-        </div>
+        <ArticleHeader
+          slug={slug}
+          kind="Compare"
+          title={page.title}
+          standfirst={page.description}
+        />
 
         {/* Pairwise comparison */}
         {page.type === 'pairwise' && (
