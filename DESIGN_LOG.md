@@ -36,6 +36,41 @@ describe the old dark theme; the reasoning still applies, the colours do not.)*
 
 ---
 
+## 2026-09-08 (3) — Guides and topics, set as articles
+
+**Changed** — `src/app/guide/[slug]/page.tsx`, `src/app/topics/[slug]/page.tsx`, and a new
+shared `src/components/ArticleLayout.tsx`. These are ~30 pages and the site's main
+search entry point.
+
+**Was** — breadcrumb, title, then a grey wall. Body copy ran the full 1120px container
+at roughly 120 characters a line, which is close to unreadable; the intro paragraph was
+inconsistently narrower than the body under it; section headings were 20px against 15px
+body, so hierarchy barely registered; body colour was `#7A7469`, a UI grey used for
+several thousand words of reading; and none of the paper-and-pastel language appeared at
+all.
+
+**Now** —
+- A **tinted header band**, coloured by a hash of the slug (`tintForSlug`) so each
+  article keeps its own stable colour and the library reads as varied rather than
+  random. It carries a 📓 Guide or 🧭 Topic chip, the title at up to 44px, a standfirst,
+  and a meta row: updated date, reading time, and the daily-verification line.
+- **A real measure.** Prose is capped at 700px, about 72 characters. Body is 17px at
+  1.75 in `#3E3A33`, section headings up to 25px with 46px of air above them.
+- **A sticky contents rail** built from the article's own headings, shown when there are
+  more than two. Hidden below 1000px, where it would just be a second copy of the
+  headings ahead of the article.
+- **Standfirsts are now a standfirst.** `splitStandfirst` takes whole sentences up to
+  ~280 characters for the header and pushes the remainder into the first body paragraph,
+  so nothing is lost but the band no longer swallows the screen. Topic pages get theirs
+  from the first paragraph of the markdown-lite body.
+
+**Why one component** — guides store `sections: {h, body}[]` and topics store a single
+markdown-lite `body`, but they are the same object to a reader. Putting the header, the
+grid, the contents rail and the prose scale in `ArticleLayout` means the tool, versus,
+prize, location and category pages can adopt it next by supplying their own content.
+
+**Verified** — 1440px and 390px, no horizontal overflow on either page type.
+
 ## 2026-09-08 (3) — Every dash, euro and accent on the article pages, repaired
 
 **Changed** — `src/app/topics/[slug]/page.tsx` and `src/app/guide/[slug]/page.tsx`. 916

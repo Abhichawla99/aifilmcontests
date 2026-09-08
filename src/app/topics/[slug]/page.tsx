@@ -3,6 +3,7 @@ import { Metadata } from 'next'
 import Link from 'next/link'
 import { getAllContests } from '@/lib/contests-db'
 import InnerLayout from '@/components/InnerLayout'
+import { ArticleHeader, ArticleGrid, H2, P, readingMinutes, splitStandfirst } from '@/components/ArticleLayout'
 import EmailSubscribe from '@/components/EmailSubscribe'
 
 export const dynamic = 'force-dynamic'
@@ -293,6 +294,20 @@ export default async function TopicPage({ params }: { params: Promise<{ slug: st
 
   const all = await getAllContests()
   const openContests = all.filter(c => c.status === 'open').slice(0, 4)
+
+  // The body is markdown-lite: paragraphs split by a blank line, "## " for a heading.
+  // The first paragraph becomes the standfirst so the header carries the argument.
+  const topicBlocks = (() => {
+    const raw = topic.body.split('\n\n').map(b => b.trim()).filter(Boolean)
+    const blocks = raw.map(t => t.startsWith('## ')
+      ? { type: 'h' as const, text: t.slice(3).trim() }
+      : { type: 'p' as const, text: t })
+    const first = blocks[0]?.type === 'p' ? blocks[0].text : undefined
+    const split = first ? splitStandfirst(first) : { lead: undefined, rest: undefined }
+    const after = first ? blocks.slice(1) : blocks
+    const body = split.rest ? [{ type: 'p' as const, text: split.rest }, ...after] : after
+    return { standfirst: split.lead, blocks: body, headings: body.filter(b => b.type === 'h').map(b => b.text) }
+  })()
 
   const pageUrl = `https://aifilmcontests.com/topics/${slug}`
   const nowIso = new Date().toISOString()
@@ -631,7 +646,7 @@ export default async function TopicPage({ params }: { params: Promise<{ slug: st
         <script key={i} type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }} />
       ))}
 
-      <div className="max-w-4xl mx-auto px-5 py-12">
+      <div className="max-w-5xl mx-auto px-5 py-12">
 
         {/* Breadcrumb */}
         <p style={{ fontSize: 12, color: '#A8A296', marginBottom: 28 }}>
@@ -643,41 +658,19 @@ export default async function TopicPage({ params }: { params: Promise<{ slug: st
         </p>
 
         {/* Header */}
-        <div style={{ marginBottom: 40 }}>
-          <h1 style={{
-            fontFamily: 'Space Grotesk, sans-serif',
-            fontSize: 'clamp(24px, 4vw, 38px)',
-            fontWeight: 700,
-            lineHeight: 1.1,
-            letterSpacing: '-0.02em',
-            color: '#1B1916',
-            marginBottom: 16,
-          }}>
-            {topic.title}
-          </h1>
-          {topic.body.split('\n\n').map((block, i) => {
-            const trimmed = block.trim()
-            if (trimmed.startsWith('## ')) {
-              return (
-                <h2 key={i} style={{
-                  fontFamily: 'Space Grotesk, sans-serif',
-                  fontSize: 22,
-                  fontWeight: 700,
-                  letterSpacing: '-0.01em',
-                  color: '#1B1916',
-                  marginTop: 28,
-                  marginBottom: 12,
-                  maxWidth: 720,
-                }}>{trimmed.slice(3)}</h2>
-              )
-            }
-            return (
-              <p key={i} style={{ fontSize: 16, color: '#7A7469', lineHeight: 1.75, maxWidth: 720, marginBottom: 16 }}>
-                {trimmed}
-              </p>
-            )
-          })}
-        </div>
+        <ArticleHeader
+          slug={slug}
+          kind="Topic"
+          title={topic.title}
+          standfirst={topicBlocks.standfirst}
+          minutes={readingMinutes(topic.body)}
+        />
+
+        <ArticleGrid headings={topicBlocks.headings}>
+          {topicBlocks.blocks.map((b, i) =>
+            b.type === 'h' ? <H2 key={i}>{b.text}</H2> : <P key={i}>{b.text}</P>
+          )}
+        </ArticleGrid>
 
         {/* Tool chips */}
         {topic.relatedTools.length > 0 && (

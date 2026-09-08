@@ -52,3 +52,13 @@ export function normalizeCategory(raw: string): CategoryStyle {
   if (has(/narrative|drama|comedy|horror|sci|thriller|fantasy|action|film|video|cinema|story/)) return categoryStyles['short-film']
   return fallbackCategory
 }
+
+/** A stable pastel for a page that has no category of its own (guides, topics).
+    Hashed from the slug so a given article always wears the same colour, and the
+    library of ~30 SEO pages reads as varied rather than random. */
+export function tintForSlug(slug: string): CategoryStyle {
+  const keys = Object.keys(categoryStyles)
+  let h = 0
+  for (let i = 0; i < slug.length; i++) h = (h * 31 + slug.charCodeAt(i)) >>> 0
+  return categoryStyles[keys[h % keys.length]]
+}

@@ -213,3 +213,12 @@ img, svg, video, canvas { max-width: 100%; }
      below a thousand words of prize breakdown. */
   .contest-rail { position: static; order: -1; margin-bottom: 4px; }
 }
+
+/* ── Article pages (guides, topics): prose measure + contents rail ─────────── */
+.article-toc { position: sticky; top: 84px; }
+@media (max-width: 1000px) {
+  .article-grid { grid-template-columns: 1fr !important; }
+  /* The contents rail is a desktop affordance. On a phone it would just be a
+     second copy of the article's headings before the article itself. */
+  .article-toc { display: none; }
+}

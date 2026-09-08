@@ -3,6 +3,7 @@ import { Metadata } from 'next'
 import Link from 'next/link'
 import { getAllContests } from '@/lib/contests-db'
 import InnerLayout from '@/components/InnerLayout'
+import { ArticleHeader, ArticleGrid, H2, P, readingMinutes, splitStandfirst } from '@/components/ArticleLayout'
 
 export const dynamic = 'force-dynamic'
 
@@ -1150,6 +1151,7 @@ export default async function GuidePage({ params }: { params: Promise<{ slug: st
   } : null
 
   const otherGuides = OTHER_GUIDES.filter(s => s !== slug).slice(0, 5)
+  const guideLead = splitStandfirst(guide.intro)
 
   return (
     <InnerLayout>
@@ -1161,7 +1163,7 @@ export default async function GuidePage({ params }: { params: Promise<{ slug: st
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(itemListLd) }} />
       )}
 
-      <div className="max-w-4xl mx-auto px-5 py-12">
+      <div className="max-w-5xl mx-auto px-5 py-12">
 
         {/* Breadcrumb */}
         <p style={{ fontSize: 12, color: '#A8A296', marginBottom: 28 }}>
@@ -1172,44 +1174,24 @@ export default async function GuidePage({ params }: { params: Promise<{ slug: st
           <span style={{ color: '#8B867C' }}>{guide.title}</span>
         </p>
 
-        {/* Header */}
-        <div style={{ marginBottom: 40 }}>
-          <h1 style={{
-            fontFamily: 'Space Grotesk, sans-serif',
-            fontSize: 'clamp(24px, 4vw, 38px)',
-            fontWeight: 700,
-            lineHeight: 1.1,
-            letterSpacing: '-0.02em',
-            color: '#1B1916',
-            marginBottom: 16,
-          }}>
-            {guide.title}
-          </h1>
-          <p style={{ fontSize: 16, color: '#7A7469', lineHeight: 1.7, maxWidth: 680 }}>
-            {guide.intro}
-          </p>
-        </div>
+        <ArticleHeader
+          slug={slug}
+          kind="Guide"
+          title={guide.title}
+          standfirst={guideLead.lead}
+          updated={guide.datePublished ? new Date(guide.datePublished).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' }) : undefined}
+          minutes={readingMinutes(guide.sections.map(x => x.body).join(' '))}
+        />
 
-        {/* Sections */}
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 40, marginBottom: 56 }}>
+        <ArticleGrid headings={guide.sections.map(x => x.h)}>
+          {guideLead.rest && <P>{guideLead.rest}</P>}
           {guide.sections.map((section, i) => (
             <section key={i}>
-              <h2 style={{
-                fontFamily: 'Space Grotesk, sans-serif',
-                fontSize: 20,
-                fontWeight: 700,
-                color: '#1B1916',
-                marginBottom: 12,
-                letterSpacing: '-0.01em',
-              }}>
-                {section.h}
-              </h2>
-              <p style={{ fontSize: 15, color: '#7A7469', lineHeight: 1.75 }}>
-                {section.body}
-              </p>
+              <H2>{section.h}</H2>
+              <P>{section.body}</P>
             </section>
           ))}
-        </div>
+        </ArticleGrid>
 
         {/* FAQ */}
         {guide.faqs && guide.faqs.length > 0 && (
