@@ -36,6 +36,61 @@ describe the old dark theme; the reasoning still applies, the colours do not.)*
 
 ---
 
+## 2026-09-08 (3) — Every dash, euro and accent on the article pages, repaired
+
+**Changed** — `src/app/topics/[slug]/page.tsx` and `src/app/guide/[slug]/page.tsx`. 916
+runs of double- and triple-encoded UTF-8 were decoded back to the characters they were
+meant to be: 1,491 em and en dashes, 74 euro signs, and the accents in São Paulo, Zürich,
+Léo Cannone, Cédric Klapisch and résumé. Two guillemets in each file's breadcrumb too.
+No wording changed anywhere — only the glyph that renders where a substitute was showing.
+
+**Why** — this was the worst-looking thing on the site and nobody had spotted it, because
+it is invisible in the source diff and invisible to anyone who only looks at the homepage.
+On the Europe topic page a reader saw "Monaco's AI Film Fest offers $10,000 and France's We
+Are Human Festival pools â ¬10,000 across three awards â€ because Europe's marquee money
+events", "entry fees run just $10â€ $25" and "the festival itself runs October 13â€ 17".
+The guide breadcrumb read "AI Film Contests Ã Â¢Ã Ã Âº Guides Ã Â¢Ã Ã Âº How to Write an
+AI Film Treatment…" and was long enough to wrap onto a second line. These are the pages
+search sends people to first, and they are the pages that have to look like someone checks
+their facts. Broken characters say the opposite in the first half-second, before a word is
+read. The prose reflowed tighter as a bonus: the garbage was padding every line it sat on.
+
+**How, so a later run can trust it** — each damaged run was decoded back through its
+encoding layers (cp1252 then latin-1, up to eight times), and only rewritten where the
+round trip succeeded, shortened the string, and left no control character or replacement
+character behind. Ordinary accented prose fails that test and was never touched. Nothing
+was skipped: every one of the 29 distinct damaged sequences resolved to a plain
+typographic character (— – € é è ô ã á ç ü × ° · › → ←).
+
+**Inspiration** — Criterion's Current and It's Nice That, an hour of reading both. The
+observation worth keeping: on a serious editorial site, punctuation is part of the
+typeface, not an afterthought. Criterion sets every byline identically — `ON FILM /
+FEATURES — AUG 27, 2026` — with a real em dash and a real typographic apostrophe, on every
+item, without exception. It is invisible when it is right and it is the first thing you
+see when it is wrong. We were failing at the lowest rung of that ladder while trying to
+climb the higher ones.
+
+**Before / after** — `reports/design/2026-09-08b-before.png`,
+`reports/design/2026-09-08b-before-390.png`, `reports/design/2026-09-08b-before-topics.png`,
+`reports/design/2026-09-08b-after.png`, `reports/design/2026-09-08b-after-390.png`,
+`reports/design/2026-09-08b-after-topics.png`.
+
+**Second change today, deliberately** — a design commit already landed this morning (the
+card deadline entry above), and the rule is one a day. Shipped anyway because this is a
+defect repair rather than a design direction: it cannot cause drift, and leaving forty-odd
+public pages full of broken characters for another day was the worse call.
+
+**Noted for a later run, not done today** — two things. First, `src/app/sitemap.ts` holds
+23,376 mangled bytes, but they are all inside one decorative `//` comment divider, so no
+reader ever sees them; left alone rather than touch a file the sitemap depends on. Second,
+these two files use straight apostrophes throughout ("Europe's", "Berlin's") where the
+headings on the same page use typographic ones. That is an inconsistency worth settling
+one way or the other, but it is a house-style decision, not damage, so it waits its turn.
+
+**Worth knowing** — the SEO robot writes both of these files. Something in that pipeline
+re-encoded its own output at least twice. If the mojibake comes back, the fix belongs
+upstream in how that robot writes the file, not here.
+
 ## 2026-09-08 (2) — The contest page, rebuilt as a festival programme entry
 
 **Changed** — `src/app/contests/[id]/page.tsx`, the site's second most important page
