@@ -224,3 +224,13 @@ img, svg, video, canvas { max-width: 100%; }
      second copy of the article's headings before the article itself. */
   .article-toc { display: none; }
 }
+
+/* ── Browse list rows ──────────────────────────────────────────────────────── */
+.browse-row:first-child { border-top: none !important; }
+.browse-row:hover { background: #FBFAF8; }
+.browse-row:hover .browse-row-prize { color: #4338CA; }
+@media (max-width: 560px) {
+  /* The prize is the first thing to go on a phone: the name and the deadline are
+     what a filmmaker scans by. */
+  .browse-row-prize { display: none; }
+}

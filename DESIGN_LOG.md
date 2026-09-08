@@ -36,6 +36,43 @@ describe the old dark theme; the reasoning still applies, the colours do not.)*
 
 ---
 
+## 2026-09-08 (5) — Browsing, instead of one long scroll
+
+**Changed** — `src/components/ContestBrowser.tsx`, rebuilt.
+
+**Was** — 70 active contests dumped into one grid with three tab rows above them.
+No search, no sort, no paging, no result count. The only way to find a specific
+festival was to scroll past everything else. Worse, the category filter matched raw
+slugs (`'short-film'`) against a column the research robot fills with freeform text,
+so "Short Film", "short film" and "narrative" were all invisible to it. Roughly two
+thirds of the catalogue could not be filtered to at all.
+
+**Now** —
+- **Search** across name, organizer, prize, location, tags and accepted tools. With 158
+  contests this is the fastest path to a specific festival.
+- **Sort:** closing soonest (default), biggest prize, recently added. Prize sorting reads
+  the largest money figure out of the prize string, currency-agnostic since it ranks
+  rather than converts.
+- **Grouped by deadline** when sorted that way: closing this week (in burnt orange),
+  closing this month, in the next three months, later in the year, not open yet. Each
+  header carries its count. This is the question a filmmaker actually has, and it turns
+  one scroll into named chunks.
+- **Twelve at a time**, with a "Show 12 more" button and an "12 of 70" line under it.
+  Deliberately not infinite scroll: the reader decides how much page they get.
+- **Cards or List.** The list is one hairline row per contest — emoji, name, organizer,
+  prize, days left — so 70 contests can be scanned in a screen or two. The prize column
+  drops below 560px, where the name and the deadline are what people scan by.
+- **A result count and a clear-filters link**, so a filtered view never looks like an
+  empty catalogue.
+- **Filters live in the URL** (`?q=&cat=&free=1&sort=`) via `replaceState`, so a filtered
+  view is shareable and Back still leaves the page rather than unwinding filter changes.
+- **A real empty state** naming what was searched, instead of the old grey line.
+
+**Fixed** — the category filter now matches on the normalized label from
+`normalizeCategory`, so all eight categories return their true set.
+
+**Verified** — 1440px and 390px, no horizontal overflow in either view.
+
 ## 2026-09-08 (4) — The remaining page types, and a card bug that broke six of them
 
 **Changed** — `/tools`, `/vs`, `/prize`, `/location`, `/categories`, `/creators/[slug]`
