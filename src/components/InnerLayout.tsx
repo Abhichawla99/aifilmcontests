@@ -55,6 +55,7 @@ export default function InnerLayout({ children }: InnerLayoutProps) {
             <Link href="/tools/runway" className="link-muted" style={{ fontSize: 13 }}>Tools</Link>
             <Link href="/categories/short-film" className="link-muted" style={{ fontSize: 13 }}>Categories</Link>
             <Link href="/cinematic-ads" className="link-muted" style={{ fontSize: 13 }}>Cinematic Ads</Link>
+            <Link href="/creators" className="link-muted" style={{ fontSize: 13 }}>Creators</Link>
           </nav>
         </div>
       </header>
@@ -80,6 +81,7 @@ export default function InnerLayout({ children }: InnerLayoutProps) {
           <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
             <Link href="/" className="link-muted" style={{ fontSize: 12 }}>Browse All</Link>
             <a href="/submit" className="link-muted" style={{ fontSize: 12 }}>Submit a Contest</a>
+            <Link href="/creators" className="link-muted" style={{ fontSize: 12 }}>Featured Creators</Link>
             <a
               href="https://ruminatex.com"
               target="_blank"

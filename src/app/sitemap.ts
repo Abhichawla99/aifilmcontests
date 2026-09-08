@@ -1,5 +1,6 @@
 import { MetadataRoute } from 'next'
 import { getAllContests } from '@/lib/contests-db'
+import { creators } from '@/data/creators'
 
 const BASE = 'https://aifilmcontests.com'
 
@@ -15,6 +16,11 @@ const STATIC_PAGES: MetadataRoute.Sitemap = [
     url: `${BASE}/cinematic-ads`,
     changeFrequency: 'weekly',
     priority: 0.8,
+  },
+  {
+    url: `${BASE}/creators`,
+    changeFrequency: 'weekly',
+    priority: 0.75,
   },
 ]
 
@@ -207,6 +213,14 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority:        0.65,
   }))
 
+  // Featured creator profiles
+  const creatorUrls: MetadataRoute.Sitemap = creators.map(c => ({
+    url:             `${BASE}/creators/${c.slug}`,
+    lastModified:    now,
+    changeFrequency: 'monthly',
+    priority:        0.6,
+  }))
+
   // Prize tier pages
   const prizeUrls: MetadataRoute.Sitemap = PRIZES.map(slug => ({
     url:             `${BASE}/prize/${slug}`,
@@ -229,6 +243,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     ...vsUrls,
     ...locationUrls,
     ...prizeUrls,
+    ...creatorUrls,
 
     // Individual contest pages (largest set, sorted: open ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ upcoming ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ closed)
     ...contestUrls.sort((a, b) => (b.priority ?? 0) - (a.priority ?? 0)),

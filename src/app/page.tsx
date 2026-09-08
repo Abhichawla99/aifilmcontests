@@ -516,6 +516,8 @@ export default async function Home() {
               <span style={{ color: '#1c1c28' }}>·</span>
               <a href="/cinematic-ads" className="link-muted">Cinematic AI Ads</a>
               <span style={{ color: '#1c1c28' }}>·</span>
+              <a href="/creators" className="link-muted">Featured Creators</a>
+              <span style={{ color: '#1c1c28' }}>·</span>
               <a
                 href="https://ruminatex.com"
                 target="_blank"
