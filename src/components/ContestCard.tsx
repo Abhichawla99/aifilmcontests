@@ -42,6 +42,13 @@ function fmt(d: string) {
   return new Date(d).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
 }
 
+/* Every card answers "how long do I have?" the same way: a figure, then a caption.
+   Time remaining for an open contest — that is the decision — the date for the rest. */
+function timeLeft(cd: { days: number; hours: number }) {
+  if (cd.days >= 1) return `${cd.days} ${cd.days === 1 ? 'day' : 'days'} left`
+  return `${cd.hours} ${cd.hours === 1 ? 'hour' : 'hours'} left`
+}
+
 export default function ContestCard({ contest }: { contest: Contest }) {
   const cd       = useCountdown(contest.deadline, contest.status)
   const isOpen   = contest.status === 'open'
@@ -116,15 +123,25 @@ export default function ContestCard({ contest }: { contest: Contest }) {
           </div>
 
           <div className="text-right flex-shrink-0">
-            {isClosed ? (
-              <span style={{ fontSize: 11, color: '#52525b', fontFamily: 'Space Grotesk, sans-serif' }}>{fmt(contest.deadline)}</span>
-            ) : isUrgent && cd ? (
-              <span className="urgent" style={{ fontSize: 11, fontWeight: 700, fontFamily: 'Space Grotesk, sans-serif', color: '#f87171' }}>
-                {cd.days === 0 ? `${cd.hours}h left` : `${cd.days}d ${cd.hours}h`}
-              </span>
-            ) : (
-              <span style={{ fontSize: 11, color: '#71717a', fontFamily: 'Space Grotesk, sans-serif' }}>{fmt(contest.deadline)}</span>
-            )}
+            <div style={{
+              fontSize: 13, fontWeight: 700,
+              fontFamily: 'Space Grotesk, sans-serif',
+              fontVariantNumeric: 'tabular-nums',
+              letterSpacing: '-0.01em',
+              lineHeight: 1.15,
+              color: isClosed ? '#52525b' : isUrgent ? '#f87171' : '#d4d4d8',
+            }}>
+              {isOpen && cd ? timeLeft(cd) : fmt(contest.deadline)}
+            </div>
+            <div style={{
+              fontSize: 9.5, color: '#52525b',
+              fontFamily: 'Space Grotesk, sans-serif', fontWeight: 500,
+              fontVariantNumeric: 'tabular-nums',
+              letterSpacing: '0.07em', textTransform: 'uppercase',
+              marginTop: 3,
+            }}>
+              {isOpen && cd ? fmt(contest.deadline) : 'Deadline'}
+            </div>
           </div>
         </div>
 
@@ -194,6 +211,7 @@ export default function ContestCard({ contest }: { contest: Contest }) {
             <div style={{
               fontSize: 14, fontWeight: 700,
               fontFamily: 'Space Grotesk, sans-serif',
+              fontVariantNumeric: 'tabular-nums',
               color: '#c4b5fd', lineHeight: 1.2,
             }}>
               {contest.prize}
