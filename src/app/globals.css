@@ -203,3 +203,13 @@ img, svg, video, canvas { max-width: 100%; }
 
 /* ── Agent badge (kept, glow softened for paper) ────────────────────────────── */
 .agent-badge { box-shadow: 0 0 0 3px rgba(22,163,74,0.08); }
+
+/* ── Contest page: prose left, spec rail right ─────────────────────────────── */
+.contest-rail { position: sticky; top: 24px; }
+@media (max-width: 900px) {
+  .contest-grid { grid-template-columns: 1fr !important; }
+  /* On a phone the rail stops sticking and moves ABOVE the description: the
+     deadline and the Apply button are the decision, and they should not sit
+     below a thousand words of prize breakdown. */
+  .contest-rail { position: static; order: -1; margin-bottom: 4px; }
+}

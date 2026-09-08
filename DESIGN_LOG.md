@@ -36,6 +36,45 @@ describe the old dark theme; the reasoning still applies, the colours do not.)*
 
 ---
 
+## 2026-09-08 (2) — The contest page, rebuilt as a festival programme entry
+
+**Changed** — `src/app/contests/[id]/page.tsx`, the site's second most important page
+type and the one every SEO page links into.
+
+**Was** — a title, a wide deadline banner, then six equal-weight boxes (Prize, AI Tools,
+Eligibility, Entry Fee, Categories, Key Dates) in a two-column grid. Nothing led,
+the boxes left large ragged gaps because their contents differ wildly in length, the
+Apply button appeared twice, and the page dead-ended with no next step. It also dropped
+the category colour and emoji entirely, so clicking a blue film-strip card landed you on
+a page with no visible relationship to it.
+
+**Now** —
+- A **header band tinted with the contest's category**, carrying that category's emoji at
+  40px, the status, the name and the organizer. The page and the card that led here are
+  now visibly the same object.
+- **Prose left, spec rail right.** The description gets a real measure at 17px, then
+  Prize (the figure large, the breakdown as hairline-separated rows rather than bullets),
+  Who can enter, and AI tools allowed as chips.
+- **A sticky spec card** holding everything you decide with: days left as the hero
+  figure, the date under it, one Apply button, then hairline rows for entry fee,
+  submissions open, festival date, location, category chips, and a line saying the page
+  is checked against the organizer's official page every morning. It follows you down
+  the page, so Apply is never more than a glance away.
+- **On a phone the rail moves above the description** (`order: -1`), because the
+  deadline and Apply are the decision and should not sit below a thousand words of prize
+  breakdown.
+- **A reminder block and three related contests** at the foot, so the page offers a next
+  step instead of ending. Related means still open, same first category, closing soonest.
+
+**Why the sticky rail** — a contest listing is a job listing: long prose that earns
+trust, next to hard facts that drive the decision. Splitting them lets each be set
+properly instead of compromising into six identical boxes.
+
+**Also** — a category that falls back to the generic style (`any genre`, `open`,
+`hybrid`) no longer shows a chip reading just "Contest" beside a real one.
+
+**Verified** — 1440px and a true 390px viewport, no horizontal overflow.
+
 ## 2026-09-08 — Paper, pastel and a set of drawings
 
 **Changed** — the whole surface, at Abhi's request: light instead of dark, Notion-ish

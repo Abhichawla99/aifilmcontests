@@ -26,3 +26,6 @@ ships it, and marks it `[x] YYYY-MM-DD` in the same commit as the change.
 
 When the backlog is empty: check Vercel Analytics for the aifilmcontests project (top
 pages, where signups come from) and add three evidence-based items instead of guessing.
+- [ ] Apply the contest-page pattern to /guide/[slug] and /topics/[slug]: tinted header band, prose at a real measure, a sticky rail holding the contests the article cites, and the subscribe block. See DESIGN_LOG.md 2026-09-08 (2).
+- [ ] Same for /tools/[slug], /vs/[slug], /prize/[slug], /location/[slug] and /categories/[slug] — these share InnerLayout, so most of the work is one component.
+- [ ] /creators/[slug]: give creator profiles the same header band treatment, tinted by their work rather than a contest category.
