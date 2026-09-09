@@ -5,7 +5,7 @@ ships it, and marks it `[x] YYYY-MM-DD` in the same commit as the change.
 `[!] blocked: <reason>` means the build failed twice and the item was skipped.
 
 - [x] 2026-09-08 Featured creators, part 1: `src/data/creators.ts` (slug, name, type, location, website, oneLiner, bio, tags, workLinks[], contests[], featuredSince) seeded with Ruminate X. Build `/creators` (grid of cards) and `/creators/[slug]` (profile with a dofollow link to the website, a "Featured creator" pill, work links, and a "Get featured" mailto CTA). Add /creators to the homepage nav/footer and sitemap.ts. Person/Organization JSON-LD on the profile.
-- [ ] Featured creators, part 2: the backlink loop. Badge at `/badge/featured-creator.svg` (dark, indigo accent, "Featured on AI Film Contests") and a copy-paste embed snippet on every profile. Add a "Why be featured" section on /creators.
+- [x] 2026-09-09 Featured creators, part 2: the backlink loop. Badge at `/badge/featured-creator.svg` (dark, indigo accent, "Featured on AI Film Contests") and a copy-paste embed snippet on every profile. Add a "Why be featured" section on /creators.
 - [ ] Featured creators, recurring: if `reports/creator-candidates.md` has an unchecked candidate, add the top one to creators.ts and tick it there. At most twice a week; otherwise continue down this list. Never invent a creator or a fact about them.
 - [ ] `/contests/closing-soon`: open contests with a deadline within 14 days, sorted by deadline, with the compact subscribe form. Link from homepage nav/footer and add to sitemap.ts.
 - [ ] `/contests/free`: open contests whose entry fee is free (Free, None, $0, No fee). Same layout.

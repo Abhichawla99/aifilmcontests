@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="200" height="54" viewBox="0 0 200 54" role="img" aria-label="Featured on AI Film Contests">
+  <title>Featured on AI Film Contests</title>
+  <defs>
+    <linearGradient id="afc-mark" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#818CF8"/>
+      <stop offset="1" stop-color="#4F46E5"/>
+    </linearGradient>
+  </defs>
+
+  <rect x="0.5" y="0.5" width="199" height="53" rx="9" fill="#16151A" stroke="#312E5E"/>
+
+  <!-- film frame mark -->
+  <g transform="translate(14 15)">
+    <rect width="24" height="24" rx="6" fill="url(#afc-mark)"/>
+    <g fill="#16151A" opacity="0.92">
+      <rect x="3.2" y="4.6" width="3" height="3" rx="0.8"/>
+      <rect x="3.2" y="10.5" width="3" height="3" rx="0.8"/>
+      <rect x="3.2" y="16.4" width="3" height="3" rx="0.8"/>
+      <rect x="17.8" y="4.6" width="3" height="3" rx="0.8"/>
+      <rect x="17.8" y="10.5" width="3" height="3" rx="0.8"/>
+      <rect x="17.8" y="16.4" width="3" height="3" rx="0.8"/>
+    </g>
+    <path d="M9.9 8.2 L16.4 12 L9.9 15.8 Z" fill="#16151A"/>
+  </g>
+
+  <g font-family="'Space Grotesk','Helvetica Neue',Helvetica,Arial,sans-serif">
+    <text x="47" y="23" font-size="8" font-weight="600" letter-spacing="1.3" fill="#A5A0F7">FEATURED ON</text>
+    <text x="47" y="39" font-size="14" font-weight="700" letter-spacing="-0.2" fill="#F5F3EF">AI Film Contests</text>
+  </g>
+</svg>

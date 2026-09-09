@@ -28,6 +28,27 @@ const MAILTO =
   'mailto:hello@aifilmcontests.com?subject=' +
   encodeURIComponent('Feature me on AI Film Contests')
 
+const WHY: { title: string; body: string }[] = [
+  {
+    title: 'A page people actually read',
+    body:
+      'A profile you can send to a festival, a client or a producer without asking them to dig through a reel. ' +
+      'Who you are, where you are, and what you have finished.',
+  },
+  {
+    title: 'A link from a site about your work',
+    body:
+      'Your profile links to your own site, and the badge links back here. ' +
+      'Two sites about AI film pointing at each other beats a link from nowhere in particular.',
+  },
+  {
+    title: 'Your work next to the contests',
+    body:
+      'This directory tracks the contests you are entering. Your profile sits beside them, ' +
+      'and links to the ones we can verify you entered.',
+  },
+]
+
 const sectionLabel: React.CSSProperties = {
   fontFamily: 'Space Grotesk, sans-serif',
   fontSize: 13,
@@ -127,6 +148,35 @@ export default function CreatorsPage() {
               </Link>
             ))}
           </div>
+        </section>
+
+        {/* Why be featured */}
+        <section style={{ marginBottom: 44 }}>
+          <h2 style={sectionLabel}>Why be featured</h2>
+          <div style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))',
+            gap: 12,
+          }}>
+            {WHY.map(w => (
+              <div key={w.title} className="card" style={{ padding: '20px 22px' }}>
+                <div style={{
+                  fontFamily: 'Space Grotesk, sans-serif',
+                  fontWeight: 600,
+                  fontSize: 15,
+                  color: '#1B1916',
+                  marginBottom: 8,
+                }}>
+                  {w.title}
+                </div>
+                <p style={{ fontSize: 13, color: '#6F6A61', lineHeight: 1.65, margin: 0 }}>{w.body}</p>
+              </div>
+            ))}
+          </div>
+          <p style={{ fontSize: 13, color: '#8B867C', lineHeight: 1.7, marginTop: 16, maxWidth: 620 }}>
+            Every profile also comes with a badge you can put on your own site, linking back to
+            your page here.
+          </p>
         </section>
 
         {/* Get featured */}

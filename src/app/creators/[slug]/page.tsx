@@ -4,6 +4,7 @@ import { notFound } from 'next/navigation'
 import Link from 'next/link'
 import InnerLayout from '@/components/InnerLayout'
 import EmailSubscribe from '@/components/EmailSubscribe'
+import BadgeEmbed from '@/components/BadgeEmbed'
 import { creators, getCreator } from '@/data/creators'
 import { getContestById } from '@/lib/contests-db'
 
@@ -169,6 +170,9 @@ export default async function CreatorProfile({ params }: { params: Promise<{ slu
             </div>
           </section>
         )}
+
+        {/* Badge + embed snippet */}
+        <BadgeEmbed slug={c.slug} name={c.name} />
 
         {/* Get featured */}
         <section className="card" style={{ padding: '24px 26px', marginBottom: 40 }}>
