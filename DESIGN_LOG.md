@@ -36,6 +36,64 @@ describe the old dark theme; the reasoning still applies, the colours do not.)*
 
 ---
 
+## 2026-09-09 — The submit form, given hierarchy and a visible focus state
+
+**Changed** — `src/app/submit/SubmitForm.tsx`. The one page where a stranger types
+real data and hands us their email.
+
+**Was** — nine fields, all identical: a grey-on-grey fill (`rgba(27,25,22,0.03)`) inside
+a border at 9% opacity you had to hunt for, every label the same 11px small caps, and
+`outline: 'none'` inline on every input with nothing put back. That last one is the
+defect: an inline style beats a stylesheet rule, so it silently overrode the global
+`:focus-visible` outline in `globals.css` and a keyboard user got no indication at all of
+which field they were in. Nobody had spotted it because the rule *exists* — it just never
+applied here. The site already has a designed input (`.input`: white ground, a real
+`#E0DCD2` border, `#A8A296` placeholder, an indigo ring on focus) and the subscribe form
+on the homepage uses it. The submit form ignored it and reinvented a worse one.
+
+**Now** —
+- **The designed input, everywhere.** `.input` on all nine fields, so the form matches the
+  subscribe box a filmmaker saw thirty seconds earlier, and focus is visible again.
+- **Three groups, hairline-separated,** in the order the work happens: *The two things we
+  verify* (contest name, official page), *Details, if you have them* (organizer, deadline,
+  prize, entry fee), *So we can reply* (email, role, notes). Hierarchy carried by a
+  Space Grotesk 15px heading over a hairline, not by a box.
+- **Required is the default.** The bare `*` on two fields is gone; the six genuinely
+  optional fields carry a quiet lowercase `optional` in the label row instead. The form is
+  mostly optional and now looks it, which is the honest read of a two-minute task rather
+  than a nine-field one.
+- **One line of copy that earns trust,** under the official page: we read this page before
+  the listing goes live and again every morning after that, and a FilmFreeway page works.
+  It states what the site actually does; it is the reason to bother filling this in.
+
+**Also fixed, all visible** — the date field carried `colorScheme: 'dark'`, a leftover
+from the retired dark theme that renders the native picker dark on paper; its
+`yyyy-mm-dd` also sat at full ink weight, so the emptiest field on the page looked like
+the most filled-in one, and it is now placeholder grey. The role `select` had
+`appearance: none` and no arrow put back, so a dropdown read as a plain text field — it
+has a caret. The error state was a single loose orange line; it is now a burnt-orange
+hairline block labelled "Not sent" over the message.
+
+**Inspiration** — Are.na's sign-up page (Criterion, It’s Nice That and Letterboxd all
+refused the fetch or served nothing). The observation worth keeping: Are.na frames a field
+only where a *decision* is being made. The four account inputs are one uninterrupted
+borderless stack, and then the three subscription tiers are the only bordered blocks on
+the page, so the eye goes straight to the choice. Our form had the opposite arrangement —
+identical framing on all nine — so nothing led. Adapted rather than copied: we keep the
+field borders, because ours sit on paper and need the edge, and we spend the emphasis on
+the group headings so the two fields we actually verify read first.
+
+**Not done** — the fields still validate only on submit, so a malformed URL is caught by
+the browser rather than by us. Per-field inline validation is the natural next step here
+and it is more than one day’s change.
+
+**Verified** — 1440px and a true 390px viewport, no horizontal overflow at either. The
+two-up rows collapse to single column below 190px per column, so nothing is squeezed.
+
+**Before / after** — `reports/design/2026-09-09-before.png`,
+`reports/design/2026-09-09-before-390.png`, `reports/design/2026-09-09-after.png`,
+`reports/design/2026-09-09-after-390.png`.
+
 ## 2026-09-08 (5) — Browsing, instead of one long scroll
 
 **Changed** — `src/components/ContestBrowser.tsx`, rebuilt.
