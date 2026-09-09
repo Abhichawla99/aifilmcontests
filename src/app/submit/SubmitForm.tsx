@@ -2,13 +2,26 @@
 
 import { useState } from 'react'
 
-const input: React.CSSProperties = {
-  width: '100%', padding: '11px 13px', borderRadius: 8, fontSize: 14, color: '#1B1916',
-  background: 'rgba(27,25,22,0.03)', border: '1px solid rgba(27,25,22,0.09)', outline: 'none',
-}
 const label: React.CSSProperties = {
-  display: 'block', fontSize: 11, fontWeight: 600, letterSpacing: '0.08em', textTransform: 'uppercase',
-  color: '#7A7469', marginBottom: 6, fontFamily: 'Space Grotesk, sans-serif',
+  display: 'flex', alignItems: 'baseline', gap: 8, fontSize: 11, fontWeight: 600,
+  letterSpacing: '0.08em', textTransform: 'uppercase', color: '#7A7469',
+  marginBottom: 7, fontFamily: 'Space Grotesk, sans-serif',
+}
+const optionalMark: React.CSSProperties = {
+  fontSize: 10, fontWeight: 500, letterSpacing: '0.04em', textTransform: 'none', color: '#A8A296',
+}
+const hint: React.CSSProperties = { fontSize: 12.5, lineHeight: 1.55, color: '#8B867C', margin: '7px 0 0' }
+const legend: React.CSSProperties = {
+  fontFamily: 'Space Grotesk, sans-serif', fontSize: 15, fontWeight: 700, color: '#1B1916',
+  letterSpacing: '-0.01em', margin: 0,
+}
+const rule: React.CSSProperties = { border: 'none', borderTop: '1px solid #ECE9E2', margin: '30px 0 20px' }
+const pair: React.CSSProperties = {
+  display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(190px, 1fr))', gap: 16,
+}
+
+function Optional() {
+  return <span style={optionalMark}>optional</span>
 }
 
 export default function SubmitForm() {
@@ -41,38 +54,91 @@ export default function SubmitForm() {
   }
 
   return (
-    <form onSubmit={submit} style={{ display: 'grid', gap: 16 }}>
+    <form onSubmit={submit}>
       {/* honeypot: hidden from people, filled by bots */}
       <input type="text" name="website" value={f.website} onChange={set('website')} tabIndex={-1} autoComplete="off" style={{ position: 'absolute', left: -9999, opacity: 0, height: 0 }} aria-hidden="true" />
 
-      <div><label style={label} htmlFor="name">Contest name *</label><input id="name" required style={input} value={f.name} onChange={set('name')} placeholder="e.g. Busan International AI Film Festival" /></div>
-      <div><label style={label} htmlFor="url">Official page *</label><input id="url" required type="url" style={input} value={f.url} onChange={set('url')} placeholder="https://" /></div>
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 16 }}>
-        <div><label style={label} htmlFor="organizer">Organizer</label><input id="organizer" style={input} value={f.organizer} onChange={set('organizer')} /></div>
-        <div><label style={label} htmlFor="deadline">Submission deadline</label><input id="deadline" type="date" style={{ ...input, colorScheme: 'dark' }} value={f.deadline} onChange={set('deadline')} /></div>
-      </div>
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 16 }}>
-        <div><label style={label} htmlFor="prize">Prize</label><input id="prize" style={input} value={f.prize} onChange={set('prize')} placeholder="e.g. $10,000 + screening" /></div>
-        <div><label style={label} htmlFor="fee">Entry fee</label><input id="fee" style={input} value={f.fee} onChange={set('fee')} placeholder="Free, $25, …" /></div>
-      </div>
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 16 }}>
-        <div><label style={label} htmlFor="email">Your email *</label><input id="email" required type="email" style={input} value={f.email} onChange={set('email')} /></div>
+      <h2 style={legend}>The two things we verify</h2>
+      <div style={{ display: 'grid', gap: 18, marginTop: 16 }}>
         <div>
-          <label style={label} htmlFor="role">You are</label>
-          <select id="role" style={{ ...input, appearance: 'none' }} value={f.role} onChange={set('role')}>
-            <option value="organizer">The organizer</option>
-            <option value="filmmaker">A filmmaker who found it</option>
-            <option value="other">Someone else</option>
-          </select>
+          <label style={label} htmlFor="name">Contest name</label>
+          <input id="name" required className="input" value={f.name} onChange={set('name')} placeholder="e.g. Busan International AI Film Festival" />
+        </div>
+        <div>
+          <label style={label} htmlFor="url">Official page</label>
+          <input id="url" required type="url" className="input" value={f.url} onChange={set('url')} placeholder="https://" />
+          <p style={hint}>We read this page before the listing goes live, and again every morning after that. A festival&rsquo;s own site or its FilmFreeway page both work.</p>
         </div>
       </div>
-      <div><label style={label} htmlFor="notes">Anything else</label><textarea id="notes" rows={3} style={{ ...input, resize: 'vertical' }} value={f.notes} onChange={set('notes')} placeholder="Eligibility, categories, tools allowed, a correction to an existing listing…" /></div>
 
-      <button type="submit" disabled={status === 'loading'} className="btn w-full justify-center" style={{ padding: '12px 18px' }}>
+      <hr style={rule} />
+
+      <h2 style={legend}>Details, if you have them</h2>
+      <p style={{ ...hint, marginTop: 6, marginBottom: 16 }}>Leave anything blank and we will read it off the official page ourselves.</p>
+      <div style={{ display: 'grid', gap: 16 }}>
+        <div style={pair}>
+          <div>
+            <label style={label} htmlFor="organizer">Organizer <Optional /></label>
+            <input id="organizer" className="input" value={f.organizer} onChange={set('organizer')} placeholder="Who runs it" />
+          </div>
+          <div>
+            <label style={label} htmlFor="deadline">Submission deadline <Optional /></label>
+            <input id="deadline" type="date" className="input" style={{ color: f.deadline ? '#1B1916' : '#A8A296' }} value={f.deadline} onChange={set('deadline')} />
+          </div>
+        </div>
+        <div style={pair}>
+          <div>
+            <label style={label} htmlFor="prize">Prize <Optional /></label>
+            <input id="prize" className="input" value={f.prize} onChange={set('prize')} placeholder="e.g. $10,000 + screening" />
+          </div>
+          <div>
+            <label style={label} htmlFor="fee">Entry fee <Optional /></label>
+            <input id="fee" className="input" value={f.fee} onChange={set('fee')} placeholder="Free, $25, …" />
+          </div>
+        </div>
+      </div>
+
+      <hr style={rule} />
+
+      <h2 style={legend}>So we can reply</h2>
+      <div style={{ display: 'grid', gap: 16, marginTop: 16 }}>
+        <div style={pair}>
+          <div>
+            <label style={label} htmlFor="email">Your email</label>
+            <input id="email" required type="email" className="input" value={f.email} onChange={set('email')} placeholder="you@example.com" />
+          </div>
+          <div>
+            <label style={label} htmlFor="role">You are</label>
+            <div style={{ position: 'relative' }}>
+              <select id="role" className="input" style={{ appearance: 'none', paddingRight: 34 }} value={f.role} onChange={set('role')}>
+                <option value="organizer">The organizer</option>
+                <option value="filmmaker">A filmmaker who found it</option>
+                <option value="other">Someone else</option>
+              </select>
+              <span aria-hidden="true" style={{ position: 'absolute', right: 14, top: '50%', transform: 'translateY(-50%)', color: '#8B867C', fontSize: 11, pointerEvents: 'none' }}>▾</span>
+            </div>
+          </div>
+        </div>
+        <div>
+          <label style={label} htmlFor="notes">Anything else <Optional /></label>
+          <textarea id="notes" rows={3} className="input" style={{ resize: 'vertical' }} value={f.notes} onChange={set('notes')} placeholder="Eligibility, categories, tools allowed, a correction to an existing listing…" />
+        </div>
+      </div>
+
+      <button type="submit" disabled={status === 'loading'} className="btn w-full justify-center" style={{ padding: '13px 18px', marginTop: 26 }}>
         {status === 'loading' ? 'Sending…' : 'Submit contest'}
       </button>
-      {status === 'error' && <p style={{ fontSize: 13, color: '#C2410C', margin: 0 }}>{message}</p>}
-      <p style={{ fontSize: 12, color: '#8B867C', lineHeight: 1.6, margin: 0 }}>
+
+      {status === 'error' && (
+        <div role="alert" style={{ marginTop: 14, borderLeft: '2px solid #C2410C', padding: '2px 0 2px 14px' }}>
+          <div style={{ fontFamily: 'Space Grotesk, sans-serif', fontSize: 11, fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase', color: '#C2410C', marginBottom: 4 }}>
+            Not sent
+          </div>
+          <p style={{ fontSize: 13.5, lineHeight: 1.55, color: '#3E3A33', margin: 0 }}>{message}</p>
+        </div>
+      )}
+
+      <p style={{ fontSize: 12.5, color: '#8B867C', lineHeight: 1.6, margin: '16px 0 0' }}>
         Listing is free and stays free. We only list contests we can verify on an official page.
       </p>
     </form>
