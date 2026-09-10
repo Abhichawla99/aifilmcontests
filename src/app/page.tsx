@@ -258,40 +258,18 @@ export default async function Home() {
                   Deadline-verified daily by an agent that actually reads each page.
                 </p>
 
-                {/* Stats strip */}
-                <div style={{
-                  display: 'flex', alignItems: 'center', gap: 0,
-                  flexWrap: 'wrap',
-                  marginBottom: 44,
-                  border: '1px solid rgba(27,25,22,0.06)',
-                  borderRadius: 12,
-                  overflow: 'hidden',
-                  background: 'rgba(27,25,22,0.02)',
-                  backdropFilter: 'blur(8px)',
-                  width: 'fit-content',
-                  maxWidth: '100%',
-                }}>
+                {/* Figures row: ruled, not boxed. Four across on desktop, 2×2 on a phone
+                    (see .hero-stats in globals.css) so no figure is ever orphaned. */}
+                <div className="hero-stats">
                   {[
                     { n: open.length,     label: 'Open now',    color: '#15803D' },
                     { n: upcoming.length, label: 'Coming soon', color: '#B45309' },
                     { n: totalPrize >= 1_000_000 ? `$${(totalPrize / 1_000_000).toFixed(1)}M+` : `$${Math.round(totalPrize / 1000)}K+`, label: 'In prizes', color: '#4338CA' },
-                    { n: allContests.filter(c => c.status !== 'closed').length, label: 'Active', color: '#7A7469' },
-                  ].map((s, i) => (
-                    <div key={s.label} style={{
-                      padding: '14px 22px',
-                      borderRight: i < 3 ? '1px solid rgba(27,25,22,0.05)' : 'none',
-                      display: 'flex', flexDirection: 'column', gap: 3,
-                    }}>
-                      <span style={{
-                        fontFamily: 'Space Grotesk, sans-serif',
-                        fontWeight: 700, fontSize: 'clamp(20px, 2.5vw, 26px)',
-                        color: s.color, lineHeight: 1,
-                      }}>
-                        {s.n}
-                      </span>
-                      <span style={{ fontSize: 10, color: '#A8A296', textTransform: 'uppercase', letterSpacing: '0.06em', fontFamily: 'Space Grotesk, sans-serif' }}>
-                        {s.label}
-                      </span>
+                    { n: allContests.filter(c => c.status !== 'closed').length, label: 'Active', color: '#3E3A33' },
+                  ].map(s => (
+                    <div key={s.label} className="hero-stat">
+                      <span className="hero-stat-n" style={{ color: s.color }}>{s.n}</span>
+                      <span className="hero-stat-label">{s.label}</span>
                     </div>
                   ))}
                 </div>
