@@ -36,6 +36,57 @@ describe the old dark theme; the reasoning still applies, the colours do not.)*
 
 ---
 
+## 2026-09-10 — The homepage figures, ruled instead of boxed
+
+**Changed** — the stat strip under the homepage headline (`src/app/page.tsx`), styled
+by a new `.hero-stats` block in `globals.css`. The first numbers anyone sees on the site.
+
+**Was** — four figures (open now, coming soon, in prizes, active) in a bordered, filled,
+rounded box with `backdropFilter: blur(8px)`, a glass leftover from the dark theme that
+does nothing on flat paper. The box was a flex row with `flexWrap: wrap`, so at 390px it
+broke 3 + 1: "77 ACTIVE" sat alone on a second row under an empty two-thirds of a box,
+with a stray divider hanging off the end of the first row. That was the one part of the
+hero that looked squeezed rather than set. The labels were `#A8A296` at 10px, placeholder
+grey, about 2.4:1 against the paper, so the words explaining each number were the
+hardest thing in the hero to read.
+
+**Now** —
+- **A ruled row, not a box.** A darker hairline above, a quiet one below, hairlines
+  between the figures. No fill, no radius, no blur. The rules group the figures, which
+  is how a programme sets a totals line.
+- **2 × 2 below 520px,** with the same hairlines between cells and between rows, so on
+  a phone it reads as a small table and nothing is left on its own.
+- **Tabular figures** at up to 28px with tighter tracking, so 74, 3 and 77 sit on the
+  same grid.
+- **Labels you can read:** `#7A7469`, 10.5px, weight 500, 0.08em tracking. "Active" is
+  now in body ink instead of the same grey as its label.
+
+Figures, labels, colours per status, and the prize formula are all unchanged.
+
+**Inspiration** — Letterboxd's film pages (Sundance and Metrograph timed out in the
+headless capture). What's worth keeping: the watches, lists and likes counts under
+each film (7.5M, 890K, 3.9M on Parasite) are set as plain 12px figures with no border,
+no fill, no container at all, and the ratings block below is introduced by a small-caps
+"RATINGS" label over a single hairline. The rule does the grouping. Adapted rather than
+copied: our figures are the headline numbers, so they stay large and keep their status
+colours, and the hairline goes above them where Letterboxd puts it above its histogram.
+
+**Noted for a later run, not done today** — two dark-theme leftovers in the same hero.
+The subscribe card still carries `boxShadow: … 0 24px 48px -12px rgba(0,0,0,0.6)` and
+`backdropFilter: blur(20px)`: on paper that paints a heavy grey smear under the card,
+most visible at 390px. And `FeaturedSpotlight` still says "3d 5h remaining" inside a
+pink box while every contest card says "N days left" over the date (2026-09-08 entry):
+the one contest we most want people to enter speaks a different deadline language from
+the rest of the page. Separately, a question for Abhi rather than a design call: "77
+active" is exactly 74 open plus 3 coming soon, so it repeats the two figures before it.
+"167 tracked" or "N closing this week" would each tell a visitor something new.
+
+**Verified** — live, at 1440px, 390px and 375px. No horizontal overflow at any width.
+
+**Before / after** — `reports/design/2026-09-10-before.png`,
+`reports/design/2026-09-10-before-390.png`, `reports/design/2026-09-10-after.png`,
+`reports/design/2026-09-10-after-390.png`.
+
 ## 2026-09-09 — The submit form, given hierarchy and a visible focus state
 
 **Changed** — `src/app/submit/SubmitForm.tsx`. The one page where a stranger types
