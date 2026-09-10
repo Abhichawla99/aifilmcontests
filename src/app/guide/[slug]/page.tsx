@@ -1064,6 +1064,88 @@ const GUIDES: Record<string, GuideData> = {
       "runway-ai-film-festival-2026"
     ]
   },
+  'how-to-win-higgsfield-global-film-festival-2026': {
+    title: "How to Win the Higgsfield Global Film Festival: $1,000,000 Prize, Oscar-Winning Jury, September 14 Deadline",
+    description: "The Higgsfield Global Film Festival pays out $1,000,000 across 14 winners — $500,000 for first place alone — judged by five-time Oscar winner Edwin Catmull and Oscar-nominated cinematographer Phedon Papamichael, with submissions closing September 14, 2026. Entry is free with any registered Higgsfield account, films run 3 minutes minimum, and every frame of AI video and image generation must happen inside Higgsfield's own Cinema Studio — no Sora, Runway, Veo or Kling allowed. Here is the full prize breakdown, the one rule that disqualifies most first-time entrants, and what to do with the days left before the deadline.",
+    keywords: "Higgsfield Global Film Festival, how to win Higgsfield Global Film Festival, Higgsfield $1,000,000 contest, Higgsfield film festival deadline, Higgsfield AI film contest rules, Edwin Catmull AI film jury, Phedon Papamichael AI film festival, Higgsfield Cinema Studio submission, Higgsfield Global Film Festival September 14",
+    datePublished: "2026-09-10",
+    intro: "The Higgsfield Global Film Festival is a $1,000,000 short-film contest run entirely inside Higgsfield's own AI video platform, and the submission window closes September 14, 2026. Fourteen winners split the pool: $500,000 for first place, $200,000 for second, $100,000 for third, a separate $100,000 Audience Choice award, and ten Honorable Mentions at $10,000 each. The jury is the kind most AI festivals can't get near — five-time Oscar winner and former Walt Disney Animation Studios president Edwin Catmull, Oscar and BAFTA-nominated cinematographer Phedon Papamichael (Ford v Ferrari, The Pursuit of Happyness), Mortal Kombat and Resident Evil director Paul W.S. Anderson, and The Crow and Dark City director Alex Proyas. Entry is free to any registered Higgsfield user 18 or older, solo or in a team of up to four, with no paid subscription required. The catch that trips up entrants coming from other AI festivals: every frame of AI video or image generation has to happen inside Higgsfield's Cinema Studio itself — bringing in a Sora, Runway, Veo or Kling shot disqualifies the film outright. This guide covers the exact prize structure, the jury, the platform-exclusivity and AI-audio rules, the Create in Public shortlist mechanic, and what a realistic plan looks like with only days left before the deadline.",
+    sections: [
+      {
+        h: "The $1,000,000 pool and why September 14 matters",
+        body: "Higgsfield opened the Global Film Festival with a program reveal on August 3, 2026, opened the Cinema Studio project where films are actually built on August 10, and closes the competition on September 14, 2026 — roughly 24 days of active production time from the platform's own framing. Winners are announced the first week of October. That is a short runway by festival standards: compare it to the Future Vision XPRIZE's months-long window or Astana's three-month cycle. Higgsfield is treating the contest as a growth and proof-of-concept play as much as a festival — the company closed a $400 million Series B in mid-August 2026 that quadrupled its valuation to $5.4 billion in eight months, according to TechCrunch, and the festival is the most visible demonstration yet that its Cinema Studio can carry full short films rather than isolated clips. As of this writing, Higgsfield's own site shows 3,844 contestants building live, which tells you the shortlist competition is real but not so saturated that a strong, tightly-executed 3-minute film can't stand out."
+      },
+      {
+        h: "How the $1,000,000 actually splits across 14 winners",
+        body: "The prize is not a single jackpot. First place takes $500,000 — half the total pool by itself. Second place takes $200,000, third takes $100,000, and a separate $100,000 Audience Choice award goes to the film the community responds to most, which is judged independently of the top-three jury placements. Below that, ten Honorable Mentions each receive $10,000, spreading real money to a much wider group than most AI festivals attempt. Fourteen total winners from an open, worldwide entry pool means the realistic strategy differs from a winner-take-all festival: a film doesn't have to be the single best submission in the world to win money, it has to be strong enough to land in the top handful or to win the popular vote outright. That structure rewards filmmakers who optimize for both craft (for the jury tiers) and shareability (for Audience Choice), which is a different brief than a pure festival where only jury opinion counts."
+      },
+      {
+        h: "The jury: Toy Story's producer and three working Hollywood directors",
+        body: "Higgsfield recruited a jury most AI-native contests can't touch. Edwin Catmull is a five-time Oscar winner, the former president of Walt Disney Animation Studios, executive producer of Toy Story, and a Turing Award laureate — arguably the single most credentialed name in the history of computer animation judging any AI film contest to date. Phedon Papamichael is a two-time Oscar and BAFTA nominee and an ASC member who shot Ford v Ferrari, The Pursuit of Happyness and The Trial of the Chicago 7 — a working cinematographer, not a technologist, which matters if your film's visual grammar is the thing you're proudest of. Paul W.S. Anderson directed Mortal Kombat and the Resident Evil and Alien vs. Predator franchises across three decades of box-office hits, and Alex Proyas directed The Crow, Dark City and the Oscar-nominated I, Robot. That panel skews toward genre filmmaking and visual craft over arthouse sensibility — a coherent, well-shot genre short with a real ending is more likely to land with this jury than an abstract experimental piece, though the brief is explicitly any story, any genre."
+      },
+      {
+        h: "Eligibility and format: what actually counts as an entry",
+        body: "Any registered Higgsfield user in good standing can enter and win — no paid subscription is required to submit, per the festival's own FAQ. Entrants must be 18 or older and located somewhere participation and prize payouts are legally permitted; the contest is otherwise open worldwide. You can enter solo or as a team of up to four people, and entries are unlimited as long as each one is a standalone film. Format is deliberately loose on story: any genre, any story, told however you want. Format is strict on runtime: 3 minutes is the stated minimum, with 3 to 5 minutes recommended as the sweet spot the jury is calibrated to watch. Films are exported as MP4 or MOV, up to 4K. If English isn't your film's language, plan for subtitles or a voice-over track, since the jury and Audience Choice voters are drawn from a global, largely English-reading audience even though the rules don't name a formal subtitle mandate the way some other AI festivals do."
+      },
+      {
+        h: "The rule that disqualifies the most first-time entrants",
+        body: "Read this section twice if you're coming from another AI festival. Higgsfield's official FAQ is unambiguous: \"All AI video and image generation has to happen on Higgsfield, inside your Film Festival Cinema Studio project. Using any other AI platform or third-party AI tool for visuals isn't allowed.\" That means a shot generated in Sora, Runway, Veo, Kling, Luma, Pika or MidJourney and dropped into your edit disqualifies the film — even if the rest of the project is built natively in Higgsfield. This is the single biggest difference between the Higgsfield Global Film Festival and open-tool contests like Astana AIFF or the Runway AI Film Festival, which welcome any generative pipeline. What is allowed, and welcomed at any stage, is traditional non-AI software: editing, compositing, color grading, titles, 3D work and animation in tools like DaVinci Resolve, Premiere, After Effects, Blender or Photoshop, per the same FAQ. In practice that means your post-production stack stays familiar — you just can't source a single AI-generated pixel from outside Higgsfield's own models (which include Higgsfield's core video and image tools alongside newer releases like Hell Grind, Zephyr and Mork, all of which the festival open-sourced as teaching examples with full prompts and canvases public)."
+      },
+      {
+        h: "The audio rule almost nobody reads carefully",
+        body: "Audio gets the same all-Higgsfield, all-AI treatment as video, and it's stricter than most entrants expect. Per the official FAQ: \"Yes, all of it: music, voice, dialogue, lipsync, and sound design.\" Human-composed or human-performed music is not allowed, licensed or stock tracks are not allowed, and recorded voice-overs are not allowed — even ones you personally own the rights to or have properly licensed. The entire soundtrack has to be AI-generated, and you need to be able to name which AI audio tool you used if the festival asks. This rule alone will disqualify a meaningful share of submissions, because reaching for a familiar stock-music library or a friend's live vocal take is instinctive for most filmmakers, AI-native or not. If you're building your soundtrack now, treat AI music and AI voice generation as a first-class production step rather than a shortcut — pick tools deliberately, keep a record of what generated each stem, and don't let a single human-recorded sound effect slip into the final mix."
+      },
+      {
+        h: "Create in Public: the shortlist backdoor and credit grants",
+        body: "Higgsfield built a second path to the jury alongside straight submission, called Create in Public. Instead of finishing your film privately and submitting only the final cut, you can publish your work-in-progress to a public project page as you build it, letting the community watch, like and follow along. The payoff: the 50 most community-supported films go straight to the jury's shortlist, and Higgsfield states its own editorial picks are additive and never replace or reduce those 50 community-earned spots. Beyond shortlist access, standout public projects are candidates for Higgsfield credit grants — up to 100,000 credits per project — which effectively subsidizes production for filmmakers willing to work in the open. Final Community Top 50 positions are confirmed only after eligibility and integrity checks, so the mechanic isn't a pure popularity contest, but it is a real, documented way to improve your odds beyond craft alone. If you have any appetite for building an audience while you work, Create in Public is close to a free insurance policy on your shortlist chances."
+      },
+      {
+        h: "Days left before September 14: a realistic plan",
+        body: "With the deadline landing September 14 and winners due the first week of October, there is no long runway left — treat the remaining days as a sprint, not a production schedule. First priority: lock a single 3-to-5-minute idea today if you haven't already; the format rewards a tight, complete story over an ambitious fragment, and Papamichael and Anderson's presence on the jury signals that visual and structural craft on a short, finished piece beats an unfinished epic. Second: build entirely inside Higgsfield's Cinema Studio from the first shot — don't generate test footage elsewhere and plan to swap it in, since none of that outside material is eligible even as a placeholder that accidentally ships. Third: generate your full soundtrack with AI tools as you go, not as a last-minute pass, so a rushed final night doesn't tempt you into a stock cue that disqualifies the entry. Fourth: if you're building visibly, publish to Create in Public now rather than at the finish line — the community-support clock is running, and a film posted with days of runway has more time to accumulate the support that earns a Top 50 shortlist slot. Fifth: export early, confirm your MP4 or MOV plays cleanly at your intended resolution, and submit with a buffer before the deadline rather than in the final hours, when upload and platform load are highest."
+      },
+      {
+        h: "Bottom line",
+        body: "The Higgsfield Global Film Festival is the largest single-platform AI film prize of 2026, and it is judged by people who make real films for a living — not just AI-industry figures. $1,000,000 splits across 14 winners, with $500,000 sitting on first place alone and a separate $100,000 Audience Choice track that rewards a shareable film as much as a technically brilliant one. The rules are stricter than most AI festivals: every pixel of video and image has to come from inside Higgsfield's Cinema Studio, and the entire soundtrack has to be AI-generated too — no outside AI tools, no stock music, no recorded voice-overs, even ones you own. What's still open to you is everything downstream of generation: any non-AI editing and finishing tool, any genre, any story, solo or as a team of four, for free. With the deadline landing September 14 and winners announced the first week of October, the filmmakers who place will be the ones who locked a story now, built it entirely on-platform without shortcuts, and — if they're smart — let the community watch them do it."
+      }
+    ],
+    ruminatex: false,
+    faqs: [
+      {
+        q: "What is the total prize pool for the Higgsfield Global Film Festival?",
+        a: "$1,000,000, split across 14 winners: $500,000 for first place, $200,000 for second, $100,000 for third, a separate $100,000 Audience Choice award, and ten Honorable Mentions worth $10,000 each. Winners are announced the first week of October 2026."
+      },
+      {
+        q: "When is the Higgsfield Global Film Festival deadline?",
+        a: "The competition closes September 14, 2026. The Cinema Studio project where entrants build their films opened August 10, 2026, giving roughly 24 days of platform production time from the festival's own framing. Winners are announced the first week of October 2026."
+      },
+      {
+        q: "Who is judging the Higgsfield Global Film Festival?",
+        a: "Edwin Catmull, a five-time Oscar winner, former president of Walt Disney Animation Studios, Toy Story executive producer and Turing Award laureate; Phedon Papamichael, a two-time Oscar and BAFTA-nominated cinematographer who shot Ford v Ferrari, The Pursuit of Happyness and The Trial of the Chicago 7; Paul W.S. Anderson, director of Mortal Kombat and the Resident Evil and Alien vs. Predator franchises; and Alex Proyas, director of The Crow, Dark City and the Oscar-nominated I, Robot."
+      },
+      {
+        q: "Can I use Sora, Runway, Veo or Kling to make my Higgsfield Global Film Festival entry?",
+        a: "No. Per Higgsfield's official FAQ, all AI video and image generation must happen inside Higgsfield's own Film Festival Cinema Studio project — using any other AI platform or third-party AI tool for visuals isn't allowed and will disqualify the film. Non-AI tools are welcome at any stage, including DaVinci Resolve, Premiere, After Effects, Blender and Photoshop for editing, compositing, color, titles, 3D and animation."
+      },
+      {
+        q: "Does my film's audio have to be AI-generated too?",
+        a: "Yes, all of it — music, voice, dialogue, lipsync and sound design. Human-composed or performed music, licensed or stock tracks, and recorded voice-overs are not allowed, even ones you own or have properly licensed. You need to be able to name the AI audio tool you used if asked."
+      },
+      {
+        q: "Do I need a paid Higgsfield subscription to enter?",
+        a: "No. Any registered Higgsfield user in good standing can enter and win — no paid subscription is required to submit. You do need to be 18 or older and located somewhere that participation and prize payouts are legally permitted."
+      },
+      {
+        q: "What is Create in Public and does it improve my odds?",
+        a: "Create in Public lets you build your film on a public project page instead of privately, so the community can watch, like and follow along as you work. The 50 most community-supported public films go straight to the jury's shortlist, and Higgsfield's own editorial picks are additive and never reduce those 50 community-earned spots. Standout public projects are also candidates for Higgsfield credit grants of up to 100,000 credits per project."
+      }
+    ],
+    featuredContestIds: [
+      "higgsfield-global-film-festival-2026",
+      "akool-creator-clash-2026",
+      "higgsfield-action-scene-2026",
+      "higgsfield-adathon-2026"
+    ]
+  },
 }
 
 const OTHER_GUIDES = Object.keys(GUIDES)
