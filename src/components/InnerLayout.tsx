@@ -52,6 +52,7 @@ export default function InnerLayout({ children }: InnerLayoutProps) {
           {/* Nav links */}
           <nav style={{ display: 'flex', alignItems: 'center', gap: 20, flexWrap: 'wrap' }}>
             <Link href="/" className="link-muted" style={{ fontSize: 13 }}>Browse Contests</Link>
+            <Link href="/contests/closing-soon" className="link-muted" style={{ fontSize: 13 }}>Closing Soon</Link>
             <Link href="/tools/runway" className="link-muted" style={{ fontSize: 13 }}>Tools</Link>
             <Link href="/categories/short-film" className="link-muted" style={{ fontSize: 13 }}>Categories</Link>
             <Link href="/cinematic-ads" className="link-muted" style={{ fontSize: 13 }}>Cinematic Ads</Link>
@@ -80,6 +81,7 @@ export default function InnerLayout({ children }: InnerLayoutProps) {
           {/* Right: links */}
           <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
             <Link href="/" className="link-muted" style={{ fontSize: 12 }}>Browse All</Link>
+            <Link href="/contests/closing-soon" className="link-muted" style={{ fontSize: 12 }}>Closing Soon</Link>
             <a href="/submit" className="link-muted" style={{ fontSize: 12 }}>Submit a Contest</a>
             <Link href="/creators" className="link-muted" style={{ fontSize: 12 }}>Featured Creators</Link>
             <a
