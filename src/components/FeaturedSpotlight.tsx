@@ -11,7 +11,6 @@ function useCountdown(deadline: string) {
     return {
       days:    Math.floor(diff / 86_400_000),
       hours:   Math.floor((diff % 86_400_000) / 3_600_000),
-      minutes: Math.floor((diff % 3_600_000)  / 60_000),
     }
   }
   const [t, setT] = useState(calc)
@@ -24,6 +23,12 @@ function useCountdown(deadline: string) {
 
 function fmt(d: string) {
   return new Date(d).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
+}
+
+/* Same words as ContestCard, so the featured contest and the grid under it agree. */
+function timeLeft(cd: { days: number; hours: number }) {
+  if (cd.days >= 1) return `${cd.days} ${cd.days === 1 ? 'day' : 'days'} left`
+  return `${cd.hours} ${cd.hours === 1 ? 'hour' : 'hours'} left`
 }
 
 export default function FeaturedSpotlight({ contest }: { contest: Contest }) {
@@ -43,20 +48,6 @@ export default function FeaturedSpotlight({ contest }: { contest: Contest }) {
       flexDirection: 'column',
       gap: 20,
     }}>
-      {/* Top gradient highlight line */}
-      <div style={{
-        position: 'absolute', top: 0, left: 0, right: 0, height: 1,
-        background: '#E1DAF0',
-        pointerEvents: 'none',
-      }} />
-
-      {/* Corner glow */}
-      <div style={{
-        position: 'absolute', top: -60, right: -60, width: 200, height: 200, borderRadius: '50%',
-        background: 'transparent',
-        pointerEvents: 'none',
-      }} />
-
       {/* Label */}
       <div style={{
         display: 'inline-flex', alignItems: 'center', gap: 7,
@@ -85,65 +76,47 @@ export default function FeaturedSpotlight({ contest }: { contest: Contest }) {
         }}>
           {contest.name}
         </h3>
-        <p style={{ fontSize: 12, color: '#A8A296', fontFamily: 'Space Grotesk, sans-serif', fontWeight: 500, textTransform: 'uppercase', letterSpacing: '0.06em' }}>
+        <p style={{ fontSize: 12, color: '#8B867C', fontFamily: 'Space Grotesk, sans-serif', fontWeight: 500, textTransform: 'uppercase', letterSpacing: '0.06em' }}>
           {contest.organizer}
         </p>
       </div>
 
-      {/* Prize */}
-      <div style={{
-        padding: '20px',
-        background: 'rgba(99,102,241,0.06)',
-        border: '1px solid rgba(99,102,241,0.1)',
-        borderRadius: 12,
-      }}>
-        <div style={{ fontSize: 10, color: '#4f46e5', fontFamily: 'Space Grotesk, sans-serif', fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: 8 }}>
-          Prize Pool
+      {/* The two facts you decide with, set as ruled rows before the prose, the way a
+          programme puts the showtime under the title. The deadline speaks the same
+          language as every ContestCard: time left as the figure, the date as its caption. */}
+      <div style={{ borderTop: '1px solid #D9D4C9', borderBottom: '1px solid #E7E4DC' }}>
+        <div style={{ padding: '14px 0 16px' }}>
+          <div className="spot-label">Prize pool</div>
+          <div style={{ fontFamily: 'Space Grotesk, sans-serif', fontSize: 'clamp(18px, 2.2vw, 22px)', fontWeight: 700, color: '#4338CA', lineHeight: 1.2, letterSpacing: '-0.02em', fontVariantNumeric: 'tabular-nums' }}>
+            {contest.prize}
+          </div>
         </div>
-        <div style={{ fontFamily: 'Space Grotesk, sans-serif', fontSize: 'clamp(18px, 2.2vw, 22px)', fontWeight: 700, color: '#4338CA', lineHeight: 1.2, letterSpacing: '-0.02em' }}>
-          {contest.prize}
+        <div style={{ padding: '14px 0 16px', borderTop: '1px solid #E7E4DC' }}>
+          <div className="spot-label">Deadline</div>
+          <div style={{ display: 'flex', alignItems: 'baseline', flexWrap: 'wrap', columnGap: 12, rowGap: 4 }}>
+            <span style={{
+              fontFamily: 'Space Grotesk, sans-serif', fontSize: 'clamp(18px, 2.2vw, 22px)', fontWeight: 700,
+              color: isUrgent ? '#C2410C' : '#1B1916',
+              letterSpacing: '-0.02em', lineHeight: 1.2, fontVariantNumeric: 'tabular-nums',
+            }}>
+              {cd ? timeLeft(cd) : fmt(contest.deadline)}
+            </span>
+            {cd && (
+              <span style={{
+                fontSize: 11, color: '#7A7469', fontFamily: 'Space Grotesk, sans-serif', fontWeight: 500,
+                letterSpacing: '0.07em', textTransform: 'uppercase', fontVariantNumeric: 'tabular-nums',
+              }}>
+                {fmt(contest.deadline)}
+              </span>
+            )}
+          </div>
         </div>
       </div>
 
       {/* Description */}
-      <p style={{ fontSize: 13, color: '#8B867C', lineHeight: 1.7, display: '-webkit-box', WebkitLineClamp: 3, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>
+      <p style={{ fontSize: 13.5, color: '#6F6A61', lineHeight: 1.7, display: '-webkit-box', WebkitLineClamp: 3, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>
         {contest.description}
       </p>
-
-      {/* Deadline */}
-      <div style={{
-        display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-        padding: '14px 16px',
-        background: isUrgent ? 'rgba(239,68,68,0.05)' : 'rgba(27,25,22,0.02)',
-        border: `1px solid ${isUrgent ? 'rgba(239,68,68,0.12)' : 'rgba(27,25,22,0.05)'}`,
-        borderRadius: 10,
-      }}>
-        <div>
-          <div style={{ fontSize: 10, color: '#A8A296', fontFamily: 'Space Grotesk, sans-serif', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: 3 }}>
-            Deadline
-          </div>
-          <div style={{ fontSize: 13, color: '#7A7469', fontFamily: 'Space Grotesk, sans-serif' }}>
-            {fmt(contest.deadline)}
-          </div>
-        </div>
-        {cd && (
-          <div style={{ textAlign: 'right' }}>
-            <div style={{
-              fontSize: 'clamp(18px, 2vw, 22px)',
-              fontFamily: 'Space Grotesk, sans-serif',
-              fontWeight: 700,
-              color: isUrgent ? '#C2410C' : '#26231E',
-              letterSpacing: '-0.02em',
-              lineHeight: 1,
-            }}>
-              {cd.days > 0 ? `${cd.days}d ${cd.hours}h` : `${cd.hours}h ${cd.minutes}m`}
-            </div>
-            <div style={{ fontSize: 10, color: '#A8A296', fontFamily: 'Space Grotesk, sans-serif', marginTop: 3 }}>
-              remaining
-            </div>
-          </div>
-        )}
-      </div>
 
       {/* CTA */}
       <div style={{ display: 'flex', gap: 10 }}>

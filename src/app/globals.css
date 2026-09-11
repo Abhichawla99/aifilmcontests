@@ -278,3 +278,12 @@ img, svg, video, canvas { max-width: 100%; }
      what a filmmaker scans by. */
   .browse-row-prize { display: none; }
 }
+
+/* ── Featured spotlight: small-caps row labels over hairline-ruled facts ───── */
+.spot-label {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 10.5px; font-weight: 600;
+  color: #7A7469;
+  letter-spacing: 0.08em; text-transform: uppercase;
+  margin-bottom: 6px;
+}
