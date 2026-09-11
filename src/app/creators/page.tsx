@@ -25,7 +25,7 @@ export const metadata: Metadata = {
 }
 
 const MAILTO =
-  'mailto:hello@aifilmcontests.com?subject=' +
+  'mailto:abhixchawla@gmail.com?subject=' +
   encodeURIComponent('Feature me on AI Film Contests')
 
 const WHY: { title: string; body: string }[] = [

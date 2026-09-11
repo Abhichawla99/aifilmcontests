@@ -42,7 +42,7 @@ const jsonLdOrganization = {
   sameAs: [],
   contactPoint: {
     '@type': 'ContactPoint',
-    email: 'hello@aifilmcontests.com',
+    email: 'abhixchawla@gmail.com',
     contactType: 'customer service',
   },
 }

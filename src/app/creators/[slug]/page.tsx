@@ -58,7 +58,7 @@ export default async function CreatorProfile({ params }: { params: Promise<{ slu
   ).filter((x): x is NonNullable<typeof x> => Boolean(x))
 
   const mailto =
-    'mailto:hello@aifilmcontests.com?subject=' +
+    'mailto:abhixchawla@gmail.com?subject=' +
     encodeURIComponent('Feature me on AI Film Contests')
 
   const jsonLd = {

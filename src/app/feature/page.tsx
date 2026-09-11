@@ -39,7 +39,7 @@ export default async function FeaturePage({ searchParams }: { searchParams: Prom
     textDecoration: 'none', fontFamily: 'Space Grotesk, sans-serif', boxShadow: 'none',
   }
   const mailto = (name?: string) =>
-    `mailto:hello@aifilmcontests.com?subject=${encodeURIComponent(`Feature ${name ?? 'my contest'} on AI Film Contests`)}`
+    `mailto:abhixchawla@gmail.com?subject=${encodeURIComponent(`Feature ${name ?? 'my contest'} on AI Film Contests`)}`
 
   return (
     <main style={{ minHeight: '100vh', background: '#FBFAF8', color: '#26231E', fontFamily: 'Inter, sans-serif' }}>
@@ -100,7 +100,7 @@ export default async function FeaturePage({ searchParams }: { searchParams: Prom
 
         <p style={{ fontSize: 13, color: '#8B867C', lineHeight: 1.7, marginTop: 36 }}>
           Every contest on this site is listed for free and verified daily. Featuring is optional and never affects whether a contest is listed.
-          Questions or corrections: <a href="mailto:hello@aifilmcontests.com" style={{ color: '#7A7469' }}>hello@aifilmcontests.com</a>.
+          Questions or corrections: <a href="mailto:abhixchawla@gmail.com" style={{ color: '#7A7469' }}>abhixchawla@gmail.com</a>.
         </p>
       </div>
     </main>
