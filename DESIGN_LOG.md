@@ -36,6 +36,72 @@ describe the old dark theme; the reasoning still applies, the colours do not.)*
 
 ---
 
+## 2026-09-11 — The featured contest, in the same deadline language as the grid
+
+**Changed** — `src/components/FeaturedSpotlight.tsx`, plus a `.spot-label` rule in
+`globals.css`. The card on the right of the homepage hero, which is the slot the /feature
+page sells.
+
+**Was** — the prize sat in an indigo-filled box and the deadline in a pink-filled box, so
+the card was two coloured boxes inside a white box inside the page. The deadline read
+"2d 5h / remaining" with "Sep 13, 2026" in grey on the left. Scroll down to the grid and
+the same contest said "2 days left / SEP 13, 2026". It was the contest we most want people
+to enter, and the only one on the page describing its deadline in a different format.
+The deadline also came last, under three lines of description, so the fact that decides
+whether you enter was the one you reached after reading everything else. Organizer and
+description were `#A8A296` and `#8B867C` on white, which are hard to read at those sizes.
+Two empty divs from the dark theme ("top gradient highlight", "corner glow") were still
+rendering and doing nothing.
+
+**Now** —
+- **Two ruled rows under the title**, prize then deadline, each with a small-caps label.
+  A darker hairline above, a quiet one between and below. No fills. This is the same
+  treatment as the hero figures from yesterday, so the whole hero now groups with rules.
+- **The card's wording and order.** Time left is the figure ("2 days left", "5 hours
+  left"), the date is a small-caps caption beside it on the same baseline, and the figure
+  turns burnt orange inside seven days. `timeLeft()` is copied from `ContestCard` so the
+  two can't drift apart. Past a deadline, the date alone is the figure, as on the cards.
+- **Facts before prose.** The description moved below the two rows, directly above Enter
+  Now, and its grey went up a step to `#6F6A61`. Organizer went to `#8B867C`, the card
+  caption grey.
+- **Tabular figures** on the prize and the deadline.
+
+Nothing about the data, the links, the button, or the featured selection changed.
+
+**Inspiration** — Metrograph's Now Playing page (Criterion, Film at Lincoln Center and
+Letterboxd all served a Cloudflare check to the headless browser). Each film is set as
+title, then the date block and showtime, then a single slash-separated credits line, and
+only then the synopsis, cut short with "MORE…". The fact you act on comes before the
+prose, every time. Our spotlight did the reverse. Adapted rather than copied: we have no
+dates to tile, so the two facts are ruled rows rather than calendar blocks.
+
+**Noted for a later run, not done today** —
+- The spotlight is `display: none` below 860px (`.hero-spotlight` in `globals.css`), so
+  phone visitors never see it. /feature sells "Pinned in the homepage spotlight for 30
+  days". Whether a phone should get a compact version of it is a call for Abhi, since it
+  touches what a paid listing includes.
+- At 390px the "Research agent running daily · fresh contests added 24/7" pill above the
+  browse grid wraps badly: "daily" drops to its own line and the grey half becomes a
+  narrow column. It also carries `backdropFilter: blur(8px)` and a green glow ring
+  (`.agent-badge`), both dark-theme leftovers. And "daily" next to "24/7" is a
+  contradiction; the copy question is Abhi's.
+- Also at 390px, "Free entry" sits alone on a second line of the status tabs with a
+  stray divider hanging in front of it, the same 3 + 1 problem the hero figures had.
+- Data, for the research robot: Busan International AI Film Festival (BIAIF) 2026
+  shows a deadline of Sep 10, 2026 but is still marked open, so it sits at the top of
+  "Closing this week" a day after it closed. Not changed here.
+
+**Verified** — built and checked locally with a throwaway preview page (the local
+env has no anon key, so the homepage renders no contests locally) in three states: under
+seven days, 49 days, and a past deadline. Live at 1440px, 390px and 375px, no horizontal
+overflow at any width.
+
+**Before / after** — `reports/design/2026-09-11-before.png`,
+`reports/design/2026-09-11-before-390.png`, `reports/design/2026-09-11-after.png`,
+`reports/design/2026-09-11-after-390.png`, `reports/design/2026-09-11-after-375.png`.
+The spotlight only appears in the 1440px pair; the phone shots confirm the hero is
+unchanged there.
+
 ## 2026-09-10 — The homepage figures, ruled instead of boxed
 
 **Changed** — the stat strip under the homepage headline (`src/app/page.tsx`), styled
