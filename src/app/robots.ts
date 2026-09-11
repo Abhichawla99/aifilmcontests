@@ -16,10 +16,10 @@ export default function robots(): MetadataRoute.Robots {
         ],
       },
       {
-        // GPTBot / AI training crawlers — disallow by default
-        // Remove this block if you want AI training on your content
-        userAgent: 'GPTBot',
-        disallow: '/',
+        // LLM/AI crawlers — explicitly welcome. /llms.txt and every contest,
+        // guide and comparison page is written to be cited, not guessed.
+        userAgent: ['GPTBot', 'OAI-SearchBot', 'ChatGPT-User', 'ClaudeBot', 'Claude-Web', 'anthropic-ai', 'PerplexityBot', 'Perplexity-User', 'Google-Extended', 'Applebot-Extended', 'CCBot', 'Bytespider', 'meta-externalagent'],
+        allow: '/',
       },
     ],
     sitemap: `${BASE}/sitemap.xml`,
