@@ -1146,6 +1146,88 @@ const GUIDES: Record<string, GuideData> = {
       "higgsfield-adathon-2026"
     ]
   },
+  "how-to-win-akool-creator-clash-2026": {
+  "title": "How to Win the AKOOL Creator Clash: $300,000 in Creator Rewards, Seedance 2 Only, September 15 Deadline",
+  "description": "AKOOL's Creator Clash pays out more than $300,000 in Creator Rewards for short videos made entirely with Seedance 2 inside AKOOL — a $30,000 grand prize called AKOOL Favorite, two $15,000 category awards for Most Creative and Best Ad, ten $1,000 AKOOL Picks, and a $100 Creator Bonus paid to every single qualifying entry — with submissions closing September 15, 2026 at 11:59 PM PT. Entry is free, judged 40% on creativity, 30% on production quality, 20% on storytelling and 10% on smart use of Seedance 2 inside AKOOL, and every entry must be posted publicly with the #AkoolClash hashtag and the AKOOL logo visible in frame before it counts. Here is the full prize breakdown, the submission mechanics most entrants get wrong, and what to do with the days left before the deadline.",
+  "keywords": "AKOOL Creator Clash, how to win AKOOL Creator Clash, AKOOL $300,000 contest, Seedance 2 AI video competition, AKOOL Creator Clash deadline, AKOOL Creator Clash rules, Seedance 2 film contest, AKOOL Creator Clash prize breakdown, AKOOL Creator Clash September 15, AKOOL Favorite grand prize",
+  "datePublished": "2026-09-11",
+  "ruminatex": false,
+  "intro": "The AKOOL Creator Clash is a $300,000 global video competition that AKOOL launched July 21, 2026, requiring every entry to be generated with Seedance 2 exclusively inside the AKOOL platform, with submissions closing September 15, 2026 at 11:59 PM PT. The prize pool is built for breadth, not a single winner-take-all jackpot: a $30,000 grand prize called “AKOOL Favorite” sits alongside two $15,000 category awards for Most Creative and Best Ad, ten $1,000 “AKOOL Picks,” and — the part most AI video contests skip entirely — a $100 Creator Bonus paid to every single qualifying entry, capped at one per person. AKOOL founder and CEO Jiajun (Jeff) Lu framed the contest as a deliberate bet on breadth over exclusivity in the company's launch announcement: “AI is changing not only how content is created, but who gets to create it,” he said, adding that “Creator Clash is our investment in helping those creators showcase their talent.” Entry is free and open to creators worldwide who are 18 or older with a valid AKOOL account. What trips up entrants coming from other AI video platforms is the exclusivity rule: the video has to be built with Seedance 2 inside AKOOL itself, not just edited there afterward, and the finished clip needs the AKOOL logo visible somewhere in frame before you publish it anywhere. Winners are announced September 30, 2026. This guide covers the full prize structure, the four weighted judging criteria AKOOL has published, the submission mechanics that quietly disqualify entries when skipped, and a realistic plan for the days left before the deadline.",
+  "sections": [
+    {
+      "h": "The $300,000 pool and why September 15 matters",
+      "body": "AKOOL opened the Creator Clash on July 21, 2026 and closes it September 15, 2026 at 11:59 PM PT, with winners announced September 30. The timing is not incidental: Seedance 2, the ByteDance-built model the entire contest runs on, currently holds the #1 Elo rating on the Artificial Analysis Video Arena — 1,269 for text-to-video and 1,351 for image-to-video — ahead of Kling 3.0, Veo 3 and Runway Gen-4.5, and AKOOL has been rolling the model out fast, with Seedance 2.5 going live on the platform mid-contest. Running a $300,000 competition the same month a new model tops the leaderboard is a growth play as much as a filmmaking contest: AKOOL wants proof, in public, that Seedance 2 on its platform can carry real creative work, not just isolated demo clips. For entrants, that means the field is younger than a typical festival's — most creators are still learning Seedance 2's reference-file and audio-sync features — which is exactly the kind of window where craft and a clear read of the judging criteria go further than in a saturated, veteran-heavy field. With this guide published September 11, 2026, four days remain before the window closes."
+    },
+    {
+      "h": "How the $300,000 actually splits",
+      "body": "The prize is engineered to reward volume, not just one winner. “AKOOL Favorite,” the grand prize, pays $30,000 cash plus a full year of AKOOL's Enterprise subscription, official creator recognition, a featured case study and AKOOL merchandise. Below that sit two $15,000 category awards — Most Creative and Best Ad — each paired with a year of AKOOL Pro. Ten “AKOOL Picks” each receive $1,000 cash and three months of AKOOL Pro, spreading real money across a much wider group of entrants than a typical top-three festival structure. Then there is the layer that makes this contest unusual: every qualified submission, not just the winners, receives a $100 USD Creator Bonus, issued after AKOOL verifies eligibility, limited to one bonus per person regardless of how many videos you submit. That structure changes the math on whether to enter at all — a single well-made, rules-compliant video has a real floor of $100 before any judging happens, which is a meaningfully different risk profile than most zero-or-nothing AI film contests."
+    },
+    {
+      "h": "The four judging criteria, weighted",
+      "body": "AKOOL publishes exactly how entries are scored, and the weighting tells you where to spend your effort. Creativity carries 40% of the score — original concepts, unusual visual metaphors, and surprising, distinctive combinations that a judge has not seen a dozen times already. Execution and production quality carries 30%, covering visual consistency, pacing, shot composition, motion quality, continuity, timing, readability and overall polish. Storytelling carries 20%, and specifically rewards a video that shows clear narrative progression — a visible change from beginning to end, not a static mood piece. Effective use of AKOOL is the smallest slice at 10%, but it is the criterion most entrants ignore entirely: it asks whether the entry demonstrates why Seedance 2 on AKOOL was essential to the concept, not incidental to it. Read the weighting literally. Creativity and execution together are 70% of your score, so a technically clean but generic prompt-and-go clip will lose to a rougher video built around one genuinely strange, specific idea. Save the flashiest Seedance 2 feature — reference-driven character consistency, native audio-sync — for a moment in the story where it visibly serves the concept, rather than treating it as the concept itself."
+    },
+    {
+      "h": "Eligibility and what counts as an entry",
+      "body": "Entrants must be 18 or older, or the age of majority where they live, hold a valid AKOOL account, and be legally eligible to participate and receive a prize under local law. AKOOL employees, contractors and their immediate family members cannot enter, and no purchase is necessary — a free AKOOL account is enough to compete for the full $300,000. The video itself must be the creator's original work, free of unauthorized copyrighted material, and cannot contain hateful, illegal, explicit, misleading or offensive content. AKOOL reserves the right to disqualify entries for false or misleading information, third-party intellectual property infringement, engagement manipulation, contest interference, guideline violations, or duplicate and low-effort submissions — the last category is worth taking seriously given how many creators will submit a first Seedance 2 test clip rather than a deliberately built entry. Winners keep full creative ownership of their video; AKOOL receives a non-exclusive, worldwide, royalty-free license to use it for promotion, with creator attribution provided where reasonably possible."
+    },
+    {
+      "h": "The rule that disqualifies the most entries: Seedance 2, inside AKOOL, logo visible",
+      "body": "This is the single biggest trap for creators arriving from other AI video tools. Every frame of the entry has to be generated with Seedance 2 exclusively within AKOOL — not sourced elsewhere and dropped into an AKOOL project, and not built with a different model on AKOOL and passed off as Seedance 2 work. A shot pulled from Sora, Runway, Veo, Kling, Luma or any other generator and mixed into the edit puts the entire entry at risk of disqualification, the same exclusivity pattern the Higgsfield Global Film Festival enforces for its own $1,000,000 contest closing one day earlier, on September 14. On top of the platform-exclusivity rule, AKOOL requires the official AKOOL logo to be visible in a corner of the video itself before you publish it anywhere — a step easy to forget if you export straight from a Seedance 2 project without checking the branding overlay. Get both of these right before you touch social media: build entirely inside Seedance 2 on AKOOL from the first shot, and confirm the logo is burned into the export, not just present somewhere in your AKOOL workspace."
+    },
+    {
+      "h": "Where and how to submit: six platforms, one hashtag, one form",
+      "body": "Publishing your video is not the same as entering the contest, and this distinction quietly disqualifies more entries than the tool-exclusivity rule does. The official process has two separate steps. First, publish the finished video publicly on one of six eligible platforms — YouTube, TikTok, Instagram, X, LinkedIn or Facebook — with the mandatory hashtag #AkoolClash in the caption and AKOOL's official account tagged wherever the platform supports tagging; confirm the tag actually activates after you post, since a typo or a platform glitch can silently break it. Second, and separately, complete AKOOL's official Creator Clash submission form and provide the public link to your post before the deadline — publishing a video without completing the form does not constitute a complete submission, full stop. Posts must stay publicly viewable through the winner-verification period after September 30, so do not set the video to private or delete it once you have entered. If any part of the process is unclear, AKOOL's Creator Engagement Team takes questions directly at info@akool.com, including requests for feedback before you submit."
+    },
+    {
+      "h": "What Seedance 2 actually lets you do differently",
+      "body": "The judging criteria reward “smart and meaningful use” of Seedance 2, which means it is worth knowing what the model does that a generic text-to-video generator does not. Seedance 2 supports a 12-file reference system with an @mention syntax, letting you lock a specific character, style or camera movement across multiple shots instead of re-rolling and hoping for consistency — image-to-video identity hold is noticeably better than Seedance 1.0, and it is one of the few current models that renders two interacting subjects, group choreography or physical contact like sparring without limbs warping. It also does native dual-branch audio-visual generation, meaning dialogue, lip-sync and sound design can be generated in the same pass as the picture rather than layered on afterward — a real advantage for a video that needs a character to actually speak. Clips are currently capped at 15 seconds at 1080p, which is a real constraint: the strongest Creator Clash entries will be the ones that treat 15 seconds as a single, complete beat — using the reference system for a payoff shot or the audio-sync for a line of dialogue that lands — rather than trying to cram a multi-scene story into a clip that was never built to hold one."
+    },
+    {
+      "h": "Four days left: a realistic plan",
+      "body": "With the deadline landing September 15 and the guide published September 11, treat what remains as a sprint. First, lock a single concept today built for the 40% creativity weighting — one distinctive idea executed cleanly beats three generic ones. Second, build it entirely inside Seedance 2 on AKOOL from the first generation, so there is no last-minute temptation to patch in a shot from another tool. Third, use the reference-file and @mention system deliberately if your concept involves a recurring character or a specific camera move — that is the concrete evidence of “effective use of AKOOL” judges are told to look for. Fourth, confirm the AKOOL logo is burned into your export before you publish anywhere, and post with the #AkoolClash hashtag and AKOOL tagged on your chosen platform. Fifth, and most commonly missed: go to the official submission form and paste in your public post link before 11:59 PM PT on September 15 — a great video that never makes it into the form has not entered the contest. Submit with a buffer, not in the final hour, in case the form or your chosen platform is under heavier load than usual that night."
+    },
+    {
+      "h": "Bottom line",
+      "body": "The AKOOL Creator Clash pays out $300,000 built to reward more than one winner: a $30,000 AKOOL Favorite grand prize, two $15,000 category awards, ten $1,000 AKOOL Picks, and a $100 Creator Bonus that every qualifying entrant collects regardless of placement. Entry is free, judged 40% on creativity, 30% on execution, 20% on storytelling and 10% on smart use of Seedance 2, and the two rules that quietly sink entries are the platform-exclusivity requirement — every frame generated with Seedance 2 inside AKOOL, logo visible — and the two-step submission process, where publishing publicly with #AkoolClash is only half the job until the official form is filled out with your link. With September 15 four days out from this guide's publish date and winners announced September 30, the filmmakers who place will be the ones who picked one distinctive idea, built it natively in Seedance 2 without shortcuts, and treated the submission form as seriously as the video itself."
+    }
+  ],
+  "faqs": [
+    {
+      "q": "What is the total prize pool for the AKOOL Creator Clash?",
+      "a": "More than $300,000 in Creator Rewards: a $30,000 grand prize called AKOOL Favorite, two $15,000 category awards for Most Creative and Best Ad, ten $1,000 AKOOL Picks, and a $100 Creator Bonus paid to every single qualifying entry, limited to one bonus per person. Winners are announced September 30, 2026."
+    },
+    {
+      "q": "When is the AKOOL Creator Clash deadline?",
+      "a": "Submissions close September 15, 2026 at 11:59 PM PT. AKOOL launched the contest July 21, 2026, and winners are announced September 30, 2026. The deadline falls one day after the Higgsfield Global Film Festival's $1,000,000 competition, which closes September 14."
+    },
+    {
+      "q": "What AI tool do I have to use for the AKOOL Creator Clash?",
+      "a": "Every frame of the entry must be generated with Seedance 2 exclusively inside AKOOL — no other AI platform or third-party AI tool for visuals is allowed, and the video must display the official AKOOL logo visibly in a corner of the frame. Mixing in footage from Sora, Runway, Veo, Kling or any other generator risks disqualification."
+    },
+    {
+      "q": "What are the judging criteria for the AKOOL Creator Clash?",
+      "a": "Four weighted criteria: creativity, 40% (original, surprising, distinctive concepts); execution and production quality, 30% (visual consistency, pacing, composition, motion, continuity, polish); storytelling, 20% (clear narrative progression from beginning to end); and effective use of AKOOL, 10% (whether Seedance 2 on AKOOL was genuinely essential to the concept, not incidental)."
+    },
+    {
+      "q": "How do I actually submit an entry to the AKOOL Creator Clash?",
+      "a": "Two separate steps are required. First, publish your finished video publicly on YouTube, TikTok, Instagram, X, LinkedIn or Facebook with the hashtag #AkoolClash and AKOOL's official account tagged. Second, complete AKOOL's official Creator Clash submission form with the public link to your post before the deadline — publishing the video alone, without filling out the form, does not count as a complete entry."
+    },
+    {
+      "q": "Do I need a paid AKOOL subscription to enter the Creator Clash?",
+      "a": "No specific subscription tier is stated as a requirement to enter — a valid AKOOL account and no purchase are necessary to compete for the full $300,000 pool. Winners do receive subscription upgrades as part of their prize: a year of AKOOL Enterprise for the grand prize, a year of AKOOL Pro for the two category awards, and three months of AKOOL Pro for each of the ten AKOOL Picks."
+    },
+    {
+      "q": "What rights does AKOOL get to my Creator Clash video?",
+      "a": "Winners retain full creative ownership of their original work. By entering, AKOOL receives a non-exclusive, worldwide, royalty-free license to use the video for promotional purposes, with creator attribution provided where reasonably possible. AKOOL may disqualify entries for false or misleading information, third-party IP infringement, engagement manipulation, contest interference, or duplicate and low-effort submissions."
+    }
+  ],
+  "featuredContestIds": [
+    "akool-creator-clash-2026",
+    "higgsfield-global-film-festival-2026",
+    "runway-ai-film-festival-2026",
+    "chroma-awards-season-2-2026"
+  ]
+},
 }
 
 const OTHER_GUIDES = Object.keys(GUIDES)
