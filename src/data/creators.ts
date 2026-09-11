@@ -54,6 +54,26 @@ export const creators: Creator[] = [
     ],
     featuredSince: '2026-09-08',
   },
+  {
+    slug: 'ariel-kotzer',
+    name: 'Ariel Kotzer',
+    type: 'filmmaker',
+    location: 'Jerusalem, Israel',
+    website: 'https://arielko.myportfolio.com',
+    oneLiner: 'AI artist and filmmaker working "non-prompting" — minimal prompts, more room for the machine.',
+    bio:
+      'Ariel Kotzer (K&CO) is a Jerusalem-based designer, AI artist and filmmaker known for a self-described "non-prompting" approach: keeping prompts to a bare minimum so AI tools like Midjourney, Runway and Seedance have more creative freedom. ' +
+      'His film Field Notes, built from a conversation with ChatGPT about its own existence, won Best Experimental at the Rome AI Festival (RAIF) 2026. ' +
+      'His other AI film work includes a music video for Peter Gabriel\'s 5050 initiative and an ongoing "fragile" series.',
+    tags: ['ai-film', 'non-prompting', 'experimental', 'jerusalem', 'music-videos'],
+    workLinks: [
+      { title: 'Field Notes', url: 'https://arielko.myportfolio.com/field-notes' },
+      { title: 'The Human Race', url: 'https://arielko.myportfolio.com/the-human-race' },
+      { title: 'Peter Gabriel: And Still', url: 'https://arielko.myportfolio.com/pg-as', client: "Peter Gabriel's 5050 initiative" },
+    ],
+    contests: ['rome-ai-festival-2026'],
+    featuredSince: '2026-09-11',
+  },
 ]
 
 export function getCreator(slug: string): Creator | undefined {
