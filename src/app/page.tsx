@@ -529,6 +529,8 @@ export default async function Home() {
             <div className="flex items-center gap-4" style={{ fontSize: 12 }}>
               <a href="/contests/closing-soon" className="link-muted">Closing Soon</a>
               <span style={{ color: '#D8D4C9' }}>·</span>
+              <a href="/contests/free" className="link-muted">Free to Enter</a>
+              <span style={{ color: '#D8D4C9' }}>·</span>
               <a href="/submit" className="link-muted">Submit a Contest</a>
               <span style={{ color: '#D8D4C9' }}>·</span>
               <a href="/cinematic-ads" className="link-muted">Cinematic AI Ads</a>

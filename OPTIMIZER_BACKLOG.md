@@ -8,7 +8,7 @@ ships it, and marks it `[x] YYYY-MM-DD` in the same commit as the change.
 - [x] 2026-09-09 Featured creators, part 2: the backlink loop. Badge at `/badge/featured-creator.svg` (dark, indigo accent, "Featured on AI Film Contests") and a copy-paste embed snippet on every profile. Add a "Why be featured" section on /creators.
 - [x] 2026-09-11 Featured creators, recurring: added Ariel Kotzer (arielko) from `reports/creator-candidates.md` to creators.ts. At most twice a week; otherwise continue down this list. Never invent a creator or a fact about them.
 - [x] 2026-09-10 `/contests/closing-soon`: open contests with a deadline within 14 days, sorted by deadline, with the compact subscribe form. Link from homepage nav/footer and add to sitemap.ts.
-- [ ] `/contests/free`: open contests whose entry fee is free (Free, None, $0, No fee). Same layout.
+- [x] 2026-09-12 `/contests/free`: open contests whose entry fee is free (Free, None, $0, No fee). Same layout.
 - [ ] `/contests/cash-prizes`: open contests whose prize contains a currency amount. Same layout.
 - [ ] `/contests/new`: contests added in the last 14 days (created_at). Same layout.
 - [ ] `/contests/student`: open contests whose eligibility mentions students. Same layout.
