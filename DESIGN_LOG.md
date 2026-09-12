@@ -36,6 +36,60 @@ describe the old dark theme; the reasoning still applies, the colours do not.)*
 
 ---
 
+## 2026-09-12 — The subscribe card, flat, with an error state someone wrote
+
+**Changed** — the subscribe card in the homepage hero (`src/app/page.tsx`) and the
+form inside it, `src/components/EmailSubscribe.tsx`, which also appears on contest,
+topic, creator and the closing-soon and free listing pages.
+
+**Was** — the card still carried a dark-theme shadow, `0 24px 48px -12px
+rgba(0,0,0,0.6)`, plus `backdropFilter: blur(20px)`. On paper that painted a wide grey
+smear under the one form that turns a visitor into a subscriber, worst at 390px where it
+spread past the card edges. Flagged in the 2026-09-10 entry. Errors were a loose
+`text-red-400` line: pale pinkish red, 12px, on white, the colour the old dark theme used.
+The consent line was `#8B867C` and its "Unsubscribe anytime" link `#A8A296`, placeholder
+grey, so the sentence that tells you you can leave was the faintest text in the card. The
+name and email inputs had no label except the placeholder, which disappears as you type.
+
+**Now** —
+- **Flat.** No shadow, no blur. A real `#E3DED3` hairline border on white is enough to
+  hold the card on paper, the same way the spotlight card beside it sits.
+- **A written error state.** `SubscribeError` is the burnt-orange ruled block the submit
+  form got on 2026-09-09: a 2px left rule, a small-caps "Not subscribed yet" label, the
+  message in body ink, `role="alert"`. Both the full and compact forms use it, so
+  "Please agree to receive email alerts to continue" now reads as a thing to fix, not a
+  stray line.
+- **The consent line in readable grey** (`#6F6A61`), the unsubscribe link in the same
+  colour with a proper underline offset.
+- **`aria-label` on the three placeholder-only inputs.**
+
+Copy, the consent rule, the API call, the success state and every link are unchanged.
+
+**Inspiration** — Dense Discovery's homepage. Its signup is a single field fused to a
+dark button, sitting straight on the page with no card, no shadow and no box around it,
+and under it a plain line saying when the next issue goes out. The form earns attention
+by being the only control on the screen, not by floating. Adapted rather than copied: our
+card stays, because it sits in a busy hero next to the spotlight and needs an edge to
+group its heading with its fields, but it lost everything that made it float.
+
+**Noted for a later run, not done today** —
+- A copy contradiction for Abhi: this card promises an alert "7 days before any deadline
+  closes"; the three-up row just below says "one last call three days before a deadline".
+  One of them is wrong. Not touched, since it is the meaning of the copy.
+- The success state still has a boxed indigo "One quick step to guarantee delivery →"
+  panel and an em dash in its copy. Worth setting in the same ruled language.
+- The "Research agent running daily · fresh contests added 24/7" pill and the Ruminatex
+  callout below the grid still carry `backdropFilter` blurs from the dark theme.
+
+**Verified** — built locally, checked at 1440px, 390px and 375px with no horizontal
+overflow, locally and again live. Error state checked in a real browser: an email with consent unticked renders
+the "Not subscribed yet" block in `rgb(194, 65, 12)` with its 2px rule. Live checked
+after deploy.
+
+**Before / after** — `reports/design/2026-09-12-before.png`,
+`reports/design/2026-09-12-before-390.png`, `reports/design/2026-09-12-after.png`,
+`reports/design/2026-09-12-after-390.png`, `reports/design/2026-09-12-after-375.png`.
+
 ## 2026-09-11 — The featured contest, in the same deadline language as the grid
 
 **Changed** — `src/components/FeaturedSpotlight.tsx`, plus a `.spot-label` rule in
