@@ -1228,6 +1228,88 @@ const GUIDES: Record<string, GuideData> = {
     "chroma-awards-season-2-2026"
   ]
 },
+  "how-to-submit-to-we-are-human-festival-2026": {
+  "title": "How to Submit to the We Are Human Festival 2026: The AI Human-Rights Film Prize With a Mandatory Ethics Notebook",
+  "description": "The We Are Human Festival is a free-to-enter Paris film prize that pays €10,000 across three awards — a €5,000 Grand Prix, a €3,000 Best Screenplay prize and a €2,000 Ethics Award — for 1-to-10-minute human/AI hybrid films that interpret Article 1 of the Universal Declaration of Human Rights, with submissions closing September 30, 2026 on FilmFreeway. Every entry requires a mandatory four-question Ethics Notebook disclosing which AI tools were used and what ethical tensions came up, fully AI-generated work with no human direction is disqualified outright, and the 20 selected films do not just screen once: they tour Paris's Forum des Images on November 24 and then seven more cities — São Paulo, New York, Nairobi, Johannesburg, Mumbai, Quito and Geneva — through March 2027. Here is the eligibility line that trips up most AI-only entrants, the Ethics Notebook broken down question by question, and the 18-day plan to get a film in before the deadline.",
+  "keywords": "We Are Human Festival, how to submit We Are Human Festival, We Are Human Festival deadline, We Are Human Festival prize, AI human rights film festival, Ethics Notebook AI film, Article 1 Universal Declaration of Human Rights film, Forum des Images AI festival, We Are Human Festival FilmFreeway, human AI hybrid film contest 2026",
+  "datePublished": "2026-09-12",
+  "ruminatex": false,
+  "intro": "The We Are Human Festival is a new Paris-based film prize, launched in 2026 by the nonprofit We Are Human, that pays €10,000 across three awards for short films exploring artificial intelligence through the lens of human rights — and it is built to run for three decades, one Universal Declaration of Human Rights article at a time. The inaugural 2026 edition is dedicated to Article 1 (\"all human beings are born free and equal in dignity and rights\"), and it wants films between 1 and 10 minutes long, submitted free of charge through FilmFreeway before the window closes September 30, 2026 at 11:59 PM. Entry is open to anyone 18 or older, anywhere in the world, with no film-school background required — the organizers say explicitly that \"no specific training is required.\" What makes this festival different from the typical AI showcase is the eligibility line most entrants miss: films must be human/AI hybrid works, and anything generated solely by AI without human creative direction is disqualified outright. Every submission also carries a mandatory Ethics Notebook, a four-question disclosure that becomes part of the work itself and is discussed on stage alongside the film. Selected films do not just screen once in Paris — they tour seven more cities on four continents through March 2027. This guide covers exactly who is behind the festival, how the €10,000 splits, what the Ethics Notebook actually asks, how to interpret Article 1 without writing a philosophy thesis, and a realistic plan for the days remaining before the deadline.",
+  "sections": [
+    {
+      "h": "Who is running this, and why a 30-year festival",
+      "body": "We Are Human is a French nonprofit (association loi 1901, recognized as serving the public interest, registered in Saint-Mandé, France) founded in 2025 by Michael Swierczynski and Elsa Swierczynski, who also co-run the cultural engineering studio Dream Feel Factory. Swierczynski's prior credits include founding the Paris Virtual Film Festival and the NewImages Festival — by his own account the world's first event dedicated to immersive experiences — plus stints at INA and the Forum des Images, which is now the festival's home venue. The organization's stated ambition is unusually long: the festival is structured as a 30-year trajectory built around the 30 articles of the Universal Declaration of Human Rights, one article explored per edition. The 2026 edition, the first, is dedicated to Article 1. That framing matters for entrants because it is not a technology showcase judged on which model you used — it is explicitly an \"artistic and committed festival,\" and the organizers say plainly on the call-for-films page that We Are Human \"is not a technology festival.\" Charlotte Billy leads international coordination, bringing a decade of experience running the French government's cultural \"Saisons\" programs across Croatia, Colombia, Romania, Portugal and Lithuania, which explains the festival's unusually ambitious eight-city international rollout for a first-year event."
+    },
+    {
+      "h": "The €10,000 prize pool, split three ways",
+      "body": "Participation is completely free, and the total prize pool is €10,000, funded directly by We Are Human as part of its nonprofit charitable mission rather than by a corporate sponsor. It splits into three named awards: the Grand Prix at €5,000, the Prize for Best Screenplay at €3,000, and the Ethics Award at €2,000. The existence of a dedicated Ethics Award — worth more than many entire AI festivals pay their top prize — is the clearest signal of what this jury actually rewards: not the flashiest generative effects, but the clearest, most honest account of how AI was used and what tradeoffs that involved. A jury described as sitting \"at the crossroads of creation, media and innovation\" makes the selection; the 20 shortlisted films beyond the three winners still receive what the festival calls the bigger prize — international theatrical screenings, audience meet-and-greets and visibility with cultural institutions in eight cities, which for a first-time short film is a distribution outcome most paid festivals do not offer at any prize tier."
+    },
+    {
+      "h": "The eligibility rule that disqualifies pure AI-generated entries",
+      "body": "Read the eligibility line twice before you submit anything: work must be \"human/AI hybrid creation,\" and works generated solely by AI without human creative direction are not eligible. This is the opposite filter from most AI film contests, which exist specifically to showcase what a model can generate on its own. Here, AI is explicitly a tool in service of a human vision — the call-for-films page puts it as \"AI... is there to amplify your vision, not replace it.\" Beyond that hybrid requirement: films must be original works completed on or after June 1, 2025, running 1 to 10 minutes, in any form — fiction, documentary, experimental work, video poem or audiovisual essay all qualify, as long as the film engages with \"the contemporary transformations linked to artificial intelligence.\" Entrants must be 18 or older, from anywhere in the world, and each creator may submit a maximum of two works to the 2026 edition, with each submission requiring its own separate Ethics Notebook. There is no fee at any stage."
+    },
+    {
+      "h": "The Ethics Notebook: four questions, mandatory, part of the work itself",
+      "body": "Every single submission requires an Ethics Notebook — the festival calls it \"four questions, ten minutes\" — and it is not a formality tucked into the entry form; it is presented alongside the film during screenings and feeds directly into the festival's public panel discussions. The four questions are fixed. One: what AI tools did you use — image, video, sound, text or voice — naming the main tools (Runway, Midjourney, ElevenLabs and Suno are the festival's own examples) without needing to be exhaustive. Two: how would you describe the human's role in the process — AI as assistant, a human/AI dialogue, AI as raw material with the human as editor, or open experimentation. Three: what ethical tensions came up — bias, representation, data origins, environmental impact or authorship — and the festival is explicit that \"none at all\" is also a valid answer. Four: how does the film connect to Article 1 specifically. Crucially, the organizers state that \"no answer is eliminatory\" — the notebook is not a hidden second round of judging, it is a transparency document that becomes an artistic artifact in its own right, and the compiled notebooks are intended for publication after the festival as what the organizers call a collective archive of committed AI creation."
+    },
+    {
+      "h": "Interpreting Article 1 without writing a thesis",
+      "body": "The full text of Article 1 reads: \"All human beings are born free and equal in dignity and rights. They are endowed with reason and conscience and should act towards one another in a spirit of brotherhood.\" That is a lot of abstraction to compress into 10 minutes, so the festival itself offers three concrete entry points worth using directly. Freedom, framed as \"against the machine\": a character who switches off their GPS, ignores an algorithm's suggestion, or simply looks up at the sky instead of a screen. Brotherhood, framed as \"the encounter\": two strangers with nothing in common who cross paths, meet each other's eyes, and share an unscripted moment of kindness, with AI used to translate their inner worlds or make the moment visually unforgettable. Dignity, framed as \"the everyday\": turning the camera on an unseen worker to show that every person carries the same worth regardless of social position. The organizers are explicit that none of this requires a big budget, a film crew or philosophical density — their own guidance is \"keep it simple, make it matter,\" built around a look, a gesture, a contrast or an encounter, with AI amplifying a real story rather than manufacturing a hypothetical one."
+    },
+    {
+      "h": "The submission timeline and where films actually go",
+      "body": "The call opened June 1, 2026 and closes September 30, 2026. The official selection is announced October 20, 2026, and the festival and awards ceremony takes place November 24, 2026 at the Forum des Images in Paris — a single day combining screenings, conferences, workshops, filmmaker meetings and the evening awards ceremony, itself free and open to the public. That is not the end of the film's life: the 20 selected projects then tour internationally from December 2026 through March 2027, with confirmed dates in São Paulo (December 10, 2026), New York (December 17, 2026), Nairobi (January 20, 2027), Johannesburg (January 28, 2027), Mumbai (February 26–28, 2027), Quito (March 2027) and Geneva (March 2027). Submission itself happens entirely through FilmFreeway, which the festival says it uses specifically \"to ensure a secure, transparent, and fair submission process\" — there is no separate proprietary upload system to navigate, unlike some AI festivals that route entries through a platform-specific dashboard."
+    },
+    {
+      "h": "How it compares to the rest of the AI festival calendar",
+      "body": "Most of 2026's highest-profile AI film competitions — the Astana International AI Film Festival, the Higgsfield Global Film Festival, the now-closed Future Vision XPRIZE — are built around a single large cash prize and, in several cases, a platform-exclusivity rule requiring every frame to come from one specific AI tool. We Are Human Festival is a deliberate inversion on both counts. The money is smaller (€10,000 against Higgsfield's $1,000,000 or the XPRIZE's $3.5 million-plus) but the eligibility bar rewards restraint over spectacle: any AI tool is acceptable as one ingredient in a human-directed work, and the value proposition is not a jackpot but eight cities of guaranteed screenings for the shortlist, not just the three winners. For filmmakers whose AI film leans documentary, essay-driven or quietly personal rather than genre spectacle — work that would struggle to stand out against a Higgsfield action-scene reel or an XPRIZE sci-fi trailer — this is a competition built for exactly that register, and a considerably less crowded one this early in its history: as a first-year festival with modest press coverage so far, competition for the shortlist is likely to be lighter than at established names."
+    },
+    {
+      "h": "18 days out: a realistic submission plan",
+      "body": "With the deadline landing September 30, 2026 and this guide published September 12, treat the next 18 days as enough time to build something deliberate rather than rushed. First, pick your Article 1 lens now — freedom, brotherhood or dignity — and write the single moment your film hinges on before opening any AI tool. Second, shoot or source your human-directed footage or concept first, and bring in AI deliberately — for imagery, sound, music or text — as amplification rather than the starting point, since the hybrid requirement is the one rule that disqualifies entries outright. Third, keep it inside the 1-to-10-minute window and confirm your material was completed on or after June 1, 2025. Fourth, draft your Ethics Notebook alongside the edit, not after it — the four questions are short, but naming your tools and tensions honestly takes real thought, and a rushed notebook written the night of the deadline will read that way to the jury. Fifth, submit through FilmFreeway with a buffer before the September 30, 11:59 PM cutoff, and remember you may enter up to two separate works, each with its own Ethics Notebook."
+    },
+    {
+      "h": "Bottom line",
+      "body": "The We Are Human Festival pays €10,000 across a Grand Prix, a Best Screenplay prize and an Ethics Award for free-to-enter, 1-to-10-minute human/AI hybrid films that engage with Article 1 of the Universal Declaration of Human Rights, with submissions closing September 30, 2026 on FilmFreeway. The rule that catches the most AI-only entrants is the hybrid requirement — fully AI-generated work without human creative direction does not qualify — and every submission needs a mandatory four-question Ethics Notebook that becomes part of the work itself, not a footnote. What the festival lacks in prize size next to Astana or Higgsfield, it makes up for in reach: the shortlist of 20 tours Paris plus seven more cities across four continents through March 2027, a distribution outcome most single-city festivals cannot match. For filmmakers making quiet, human-directed, ethically transparent AI work rather than tool-showcase spectacle, this is the most natural home on the 2026 calendar, and with 18 days left and a lighter first-year field, one of the better odds available."
+    }
+  ],
+  "faqs": [
+    {
+      "q": "When is the We Are Human Festival 2026 submission deadline?",
+      "a": "The call for films opened June 1, 2026 and closes September 30, 2026 at 11:59 PM. Submissions go through FilmFreeway. The official selection is announced October 20, 2026, and the festival and awards ceremony takes place November 24, 2026 at the Forum des Images in Paris."
+    },
+    {
+      "q": "What is the prize for the We Are Human Festival?",
+      "a": "A total of €10,000 split across three awards: the Grand Prix (€5,000), the Prize for Best Screenplay (€3,000), and the Ethics Award (€2,000). Prizes are funded directly by We Are Human, a French nonprofit, as part of its charitable mission. Participation is free."
+    },
+    {
+      "q": "Do I need to use AI to enter the We Are Human Festival?",
+      "a": "Yes, but only as part of a human-directed process. The festival requires human/AI hybrid creation — works generated solely by AI without human creative direction are not eligible. AI can be used for image, sound, music or text generation, but it must amplify a human vision rather than replace it entirely."
+    },
+    {
+      "q": "What is the Ethics Notebook and is it mandatory?",
+      "a": "Yes, it's mandatory for every submission. It's a four-question disclosure covering which AI tools you used, the human's role in the process, any ethical tensions you encountered, and how the film connects to Article 1 of the Universal Declaration of Human Rights. It's presented alongside the film at screenings and feeds into public panel discussions. No answer is eliminatory."
+    },
+    {
+      "q": "Where do I submit my film to the We Are Human Festival?",
+      "a": "Through FilmFreeway, which the festival uses to keep the submission process secure, transparent and fair. There is no separate proprietary upload platform. Search \"We Are Human Festival\" on FilmFreeway to find the official listing."
+    },
+    {
+      "q": "How many films can I submit to the We Are Human Festival?",
+      "a": "Each creator may submit a maximum of two works to the 2026 edition. Each submission is treated separately and requires its own Ethics Notebook."
+    },
+    {
+      "q": "Where does the We Are Human Festival screen after Paris?",
+      "a": "The 20 selected films tour internationally from December 2026 through March 2027: São Paulo (December 10, 2026), New York (December 17, 2026), Nairobi (January 20, 2027), Johannesburg (January 28, 2027), Mumbai (February 26–28, 2027), Quito (March 2027) and Geneva (March 2027), in addition to the Paris premiere on November 24, 2026 at the Forum des Images."
+    }
+  ],
+  "featuredContestIds": [
+    "we-are-human-festival-call-for-films-2026",
+    "festiav-valencia-2026",
+    "call-for-films-ai-2026",
+    "runway-ai-film-festival-2026"
+  ]
+},
 }
 
 const OTHER_GUIDES = Object.keys(GUIDES)
