@@ -277,13 +277,10 @@ export default async function Home() {
                 {/* Subscribe card */}
                 <div id="subscribe" style={{ maxWidth: 420 }}>
                   <div style={{
-                    border: '1px solid rgba(27,25,22,0.08)',
+                    border: '1px solid #E3DED3',
                     borderRadius: 16,
                     padding: '24px 24px',
                     background: '#FFFFFF',
-                    backdropFilter: 'blur(20px)',
-                    WebkitBackdropFilter: 'blur(20px)',
-                    boxShadow: '0 0 0 1px rgba(99,102,241,0.06), 0 24px 48px -12px rgba(0,0,0,0.6), inset 0 1px 0 rgba(27,25,22,0.04)',
                   }}>
                     <div style={{ fontSize: 10, color: '#4f46e5', fontFamily: 'Space Grotesk, sans-serif', fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: 8 }}>
                       Free alerts

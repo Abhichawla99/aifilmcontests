@@ -2,6 +2,17 @@
 
 import { useState } from 'react'
 
+function SubscribeError({ message }: { message: string }) {
+  return (
+    <div role="alert" style={{ marginTop: 12, borderLeft: '2px solid #C2410C', padding: '1px 0 1px 12px' }}>
+      <div style={{ fontFamily: 'Space Grotesk, sans-serif', fontSize: 10.5, fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase', color: '#C2410C', marginBottom: 3 }}>
+        Not subscribed yet
+      </div>
+      <p style={{ fontSize: 13, lineHeight: 1.5, color: '#3E3A33', margin: 0 }}>{message}</p>
+    </div>
+  )
+}
+
 export default function EmailSubscribe({ compact = false }: { compact?: boolean }) {
   const [name,    setName]    = useState('')
   const [email,   setEmail]   = useState('')
@@ -97,6 +108,7 @@ export default function EmailSubscribe({ compact = false }: { compact?: boolean 
               value={email}
               onChange={e => setEmail(e.target.value)}
               placeholder="your@email.com"
+              aria-label="Email address"
               required
               className="input flex-1"
               style={{ padding: '9px 12px', fontSize: '13px' }}
@@ -112,12 +124,12 @@ export default function EmailSubscribe({ compact = false }: { compact?: boolean 
               onChange={e => { setConsent(e.target.checked); if (status === 'error') { setStatus('idle'); setMessage('') } }}
               style={{ marginTop: '2px', accentColor: '#4f46e5', flexShrink: 0 }}
             />
-            <span style={{ fontSize: '11px', color: '#8B867C', lineHeight: 1.5 }}>
+            <span style={{ fontSize: '11px', color: '#6F6A61', lineHeight: 1.5 }}>
               I agree to receive email alerts about AI film contests. Unsubscribe anytime.
             </span>
           </label>
         </form>
-        {status === 'error' && <p className="mt-2 text-xs text-red-400">{message}</p>}
+        {status === 'error' && <SubscribeError message={message} />}
       </div>
     )
   }
@@ -131,6 +143,7 @@ export default function EmailSubscribe({ compact = false }: { compact?: boolean 
           value={name}
           onChange={e => setName(e.target.value)}
           placeholder="First name"
+          aria-label="First name"
           className="input"
         />
         <input
@@ -138,6 +151,7 @@ export default function EmailSubscribe({ compact = false }: { compact?: boolean 
           value={email}
           onChange={e => setEmail(e.target.value)}
           placeholder="Email address"
+          aria-label="Email address"
           required
           className="input"
         />
@@ -150,9 +164,9 @@ export default function EmailSubscribe({ compact = false }: { compact?: boolean 
             onChange={e => { setConsent(e.target.checked); if (status === 'error') { setStatus('idle'); setMessage('') } }}
             style={{ marginTop: '2px', accentColor: '#4f46e5', flexShrink: 0, width: '14px', height: '14px' }}
           />
-          <span style={{ fontSize: '12px', color: '#8B867C', lineHeight: 1.55 }}>
+          <span style={{ fontSize: '12px', color: '#6F6A61', lineHeight: 1.55 }}>
             I agree to receive email alerts about AI film contests.{' '}
-            <a href="/unsubscribe" style={{ color: '#A8A296', textDecoration: 'underline' }}>
+            <a href="/unsubscribe" style={{ color: '#6F6A61', textDecoration: 'underline', textUnderlineOffset: 2 }}>
               Unsubscribe anytime.
             </a>
           </span>
@@ -175,7 +189,7 @@ export default function EmailSubscribe({ compact = false }: { compact?: boolean 
           ) : 'Get Contest Alerts'}
         </button>
       </form>
-      {status === 'error' && <p className="mt-2 text-xs text-red-400">{message}</p>}
+      {status === 'error' && <SubscribeError message={message} />}
     </div>
   )
 }
