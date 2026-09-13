@@ -287,3 +287,41 @@ img, svg, video, canvas { max-width: 100%; }
   letter-spacing: 0.08em; text-transform: uppercase;
   margin-bottom: 6px;
 }
+
+/* ── 404: site chrome kept, a plain statement, then ruled ways out ─────────── */
+.nf-wrap { padding-top: 64px; padding-bottom: 88px; }
+.nf-head { display: grid; grid-template-columns: minmax(0, 1fr) 200px; gap: 48px; align-items: end; }
+.nf-label {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 11px; font-weight: 600; color: #C2410C;
+  letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 14px;
+}
+.nf-title {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: clamp(30px, 5vw, 44px); font-weight: 600; line-height: 1.08;
+  letter-spacing: -0.025em; color: #1B1916; max-width: 16ch;
+}
+.nf-body { margin-top: 16px; max-width: 52ch; font-size: 16px; line-height: 1.65; color: #3E3A33; }
+.nf-drawing { width: 200px; height: 150px; }
+.nf-list { list-style: none; margin: 44px 0 0; padding: 0; border-top: 1px solid #1B1916; }
+.nf-list li { border-bottom: 1px solid #E3DED3; }
+.nf-row {
+  display: flex; align-items: center; justify-content: space-between; gap: 16px;
+  padding: 16px 0; min-height: 44px; text-decoration: none;
+}
+.nf-row-title {
+  display: block; font-family: 'Space Grotesk', sans-serif;
+  font-size: 18px; font-weight: 600; color: #1B1916; letter-spacing: -0.01em;
+  transition: color 0.15s;
+}
+.nf-row-note { display: block; margin-top: 2px; font-size: 14px; color: #6F6A61; }
+.nf-row-arrow { font-size: 18px; color: #A8A296; transition: transform 0.15s, color 0.15s; }
+.nf-row:hover .nf-row-title { color: #4F46E5; }
+.nf-row:hover .nf-row-arrow { color: #4F46E5; transform: translateX(3px); }
+@media (max-width: 640px) {
+  .nf-wrap { padding-top: 40px; padding-bottom: 56px; }
+  .nf-head { grid-template-columns: 1fr; gap: 0; }
+  /* On a phone the drawing would push the ways out below the fold. */
+  .nf-drawing { display: none; }
+  .nf-list { margin-top: 32px; }
+}
