@@ -9,7 +9,7 @@ ships it, and marks it `[x] YYYY-MM-DD` in the same commit as the change.
 - [x] 2026-09-11 Featured creators, recurring: added Ariel Kotzer (arielko) from `reports/creator-candidates.md` to creators.ts. At most twice a week; otherwise continue down this list. Never invent a creator or a fact about them.
 - [x] 2026-09-10 `/contests/closing-soon`: open contests with a deadline within 14 days, sorted by deadline, with the compact subscribe form. Link from homepage nav/footer and add to sitemap.ts.
 - [x] 2026-09-12 `/contests/free`: open contests whose entry fee is free (Free, None, $0, No fee). Same layout.
-- [ ] `/contests/cash-prizes`: open contests whose prize contains a currency amount. Same layout.
+- [x] 2026-09-13 `/contests/cash-prizes`: open contests whose prize contains a currency amount. Same layout.
 - [ ] `/contests/new`: contests added in the last 14 days (created_at). Same layout.
 - [ ] `/contests/student`: open contests whose eligibility mentions students. Same layout.
 - [ ] Trust signal: show "Verified <date>" (from updated_at) on ContestCard and on the contest page near the deadline.
