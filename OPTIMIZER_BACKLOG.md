@@ -10,19 +10,21 @@ ships it, and marks it `[x] YYYY-MM-DD` in the same commit as the change.
 - [x] 2026-09-10 `/contests/closing-soon`: open contests with a deadline within 14 days, sorted by deadline, with the compact subscribe form. Link from homepage nav/footer and add to sitemap.ts.
 - [x] 2026-09-12 `/contests/free`: open contests whose entry fee is free (Free, None, $0, No fee). Same layout.
 - [x] 2026-09-13 `/contests/cash-prizes`: open contests whose prize contains a currency amount. Same layout.
-- [ ] `/contests/new`: contests added in the last 14 days (created_at). Same layout.
-- [ ] `/contests/student`: open contests whose eligibility mentions students. Same layout.
-- [ ] Trust signal: show "Verified <date>" (from updated_at) on ContestCard and on the contest page near the deadline.
-- [ ] Every /topics, /guide, /tools, /vs, /prize, /location, /categories page ends with the compact subscribe form if it does not already.
 - [ ] Contest page: an inline "Get a reminder 3 days before this deadline" subscribe block next to the deadline.
-- [ ] Paid featured listings: when a contest has featuredUntil in the future, show a "Featured" pill on ContestCard and the contest page.
+- [ ] Point guides at the kept contest rows so the weekly merge can delete the duplicates. In `src/app/guide/[slug]/page.tsx` swap `astana-ai-film-festival-2026` → `astana-aiff-2026`, `call-for-films-ai-2026` → `we-are-human-festival-call-for-films-2026`, `baiff-2026` → `burano-baiff-italy-2026` (drop the old id where the kept one is already in the same list). Evidence: 13 duplicate groups flagged this week; these 3 extras could not be removed because pages cite them.
+- [ ] `scripts/find-duplicate-contests.mjs`: read contests from Supabase, group rows whose names match after stripping year/edition/punctuation or whose url domain + deadline match, and print `DUPLICATE: keep <most complete id> — extras <ids>`. Read-only, no writes. Evidence: research, seo and weekly runs flagged the same groups 4 days running and disagreed on which row to keep (FilmFreeway vs Festhome vs own-domain mirrors).
+- [ ] Trust signal: show "Verified <date>" (from updated_at) on ContestCard and on the contest page near the deadline.
+- [ ] `/contests/new`: contests added in the last 14 days (created_at). Same layout.
+- [ ] Every /topics, /guide, /tools, /vs, /prize, /location, /categories page ends with the compact subscribe form if it does not already.
+- [ ] Contest page: "Related contests" block with 3 open contests sharing a tool or category.
+- [ ] Default Open Graph image (`app/opengraph-image.tsx`) so shared links show a card.
+- [ ] FAQPage JSON-LD on the homepage: what counts as an AI film, are there free contests, how alerts work.
 - [ ] Mobile pass at 375px: homepage hero, ticker and subscribe form must not overflow; tap targets at least 40px.
 - [ ] Performance: lazy-load or disable MouseOrbs and BackgroundFX on mobile; make sure no image is unoptimized.
-- [ ] Default Open Graph image (`app/opengraph-image.tsx`) so shared links show a card.
-- [ ] Contest page: "Related contests" block with 3 open contests sharing a tool or category.
-- [ ] FAQPage JSON-LD on the homepage: what counts as an AI film, are there free contests, how alerts work.
-- [ ] `/feature` page: a short "How it works" (pay, we pin it within a day, 30 days) and a real example screenshot of the spotlight.
 - [ ] IndexNow key file and an IndexNow ping for new pages (then note it for the seo robot in robots/RESEARCH_QUERIES.md).
+- [ ] `/contests/student`: open contests whose eligibility mentions students. Same layout.
+- [ ] `/feature` page: a short "How it works" (pay, we pin it within a day, 30 days) and a real example screenshot of the spotlight.
+- [ ] Paid featured listings: when a contest has featuredUntil in the future, show a "Featured" pill on ContestCard and the contest page.
 
 When the backlog is empty: check Vercel Analytics for the aifilmcontests project (top
 pages, where signups come from) and add three evidence-based items instead of guessing.
