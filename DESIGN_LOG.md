@@ -36,6 +36,60 @@ describe the old dark theme; the reasoning still applies, the colours do not.)*
 
 ---
 
+## 2026-09-13 — A 404 page with the site still around it
+
+**Changed** — new `src/app/not-found.tsx`, plus a `.nf-*` block at the end of
+`globals.css`. It renders for every unknown URL and every `notFound()` call on the site:
+contests, guides, topics, tools, vs, prize, location, categories and creators.
+
+**Was** — the default Next.js 404. Pure white `#FFFFFF`, not paper, with "404 | This page
+could not be found." centred in the middle of an empty screen. No nav, no logo, no link
+anywhere, so the only way out was the back button. That matters more than it sounds: the
+weekly review merges duplicate contest rows, so an old contest link in a subscriber's
+inbox, a guide, or a search result can point at an id that no longer exists. Those
+visitors already wanted a contest, and the site dropped them on a blank page.
+
+**Now** —
+- **The site chrome stays.** The page uses `InnerLayout`, so the header nav and the
+  footer (with Submit a Contest) are there, on paper.
+- **A plain statement, in the house order.** A burnt-orange small-caps label
+  ("404 · Page not found"), the same label colour the submit and subscribe error blocks
+  use; a Space Grotesk headline at up to 44px with tight tracking; one sentence of body
+  saying the likely reason, a moved or merged listing, which is true of how this site works.
+- **Four ruled ways back in,** under a dark hairline like the hero figures: browse every
+  contest, closing soon, free to enter, submit a contest. Each row is a title and a
+  one-line note, with an arrow that turns indigo and nudges right on hover. Rows are at
+  least 44px tall for a thumb, and keep the global indigo focus ring.
+- **The clapperboard drawing** from `Illustrations.tsx` sits beside the headline on
+  desktop and is dropped below 640px, where it would push the links under the fold.
+
+No data, no existing copy, no URLs and no other page changed.
+
+**Inspiration** — Are.na's 404. It keeps the full header and search, then says only a
+small orange "Error", a plain "Page not found", and one sentence where the ways out
+(Home, Explore, About, Help) are the bold words inside the sentence. No illustration
+of a lost astronaut, no joke. The page's job is to hand you back to the site. Also
+looked at Mubi ("Nothing to see here" and one Now Showing button) and Metrograph (a
+search box). Adapted rather than copied: a directory has more than one sensible way
+back in, so ours are ruled rows with a note each rather than inline links, set in the
+same hairline language as the hero figures and the spotlight.
+
+**Noted for a later run, not done today** —
+- At 390px the `InnerLayout` nav wraps to two rows of six links under the logo, about
+  200px of header before any content on every inner page. Worth a compact phone nav.
+- `InnerLayout`'s logo mark still uses the indigo-to-violet gradient and a
+  `backdropFilter: blur(16px)` header, both dark-theme leftovers.
+- Still open from earlier entries: the `.agent-badge` pill wrap and glow at 390px, and the
+  "Free entry" tab sitting alone on a second row.
+
+**Verified** — built locally, checked at 1440px, 390px and 375px on `next start`, then
+live at the same three widths. No horizontal overflow at any width. The page returns a
+real HTTP 404, not a 200, so search engines still drop dead URLs.
+
+**Before / after** — `reports/design/2026-09-13-before.png`,
+`reports/design/2026-09-13-before-390.png`, `reports/design/2026-09-13-after.png`,
+`reports/design/2026-09-13-after-390.png`, `reports/design/2026-09-13-after-375.png`.
+
 ## 2026-09-12 — The subscribe card, flat, with an error state someone wrote
 
 **Changed** — the subscribe card in the homepage hero (`src/app/page.tsx`) and the
