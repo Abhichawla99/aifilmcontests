@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { supabaseAdmin } from '@/lib/supabase'
-import { buildBundleEmail, sendToRecipients, type Recipient, type ContestEmailItem } from '@/lib/email'
-import { isMissingRelation, logAgentRun } from '@/lib/db-health'
+import { buildBundleEmail, recordSends, sendToRecipients, type Recipient, type ContestEmailItem } from '@/lib/email'
+import { isMissingRelation, logAgentRun, withDbRetry } from '@/lib/db-health'
 
 // Vercel Cron — the ONLY thing that emails subscribers. Runs once a day.
 //
@@ -53,12 +53,26 @@ export async function GET(request: NextRequest) {
   const dayStartUtc = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate()))
   const isMonday = now.getUTCDay() === 1
 
+  const read = { attempts: 3, timeoutMs: 15_000, backoffMs: [2_000, 5_000] }
   const [subsRes, openRes, sendsRes] = await Promise.all([
-    supabaseAdmin.from('subscribers').select('email,name,unsubscribe_token,created_at').eq('confirmed', true),
-    supabaseAdmin.from('contests').select(SELECT).eq('status', 'open').gte('deadline', today).order('deadline'),
-    supabaseAdmin.from('email_sends').select('recipient,sent_at,contest_ids,email_type')
-      .gte('sent_at', addDays(now, -45).toISOString()).order('sent_at', { ascending: false }).limit(20000),
+    withDbRetry(s => supabaseAdmin.from('subscribers').select('email,name,unsubscribe_token,created_at').eq('confirmed', true).abortSignal(s), read),
+    withDbRetry(s => supabaseAdmin.from('contests').select(SELECT).eq('status', 'open').gte('deadline', today).order('deadline').abortSignal(s), read),
+    withDbRetry(s => supabaseAdmin.from('email_sends').select('recipient,sent_at,contest_ids,email_type')
+      .gte('sent_at', addDays(now, -45).toISOString()).order('sent_at', { ascending: false }).limit(20000).abortSignal(s), read),
   ])
+
+  // A failed read is not an empty list (on Sep 12 a timeout got logged as
+  // "No confirmed subscribers"). And without the send history we can't tell who
+  // already got what, so sending anyway would mean duplicates. Stop and say why.
+  const unreadable = subsRes.error ? `subscribers (${subsRes.error.message})`
+    : openRes.error ? `contests (${openRes.error.message})`
+    : sendsRes.error && !isMissingRelation(sendsRes.error) ? `send history (${sendsRes.error.message})`
+    : null
+  if (unreadable) {
+    const why = `Couldn't read the ${unreadable} from Supabase, so nobody was emailed. Tomorrow's run tries again.`
+    await logAgentRun('notify', 'failed', why)
+    return NextResponse.json({ ok: false, error: why }, { status: 500 })
+  }
 
   const subs = (subsRes.data ?? []) as SubRow[]
   const open = (openRes.data ?? []) as Row[]
@@ -66,7 +80,6 @@ export async function GET(request: NextRequest) {
     await logAgentRun('notify', 'skipped', 'No confirmed subscribers')
     return NextResponse.json({ ok: true, skipped: true, reason: 'No subscribers' })
   }
-  if (sendsRes.error && !isMissingRelation(sendsRes.error)) console.error('[notify] email_sends read failed:', sendsRes.error.message)
   const sends = (sendsRes.data ?? []) as SendRow[]
 
   // What each person has already been told, and when we last wrote to them
@@ -145,9 +158,24 @@ export async function GET(request: NextRequest) {
     contestIds: r => byEmail.get(r.email)!.contestIds,
   })
 
+  // Sent but not on record (Sep 13: 80 of them). Give Supabase another minute.
+  // If it still won't take them, print the rows so they can be added by hand
+  // before tomorrow's run emails these people a second time.
+  let unrecorded = result.unrecorded ?? []
+  if (unrecorded.length && await recordSends(unrecorded, { attempts: 3, timeoutMs: 10_000, backoffMs: [20_000, 40_000] })) unrecorded = []
+  if (unrecorded.length) console.error(`[notify] UNRECORDED_SENDS ${JSON.stringify(unrecorded)}`)
+
   const stillWaiting = waiting + result.failed
   const backlogDays = DAILY_BUDGET > 0 ? Math.ceil(stillWaiting / DAILY_BUDGET) : 0
-  const details = { sent: result.sent, failed: result.failed, waiting: stillWaiting, backlogDays, dailyBudget: DAILY_BUDGET, sentTodayBefore: sentToday, new: uniq(0), soon: uniq(1), week: uniq(2), quota: !!result.quotaExceeded }
+  const details = { sent: result.sent, failed: result.failed, waiting: stillWaiting, backlogDays, dailyBudget: DAILY_BUDGET, sentTodayBefore: sentToday, new: uniq(0), soon: uniq(1), week: uniq(2), quota: !!result.quotaExceeded, unrecorded: unrecorded.length }
+
+  if (result.recordFailed) {
+    const why = unrecorded.length
+      ? `Emailed ${result.sent} people, then Supabase wouldn't save the send log, so sending paused and ${stillWaiting} people wait for tomorrow. ${unrecorded.length} of those sends are still unsaved: add them to email_sends from the Vercel log line [notify] UNRECORDED_SENDS or those people get the same email again tomorrow.`
+      : `Emailed ${result.sent} people, then paused because Supabase was slow to save the send log (it saved on a retry). ${stillWaiting} people wait for tomorrow.`
+    await logAgentRun('notify', unrecorded.length ? 'failed' : 'ok', why, details)
+    return NextResponse.json({ ok: !unrecorded.length, ...details, reason: why }, { status: unrecorded.length ? 500 : 200 })
+  }
 
   if (result.quotaExceeded) {
     const why = result.sent > 0

@@ -1,6 +1,6 @@
 import { Resend } from 'resend'
 import { supabaseAdmin } from './supabase'
-import { isMissingRelation } from './db-health'
+import { isMissingRelation, withDbRetry, type DbRetryOptions } from './db-health'
 
 const FROM_EMAIL = process.env.FROM_EMAIL || 'contests@updates.aifilmcontests.com'
 const REPLY_TO   = process.env.REPLY_TO_EMAIL || 'hello@aifilmcontests.com'
@@ -41,6 +41,18 @@ export interface SendResult {
   failed: number
   quotaExceeded?: boolean
   error?: unknown
+  /** A batch went out but email_sends wouldn't take the record, so sending stopped there. */
+  recordFailed?: boolean
+  /** Rows for emails that went out but aren't in email_sends yet. Record them or these people get it twice. */
+  unrecorded?: SendLogRow[]
+}
+
+export interface SendLogRow {
+  email_type: string
+  recipient: string
+  subject: string
+  resend_email_id: string | null
+  contest_ids: string[] | null
 }
 
 function normalizeRecipients(subs: Array<string | Recipient>): Recipient[] {
@@ -173,16 +185,17 @@ function isQuotaError(err: unknown): boolean {
   return s.includes('quota') || e.statusCode === 429
 }
 
-async function logSends(rows: Array<{
-  email_type: string; recipient: string; subject: string; resend_email_id: string | null; contest_ids: string[] | null
-}>) {
-  if (!rows.length) return
+/** Writes send records, retrying Supabase timeouts. False means the rows are NOT saved. */
+export async function recordSends(rows: SendLogRow[], retry?: DbRetryOptions): Promise<boolean> {
+  if (!rows.length) return true
   try {
-    const { error } = await supabaseAdmin.from('email_sends').insert(rows)
-    if (error && !isMissingRelation(error)) console.error('[email_sends] insert failed:', error.message)
+    const { error } = await withDbRetry(signal => supabaseAdmin.from('email_sends').insert(rows).abortSignal(signal), retry)
+    if (!error || isMissingRelation(error)) return true
+    console.error('[email_sends] insert failed:', error.message)
   } catch (e) {
     console.error('[email_sends] insert threw:', e)
   }
+  return false
 }
 
 export async function sendToRecipients(opts: {
@@ -197,6 +210,8 @@ export async function sendToRecipients(opts: {
   replyTo?: string
   /** Smaller batches waste fewer sends when a daily quota runs out mid-way. */
   batchSize?: number
+  /** Tries at saving each batch's send record. Lower it where a slow response hurts (signup). */
+  recordAttempts?: number
 }): Promise<SendResult> {
   const recipients = normalizeRecipients(opts.recipients)
   if (!recipients.length) return { success: true, sent: 0, failed: 0 }
@@ -241,13 +256,20 @@ export async function sendToRecipients(opts: {
       }
       const ids = res.data?.data ?? []
       sent += chunk.length
-      await logSends(chunk.map((r, idx) => ({
+      const rows = chunk.map((r, idx) => ({
         email_type: opts.kind,
         recipient: r.email,
         subject: subjectFor(r),
         resend_email_id: ids[idx]?.id ?? null,
         contest_ids: idsFor(r),
-      })))
+      }))
+      if (!(await recordSends(rows, { attempts: opts.recordAttempts ?? 3 }))) {
+        // These people got the email but nothing says so. Stop here: every
+        // further batch we can't record is a duplicate in tomorrow's run.
+        const notSent = recipients.length - i - chunk.length
+        console.error(`[Email] ${opts.kind}: ${chunk.length} sent but not recorded; stopping with ${notSent} not sent`)
+        return { success: failed + notSent === 0, sent, failed: failed + notSent, recordFailed: true, unrecorded: rows }
+      }
     } catch (err) {
       console.error(`[Email] ${opts.kind} batch threw:`, err)
       failed += chunk.length
@@ -296,6 +318,8 @@ export async function sendWelcomeEmail(
     kind: 'welcome',
     subject: "You're on the list — AI Film Contests",
     recipients: [{ email, token, name }],
+    // The signup form waits on this; a welcome record isn't used for dedup.
+    recordAttempts: 1,
     html: (_r, unsub) => shell(`
   <h1 style="font-size:26px;font-weight:700;margin:0 0 6px 0;line-height:1.25;">${greeting}</h1>
   <h2 style="font-size:26px;font-weight:400;margin:0 0 20px 0;line-height:1.25;color:#a1a1aa;">You're officially on the list.</h2>

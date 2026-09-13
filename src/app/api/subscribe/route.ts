@@ -24,10 +24,11 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: result.message }, { status: 409 })
     }
 
-    // Non-blocking — don't let email failure break signup
-    sendWelcomeEmail(email, name || null, result.token).catch(err =>
-      console.error('[Email] Welcome send failed:', err)
-    )
+    // Wait for it: Vercel freezes the function once the response goes out, which
+    // was cutting welcome emails off mid-send. A failed email still doesn't fail signup.
+    const welcome = await sendWelcomeEmail(email, name || null, result.token)
+      .catch(err => ({ success: false, error: err }))
+    if (!welcome.success) console.error('[Email] Welcome send failed:', welcome.error)
 
     return NextResponse.json({ success: true, message: result.message })
   } catch (error) {

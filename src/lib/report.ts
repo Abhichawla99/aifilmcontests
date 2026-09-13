@@ -102,13 +102,16 @@ export async function buildDailyReport(): Promise<DailyReport> {
   const engagementMeasurable = !ev.missing && anyEventsEver
 
   // ── Emails ──────────────────────────────────────────────────────────────────
-  const sentYesterday = await count('email_sends', q => q.gte('sent_at', yStart.toISOString()).lt('sent_at', dayStart.toISOString()))
-  const sent7 = await count('email_sends', q => q.gte('sent_at', d7.toISOString()))
+  // Counts leave out this report's own email to Abhi; it isn't a subscriber email.
+  const sentYesterday = await count('email_sends', q => q.neq('email_type', 'report').gte('sent_at', yStart.toISOString()).lt('sent_at', dayStart.toISOString()))
+  const sent7 = await count('email_sends', q => q.neq('email_type', 'report').gte('sent_at', d7.toISOString()))
   const lastSend = await rows<{ sent_at: string; email_type: string }>('email_sends', q =>
-    q.select('sent_at,email_type').order('sent_at', { ascending: false }).limit(1))
+    q.select('sent_at,email_type').neq('email_type', 'report').order('sent_at', { ascending: false }).limit(1))
   let lastEmailAt: Date | null = lastSend.data[0] ? new Date(lastSend.data[0].sent_at) : null
   let sends7Approx: number | null = sent7
-  if (lastSend.missing || !lastEmailAt) {
+  // A read that timed out is not "nothing sent". On Sep 13 this fell through to
+  // the old log (last row Aug 30) and the report said "nothing in 14 days".
+  if (lastSend.missing || (!lastEmailAt && !lastSend.error)) {
     // Fall back to the old per-contest log
     const legacy = await rows<{ sent_at: string; recipient_count: number }>('email_logs', q =>
       q.select('sent_at,recipient_count').order('sent_at', { ascending: false }).limit(200))
@@ -122,10 +125,19 @@ export async function buildDailyReport(): Promise<DailyReport> {
   const quotaLogged = /quota|refused|stopped us/i.test(notifyFail.data[0]?.summary ?? '')
   const lastNotify = await rows<{ status: string; summary: string | null; details: Record<string, unknown> | null; ran_at: string }>('agent_runs', q =>
     q.select('status,summary,details,ran_at').eq('task', 'notify').order('ran_at', { ascending: false }).limit(1))
-  const nd = (lastNotify.data[0]?.details ?? {}) as { waiting?: number; backlogDays?: number; dailyBudget?: number; sent?: number }
+  const nd = (lastNotify.data[0]?.details ?? {}) as { waiting?: number; backlogDays?: number; dailyBudget?: number; sent?: number; unrecorded?: number }
   const peopleWaiting = Number(nd.waiting ?? 0)
   const backlogDays = Number(nd.backlogDays ?? 0)
   const dailyBudget = Number(nd.dailyBudget ?? (process.env.EMAIL_DAILY_BUDGET ?? 80))
+
+  // Sends that went out but never made it into email_sends. Once someone adds
+  // them (pulse rows from around the run time), this goes back to zero.
+  let unrecordedSends = 0
+  const notifyAt = lastNotify.data[0] ? new Date(lastNotify.data[0].ran_at) : null
+  if (notifyAt && notifyAt >= h36 && Number(nd.unrecorded ?? 0) > 0) {
+    const saved = await count('email_sends', q => q.eq('email_type', 'pulse').gte('sent_at', new Date(notifyAt.getTime() - 15 * 60_000).toISOString()))
+    if (saved == null || saved < Number(nd.sent ?? 0)) unrecordedSends = Number(nd.unrecorded)
+  }
 
   // Things that SHOULD have been emailed to at least one person but weren't
   const announced = new Set<string | null>()
@@ -149,7 +161,9 @@ export async function buildDailyReport(): Promise<DailyReport> {
   const pendingClosing = dueSoon.data.filter(c => !pinged.has(c.id))
   const pending = pendingNew.length + pendingClosing.length
 
-  const emailsStuck = pending > 0 && (daysSinceEmail == null || daysSinceEmail >= 2)
+  const sendLogUnreadable = !lastSend.missing &&
+    (!!lastSend.error || sentYesterday == null || sent7 == null || (!!recentSends.error && !recentSends.missing))
+  const emailsStuck = !sendLogUnreadable && pending > 0 && (daysSinceEmail == null || daysSinceEmail >= 2)
   const quotaBlocked = quotaLogged || emailsStuck
 
   // ── Contests ────────────────────────────────────────────────────────────────
@@ -192,6 +206,7 @@ export async function buildDailyReport(): Promise<DailyReport> {
   const todos: string[] = []
   if (!migrated) todos.push('Paste supabase/migrations/2026-09-07-autopilot.sql into Supabase → SQL Editor → Run. Takes 30 seconds. Unlocks tracking, sales, and robot reporting.')
   const outgrown = backlogDays >= 3
+  if (unrecordedSends) todos.push(`${unrecordedSends} people got this morning's email but Supabase didn't save a record of it, so tomorrow's 8am run will email them again. Tell Claude: "add the UNRECORDED_SENDS rows from the Vercel notify log to email_sends".`)
   if (quotaLogged) todos.push(`Resend refused to send yesterday. On the Free plan we send ${dailyBudget} a day and stop when Resend says stop, so this usually means other emails (welcome, report) used the rest, or the 3,000/month is gone. If it repeats, upgrade Resend to Pro ($20/mo) at resend.com → Settings → Billing → Transactional.`)
   else if (emailsStuck) todos.push(`Emails look stuck: ${pending} contest update${pending === 1 ? '' : 's'} should have gone out but nothing has been sent for ${daysSinceEmail ?? '?'} days. Check the notify cron in Vercel logs.`)
   if (outgrown) todos.push(`The list has outgrown the free email plan: ${peopleWaiting} people are waiting about ${backlogDays} days for their next email. Upgrade Resend to Pro ($20/mo, no daily cap) at resend.com → Settings → Billing → Transactional, then set EMAIL_DAILY_BUDGET=0 in Vercel.`)
@@ -203,11 +218,16 @@ export async function buildDailyReport(): Promise<DailyReport> {
 
   // ── Headline ────────────────────────────────────────────────────────────────
   let headline: string
-  if (quotaBlocked) {
+  if (unrecordedSends) {
+    const todoNo = todos.findIndex(t => t.includes('UNRECORDED_SENDS')) + 1
+    headline = `🔴 ${unrecordedSends} people will get the same email twice tomorrow unless this morning's sends are added to the log. See to-do #${todoNo}.`
+  } else if (quotaBlocked) {
     const todoNo = todos.findIndex(t => t.startsWith('Resend refused') || t.startsWith('Emails look stuck')) + 1
     headline = quotaLogged
       ? `🔴 Resend refused to send yesterday. ${nd.sent ?? 0} people got their email, ${peopleWaiting} are waiting. See to-do #${todoNo}.`
       : `🔴 Emails look stuck. ${pendingNew.length} new contest${pendingNew.length === 1 ? '' : 's'} and ${pendingClosing.length} last-call${pendingClosing.length === 1 ? '' : 's'} are waiting, but nothing has gone out in ${daysSinceEmail ?? '?'} days. See to-do #${todoNo}.`
+  } else if (sendLogUnreadable) {
+    headline = `🟡 Supabase timed out while this report was reading the email log, so the email numbers below are incomplete. If tomorrow's report says this again, tell Claude.`
   } else if (!migrated) {
     headline = `🟡 The robots are running but can't report in yet. Paste the SQL (to-do #1, 30 seconds) and tomorrow's report has real numbers.`
   } else if (daysSinceEmail != null && daysSinceEmail >= 8) {
@@ -247,6 +267,7 @@ export async function buildDailyReport(): Promise<DailyReport> {
   }
   L.push('')
   L.push('EMAILS')
+  if (sendLogUnreadable) L.push(`• Couldn't read the send log (Supabase timed out), so the numbers below are incomplete.`)
   L.push(`• Sent yesterday: ${n(sentYesterday ?? (lastSend.missing ? null : 0))}. Last 7 days: ${n(sends7Approx)}.`)
   L.push(`• Last email went out: ${lastEmailAt ? `${lastEmailAt.toISOString().slice(0, 10)} (${daysSinceEmail} days ago)` : 'never / unknown'}.`)
   L.push(`• Waiting to go out: ${pendingNew.length} new-contest announcement${pendingNew.length === 1 ? '' : 's'}, ${pendingClosing.length} last-call ping${pendingClosing.length === 1 ? '' : 's'}.`)
@@ -305,7 +326,7 @@ export async function buildDailyReport(): Promise<DailyReport> {
       migrated, quotaBlocked, analyticsOn, stripeReady, outreachMode,
       people: { total, active, left, newYesterday, new7, newMonth, newLastMonth, topSources },
       engagement: { measurable: engagementMeasurable, opened30: opened.size, clicked30: clicked.size, complaints7, bounces7 },
-      emails: { sentYesterday, sends7: sends7Approx, lastEmailAt: lastEmailAt?.toISOString() ?? null, daysSinceEmail, pendingNew: pendingNew.map(c => c.name), pendingClosing: pendingClosing.map(c => c.name), quotaLogged, emailsStuck, peopleWaiting, backlogDays, dailyBudget },
+      emails: { sentYesterday, sends7: sends7Approx, lastEmailAt: lastEmailAt?.toISOString() ?? null, daysSinceEmail, pendingNew: pendingNew.map(c => c.name), pendingClosing: pendingClosing.map(c => c.name), quotaLogged, emailsStuck, sendLogUnreadable, unrecordedSends, peopleWaiting, backlogDays, dailyBudget },
       contests: { total: cTotal, open: cOpen, upcoming: cUpcoming, closed: cClosed, addedYesterday: added.data, closingSoon: closing.data, featuredNow },
       money: { sales30: sales30.data.length, revenue30Cents: sales30.data.length * PRICE_CENTS, drafted7, sentOut7, contactsKnown },
       robots: Object.fromEntries(Array.from(latestByTask.entries())),
