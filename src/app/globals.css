@@ -325,3 +325,36 @@ img, svg, video, canvas { max-width: 100%; }
   .nf-drawing { display: none; }
   .nf-list { margin-top: 32px; }
 }
+
+/* ── Inner-page header (InnerLayout + InnerNav) ─────────────────────────────── */
+/* Flat paper and a hairline, no blur. One row on desktop; on a phone the links
+   become a single swipeable line under the logo instead of wrapping to three. */
+.inav-header { position: sticky; top: 0; z-index: 50; background: #FBFAF8; border-bottom: 1px solid #E3DED3; }
+.inav-row { display: flex; align-items: center; justify-content: space-between; gap: 24px; min-height: 60px; }
+.inav-brand {
+  display: flex; align-items: center; gap: 10px; flex-shrink: 0; text-decoration: none;
+  font-family: 'Space Grotesk', sans-serif; font-weight: 600; font-size: 15px;
+  letter-spacing: -0.01em; color: #1B1916;
+}
+.inav { display: flex; align-items: stretch; gap: 22px; align-self: stretch; }
+.inav-link {
+  display: flex; align-items: center; white-space: nowrap; text-decoration: none;
+  font-size: 13px; color: #7A7469; border-bottom: 2px solid transparent;
+  padding-top: 2px; transition: color 0.15s, border-color 0.15s;
+}
+.inav-link:hover { color: #1B1916; }
+.inav-link[aria-current='page'] { color: #1B1916; font-weight: 500; border-bottom-color: #4F46E5; }
+.inav-link:focus-visible { outline-offset: -2px; }
+@media (max-width: 760px) {
+  .inav-header { position: static; }
+  .inav-row { flex-direction: column; align-items: stretch; gap: 0; min-height: 0; padding-left: 0; padding-right: 0; }
+  .inav-brand { padding: 14px 20px 10px; }
+  .inav {
+    gap: 20px; overflow-x: auto; scrollbar-width: none; padding: 0 20px;
+    -webkit-mask-image: linear-gradient(to right, #000 85%, transparent);
+    mask-image: linear-gradient(to right, #000 85%, transparent);
+  }
+  .inav::-webkit-scrollbar { display: none; }
+  .inav-link { min-height: 40px; }
+  .inav::after { content: ''; flex: 0 0 12px; }
+}

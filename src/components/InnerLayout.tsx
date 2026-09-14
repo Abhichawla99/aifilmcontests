@@ -1,17 +1,13 @@
 import Link from 'next/link'
 import React from 'react'
+import InnerNav from './InnerNav'
 
-// SVG logo mark: film strip play button icon with indigo gradient, corner perf marks, white play triangle
+// Logo mark: flat indigo film frame, corner perforations, white play triangle.
+// Flat since 2026-09-14; the indigo-to-violet gradient was a dark-theme leftover.
 function LogoMark() {
   return (
-    <svg width="30" height="30" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ borderRadius: 7 }}>
-      <defs>
-        <linearGradient id="ig" x1="0" y1="0" x2="30" y2="30" gradientUnits="userSpaceOnUse">
-          <stop offset="0%" stopColor="#4f46e5" />
-          <stop offset="100%" stopColor="#7c3aed" />
-        </linearGradient>
-      </defs>
-      <rect width="30" height="30" rx="7" fill="url(#ig)" />
+    <svg width="28" height="28" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" style={{ flexShrink: 0 }}>
+      <rect width="30" height="30" rx="7" fill="#4F46E5" />
       {/* Perforation marks */}
       <rect x="3" y="4" width="3" height="4" rx="0.8" fill="rgba(27,25,22,0.22)" />
       <rect x="3" y="11" width="3" height="4" rx="0.8" fill="rgba(27,25,22,0.22)" />
@@ -32,32 +28,14 @@ interface InnerLayoutProps {
 export default function InnerLayout({ children }: InnerLayoutProps) {
   return (
     <div style={{ background: '#FBFAF8', minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
-      {/* Sticky Nav */}
-      <header style={{
-        position: 'sticky',
-        top: 0,
-        zIndex: 50,
-        backdropFilter: 'blur(16px)',
-        WebkitBackdropFilter: 'blur(16px)',
-        background: 'rgba(251,250,248,0.7)',
-        borderBottom: '1px solid rgba(27,25,22,0.06)',
-      }}>
-        <div className="max-w-4xl mx-auto px-5 py-4 flex items-center justify-between gap-4" style={{ flexWrap: 'wrap' }}>
-          {/* Logo */}
-          <Link href="/" style={{ textDecoration: 'none', display: 'flex', alignItems: 'center', gap: 10 }}>
+      {/* Nav: sticky on desktop; on a phone it scrolls away with the page */}
+      <header className="inav-header">
+        <div className="max-w-5xl mx-auto px-5 inav-row">
+          <Link href="/" className="inav-brand">
             <LogoMark />
-            <span style={{ fontFamily: 'Space Grotesk, sans-serif', fontWeight: 600, fontSize: 15, color: '#26231E' }}>AI Film Contests</span>
+            <span>AI Film Contests</span>
           </Link>
-
-          {/* Nav links */}
-          <nav style={{ display: 'flex', alignItems: 'center', gap: 20, flexWrap: 'wrap' }}>
-            <Link href="/" className="link-muted" style={{ fontSize: 13 }}>Browse Contests</Link>
-            <Link href="/contests/closing-soon" className="link-muted" style={{ fontSize: 13 }}>Closing Soon</Link>
-            <Link href="/tools/runway" className="link-muted" style={{ fontSize: 13 }}>Tools</Link>
-            <Link href="/categories/short-film" className="link-muted" style={{ fontSize: 13 }}>Categories</Link>
-            <Link href="/cinematic-ads" className="link-muted" style={{ fontSize: 13 }}>Cinematic Ads</Link>
-            <Link href="/creators" className="link-muted" style={{ fontSize: 13 }}>Creators</Link>
-          </nav>
+          <InnerNav />
         </div>
       </header>
 
@@ -68,7 +46,7 @@ export default function InnerLayout({ children }: InnerLayoutProps) {
 
       {/* Footer */}
       <footer style={{ borderTop: '1px solid rgba(27,25,22,0.05)', padding: '28px 0', marginTop: 'auto' }}>
-        <div className="max-w-4xl mx-auto px-5" style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', justifyContent: 'space-between', gap: 16 }}>
+        <div className="max-w-5xl mx-auto px-5" style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', justifyContent: 'space-between', gap: 16 }}>
           {/* Left: logo + name */}
           <Link href="/" style={{ textDecoration: 'none', display: 'flex', alignItems: 'center', gap: 8 }}>
             <LogoMark />
@@ -79,7 +57,7 @@ export default function InnerLayout({ children }: InnerLayoutProps) {
           <span style={{ fontSize: 12, color: '#A8A296', textAlign: 'center' }}>Tracking every AI film competition · Updated daily</span>
 
           {/* Right: links */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px 16px', flexWrap: 'wrap' }}>
             <Link href="/" className="link-muted" style={{ fontSize: 12 }}>Browse All</Link>
             <Link href="/contests/closing-soon" className="link-muted" style={{ fontSize: 12 }}>Closing Soon</Link>
             <a href="/submit" className="link-muted" style={{ fontSize: 12 }}>Submit a Contest</a>
