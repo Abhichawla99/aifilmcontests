@@ -36,6 +36,67 @@ describe the old dark theme; the reasoning still applies, the colours do not.)*
 
 ---
 
+## 2026-09-14 — The inner-page header, one line on a phone
+
+**Changed** — `src/components/InnerLayout.tsx`, a new client component
+`src/components/InnerNav.tsx`, and an `.inav-*` block at the end of `globals.css`. This
+header sits on every guide, topic, creator, location, prize and versus page, the three
+contest listings (closing soon, free, cash prizes) and the 404.
+
+**Was** — at 390px the six nav links wrapped to three rows under the logo: about 140px of
+header before the breadcrumb, and it was sticky, so it kept that slice of a phone screen
+for the whole read. No link said which section you were in. The header was translucent
+paper with `backdropFilter: blur(16px)`, and the logo mark still had the indigo-to-violet
+gradient, both flagged as dark-theme leftovers on 2026-09-13. On desktop the header used
+`max-w-4xl` while most of these pages set their content in `max-w-5xl`, so the logo sat
+64px to the right of the content edge under it.
+
+**Now** —
+- **One swipeable line on a phone.** Below 760px the logo takes one short row and the
+  links sit in a single horizontal scroller under it, with a soft fade on the right edge
+  as the hint that it scrolls. Header height at 390px is about 92px, down from 140px.
+  On a phone it scrolls away with the page instead of sticking; on desktop it stays
+  sticky, where there is room.
+- **The current section is marked.** The matching link turns ink, weight 500, with a 2px
+  indigo underline that sits on the header's hairline, and carries `aria-current="page"`.
+  Matching is by path prefix, so a creator profile marks Creators. On a phone the current
+  link is scrolled into view on load, so Creators is not hidden past the fade.
+- **Flat.** Solid paper `#FBFAF8` and a `#E3DED3` hairline, no blur. The logo mark is flat
+  indigo `#4F46E5`, which also drops the duplicate SVG gradient id the header and footer
+  used to share.
+- **Aligned.** Header and footer now use `max-w-5xl`, so on desktop the logo lines up
+  with the breadcrumb and hero band. The footer's link row can wrap.
+- Links stay 13px `#7A7469`, at least 40px tall on a phone. Focus rings are inset by 2px
+  so the scroller does not clip them.
+
+No link targets, labels, data or copy changed.
+
+**Inspiration** — Criterion Current and Metrograph, both at 390px. Each keeps its phone
+header to a single short row (Metrograph's is about 55px: wordmark left, sign-in and
+search right) and puts everything else one gesture away, so the first thing under the
+header is the page itself. Adapted rather than copied: we have no menu or search to hide
+links behind, and six plain links are easier to use than a hamburger, so ours stay
+visible in one scrolling line.
+
+**Noted for a later run, not done today** —
+- `/tools/[slug]` and `/categories/[slug]` do not use `InnerLayout`. They have their own
+  header with an "AI" text logo tile, a lone "← All contests" link and a `max-w-4xl`
+  container that does not line up with their content. Moving them onto `InnerLayout`
+  would give every inner page the same header.
+- The homepage header still has the `navbg` gradient logo and a blurred background.
+- Still open: the `.agent-badge` pill wrap at 390px, "Free entry" alone on a second tab row.
+- Process note: today's design commit (a0834b1) was authored with Abhi's personal email
+  instead of the bot's noreply address. Left as is rather than force-pushing `main`.
+
+**Verified** — built locally, checked on `next start` at 1440px, 390px and 375px on
+/contests/closing-soon, /creators and /contests/free, then live at the same widths. No
+horizontal overflow at any width. Unknown URLs still return a real 404.
+
+**Before / after** — `reports/design/2026-09-14-before.png`,
+`reports/design/2026-09-14-before-390.png`, `reports/design/2026-09-14-before-375.png`,
+`reports/design/2026-09-14-after.png`, `reports/design/2026-09-14-after-390.png`,
+`reports/design/2026-09-14-after-375.png`.
+
 ## 2026-09-13 — A 404 page with the site still around it
 
 **Changed** — new `src/app/not-found.tsx`, plus a `.nf-*` block at the end of
