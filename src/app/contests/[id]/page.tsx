@@ -5,6 +5,7 @@ import { getContestById, getAllContests } from '@/lib/contests-db'
 import { normalizeCategory, closedStyle } from '@/lib/theme'
 import ContestCard from '@/components/ContestCard'
 import EmailSubscribe from '@/components/EmailSubscribe'
+import DeadlineReminder from '@/components/DeadlineReminder'
 
 export const dynamic = 'force-dynamic'
 export const revalidate = 0
@@ -330,6 +331,7 @@ export default async function ContestPage({ params }: { params: Promise<{ id: st
                       {fmt(contest.deadline)}
                     </div>
                   )}
+                  {isOpen && <DeadlineReminder contestName={contest.name} />}
                   {!isClosed && (
                     <a
                       href={contest.url}
