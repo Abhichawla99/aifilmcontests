@@ -54,14 +54,40 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
   from { transform: translateX(0); }
   to   { transform: translateX(-50%); }
 }
-.ticker-wrap { overflow: hidden; }
+.ticker-wrap { overflow: hidden; border-bottom: 1px solid #E3DED3; background: #FBFAF8; }
 .ticker-track {
   display: inline-flex;
-  align-items: center;
+  align-items: stretch;
   animation: ticker 60s linear infinite;
   white-space: nowrap;
 }
-.ticker-track:hover { animation-play-state: paused; }
+.ticker-track:hover, .ticker-track:focus-within { animation-play-state: paused; }
+/* One contest per ruled cell: name, then the days count as the figure, then the date
+   as a caption. Hairlines between cells instead of a separator glyph. */
+.tick-item {
+  display: inline-flex; align-items: baseline; gap: 8px;
+  padding: 10px 20px;
+  border-right: 1px solid #E3DED3;
+  text-decoration: none;
+  font-family: 'Space Grotesk', sans-serif;
+}
+.tick-item:focus-visible { outline-offset: -2px; }
+.tick-item .dot { background: #16A34A; align-self: center; }
+.tick-urgent .dot { background: #C2410C; }
+.tick-name { font-size: 12.5px; color: #5E594F; transition: color 0.15s ease; }
+.tick-item:hover .tick-name { color: #1B1916; text-decoration: underline; text-underline-offset: 3px; text-decoration-color: #C9C4B8; }
+.tick-days { font-size: 12.5px; font-weight: 600; color: #1B1916; font-variant-numeric: tabular-nums; }
+.tick-urgent .tick-days { color: #C2410C; }
+.tick-date {
+  font-size: 10.5px; font-weight: 500; color: #7A7469;
+  letter-spacing: 0.08em; text-transform: uppercase;
+  font-variant-numeric: tabular-nums;
+}
+@media (prefers-reduced-motion: reduce) {
+  .ticker-wrap { overflow-x: auto; scrollbar-width: none; }
+  .ticker-track { animation: none; }
+  .tick-dup { display: none; }
+}
 
 /* ── Live pulse / urgent flash ──────────────────────────────────────────────── */
 @keyframes livepulse { 0%,100% { opacity: 1; } 50% { opacity: 0.25; } }

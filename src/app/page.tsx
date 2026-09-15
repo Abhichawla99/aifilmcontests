@@ -146,32 +146,28 @@ export default async function Home() {
 
         {/* ── Ticker ── */}
         {ticker.length > 0 && (
-          <div className="ticker-wrap" style={{
-            borderBottom: '1px solid rgba(27,25,22,0.04)',
-            background: 'rgba(27,25,22,0.01)',
-            padding: '9px 0',
-          }}>
+          <div className="ticker-wrap">
             <div className="ticker-track">
               {tickerItems.map((c, i) => {
                 const d = daysLeft(c.deadline)
-                const urgent = d <= 5
+                const urgent = d <= 7
+                // The second copy only exists to make the loop seamless: keep it out of
+                // the tab order and away from screen readers.
+                const dup = i >= ticker.length
                 return (
                   <a
                     key={`${c.id}-${i}`}
                     href={c.url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center gap-2 px-6 hover:opacity-60 transition-opacity"
-                    style={{ textDecoration: 'none' }}
+                    className={`tick-item${urgent ? ' tick-urgent' : ''}${dup ? ' tick-dup' : ''}`}
+                    aria-hidden={dup || undefined}
+                    tabIndex={dup ? -1 : undefined}
                   >
-                    <span className="dot" style={{ background: urgent ? '#DC2626' : '#22c55e', boxShadow: urgent ? '0 0 6px rgba(239,68,68,0.6)' : '0 0 6px rgba(34,197,94,0.5)' }} />
-                    <span style={{ fontSize: 12, color: '#7A7469', fontFamily: 'Space Grotesk, sans-serif' }}>{c.name}</span>
-                    <span style={{ fontSize: 12, color: urgent ? '#C2410C' : '#A8A296', fontFamily: 'Space Grotesk, sans-serif', fontWeight: 600 }}>
-                      {d <= 0 ? 'today' : `${d}d`}
-                    </span>
-                    <span style={{ color: '#C9C4B8', fontSize: 11 }}>·</span>
-                    <span style={{ fontSize: 11, color: '#E7E4DC' }}>{fmtShort(c.deadline)}</span>
-                    <span style={{ color: '#C9C4B8', fontSize: 14, marginLeft: 12 }}>⎮</span>
+                    <span className="dot" />
+                    <span className="tick-name">{c.name}</span>
+                    <span className="tick-days">{d <= 0 ? 'today' : `${d}d`}</span>
+                    <span className="tick-date">{fmtShort(c.deadline)}</span>
                   </a>
                 )
               })}
