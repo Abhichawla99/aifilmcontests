@@ -36,6 +36,66 @@ describe the old dark theme; the reasoning still applies, the colours do not.)*
 
 ---
 
+## 2026-09-15 — The deadline ticker, readable on paper
+
+**Changed** — the ticker under the homepage header (`src/app/page.tsx`) and the
+`.ticker-*` / new `.tick-*` rules in `globals.css`.
+
+**Was** — the ticker was the last homepage element still in dark-theme colours. Each
+deadline date was `#E7E4DC` on the `#FBFAF8` paper, a contrast of about 1.2:1, so "Sep 20"
+was close to invisible at both widths. The days count was `#A8A296` unless a deadline
+was within five days, when it went red `#DC2626` with a red glow on its dot; open dots
+had a green glow. Items were separated by a 14px `⎮` glyph in placeholder grey. The whole
+row faded to 60% opacity on hover, the reverse of what a hover should do. The loop is made
+by rendering the list twice, and both copies were links in the tab order and in the
+accessibility tree, so a screen reader read every contest twice. It also kept moving while
+a keyboard user tabbed through it, and there was no reduced-motion rule.
+
+**Now** —
+- **One ruled cell per contest.** A `#E3DED3` hairline between cells replaces the glyph,
+  and the strip sits on solid paper with the same hairline under it.
+- **The house deadline order.** Name in `#5E594F`, then the days count as the figure in
+  ink, weight 600, tabular figures, then the date as a small-caps caption in `#7A7469`
+  (the `.spot-label` grey). Inside seven days the dot and the count turn burnt orange
+  `#C2410C`, the same threshold and colour as the cards and the spotlight. The threshold
+  was five days before. No glows.
+- **Hover reveals instead of fading:** the name turns ink with a quiet underline.
+- **Accessible loop.** The duplicate copy is `aria-hidden` and out of the tab order.
+  Hover and keyboard focus both pause the scroll. With `prefers-reduced-motion`, the
+  animation stops, the duplicate is hidden, and the strip becomes a static row you can
+  swipe.
+
+No contest data, link, label or ordering changed.
+
+**Inspiration** — Metrograph's "Today's Films" rail on its homepage (the FT markets page
+was also open, but its data strip was not in view). Each entry is two facts: the title,
+then the showtime in the house red, with a rule between entries. Nothing in the rail is
+faded to decoration, and colour lands only on the time-sensitive fact. Adapted rather than
+copied: our strip moves horizontally and carries three facts, so the rules run
+vertically and the date is a caption rather than a coloured line.
+
+**Noted for a later run, not done today** —
+- The ticker and the spotlight can disagree by a day. Live today the 1 Billion AI Film
+  Award reads "15d · Sep 30" in the ticker and "14 days left · Sep 29, 2026" in the
+  spotlight. The ticker's `daysLeft()` rounds up with `Math.ceil` and `fmtShort()` formats
+  in the server's timezone, while the cards and spotlight use `timeLeft()`. Worth making
+  the ticker call the same helper. That is a logic change, so it was left out of today's
+  visual one.
+- Still open: the homepage header's `navbg` gradient logo and blurred background, the
+  `.agent-badge` pill wrap at 390px, the Ruminatex callout's `backdropFilter`, and
+  `/tools/[slug]` and `/categories/[slug]` not using `InnerLayout`.
+- Process: `.env.cron` still has no public anon key, so a local build renders no contests
+  and no ticker. The new ticker was checked before pushing in a static harness that loaded
+  the built CSS with five real contest rows, then checked live.
+
+**Verified** — `npm run build` passed. Harness checked at 1440px and 390px, then live at
+1440px, 390px and 375px after deploy (d58c606). No horizontal overflow at any width. The
+homepage returns 200, and /submit still renders cleanly at 390px.
+
+**Before / after** — `reports/design/2026-09-15-before.png`,
+`reports/design/2026-09-15-before-390.png`, `reports/design/2026-09-15-after.png`,
+`reports/design/2026-09-15-after-390.png`, `reports/design/2026-09-15-after-375.png`.
+
 ## 2026-09-14 — The inner-page header, one line on a phone
 
 **Changed** — `src/components/InnerLayout.tsx`, a new client component
