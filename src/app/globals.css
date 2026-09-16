@@ -384,3 +384,94 @@ img, svg, video, canvas { max-width: 100%; }
   .inav-link { min-height: 40px; }
   .inav::after { content: ''; flex: 0 0 12px; }
 }
+
+/* ── Browse toolbar ─────────────────────────────────────────────────────────
+   The control bar above the contest grid. Every row is a named dimension:
+   a small-caps label on the left, its controls on the right. All three
+   controls in the top row share one 38px height so the bar reads as one
+   object, and the sort select carries a caret so it reads as a control. */
+.bb-controls {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+.bb-search { position: relative; flex: 1 1 260px; min-width: 0; }
+.bb-search .input { height: 38px; padding: 0 12px 0 30px; }
+.bb-search-icon {
+  position: absolute; left: 12px; top: 50%; transform: translateY(-50%);
+  font-size: 13px; color: #A8A296; pointer-events: none;
+}
+.bb-sort { display: inline-flex; align-items: center; gap: 8px; }
+.bb-select-wrap { position: relative; display: inline-flex; align-items: center; }
+.bb-select {
+  height: 38px;
+  width: auto;
+  padding: 0 32px 0 12px;
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  appearance: none;
+  -webkit-appearance: none;
+}
+/* the caret: the only affordance the control needs */
+.bb-select-wrap::after {
+  content: '';
+  position: absolute; right: 13px; top: 50%;
+  width: 6px; height: 6px;
+  border-right: 1.5px solid #7A7469;
+  border-bottom: 1.5px solid #7A7469;
+  transform: translateY(-4px) rotate(45deg);
+  pointer-events: none;
+}
+.bb-view {
+  display: inline-flex;
+  height: 38px;
+  border: 1px solid #E0DCD2;
+  border-radius: 8px;
+  overflow: hidden;
+}
+.bb-view button {
+  padding: 0 14px;
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 12.5px;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  background: #fff;
+  color: #7A7469;
+  transition: color 0.15s, background 0.15s;
+}
+.bb-view button:hover { color: #3E3A33; }
+.bb-view button[aria-pressed='true'] { background: #EEF0FB; color: #4338CA; }
+/* the group clips its overflow, so the ring has to sit inside the button */
+.bb-view button:focus-visible { outline-offset: -2px; border-radius: 0; }
+
+/* A named row of chips: label, then the chips it governs. */
+.bb-row {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 4px 14px;
+  align-items: start;
+}
+.bb-row-label {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 10px;
+  font-weight: 600;
+  color: #8B867C;
+  text-transform: uppercase;
+  letter-spacing: 0.09em;
+  white-space: nowrap;
+  padding-top: 9px;
+}
+.bb-chips { display: flex; flex-wrap: wrap; align-items: center; gap: 4px; }
+
+@media (max-width: 640px) {
+  /* Label above its chips: at 390px a label column eats a third of the width
+     and every chip row wraps to three lines. */
+  .bb-row { grid-template-columns: 1fr; gap: 6px; }
+  .bb-row-label { padding-top: 2px; }
+  /* Thumb-sized chips on a phone. */
+  .bb-chips .tab { min-height: 36px; display: inline-flex; align-items: center; }
+}

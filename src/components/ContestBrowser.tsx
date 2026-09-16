@@ -209,86 +209,85 @@ export default function ContestBrowser({ contests }: { contests: Contest[] }) {
       {/* ── Controls ── */}
       <div style={{ marginBottom: 22, display: 'flex', flexDirection: 'column', gap: 12 }}>
 
-        {/* Search + sort + view */}
-        <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap', alignItems: 'center' }}>
-          <div style={{ position: 'relative', flex: '1 1 260px', minWidth: 0 }}>
-            <span aria-hidden style={{
-              position: 'absolute', left: 12, top: '50%', transform: 'translateY(-50%)',
-              fontSize: 13, opacity: 0.5, pointerEvents: 'none',
-            }}>⌕</span>
+        {/* Search, sort, view — one row, one height */}
+        <div className="bb-controls">
+          <div className="bb-search">
+            <span aria-hidden className="bb-search-icon">⌕</span>
             <input
               className="input"
               value={q}
               onChange={e => setQ(e.target.value)}
               placeholder="Search festivals, organizers, tools, cities…"
               aria-label="Search contests"
-              style={{ paddingLeft: 30 }}
             />
           </div>
 
-          <label style={{ display: 'inline-flex', alignItems: 'center', gap: 7 }}>
-            <span style={{
-              fontSize: 10, color: '#8B867C', textTransform: 'uppercase', letterSpacing: '0.09em',
-              fontFamily: 'Space Grotesk, sans-serif', fontWeight: 600,
-            }}>Sort</span>
-            <select
-              value={sort}
-              onChange={e => setSort(e.target.value as SortKey)}
-              className="input"
-              style={{ width: 'auto', padding: '8px 10px', fontSize: 13, appearance: 'none', cursor: 'pointer' }}
-            >
-              {SORTS.map(s => <option key={s.v} value={s.v}>{s.label}</option>)}
-            </select>
+          <label className="bb-sort">
+            <span className="bb-row-label" style={{ paddingTop: 0 }}>Sort</span>
+            <span className="bb-select-wrap">
+              <select
+                value={sort}
+                onChange={e => setSort(e.target.value as SortKey)}
+                className="input bb-select"
+              >
+                {SORTS.map(s => <option key={s.v} value={s.v}>{s.label}</option>)}
+              </select>
+            </span>
           </label>
 
-          <div style={{ display: 'inline-flex', border: '1px solid #E0DCD2', borderRadius: 8, overflow: 'hidden' }}>
+          <div className="bb-view" role="group" aria-label="Result layout">
             {(['cards', 'list'] as View[]).map(v => (
-              <button
-                key={v}
-                onClick={() => setView(v)}
-                aria-pressed={view === v}
-                style={{
-                  padding: '8px 12px', fontSize: 12.5, cursor: 'pointer', border: 'none',
-                  fontFamily: 'Space Grotesk, sans-serif', fontWeight: 600,
-                  background: view === v ? '#EEF0FB' : '#fff',
-                  color: view === v ? '#4338CA' : '#7A7469',
-                }}
-              >
+              <button key={v} onClick={() => setView(v)} aria-pressed={view === v}>
                 {v === 'cards' ? 'Cards' : 'List'}
               </button>
             ))}
           </div>
         </div>
 
-        {/* Status + free */}
-        <div className="flex items-center gap-1 flex-wrap">
-          {([
-            { v: 'all',      label: `All active (${openCount + upcomingCount})` },
-            { v: 'open',     label: `Open (${openCount})` },
-            { v: 'upcoming', label: `Coming soon (${upcomingCount})` },
-          ] as { v: StatusFilter; label: string }[]).map(({ v, label }) => (
-            <button key={v} onClick={() => setStatus(v)} className={`tab ${status === v ? 'on' : ''}`}>
-              {label}
+        {/* Show: status, plus the free-entry toggle */}
+        <div className="bb-row">
+          <span className="bb-row-label" id="bb-show-label">Show</span>
+          <div className="bb-chips" role="group" aria-labelledby="bb-show-label">
+            {([
+              { v: 'all',      label: `All active (${openCount + upcomingCount})` },
+              { v: 'open',     label: `Open (${openCount})` },
+              { v: 'upcoming', label: `Coming soon (${upcomingCount})` },
+            ] as { v: StatusFilter; label: string }[]).map(({ v, label }) => (
+              <button
+                key={v}
+                onClick={() => setStatus(v)}
+                aria-pressed={status === v}
+                className={`tab ${status === v ? 'on' : ''}`}
+              >
+                {label}
+              </button>
+            ))}
+            <button
+              onClick={() => setFreeOnly(v => !v)}
+              aria-pressed={freeOnly}
+              className={`tab ${freeOnly ? 'on' : ''}`}
+            >
+              Free entry
             </button>
-          ))}
-          <span style={{ width: 1, height: 16, background: '#E7E4DC', margin: '0 6px' }} />
-          <button onClick={() => setFreeOnly(v => !v)} className={`tab ${freeOnly ? 'on' : ''}`}>
-            Free entry
-          </button>
+          </div>
         </div>
 
-        {/* Categories */}
-        <div className="flex items-center gap-1 flex-wrap">
-          {CATEGORIES.map(({ value, label, emoji }) => (
-            <button
-              key={value}
-              onClick={() => setCategory(value)}
-              className={`tab ${category === value ? 'on' : ''}`}
-              style={{ fontSize: 12, padding: '4px 10px' }}
-            >
-              {emoji ? `${emoji} ` : ''}{label}
-            </button>
-          ))}
+        {/* Category */}
+        <div className="bb-row">
+          <span className="bb-row-label" id="bb-cat-label">Category</span>
+          <div className="bb-chips" role="group" aria-labelledby="bb-cat-label">
+            {CATEGORIES.map(({ value, label, emoji }) => (
+              <button
+                key={value}
+                onClick={() => setCategory(value)}
+                aria-pressed={category === value}
+                className={`tab ${category === value ? 'on' : ''}`}
+                style={{ fontSize: 12, padding: '4px 10px' }}
+              >
+                {emoji ? `${emoji} ` : ''}{label}
+              </button>
+            ))}
+          </div>
         </div>
 
         {/* Result count */}
