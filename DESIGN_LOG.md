@@ -36,6 +36,82 @@ describe the old dark theme; the reasoning still applies, the colours do not.)*
 
 ---
 
+## 2026-09-16 — The browse toolbar, set as one labelled control bar
+
+**Changed** — the controls above the contest grid in `src/components/ContestBrowser.tsx`,
+styled by a new `.bb-*` block at the end of `globals.css`. This toolbar is how anyone
+narrows 77 contests down to the ones they can actually enter.
+
+**Was** — three rows of unlike parts stacked on top of each other.
+- **No shared baseline.** The search field was 40px tall (`.input`, `padding: 10px 14px`),
+  the sort select 34px (`padding: 8px 10px`) and the Cards/List toggle 35px
+  (`padding: 8px 12px`). Three bordered white boxes on one line, none of them agreeing.
+- **A select with no caret.** The sort control had `appearance: none` and nothing drawn
+  in its place, so "Closing soonest" sat in a plain white rounded box with no affordance
+  at all — the same shape as the search field beside it. The one control that changes the
+  order of every contest on the page read as a text input.
+- **Two anonymous rows of pills.** Nothing said what the status chips or the category
+  chips filtered. "Sort" was the only labelled control in the bar.
+- **A divider that broke on a phone.** "Free entry" was held apart from the three status
+  tabs by a bare `<span>` 1px high and 16px tall. At 390px the row wrapped: the divider
+  dangled at the end of the first line and "Free entry" sat alone on the second. Flagged
+  on 2026-09-11, 2026-09-13 and 2026-09-14 and not fixed until now.
+- Chips were about 28px tall, under a thumb.
+
+**Now** —
+- **Every row names its dimension.** Sort, Show, Category, each a small-caps Space Grotesk
+  label in `#8B867C` with its controls in a second column. Below 640px the label moves
+  above its chips, because a label column at 390px takes a third of the width and pushes
+  every chip row to three lines.
+- **One height.** Search, sort and the view toggle are all 38px, so the top row reads as
+  one object rather than three.
+- **The select has a caret** — a 6px rotated corner in the label grey, drawn on the
+  wrapper so it cannot be clicked through. That is the whole affordance, and it is enough.
+- **The divider is gone.** The Show label does the grouping the rule was standing in for.
+  "Free entry" still wraps to its own line at 390px, but as the fourth item of a named
+  group rather than an orphan behind a hanging tick.
+- **36px chips on a phone**, and `aria-pressed` on every filter button so a screen reader
+  says which ones are on. The view toggle clips its overflow, so its focus ring is inset
+  the same way `.tick-item` and `.inav-link` handle theirs.
+
+No filter behaviour, label text, ordering, copy or data changed.
+
+**Inspiration** — Letterboxd's Browse Films bar. Four filters and a sort sit on a single
+line as `DECADE ⌄  GENRE ⌄  SERVICE ⌄  Sort by FILM POPULARITY ⌄`: no pills, no boxes, no
+fills. The dimension is named in grey, the current value sits next to it in caps, and a
+small caret is the only thing marking any of it as a control. Twenty pixels of height does
+the work our three rows were doing. Siteinspire's `Popular Categories · Styles · Types ·
+Subjects · Platforms` strip was also open, and makes the same bet: filters set as words on
+a rule, not as buttons. Adapted rather than copied: we have nine categories with emoji and
+four status states, which will not fit one line at 390px, so ours stay as chips — but they
+inherit Letterboxd's label-then-value grammar and its caret.
+
+**Noted for a later run, not done today** —
+- **Data, for the research robot:** Bali International AI Film Festival (BIAIFF) 2026 —
+  Season 5 shows a deadline of Sep 15, 2026 and is still marked open, so today it renders
+  in "Closing this week" with its date already past. Same class of bug as the Busan entry
+  noted on 2026-09-11.
+- The "Research agent running daily · fresh contests added 24/7" pill above this toolbar
+  still wraps to two ragged lines at both 390px and 375px, and still carries its
+  `backdropFilter` blur and green glow ring. Now the most obviously unfinished thing in the
+  browse section. The "daily" versus "24/7" contradiction is a copy call for Abhi.
+- The "Closing this week" group heading ends with a bare count at the far right of a long
+  hairline, which reads as a stray digit at 1440px.
+- Still open: the homepage header's gradient logo mark and blurred background, the
+  Ruminatex callout's `backdropFilter`, the subscribe success state's boxed indigo panel,
+  and `/tools/[slug]` and `/categories/[slug]` not using `InnerLayout`.
+- Process: `.env.cron` still has no `NEXT_PUBLIC_SUPABASE_ANON_KEY`, so a local build
+  renders zero contests. The toolbar was checked locally in that empty state (which does
+  exercise every control, with zero counts) and then live after deploy.
+
+**Verified** — `npm run build` exited 0. Checked on `next start` at 1440px, 390px and
+375px with no horizontal overflow at any width, then live at the same three widths after
+deploy (8016453). The homepage returns 200.
+
+**Before / after** — `reports/design/2026-09-16-before.png`,
+`reports/design/2026-09-16-before-390.png`, `reports/design/2026-09-16-after.png`,
+`reports/design/2026-09-16-after-390.png`, `reports/design/2026-09-16-after-375.png`.
+
 ## 2026-09-15 — The deadline ticker, readable on paper
 
 **Changed** — the ticker under the homepage header (`src/app/page.tsx`) and the
