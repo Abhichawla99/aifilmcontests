@@ -36,6 +36,86 @@ describe the old dark theme; the reasoning still applies, the colours do not.)*
 
 ---
 
+## 2026-09-17 — The homepage header, the same object as every other page's
+
+**Changed** — the header in `src/app/page.tsx`, a new shared `src/components/LogoMark.tsx`,
+and an `.hnav-*` block at the end of `globals.css`. `InnerLayout.tsx` now imports the
+shared mark instead of holding its own copy.
+
+**Was** — the site had two unrelated headers, and the worse one was on the page most
+people land on.
+- **No navigation at all on a phone.** The three links were `hidden sm:flex`, so below
+  640px they were simply not rendered. At 390px the homepage header was a logo, a
+  wordmark and a Get Alerts button — nothing else. A visitor arriving from search had no
+  way to Closing Soon, Tools, Categories, Creators or Submit without scrolling the whole
+  page to the footer. Every other page has carried a swipeable line of six links since
+  2026-09-14; the entry point carried none.
+- **The last blurred chrome on the page.** `backdropFilter: blur(16px)` over
+  `rgba(251,250,248,0.85)`, with a `rgba(27,25,22,0.05)` bottom border so faint it read
+  as no rule at all rather than as the house `#E3DED3` hairline.
+- **The gradient mark.** The logo still filled its frame with a `#3730a3` → `#5b21b6`
+  gradient plus a second "shine" gradient over it — a dark-theme leftover flagged on
+  2026-09-13, 09-14, 09-15 and 09-16. The inner header's mark went flat indigo on
+  2026-09-14, so the two headers had been drawing visibly different logos for three days.
+
+**Now** —
+- **One header, two arrangements.** The homepage reuses the inner header's `.inav-*`
+  parts. On desktop the brand, the links and the button sit on one 60px row. Below 760px
+  it becomes a two-row grid: brand and Get Alerts share row one, the links get row two to
+  themselves as a full-width swipeable line. Phone header height goes from about 70px
+  with no nav to about 92px with it — the same height, and the same shape, as every
+  other page.
+- **Flat paper and the house hairline.** No blur. On a phone it scrolls away with the
+  page, as the inner header already does; on desktop it stays sticky.
+- **One mark, drawn once.** `LogoMark` is now a component both headers and the footer
+  import, so the flat indigo frame cannot drift apart again.
+
+The three links keep their exact labels and targets (`#contests`, `#subscribe`,
+`/submit`), the Get Alerts button keeps `#subscribe`, and no copy or data changed. None
+of the three is marked `aria-current`: two are in-page anchors, so claiming one is "the
+current page" would be a lie the inner nav does not tell.
+
+**Inspiration** — siteinspire at 375px. Its header is one short row (mark, search, menu),
+but the way into the collection is not hidden behind that menu: `Popular Categories ·
+Styles · Types ·` sits in the page itself as a horizontal scroller running off the right
+edge, one gesture from a thumb. Mubi, Metrograph and Criterion were also open at the same
+width and all three put everything behind a hamburger — which suits a cinema or a
+streaming service selling one thing, and does not suit a directory whose whole value is
+that you can get at 79 contests several ways. Adapted rather than copied: siteinspire's
+strip is filters, ours is sections, and ours already existed on every page but this one.
+
+**Noted for a later run, not done today** —
+- With the homepage and inner headers now the same object, the two link *sets* are still
+  different: the homepage offers Browse / Subscribe / Submit a Contest, the inner pages
+  offer Browse Contests / Closing Soon / Tools / Categories / Cinematic Ads / Creators.
+  Reconciling them is a navigation decision, not a visual one, and it changes which URLs
+  a visitor is offered, so it is a call for Abhi rather than something to do quietly.
+- The `.agent-badge` pill above the browse toolbar still wraps to two ragged lines at
+  390px and 375px and still carries `backdropFilter` and a green glow ring. Now the only
+  blurred element left on the homepage, and the most obviously unfinished thing on it.
+  Its "daily" versus "24/7" copy contradiction is still a call for Abhi.
+- Still open: the Ruminatex callout's `backdropFilter`, the subscribe success state's
+  boxed indigo panel, the "Closing this week" heading's stray far-right count at 1440px,
+  and `/tools/[slug]` and `/categories/[slug]` not using `InnerLayout`.
+- **Data, for the research robot:** Bali International AI Film Festival (BIAIFF) 2026
+  Season 5 still shows a Sep 15, 2026 deadline while marked open, so it renders in
+  "Closing this week" with a past date. Carried over from 2026-09-16.
+- Process: `.env.cron` still has no `NEXT_PUBLIC_SUPABASE_ANON_KEY`. Pointing it at the
+  service-role key to get a populated local render was refused, correctly — that key
+  would be inlined into the client bundle. The header sits above all contest data, so it
+  was fully checkable locally in the empty state, then confirmed live with real rows.
+
+**Verified** — `npm run build` exited 0. Checked on `next start` at 1440px, 390px and
+375px with no horizontal overflow at any width, on the homepage and on /creators and
+/submit to confirm the shared-mark refactor left the inner header alone. Then live at the
+same three widths after deploy (f657d34). The homepage, /creators and /submit all
+return 200.
+
+**Before / after** — `reports/design/2026-09-17-before.png`,
+`reports/design/2026-09-17-before-390.png`, `reports/design/2026-09-17-before-375.png`,
+`reports/design/2026-09-17-after.png`, `reports/design/2026-09-17-after-390.png`,
+`reports/design/2026-09-17-after-375.png`.
+
 ## 2026-09-16 — The browse toolbar, set as one labelled control bar
 
 **Changed** — the controls above the contest grid in `src/components/ContestBrowser.tsx`,
