@@ -31,6 +31,89 @@ interface GuideData {
 }
 
 const GUIDES: Record<string, GuideData> = {
+  "ai-film-contests-closing-september-30-2026": {
+    "title": "8 AI Film Festivals Closing September 30, 2026: The Biggest Deadline Pile-Up of the Year",
+    "description": "Eight AI film festivals all close on September 30, 2026 \u2014 more dedicated AI-film deadlines landing on a single day than at any other point this year \u2014 led by the $1,000,000 grand prize at Dubai's 1 Billion AI Film Award and Runway AI Film Festival's free-entry $25,000+ pool. Here is every deadline, prize, fee and eligibility rule before the window shuts.",
+    "keywords": "AI film contests closing September 30 2026, AI film festival deadlines September 2026, AI film contest deadline this week, Runway AI Film Festival deadline, We Are Human Festival AI, 1 Billion AI Film Award deadline, AI short film submission deadline, AI film festivals closing soon",
+    "datePublished": "2026-09-17",
+    "ruminatex": false,
+    "intro": "Eight AI film festivals close on the same day this year: September 30, 2026. No other date on the 2026 calendar carries this many dedicated AI-film deadlines at once, and the prize spread runs from free laurels to the seven-figure grand prize at Dubai's 1 Billion AI Film Award. Five of the eight cost nothing to enter \u2014 Runway AI Film Festival, the We Are Human Festival's Paris open call, and the 1 Billion AI Film Award are all free \u2014 while CSFCCA Taipei, WAIMF Marbella, On Art Warsaw and AI Film Festival Japan charge tiered FilmFreeway or Festhome fees. This guide lists every one of the eight with its exact prize, fee and eligibility rule pulled from the official page, plus five more deadlines landing the same week that are easy to miss if you only watch the 30th.",
+    "sections": [
+      {
+        "h": "The short answer: eight festivals, one deadline",
+        "body": "In prize order: the 1 Billion AI Film Award (Dubai, $1,000,000, free) closes first alphabetically but tops every other prize on this list by two orders of magnitude. Runway AI Film Festival (New York screening, $25,000+, free) is the largest dedicated AI-film competition by submission volume. The We Are Human Festival's Paris open call (Forum des images screening, 10,000 euro total across three prizes, free) is the only one on this list that disqualifies fully AI-generated work outright. CSFCCA International AI Film Festival (Taipei, Golden Mars Grand Prize statuette, paid FilmFreeway tiers) and WAIMF \u2014 World AI Movie Festival (Marbella, undisclosed cash Grand Prix plus ten category trophies, paid FilmFreeway tiers) both stage in-person award ceremonies within a week of each other in early October. On Art AI Film Festival (Warsaw, screening plus jury recognition, tiered FilmFreeway fee) and the AI International Music Video Festival (Hollywood, jury and audience awards, FilmFreeway fee) round out the non-cash side. AI Film Festival Japan, running as part of AIFJ's Tokyo Innovation Base program October 31 to November 2, charges from $29 via Festhome and awards CapCut- and ElevenLabs-sponsored categories on top of its own Best AI Movie prize."
+      },
+      {
+        "h": "The $1,000,000 anchor: 1 Billion AI Film Award in Dubai",
+        "body": "The 1 Billion AI Film Award is organized by the 1 Billion Followers Summit and culminates in a public premiere in Dubai, UAE, with a $1,000,000 prize \u2014 per the event's own festival listing on Hollywood.AI, the 2026 competition has already selected five titles into its program ahead of the final close. Entry is free and open to filmmakers worldwide, with submissions accepted through the official hollywood.ai/awards portal. Because the summit itself is a media and creator-economy event rather than a traditional film festival, the AI Film Award functions as its flagship content prize \u2014 expect the judging criteria to weight audience reach and shareability alongside craft, more like a creator competition than a festival jury screening. At seven figures, it is the single largest AI-film cash prize open for entry anywhere on the site this month, ahead even of Runway's pool."
+      },
+      {
+        "h": "Runway AI Film Festival: free entry, $25,000+, and a New York screening",
+        "body": "Runway's own festival runs annually in the fall, and 2026's edition \u2014 per festival-tracking coverage from NerdFX's 2026 submission guide \u2014 carries a free entry fee and a prize pool north of $25,000, with selected films screened in New York. It is one of the highest-volume dedicated AI festivals by submission count industry-wide, alongside the New York/LA-based AI Film Festival (AIFF) and the quarterly Sora Film Festival. Because Runway does not publish a hard cap on entries and the fee is zero, filmmakers with a finished 2026 short lose nothing by submitting even as a long shot; the same NerdFX guide notes the sweet spot for AI-festival shorts runs three to eight minutes, with films under three minutes struggling to land narrative depth and films past ten minutes straining current AI consistency."
+      },
+      {
+        "h": "We Are Human Festival: a free Paris open call \u2014 but fully AI-generated films are disqualified",
+        "body": "This is the one deadline on the list with a hard eligibility trap. The We Are Human Festival's first edition, per its official call-for-films page, is built on a 30-year, 30-article structure keyed to the Universal Declaration of Human Rights \u2014 2026 is dedicated to Article 1, on freedom and equal dignity. Submissions must be human/AI hybrid creation: the rules explicitly state that works generated solely by AI without human creative direction are not eligible, and every entry requires an accompanying Ethics Notebook. Submission opened June 1 and free entry, 1 to 10 minutes, aged 18 and up, closes September 30, 2026. Selected films screen in Paris at the Forum des images on November 24, 2026, then travel to partner cities including Sao Paulo, New York, Nairobi, Johannesburg, Mumbai, Quito and Geneva. Total prizes run 10,000 euros across three awards: a 5,000 euro Grand Prix, a 3,000 euro Best Screenplay prize, and a 2,000 euro Ethics Prize. If your film leans on AI generation with no human-directed hybrid layer, this is not your festival \u2014 but if it is, the multi-city screening circuit is worth more than the cash."
+      },
+      {
+        "h": "Three paid-entry options: CSFCCA Taipei, WAIMF Marbella, and Warsaw's On Art Festival",
+        "body": "CSFCCA International AI Film Festival awards its Golden Mars Grand Prize statuette in Taipei, with an in-person screening and industry exchange on November 20; entry runs through paid FilmFreeway tiers and the festival accepts narrative shorts, animation, music videos, experimental work, concept trailers and commercials, open worldwide. WAIMF \u2014 World AI Movie Festival holds its inaugural edition October 7-8 at Red Dog Cinema in Puerto Banus, Marbella, judged by an international jury of producers and directors, with a Grand Prix cash prize plus trophy across ten award categories; minimum runtime is four minutes, completed after January 1, 2025, with English subtitles required for non-English films. On Art AI Film Festival in Warsaw screens 40 short films and 10 medium-length or feature entries at its November finale, open to professional and independent filmmakers across fiction, animation, documentary, video art and experimental work, with the prize built around the Warsaw screening slot and jury recognition rather than cash."
+      },
+      {
+        "h": "AI International Music Video Festival and AI Film Festival Japan round out the pile-up",
+        "body": "The AI International Music Video Festival, run by the nonprofit The AI Project out of Hollywood, spun out of the AI International Film Festival specifically for music videos whose visuals, animation or music are AI-made, plus live-action and documentary work on AI themes; both horizontal and vertical formats are accepted, entry is via FilmFreeway, and the work must be original to the submitting artist, who carries copyright-compliance responsibility. AI Film Festival Japan (AIFJ) closes its Tokyo Innovation Base program the same day, with awards for Best AI Movie, Animation, Creative and Film Music plus sponsored categories from CapCut and ElevenLabs; entry starts at $29 via Festhome, with FilmFreeway tiers priced separately, and the festival itself runs October 31 to November 2 in Tokyo."
+      },
+      {
+        "h": "Five more deadlines land the same week \u2014 don't stop at September 30",
+        "body": "The pile-up doesn't start or end on the 30th. Tyrannus Angel Awards 2026, a faith-driven red-carpet gala in Los Angeles judging on emotional impact over technical showmanship, closes September 20 with a $50,000 total prize pool across Original, Adapted and Animated divisions ($30 per film via FilmFreeway). The AI International Film Festival's Hollywood edition \u2014 the world's first AI film festival, running monthly since 2021 with a 53-category program \u2014 closes September 21, the same day as the free-entry Qolaba AI Film Challenge, a social-first competition from Qolaba.ai that requires posting your entry publicly to Instagram, YouTube, TikTok, LinkedIn, X or Facebook for a shot at $3,000 across four tracks. The AI Song Contest's Bangkok edition, a Eurovision-style AI-music competition, closes September 27 with $1,000 cash and a flight to the live Award Show on November 29. Days after the pile-up, Valencia's FESTIAV closes October 4 (2,250 euros in category prizes, 5-20 euro entry) and Slamdance's DIG strand \u2014 the festival that launched Tarantino and the Russo Brothers \u2014 closes October 6 with a $25,000 AGBO Fellowship from the Russo Brothers plus a Utopia theatrical distribution deal for the winner."
+      },
+      {
+        "h": "How to actually hit all eight deadlines with one finished film",
+        "body": "You do not need eight different films. A single finished short under ten minutes, disclosed honestly as AI-assisted, clears the technical bar for most of these festivals simultaneously \u2014 the exception is We Are Human, whose human/AI hybrid requirement and Ethics Notebook rule out fully AI-generated work, and WAIMF's four-minute minimum runtime, which rules out very short pieces. Build your submission order around cost first: submit to the five free festivals \u2014 Runway, 1 Billion AI Film Award, and We Are Human if your film qualifies \u2014 before spending anything on the paid FilmFreeway or Festhome tiers at CSFCCA, WAIMF, On Art Warsaw or AIFJ. Prepare one FilmFreeway-ready package once (film file, short and long synopsis, director's statement explaining your AI process, an AI-disclosure statement, three to five stills, a poster and an optional 30-60 second trailer) and reuse it across every submission portal rather than customizing per festival \u2014 the deliverables list is close to identical across all eight. Submit at least 48 hours before midnight on the 30th; several of these festivals run on FilmFreeway's own server clock, not your local time zone, and a last-minute upload failure has no grace period once a deadline closes."
+      }
+    ],
+    "faqs": [
+      {
+        "q": "How many AI film contests close on September 30, 2026?",
+        "a": "Eight dedicated AI film festivals: the 1 Billion AI Film Award (Dubai, $1,000,000), Runway AI Film Festival (New York, $25,000+, free), the We Are Human Festival's Paris open call (10,000 euros total, free), CSFCCA International AI Film Festival (Taipei), WAIMF \u2014 World AI Movie Festival (Marbella), On Art AI Film Festival (Warsaw), the AI International Music Video Festival (Hollywood), and AI Film Festival Japan (Tokyo). It is the single busiest AI-film deadline day of 2026."
+      },
+      {
+        "q": "Which September 30 deadlines are free to enter?",
+        "a": "Three are completely free: the 1 Billion AI Film Award, Runway AI Film Festival, and the We Are Human Festival's Call for Films. The remaining five \u2014 CSFCCA, WAIMF, On Art Warsaw, the AI International Music Video Festival and AI Film Festival Japan \u2014 charge tiered entry fees through FilmFreeway or Festhome, typically starting in the $20-40 range."
+      },
+      {
+        "q": "Can a fully AI-generated film enter the We Are Human Festival?",
+        "a": "No. The festival's official rules state that works generated solely by AI without human creative direction are not eligible \u2014 every submission must be human/AI hybrid creation with an accompanying Ethics Notebook. It is the one September 30 deadline built around AI as a tool for human-directed storytelling rather than as a subject in its own right, themed in 2026 around Article 1 of the Universal Declaration of Human Rights."
+      },
+      {
+        "q": "What is the biggest cash prize among the September 30 deadlines?",
+        "a": "The 1 Billion AI Film Award in Dubai, at $1,000,000, organized by the 1 Billion Followers Summit with a public premiere in Dubai, UAE. Runway AI Film Festival is the largest free-entry cash prize at $25,000+, and the We Are Human Festival splits 10,000 euros across a Grand Prix, a Best Screenplay prize and an Ethics Prize."
+      },
+      {
+        "q": "Are there AI film deadlines right before or after September 30?",
+        "a": "Yes. Tyrannus Angel Awards ($50,000 pool) closes September 20, the AI International Film Festival Hollywood edition and the Qolaba AI Film Challenge both close September 21, and the AI Song Contest Bangkok edition closes September 27. Right after the pile-up, Valencia's FESTIAV closes October 4 and Slamdance's DIG strand \u2014 with a $25,000 AGBO Fellowship from the Russo Brothers \u2014 closes October 6."
+      },
+      {
+        "q": "Can I submit the same film to multiple September 30 festivals?",
+        "a": "Yes, and most AI filmmakers do \u2014 festival submission platforms like FilmFreeway are built for simultaneous multi-festival entry, and none of these eight festivals require exclusivity at the submission stage. The only film that cannot go everywhere on this list is a fully AI-generated one with no human-directed hybrid layer, which the We Are Human Festival disqualifies, and anything under four minutes, which falls short of WAIMF's runtime minimum."
+      }
+    ],
+    "featuredContestIds": [
+      "1-billion-ai-film-award-2026",
+      "runway-ai-film-festival-2026",
+      "we-are-human-festival-call-for-films-2026",
+      "csfcca-intl-ai-film-festival-2026",
+      "waimf-marbella-2026",
+      "on-art-ai-warsaw-2026",
+      "ai-international-music-video-festival-2026",
+      "ai-film-festival-japan-november-2026",
+      "tyrannus-angel-ai-film-awards-2026",
+      "qolaba-ai-film-challenge-2026",
+      "ai-song-contest-2026",
+      "slamdance-dig-ai-2027"
+    ]
+  },
+
   "how-to-write-ai-film-treatment": {
     "title": "How to Write an AI Film Treatment in 2026: The 12-Page XPRIZE Format, Step by Step",
     "description": "An AI film treatment is a present-tense prose document of up to 12 pages — plus a one-page cover sheet with a one-sentence logline, a 300-word synopsis and a 300-word personal statement — that tells a judge your film's full story, ending included. It is the exact written package the $3.5 million Future Vision XPRIZE requires with every submission before August 15, 2026, and the same skill that unlocks Runway's $10 million Hundred Film Fund, which funds projects on a written proposal alone. Here is the format, page by page.",
