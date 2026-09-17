@@ -331,6 +331,11 @@ export default async function ContestPage({ params }: { params: Promise<{ id: st
                       {fmt(contest.deadline)}
                     </div>
                   )}
+                  {contest.updatedAt && (
+                    <div style={{ fontSize: 11, color: '#A8A296', marginTop: 6 }}>
+                      Verified {fmt(contest.updatedAt)}
+                    </div>
+                  )}
                   {isOpen && <DeadlineReminder contestName={contest.name} />}
                   {!isClosed && (
                     <a

@@ -24,6 +24,7 @@ function rowToContest(row: Record<string, unknown>): Contest {
     tags: row.tags as string[],
     location: row.location as string | undefined,
     eventDate: row.event_date as string | undefined,
+    updatedAt: row.updated_at as string | undefined,
   }
 }
 

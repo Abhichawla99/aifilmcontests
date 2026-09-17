@@ -96,6 +96,15 @@ export default function ContestCard({ contest }: { contest: Contest }) {
             }}>
               {isOpen && cd ? fmt(contest.deadline) : 'Deadline'}
             </div>
+            {contest.updatedAt && (
+              <div style={{
+                fontSize: 8.5, color: '#A8A296',
+                fontFamily: 'Space Grotesk, sans-serif', fontWeight: 500,
+                marginTop: 3,
+              }}>
+                Verified {fmt(contest.updatedAt)}
+              </div>
+            )}
           </div>
         </div>
 
