@@ -6,6 +6,7 @@ import EmailSubscribe from '@/components/EmailSubscribe'
 import BackgroundFX from '@/components/BackgroundFX'
 import MouseOrbs from '@/components/MouseOrbs'
 import FeaturedSpotlight from '@/components/FeaturedSpotlight'
+import LogoMark from '@/components/LogoMark'
 
 export const dynamic  = 'force-dynamic'
 export const revalidate = 0
@@ -92,53 +93,25 @@ export default async function Home() {
       {/* ── Content (above shader + orbs + grain) ── */}
       <div style={{ position: 'relative', zIndex: 10 }}>
 
-        {/* ── Nav ── */}
-        <header style={{
-          borderBottom: '1px solid rgba(27,25,22,0.05)',
-          backdropFilter: 'blur(16px)',
-          WebkitBackdropFilter: 'blur(16px)',
-          background: 'rgba(251,250,248,0.85)',
-          position: 'sticky',
-          top: 0,
-          zIndex: 50,
-        }}>
-          <div className="max-w-6xl mx-auto px-5 py-4 flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              {/* Logo mark — film frame with play triangle */}
-              <svg width="30" height="30" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ flexShrink: 0 }}>
-                <defs>
-                  <linearGradient id="navbg" x1="0" y1="0" x2="1" y2="1">
-                    <stop offset="0%" stopColor="#3730a3"/>
-                    <stop offset="100%" stopColor="#5b21b6"/>
-                  </linearGradient>
-                  <linearGradient id="navshine" x1="0" y1="0" x2="1" y2="1">
-                    <stop offset="0%" stopColor="rgba(27,25,22,0.12)"/>
-                    <stop offset="100%" stopColor="rgba(27,25,22,0)"/>
-                  </linearGradient>
-                </defs>
-                <rect width="32" height="32" rx="7.5" fill="url(#navbg)"/>
-                <rect width="32" height="32" rx="7.5" fill="url(#navshine)"/>
-                <rect x="3.5" y="3.5" width="3.2" height="3.2" rx="0.7" fill="rgba(27,25,22,0.22)"/>
-                <rect x="25.3" y="3.5" width="3.2" height="3.2" rx="0.7" fill="rgba(27,25,22,0.22)"/>
-                <rect x="3.5" y="25.3" width="3.2" height="3.2" rx="0.7" fill="rgba(27,25,22,0.22)"/>
-                <rect x="25.3" y="25.3" width="3.2" height="3.2" rx="0.7" fill="rgba(27,25,22,0.22)"/>
-                <path d="M12.5 10.2L22.5 16L12.5 21.8V10.2Z" fill="white" opacity="0.92"/>
-              </svg>
-              <span style={{
-                fontFamily: 'Space Grotesk, sans-serif', fontWeight: 700,
-                fontSize: 15, color: '#26231E', letterSpacing: '-0.01em',
-              }}>
-                AI Film Contests
-              </span>
+        {/* ── Nav ──
+             Same object as the inner-page header (.inav-*): flat paper, a
+             hairline, the shared flat mark. Below 760px the links move to
+             their own swipeable line instead of disappearing entirely, which
+             is what they used to do below 640px. ── */}
+        <header className="inav-header">
+          <div className="max-w-6xl mx-auto px-5 inav-row hnav-row">
+            <div className="inav-brand">
+              <LogoMark />
+              <span>AI Film Contests</span>
             </div>
 
-            <nav className="hidden sm:flex items-center gap-6">
+            <nav className="inav" aria-label="Site">
               {([['Browse', '#contests'], ['Subscribe', '#subscribe'], ['Submit a Contest', '/submit']] as [string, string][]).map(([label, href]) => (
-                <a key={label} href={href} className="link-muted" style={{ fontSize: 13, fontWeight: 500 }}>{label}</a>
+                <a key={label} href={href} className="inav-link">{label}</a>
               ))}
             </nav>
 
-            <a href="#subscribe" className="btn" style={{ padding: '7px 16px', fontSize: 13 }}>
+            <a href="#subscribe" className="btn hnav-cta">
               Get Alerts
             </a>
           </div>

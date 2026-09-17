@@ -475,3 +475,29 @@ img, svg, video, canvas { max-width: 100%; }
   /* Thumb-sized chips on a phone. */
   .bb-chips .tab { min-height: 36px; display: inline-flex; align-items: center; }
 }
+
+/* ── Homepage header ────────────────────────────────────────────────────────
+   The homepage reuses the inner-page header's .inav-* parts so both headers
+   are one object. The only difference is the Get Alerts button, which the
+   inner pages do not carry:
+
+   · desktop — brand, links, button on one 60px row;
+   · ≤760px  — a two-row grid. The brand and the button share row one, and the
+     links get row two to themselves as a swipeable line. Before this, the
+     links were `hidden sm:flex` and simply vanished under 640px, so the
+     homepage — the page most people land on — was the only page on the site
+     with no navigation at all on a phone. */
+.hnav-cta { padding: 7px 16px; text-decoration: none; }
+
+@media (max-width: 760px) {
+  /* Overrides .inav-row's column flex from the inner-header block above. */
+  .hnav-row {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: center;
+    column-gap: 12px;
+  }
+  .hnav-row .inav-brand { grid-column: 1; grid-row: 1; }
+  .hnav-cta { grid-column: 2; grid-row: 1; margin-right: 20px; }
+  .hnav-row .inav { grid-column: 1 / -1; grid-row: 2; }
+}
