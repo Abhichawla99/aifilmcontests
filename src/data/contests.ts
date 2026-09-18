@@ -24,6 +24,7 @@ export interface Contest {
   location?: string
   eventDate?: string
   updatedAt?: string
+  createdAt?: string
 }
 
 export const contests: Contest[] = [
