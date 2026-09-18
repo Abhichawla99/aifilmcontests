@@ -36,6 +36,85 @@ describe the old dark theme; the reasoning still applies, the colours do not.)*
 
 ---
 
+## 2026-09-18 — The browse masthead, one ruled line instead of a green pill
+
+**Changed** — the header above the contest grid in `src/app/page.tsx`, and a new
+`.bmast-*` block at the end of `globals.css` replacing the one-line `.agent-badge` rule.
+This is the masthead of the section 83 contests live under.
+
+**Was** — a title with a marketing sticker floated beside it.
+- **The last blurred element on the homepage.** `backdropFilter: blur(8px)` over
+  `rgba(34,197,94,0.04)`, a `rgba(34,197,94,0.2)` border and a `0 0 0 3px rgba(22,163,74,0.08)`
+  glow ring. Flagged on 2026-09-14, 09-15, 09-16 and 09-17 and not fixed until now.
+- **Ragged at phone width.** At 390px the capsule wrapped "Research agent running /
+  daily" mid-phrase, and the note "· fresh contests added 24/7" wrapped again beside it,
+  so the pill became a two-line, two-column blob about 100px tall. The dot sat vertically
+  centred against both lines while the text started at the top, so nothing in it lined up
+  with anything else.
+- **Two credibility claims in two different languages.** "83 active · verified against
+  live sources daily" sat in plain grey under the title; the freshness claim sat in green
+  inside a capsule. Both say the same kind of thing — this list is current — and the page
+  set them as if they were unrelated.
+- The note was `font-size: 10px` at `opacity: 0.6` on green, about 2.4:1 against the
+  capsule fill. Small green text on a green wash, i.e. decoration.
+
+**Now** —
+- **Title, rule, then the two facts on one line.** A `#E3DED3` hairline under
+  "Browse Competitions", with the active count at the left of it and the agent status at
+  the right. Same grammar as the spotlight's ruled facts and the hero's figures row.
+- **The claim is type, not a container.** No blur, no border, no glow, no fill. The dot
+  keeps the house open-green and its `.live` pulse, the agent's name keeps `#15803D`
+  Space Grotesk 600, and the note goes to the `#8B867C` label grey at 12px — the same size
+  as the name, so it reads as the rest of a sentence rather than as fine print.
+- **Below 720px each fact takes a full-width line**, because the two cannot share one
+  without the agent line being squeezed to three words a row. The dot hangs into the
+  margin (`text-indent: -13px`), so at 375px, where "added 24/7" wraps, the second line
+  aligns under "Research" instead of under the dot. A non-breaking space keeps "24/7" with
+  "added" so the figure is never orphaned.
+- The block is about 100px shorter on a phone, which lifts the search field and the
+  filters that much closer to the top of the section.
+
+No copy, data, link, filter or ordering changed. The "daily" versus "24/7" contradiction
+in the sentence is still there, untouched: it is a copy call for Abhi, not a visual one.
+
+**Inspiration** — It's Nice That's homepage. Its feed masthead is "The Nice Feed
+Refreshed 1h ago" — the section name in ink, the freshness claim immediately beside it in
+grey type at a smaller size, and "Explore All →" at the far right of the same line. The
+claim that the list is current is carried entirely by where the words sit, with no badge,
+no colour fill and no icon. Are.na's Explore page was open at the same time and makes the
+harder version of the same bet: its only nod to freshness is a sort option called
+"Recently updated", set as plain text under a small-caps "Sort" label. Adapted rather than
+copied: ours keeps a green dot, because green already means open on every card and in the
+ticker, and a live pulse is the one thing here that is genuinely a status rather than a
+sentence.
+
+**Noted for a later run, not done today** —
+- The "Closing this week" group heading still ends with a bare count at the far right of
+  a long hairline, which reads as a stray digit at 1440px and at 390px. Carried from
+  2026-09-16 and 2026-09-17. With the masthead above it now also built on a hairline, the
+  two rules sit close enough that the difference is easy to see.
+- Still open: the Ruminatex callout's `backdropFilter` (now the only blur left on the
+  homepage), the subscribe success state's boxed indigo panel, and `/tools/[slug]` and
+  `/categories/[slug]` not using `InnerLayout`.
+- The homepage and inner headers are one object but still offer different link sets.
+  Reconciling them changes which URLs a visitor is offered, so it stays a call for Abhi.
+- **Data, for the research robot:** Bali International AI Film Festival (BIAIFF) 2026
+  Season 5 still shows a Sep 15, 2026 deadline while marked open. Carried over from
+  2026-09-16 and 2026-09-17, now three days stale.
+- Process: `.env.cron` still has no `NEXT_PUBLIC_SUPABASE_ANON_KEY`, so a local build
+  renders zero contests. The masthead sits above all contest data and its only dynamic
+  part is the count, so it was fully checkable locally in the empty state, then confirmed
+  live with 83 real rows.
+
+**Verified** — `npm run build` exited 0. Checked on `next start` at 1440px, 390px and
+375px with no horizontal overflow at any width, and on /submit at 390px to confirm
+removing the `.agent-badge` rule from the shared stylesheet left other pages alone. Then
+live at the same three widths after deploy (409c1e1). The homepage returns 200.
+
+**Before / after** — `reports/design/2026-09-18-before.png`,
+`reports/design/2026-09-18-before-390.png`, `reports/design/2026-09-18-after.png`,
+`reports/design/2026-09-18-after-390.png`, `reports/design/2026-09-18-after-375.png`.
+
 ## 2026-09-17 — The homepage header, the same object as every other page's
 
 **Changed** — the header in `src/app/page.tsx`, a new shared `src/components/LogoMark.tsx`,
