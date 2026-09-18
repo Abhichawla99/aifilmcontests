@@ -273,9 +273,6 @@ img, svg, video, canvas { max-width: 100%; }
 }
 .presented-by-badge:hover { border-color: #C9C4B8; background: #F7F5F1; }
 
-/* ── Agent badge (kept, glow softened for paper) ────────────────────────────── */
-.agent-badge { box-shadow: 0 0 0 3px rgba(22,163,74,0.08); }
-
 /* ── Contest page: prose left, spec rail right ─────────────────────────────── */
 .contest-rail { position: sticky; top: 24px; }
 @media (max-width: 900px) {
@@ -500,4 +497,63 @@ img, svg, video, canvas { max-width: 100%; }
   .hnav-row .inav-brand { grid-column: 1; grid-row: 1; }
   .hnav-cta { grid-column: 2; grid-row: 1; margin-right: 20px; }
   .hnav-row .inav { grid-column: 1 / -1; grid-row: 2; }
+}
+
+/* ── Browse masthead ────────────────────────────────────────────────────────
+   The section title, then one ruled line carrying the two facts that say the
+   list is worth trusting: how many contests are active, and that a robot keeps
+   them current. The freshness claim used to be a green pill with a blur and a
+   glow ring floated to the right of the title — the last blurred element on the
+   homepage, and at 390px it broke "Research agent running / daily" across two
+   lines inside its own capsule. It is type on a hairline now, in the same
+   grammar as the spotlight's ruled facts, so it reads as part of the page
+   rather than as a sticker applied to it. The dot keeps the house open-green
+   and its slow pulse; nothing else about the claim is decorated. */
+.bmast { margin-bottom: 30px; }
+.bmast-title {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: clamp(20px, 3vw, 28px);
+  font-weight: 700;
+  color: #1B1916;
+  letter-spacing: -0.03em;
+}
+.bmast-meta {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 4px 28px;
+  margin-top: 11px;
+  padding-top: 9px;
+  border-top: 1px solid #E3DED3;
+}
+.bmast-count { font-size: 13px; color: #7A7469; }
+.bmast-agent {
+  font-size: 12px;
+  color: #7A7469;
+  line-height: 1.5;
+  /* the dot hangs into the margin so a wrapped second line lines up with the
+     text rather than with the dot */
+  padding-left: 13px;
+  text-indent: -13px;
+}
+.bmast-agent .dot {
+  display: inline-block;
+  vertical-align: middle;
+  margin-right: 7px;
+  margin-bottom: 2px;
+}
+.bmast-agent-name {
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 600;
+  color: #15803D;
+  letter-spacing: 0.01em;
+}
+.bmast-agent-note { color: #8B867C; }
+
+@media (max-width: 720px) {
+  /* Below this the two facts cannot share a line without the agent line being
+     squeezed to three words a row, so each gets its own full-width line. */
+  .bmast-meta { display: block; }
+  .bmast-agent { margin-top: 4px; }
 }

@@ -323,37 +323,17 @@ export default async function Home() {
 
         {/* ── Browse ── */}
         <section id="contests" className="max-w-6xl mx-auto px-5 py-14">
-          <div className="flex items-start justify-between mb-9 gap-4 flex-wrap">
-            <div>
-              <h2 style={{
-                fontFamily: 'Space Grotesk, sans-serif',
-                fontSize: 'clamp(20px, 3vw, 28px)',
-                fontWeight: 700,
-                color: '#1B1916',
-                marginBottom: 6,
-                letterSpacing: '-0.03em',
-              }}>
-                Browse Competitions
-              </h2>
-              <p style={{ fontSize: 13, color: '#7A7469' }}>
+          <div className="bmast">
+            <h2 className="bmast-title">Browse Competitions</h2>
+            <div className="bmast-meta">
+              <p className="bmast-count">
                 {open.length + upcoming.length} active · verified against live sources daily
               </p>
-            </div>
-            <div className="agent-badge" style={{
-              display: 'flex', alignItems: 'center', gap: 8,
-              fontSize: 12,
-              border: '1px solid rgba(34,197,94,0.2)',
-              borderRadius: 100, padding: '7px 16px',
-              background: 'rgba(34,197,94,0.04)',
-              backdropFilter: 'blur(8px)',
-            }}>
-              <span className="dot dot-open live" style={{ width: 6, height: 6 }} />
-              <span style={{ fontFamily: 'Space Grotesk, sans-serif', fontWeight: 600, color: '#15803D', letterSpacing: '0.01em' }}>
-                Research agent running daily
-              </span>
-              <span style={{ fontSize: 10, color: '#15803D', fontFamily: 'Space Grotesk, sans-serif', fontWeight: 400, opacity: 0.6 }}>
-                · fresh contests added 24/7
-              </span>
+              <p className="bmast-agent">
+                <span className="dot dot-open live" />
+                <span className="bmast-agent-name">Research agent running daily</span>{' '}
+                <span className="bmast-agent-note">{'· fresh contests added\u00A024/7'}</span>
+              </p>
             </div>
           </div>
 
