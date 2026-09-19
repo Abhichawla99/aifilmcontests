@@ -4,6 +4,7 @@ import Link from 'next/link'
 import { getAllContests } from '@/lib/contests-db'
 import ContestCard from '@/components/ContestCard'
 import { ArticleHeader } from '@/components/ArticleLayout'
+import EmailSubscribe from '@/components/EmailSubscribe'
 
 export const dynamic = 'force-dynamic'
 
@@ -243,6 +244,11 @@ export default async function ToolPage({ params }: { params: Promise<{ slug: str
               </div>
             </section>
           )}
+
+          {/* Deadline alerts */}
+          <section style={{ marginBottom: 48 }}>
+            <EmailSubscribe compact />
+          </section>
 
           {/* Other tools */}
           <section style={{ borderTop: '1px solid rgba(27,25,22,0.05)', paddingTop: 32, marginTop: 8 }}>

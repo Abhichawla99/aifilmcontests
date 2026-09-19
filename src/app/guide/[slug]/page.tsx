@@ -4,6 +4,7 @@ import Link from 'next/link'
 import { getAllContests } from '@/lib/contests-db'
 import InnerLayout from '@/components/InnerLayout'
 import { ArticleHeader, ArticleGrid, H2, P, readingMinutes, splitStandfirst } from '@/components/ArticleLayout'
+import EmailSubscribe from '@/components/EmailSubscribe'
 
 export const dynamic = 'force-dynamic'
 
@@ -1627,6 +1628,11 @@ export default async function GuidePage({ params }: { params: Promise<{ slug: st
             </div>
           </section>
         )}
+
+        {/* Deadline alerts */}
+        <section style={{ marginBottom: 48 }}>
+          <EmailSubscribe compact />
+        </section>
 
         {/* Related guides */}
         <section style={{ borderTop: '1px solid rgba(27,25,22,0.05)', paddingTop: 32, marginBottom: 40 }}>

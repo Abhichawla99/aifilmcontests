@@ -1,6 +1,7 @@
 import { notFound } from 'next/navigation'
 import ContestCard from '@/components/ContestCard'
 import { ArticleHeader } from '@/components/ArticleLayout'
+import EmailSubscribe from '@/components/EmailSubscribe'
 import { Metadata } from 'next'
 import Link from 'next/link'
 import { getAllContests } from '@/lib/contests-db'
@@ -172,6 +173,11 @@ export default async function LocationPage({ params }: { params: Promise<{ slug:
               </div>
           </section>
         )}
+
+        {/* Deadline alerts */}
+        <section style={{ marginBottom: 48 }}>
+          <EmailSubscribe compact />
+        </section>
 
         {/* Other locations */}
         <section style={{ borderTop: '1px solid rgba(27,25,22,0.05)', paddingTop: 32, marginBottom: 40 }}>
