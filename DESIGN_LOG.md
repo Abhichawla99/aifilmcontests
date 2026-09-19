@@ -36,6 +36,88 @@ describe the old dark theme; the reasoning still applies, the colours do not.)*
 
 ---
 
+## 2026-09-19 — The contest grid's group headings, with the count back beside its label
+
+**Changed** — the deadline-bucket heading in `src/components/ContestBrowser.tsx`, styled
+by a new `.cbg-*` block at the end of `globals.css`. These five headings — Closing this
+week, Closing this month, In the next three months, Later in the year, Not open yet — are
+the only wayfinding inside a list of 84 contests.
+
+**Was** — a label, a rule that ate the rest of the line, and a number stranded at the end
+of it.
+- **A digit 940px from the words it counted.** At 1440px the heading was `CLOSING THIS
+  WEEK` at the left margin, then a hairline running the full width of the grid, then `5`
+  hard against the right edge. Nothing tied the two together, so the number read as a page
+  number or a stray rather than as the size of the group. Flagged on 2026-09-16, 09-17 and
+  09-18 and not fixed until now.
+- **Set as fine print, not as a heading.** 11px Space Grotesk in `#8B867C`, the same grey
+  and nearly the same size as the "84 contests · showing 12" result line sitting 20px
+  above it. The one element telling a visitor which pile of contests they had scrolled
+  into was quieter than the running count above it.
+- **The wrong hairline.** `#ECE9E2`, where the house rule is `#E3DED3`. Since 09-18 the
+  browse masthead a few rows up has been built on `#E3DED3`, so two rules of different
+  greys sat within about 200px of each other.
+- **An unnamed region.** Each `<section>` had no accessible name, and a screen reader got
+  the label and the count as two unrelated fragments.
+
+**Now** —
+- **`CLOSING THIS WEEK · 5`, then the rule out to the right edge.** The count sits
+  immediately after its label, joined by the house middot — the same separator as "84
+  active · verified against live sources daily" directly above and "12 of 84" below. The
+  hairline now terminates the heading instead of joining two unrelated things.
+- **12px ink.** The label is `#1B1916` at 12px with 0.09em tracking, so a section heading
+  reads as one. `Closing this week` keeps burnt orange `#C2410C`, the same
+  inside-seven-days colour the cards, the ticker and the spotlight already use, and its
+  count takes the orange at 68% so the figure stays subordinate to the words.
+- **The house hairline**, `#E3DED3`, matching the masthead above it.
+- **A labelled region.** The section carries `aria-labelledby`; the visible figure is
+  `aria-hidden` and a visually hidden `, 5 contests` sits beside it, so a screen reader
+  hears "Closing this week, 5 contests" rather than "Closing this week 5".
+- The rule is `flex: 1 1 24px`, so if a bucket name ever outgrows its line the rule drops
+  to a full-width line of its own instead of squeezing the label or overflowing.
+
+No filter behaviour, bucket definition, label text, copy, data or ordering changed.
+
+**Inspiration** — Criterion's Shop All Films list view. Above 1891 rows it prints
+`1891 RESULTS` at the top left: the figure in ink, the unit in small-caps grey, the two
+locked together and sitting at the margin where the list begins. Nothing is floated to the
+right of a leader line. Film at Lincoln Center's Now Playing calendar was open at the same
+time and makes the other half of the argument: its day groups are headed `SEP 19` in large
+display type at the left, with no rule and no count at all, and the size alone is enough to
+break the schedule into days. Adapted rather than copied: ours keeps a count, because
+"how many can I still enter this week" is the question this directory exists to answer,
+and keeps the rule, because five buckets on one page need a horizon line that a date
+heading standing alone does not.
+
+**Noted for a later run, not done today** —
+- The five bucket names are still the copy they were. "Closing this month" means within 30
+  days and "In the next three months" means within 90, so a contest closing on 19 October
+  sits under "this month". Renaming them is a copy call for Abhi, not a visual one.
+- Still open: the Ruminatex callout's `backdropFilter`, now the only blur left on the
+  homepage; the subscribe success state's boxed indigo panel; and `/tools/[slug]` and
+  `/categories/[slug]` not using `InnerLayout`.
+- The homepage and inner headers are one object but still offer different link sets.
+  Carried from 2026-09-17 and 09-18; it changes which URLs a visitor is offered, so it
+  stays a call for Abhi.
+- **Data, for the research robot:** Bali International AI Film Festival (BIAIFF) 2026
+  Season 5 still shows a Sep 15, 2026 deadline while marked open. Carried from 2026-09-16,
+  09-17 and 09-18, now four days stale.
+- Process: `.env.cron` still has no `NEXT_PUBLIC_SUPABASE_ANON_KEY`, so a plain local build
+  renders zero contests and no group headings at all. Pointing that variable at the
+  service-role key is still refused — it would be inlined into the client bundle. Instead
+  `getAllContests` was pointed at the server-only `supabaseAdmin` client for the local
+  screenshot build only, which keeps the key out of `.next/static` (grepped to confirm),
+  and that edit was reverted before the committed build.
+
+**Verified** — `npm run build` exited 0. On `next start` with all five buckets expanded,
+every heading renders on a single 20px line at 1440px, 390px and 375px, with the rule
+between 113px and 980px wide and no horizontal overflow at any width. Then live at the
+same three widths after deploy (07ae4cc). The homepage returns 200.
+
+**Before / after** — `reports/design/2026-09-19-before.png`,
+`reports/design/2026-09-19-before-390.png`, `reports/design/2026-09-19-after.png`,
+`reports/design/2026-09-19-after-390.png`, `reports/design/2026-09-19-after-375.png`.
+
 ## 2026-09-18 — The browse masthead, one ruled line instead of a green pill
 
 **Changed** — the header above the contest grid in `src/app/page.tsx`, and a new
