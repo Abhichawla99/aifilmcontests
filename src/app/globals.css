@@ -557,3 +557,52 @@ img, svg, video, canvas { max-width: 100%; }
   .bmast-meta { display: block; }
   .bmast-agent { margin-top: 4px; }
 }
+
+/* ── Contest-grid group headings (.cbg) ─────────────────────────────────────
+   The deadline buckets are the only wayfinding in a list of 80-odd contests,
+   so each one is set as a heading rather than as fine print. The count used to
+   float at the far right of a full-width rule, which at 1440px left a lone
+   digit about a thousand pixels from the words it counted; it now sits beside
+   its label and the rule runs out to the right edge, terminating the heading
+   instead of joining two unrelated things. */
+.cbg {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 9px;
+  margin-bottom: 14px;
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.09em;
+  color: #1B1916;
+}
+.cbg-count {
+  flex: none;
+  font-variant-numeric: tabular-nums;
+  color: #8B867C;
+}
+.cbg-count::before {
+  content: '·';
+  margin-right: 9px;
+  color: #BBB5A8;
+}
+/* Wraps to its own full-width line rather than squeezing the label, so a long
+   bucket name at 375px degrades into heading-then-rule instead of overflowing. */
+.cbg-rule {
+  flex: 1 1 24px;
+  min-width: 24px;
+  height: 1px;
+  background: #E3DED3;
+}
+/* Burnt orange lands here for the same reason it lands on a card's days-left
+   figure: the deadline is inside seven days. */
+.cbg-urgent { color: #C2410C; }
+.cbg-urgent .cbg-count { color: #C2410C; opacity: 0.68; }
+.cbg-urgent .cbg-count::before { color: #E3B39E; }
+
+@media (max-width: 420px) {
+  .cbg { gap: 8px; letter-spacing: 0.07em; }
+  .cbg-count::before { margin-right: 8px; }
+}

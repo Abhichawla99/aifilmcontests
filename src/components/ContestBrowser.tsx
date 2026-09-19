@@ -319,21 +319,20 @@ export default function ContestBrowser({ contests }: { contests: Contest[] }) {
         </div>
       ) : groups ? (
         <div style={{ display: 'flex', flexDirection: 'column', gap: 34 }}>
-          {groups.map(([label, list]) => (
-            <section key={label}>
-              <h3 style={{
-                fontFamily: 'Space Grotesk, sans-serif', fontSize: 11, fontWeight: 700,
-                textTransform: 'uppercase', letterSpacing: '0.1em',
-                color: label === 'Closing this week' ? '#C2410C' : '#8B867C',
-                marginBottom: 12, display: 'flex', alignItems: 'center', gap: 9,
-              }}>
-                {label}
-                <span style={{ flex: 1, height: 1, background: '#ECE9E2' }} />
-                <span style={{ fontVariantNumeric: 'tabular-nums', opacity: 0.75 }}>{list.length}</span>
-              </h3>
-              {render(list)}
-            </section>
-          ))}
+          {groups.map(([label, list]) => {
+            const id = 'grp-' + label.toLowerCase().replace(/[^a-z0-9]+/g, '-')
+            return (
+              <section key={label} aria-labelledby={id}>
+                <h3 id={id} className={'cbg' + (label === 'Closing this week' ? ' cbg-urgent' : '')}>
+                  <span className="cbg-label">{label}</span>
+                  <span className="cbg-count" aria-hidden="true">{list.length}</span>
+                  <span className="sr-only">, {list.length} contest{list.length === 1 ? '' : 's'}</span>
+                  <span className="cbg-rule" aria-hidden="true" />
+                </h3>
+                {render(list)}
+              </section>
+            )
+          })}
         </div>
       ) : render(shown)}
 
