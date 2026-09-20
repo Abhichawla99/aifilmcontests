@@ -449,52 +449,45 @@ export default async function Home() {
         </section>
 
         {/* ── Footer ── */}
-        <footer style={{
-          borderTop: '1px solid rgba(27,25,22,0.04)',
-          padding: '28px 0',
-          background: 'rgba(251,250,248,0.8)',
-          backdropFilter: 'blur(8px)',
-        }}>
-          <div className="max-w-6xl mx-auto px-5 flex flex-col sm:flex-row items-center justify-between gap-4">
-            <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-              <div style={{
-                width: 22, height: 22, borderRadius: 5,
-                background: '#4F46E5',
-                display: 'flex', alignItems: 'center', justifyContent: 'center',
-                fontSize: 8, fontWeight: 800, color: '#fff',
-              }}>AI</div>
-              <span style={{ fontFamily: 'Space Grotesk, sans-serif', fontSize: 13, fontWeight: 600, color: '#A8A296' }}>
-                AI Film Contests
-              </span>
-            </div>
-
-            <span style={{ fontSize: 12, color: '#8B867C' }}>
-              Tracking every AI film competition · Updated daily
-            </span>
-
-            <div className="flex items-center gap-4" style={{ fontSize: 12 }}>
-              <a href="/contests/closing-soon" className="link-muted">Closing Soon</a>
-              <span style={{ color: '#D8D4C9' }}>·</span>
-              <a href="/contests/free" className="link-muted">Free to Enter</a>
-              <span style={{ color: '#D8D4C9' }}>·</span>
-              <a href="/contests/cash-prizes" className="link-muted">Cash Prizes</a>
-              <span style={{ color: '#D8D4C9' }}>·</span>
-              <a href="/submit" className="link-muted">Submit a Contest</a>
-              <span style={{ color: '#D8D4C9' }}>·</span>
-              <a href="/cinematic-ads" className="link-muted">Cinematic AI Ads</a>
-              <span style={{ color: '#D8D4C9' }}>·</span>
-              <a href="/creators" className="link-muted">Featured Creators</a>
-              <span style={{ color: '#D8D4C9' }}>·</span>
-              <a
-                href="https://ruminatex.com"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="link-muted"
-                style={{ fontSize: 11 }}
-              >
-                Crafted by Ruminatex
+        <footer className="sfoot">
+          <div className="max-w-6xl mx-auto px-5 sfoot-grid">
+            <div className="sfoot-ident">
+              <a href="/" className="sfoot-mark">
+                <span className="sfoot-tile" aria-hidden>AI</span>
+                <span className="sfoot-name">AI Film Contests</span>
               </a>
+              <p className="sfoot-tagline">
+                {'Tracking every AI film competition ·\u00A0Updated daily'}
+              </p>
+              <p className="sfoot-credit">
+                <a
+                  href="https://ruminatex.com"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="link-muted"
+                >
+                  Crafted by Ruminatex
+                </a>
+              </p>
             </div>
+
+            <nav aria-labelledby="sfoot-browse">
+              <h2 className="sfoot-head" id="sfoot-browse">Browse</h2>
+              <div className="sfoot-links">
+                <a href="/contests/closing-soon" className="link-muted">Closing Soon</a>
+                <a href="/contests/free" className="link-muted">Free to Enter</a>
+                <a href="/contests/cash-prizes" className="link-muted">Cash Prizes</a>
+              </div>
+            </nav>
+
+            <nav aria-labelledby="sfoot-more">
+              <h2 className="sfoot-head" id="sfoot-more">More</h2>
+              <div className="sfoot-links">
+                <a href="/submit" className="link-muted">Submit a Contest</a>
+                <a href="/creators" className="link-muted">Featured Creators</a>
+                <a href="/cinematic-ads" className="link-muted">Cinematic AI Ads</a>
+              </div>
+            </nav>
           </div>
         </footer>
 

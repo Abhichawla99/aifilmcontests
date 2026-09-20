@@ -606,3 +606,93 @@ img, svg, video, canvas { max-width: 100%; }
   .cbg { gap: 8px; letter-spacing: 0.07em; }
   .cbg-count::before { margin-right: 8px; }
 }
+
+/* ── Site footer (.sfoot) ───────────────────────────────────────────────────
+   Seven links of two and three words each ("Submit a Contest", "Cinematic AI
+   Ads", "Crafted by Ruminatex") were set as one centre-justified row with
+   middot separators. At 1440px there was no room for it, so every label broke
+   across two lines while its separator stayed vertically centred between them;
+   at 390px the row did not wrap at all and both end links ran off the edges of
+   the screen, unreachable. A single-line footer is a function of label length,
+   not of taste — so the links now stack one per line under two named columns,
+   the way a footer of phrases has to be set. */
+.sfoot {
+  border-top: 1px solid #E3DED3;
+  padding: 34px 0 34px;
+}
+.sfoot-grid {
+  display: grid;
+  /* The 1fr identity column absorbs the slack, so the two link columns sit to
+     the right the way the old left/right split did. */
+  grid-template-columns: minmax(200px, 1fr) minmax(128px, auto) minmax(128px, auto);
+  gap: 28px 64px;
+  align-items: start;
+}
+.sfoot-mark {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+}
+.sfoot-tile {
+  width: 22px;
+  height: 22px;
+  border-radius: 5px;
+  flex: none;
+  background: #4F46E5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 8px;
+  font-weight: 800;
+  color: #fff;
+}
+.sfoot-name {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  color: #3E3A33;
+  white-space: nowrap;
+}
+.sfoot-tagline {
+  margin-top: 11px;
+  /* Wide enough for the sentence on one line down to a 340px viewport. */
+  max-width: 300px;
+  font-size: 12px;
+  line-height: 1.7;
+  color: #8B867C;
+}
+.sfoot-credit {
+  margin-top: 14px;
+  font-size: 12px;
+  color: #A8A296;
+}
+.sfoot-head {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: #A8A296;
+  margin-bottom: 10px;
+}
+.sfoot-links {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2px;
+}
+/* Padding rather than gap, so the row of a link is its own hit target. */
+.sfoot-links a {
+  font-size: 13px;
+  line-height: 1.35;
+  padding: 5px 0;
+}
+
+@media (max-width: 640px) {
+  /* Two link columns still fit side by side at 375px — the longest label,
+     "Featured Creators", is about 107px — so only the identity block needs a
+     full-width line of its own. */
+  .sfoot-grid { grid-template-columns: 1fr 1fr; gap: 26px 20px; }
+  .sfoot-ident { grid-column: 1 / -1; }
+}
