@@ -19,6 +19,13 @@ function daysLeft(deadline: string) {
   return Math.ceil((new Date(deadline).getTime() - Date.now()) / 86_400_000)
 }
 
+// Named AI tools a contest allows, lowercased. Generic entries ("Any AI tools",
+// "Hybrid welcome") name no tool, so they never count as a match.
+const KNOWN_TOOLS = ['runway', 'sora', 'kling', 'veo', 'midjourney', 'pika', 'luma', 'elevenlabs', 'higgsfield', 'suno', 'leonardo']
+function toolKeys(tools?: string[]): string[] {
+  const text = (tools ?? []).join(' | ').toLowerCase()
+  return KNOWN_TOOLS.filter(t => text.includes(t))
+}
 
 // ── generateStaticParams ────────────────────────────────────────────────────
 export async function generateStaticParams() {
@@ -84,15 +91,23 @@ export default async function ContestPage({ params }: { params: Promise<{ id: st
   const cats = realCats.length ? realCats : allCats
   const tint = isClosed ? closedStyle : (cats[0] ?? normalizeCategory('film'))
 
-  // Related: still open, shares this contest's first category, closing soonest first.
+  // Related: still open and sharing a category or a named AI tool with this contest.
+  // Best match first (categories weigh more than tools), then closing soonest.
   const all = await getAllContests()
+  const myCats = new Set(cats.map(c => c.label))
+  const myTools = toolKeys(contest.aiToolsAllowed)
   const related = all
-    .filter(c =>
-      c.id !== contest.id &&
-      c.status === 'open' &&
-      (cats.length === 0 || (c.categories ?? []).some(x => normalizeCategory(x).label === cats[0].label)))
-    .sort((a, b) => new Date(a.deadline).getTime() - new Date(b.deadline).getTime())
+    .filter(c => c.id !== contest.id && c.status === 'open')
+    .map(c => {
+      const theirCats = new Set((c.categories ?? []).map(x => normalizeCategory(x).label))
+      const sharedCats = Array.from(myCats).filter(l => theirCats.has(l)).length
+      const sharedTools = toolKeys(c.aiToolsAllowed).filter(t => myTools.includes(t)).length
+      return { c, score: sharedCats * 2 + sharedTools }
+    })
+    .filter(x => x.score > 0)
+    .sort((a, b) => b.score - a.score || new Date(a.c.deadline).getTime() - new Date(b.c.deadline).getTime())
     .slice(0, 3)
+    .map(x => x.c)
 
   // JSON-LD Event schema
   const jsonLdEvent = {
@@ -419,10 +434,10 @@ export default async function ContestPage({ params }: { params: Promise<{ id: st
                 fontFamily: 'Space Grotesk, sans-serif', fontSize: 20, fontWeight: 700,
                 color: '#1B1916', letterSpacing: '-0.02em', marginBottom: 4,
               }}>
-                Also open in {cats[0]?.label.toLowerCase() ?? 'AI film'}
+                More open contests like this
               </h2>
               <p style={{ fontSize: 13, color: '#7A7469', marginBottom: 18 }}>
-                Same category, sorted by which closes first.
+                Same category or AI tool, closest match first.
               </p>
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: 16 }}>
                 {related.map(c => <ContestCard key={c.id} contest={c} />)}
