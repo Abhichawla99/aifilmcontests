@@ -36,6 +36,103 @@ describe the old dark theme; the reasoning still applies, the colours do not.)*
 
 ---
 
+## 2026-09-20 — The homepage footer, set as columns instead of one impossible row
+
+**Changed** — the `<footer>` in `src/app/page.tsx`, and a new `.sfoot-*` block at the end
+of `globals.css` replacing the inline styles it was built from. This is the last thing on
+the page and the only navigation offered to someone who has scrolled past all 85 contests.
+
+**Was** — seven links in a single centre-justified row, and there was never room for them.
+- **Every label broken across two lines at 1440px.** `Closing / Soon`, `Free to / Enter`,
+  `Cash / Prizes`, `Submit a / Contest`, `Cinematic AI / Ads`, `Featured / Creators`,
+  `Crafted by / Ruminatex` — and the wordmark itself, `AI Film / Contests`. The row was
+  `flex items-center gap-4` with no `flex-wrap`, sharing one line with the wordmark and a
+  47-character tagline, so each link was squeezed to roughly 90px and wrapped inside it.
+- **A middot floating between the two halves of nothing.** The six `·` separators are
+  their own elements and stayed vertically centred, so each one sat in the gutter beside
+  the *middle* of a two-line label rather than between two links.
+- **Two links unreachable on a phone.** At 390px the row still did not wrap; it simply
+  overran both edges of the centred container. `Closing Soon` was clipped off the left of
+  the screen and `Crafted by Ruminatex` off the right, and the labels that did survive
+  were shredded into three-line columns (`Free / to / Enter`, `Submit / a / Contest`). The
+  overflow check passed the whole time, because the row was clipped rather than widening
+  the document — nothing warned, the links were just gone.
+- **The second-to-last blur on the homepage**, `backdropFilter: blur(8px)` over
+  `rgba(251,250,248,0.8)`, doing no work at all: the fill is the page ground at 80%, so it
+  blurred paper against paper. Its border was `rgba(27,25,22,0.04)`, about a quarter the
+  weight of the `#E3DED3` hairline used everywhere else since 09-18.
+
+**Now** —
+- **Three columns.** Identity at the left — wordmark, tagline, and the Ruminatex credit
+  moved down beneath them — then `BROWSE` (Closing Soon, Free to Enter, Cash Prizes) and
+  `MORE` (Submit a Contest, Featured Creators, Cinematic AI Ads). The identity column is
+  `minmax(200px, 1fr)` so it absorbs the slack and the two link columns still sit at the
+  right, keeping the left/right split the old row was reaching for.
+- **One link per line, every line a full label.** The longest, `Featured Creators`,
+  measures 111px and gets 128px minimum. No separators, because a column does not need
+  them; the six middots are gone rather than restyled.
+- **Column headings instead of a run of equals.** 11px Space Grotesk 700 in `#A8A296` at
+  0.1em, the same small-caps label grammar as `PRIZE POOL` and `DEADLINE` on the spotlight
+  and `FREE ALERTS` on the subscribe card. Each column is a `<nav>` labelled by its
+  heading, so a screen reader hears "Browse navigation" rather than eleven loose links.
+- **The house hairline and no blur.** `#E3DED3`, flat, with the page ground showing
+  through — one of the two remaining homepage blurs removed.
+- **Two columns side by side at 390px and 375px**, with the identity block spanning both.
+  Every link now lands between x=20 and x=316 inside a 390px screen. Links carry `5px 0`
+  padding rather than a margin so the hit target is the width of the row, not just the
+  glyphs.
+- The tagline is capped at 300px with a non-breaking space binding `· Updated daily`, so
+  it holds one line down to a 340px viewport instead of orphaning the middot.
+
+Same seven links, same URLs, same label text. No copy, data or ordering changed.
+`InnerLayout`'s footer was already wrapping and was left alone.
+
+**Inspiration** — Letterboxd's footer fits eleven links on one line, and the reason is
+that every one of them is a single word: About, Pro, News, Apps, Help, Terms, API,
+Contact. Criterion and It's Nice That, whose footer links are phrases — "Criterion Closet
+Picks", "Advertising Opportunities", "Careers at It's Nice That" — do not attempt a row at
+all. Both stack them under a small named column heading, one per line: Criterion jumps
+from a 24px white group name to 13px grey small-caps links, It's Nice That sets heading
+and links at the same 13px and lets the stacking alone carry the hierarchy. A single-line
+footer is a function of label length, not of taste, and ours had seven phrases. Adapted
+rather than copied: we take It's Nice That's one-size restraint for the links but keep a
+quieter heading than Criterion's, because two columns of three do not need a 24px shout to
+be told apart.
+
+**Noted for a later run, not done today** —
+- The Ruminatex callout directly above the footer is now the only `backdropFilter` left on
+  the homepage, over a `rgba(27,25,22,0.015)` fill and a `rgba(27,25,22,0.05)` border that
+  together render as a barely-there ghost box. Its `ruminatex.com` button is `#A8A296`
+  inside a 5%-black border and reads as disabled, and the film-frame icon is stroked
+  `rgba(165,180,252,0.7)` on a `rgba(99,102,241,0.08)` fill — invisible at any real
+  viewing distance. Carried from 2026-09-17, 09-18 and 09-19.
+- Still open: the subscribe success state's boxed indigo panel, and `/tools/[slug]` and
+  `/categories/[slug]` not using `InnerLayout`.
+- Footer tap targets are 27.5px tall, better than the 17px they were but short of the 40px
+  the optimizer backlog wants for mobile. Raising them is a site-wide pass, not a footer
+  one.
+- The homepage and inner footers now differ: this one has Free to Enter, Cash Prizes and
+  Cinematic AI Ads; `InnerLayout`'s has Browse All. Reconciling them changes which URLs a
+  visitor is offered on 300-odd pages, so it stays a call for Abhi — the same reason the
+  two headers' link sets have stayed apart since 2026-09-17.
+- **Data, for the research robot:** Bali International AI Film Festival (BIAIFF) 2026
+  Season 5 still shows a Sep 15, 2026 deadline while marked open. Carried from 2026-09-16
+  through 09-19, now five days stale.
+- Process: `.env.cron` still has no `NEXT_PUBLIC_SUPABASE_ANON_KEY`. As on 09-19,
+  `getAllContests` was pointed at the server-only `supabaseAdmin` client for the local
+  screenshot build so the page rendered its real 85 contests, and that edit was reverted
+  before the committed build — the diff is `page.tsx` and `globals.css` only.
+
+**Verified** — `npm run build` exited 0 with the shim reverted. On `next start`, all eight
+footer links render on a single line at 1440px, 390px and 375px, with no horizontal
+overflow at any width, and `/submit` and `/contests/closing-soon` were checked at 390px to
+confirm the new stylesheet block left `InnerLayout` alone. Then live at the same three
+widths after deploy (e07703b). The homepage returns 200.
+
+**Before / after** — `reports/design/2026-09-20-before.png`,
+`reports/design/2026-09-20-before-390.png`, `reports/design/2026-09-20-after.png`,
+`reports/design/2026-09-20-after-390.png`, `reports/design/2026-09-20-after-375.png`.
+
 ## 2026-09-19 — The contest grid's group headings, with the count back beside its label
 
 **Changed** — the deadline-bucket heading in `src/components/ContestBrowser.tsx`, styled
