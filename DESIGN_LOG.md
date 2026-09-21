@@ -36,6 +36,114 @@ describe the old dark theme; the reasoning still applies, the colours do not.)*
 
 ---
 
+## 2026-09-21 — The cinematic-ads callout, a ruled aside instead of a ghost box
+
+**Changed** — the Ruminatex / cinematic-ads block in `src/app/page.tsx`, and a new
+`.rcal-*` block at the end of `globals.css` replacing the inline styles it was built
+from. It sits between the contest grid and the subscribe card, and it is the only place
+on the homepage that says who makes this directory.
+
+**Was** — a box drawn at a weight nobody can see.
+- **A border and a fill both below the threshold of visibility.** `1px solid
+  rgba(27,25,22,0.05)` around a 16px radius, filled `rgba(27,25,22,0.015)` — a twentieth
+  and a sixty-sixth of an opaque line. The house hairline is `#E3DED3`, roughly four
+  times the weight, and it already ran above this block on the past-contests divider and
+  below it across the top of the footer.
+- **It read as a component that had failed to load.** Directly beneath it the subscribe
+  card carries a real `#E1DAF0` border on a real `#F3F0F9` fill. Two boxes stacked, one
+  fully rendered and one a grey wash, and the eye reads the wash as broken rather than as
+  quiet.
+- **The homepage's last `backdropFilter`.** `blur(8px)` over a fill that is the page
+  ground at 1.5%, so it blurred paper against paper. Flagged on 2026-09-17, 09-18, 09-19
+  and 09-20 and not fixed until now.
+- **A link styled as a disabled control.** `ruminatex.com` was `#A8A296` inside that same
+  5%-black border at an 8px radius with `6px 14px` of padding — a pill, greyed, which is
+  exactly the shape and colour of a button you cannot press. It was the studio credit,
+  and it looked switched off.
+- **The actionable link was the seventh phrase of a grey sentence.** "Explore how AI is
+  reshaping brand filmmaking →" sat mid-run inside a 13px `#6F6A61` line 890px long at
+  1440px. The one thing in the block a visitor could do had no more prominence than
+  "Looking to create".
+- **An icon chip that vanished, then floated.** A 16px film frame stroked
+  `rgba(165,180,252,0.7)` — pale indigo at 70% — inside a 36px `rgba(99,102,241,0.08)`
+  tile. Invisible at any real viewing distance on desktop. At 390px the paragraph beside
+  it ran to three lines while the tile stayed `align-items: center`, so a 36px square hung
+  in the left gutter level with line two and nothing at all sat beside lines one and
+  three. The text was indented 50px from the box's padding while `ruminatex.com` started
+  at the padding edge, so one small box contained two different left margins.
+
+**Now** —
+- **A hairline and nothing else.** `border-top: 1px solid #E3DED3`, no border, no radius,
+  no fill, no blur — the same grammar as the footer, the browse masthead and the grid's
+  bucket headings. The homepage now has no `backdropFilter` left anywhere.
+- **A 20px left rail.** The film frame comes out of its tile and is stroked `#4F46E5` at
+  1.5, sitting in a rail that both text rows indent to. At 390px and 375px it lands on the
+  first line of the sentence rather than floating beside it, and the sentence, the link
+  and the credit all begin at x=54.
+- **The link is the loudest thing in the block.** Its own row, 15px Space Grotesk 600 in
+  indigo at -0.005em, underlining on hover. The context sentence stays 13px `#6F6A61`
+  with `cinematic AI content` at `#3E3A33` 500, exactly as before.
+- **`ruminatex.com` stops pretending to be a button.** Plain text, 12px Space Grotesk in
+  `#8B867C` — one step darker than the `#A8A296` it was, so it reads — baselined with the
+  opening sentence at the right at desktop, dropping under the link below 720px because
+  at 390px the link alone measures about 300px and has nothing left to share.
+- Focus rings come from the global `a:focus-visible` rule rather than from nothing, since
+  the old markup carried a dead `onMouseEnter={undefined}` and no focus or hover state on
+  either link.
+
+Same words, same word order, same two URLs (`/cinematic-ads` and `ruminatex.com`). No
+copy, data or ordering changed.
+
+**Inspiration** — MUBI's Notebook marks its newsletter aside — "Don't miss our latest
+features and interviews" — with `background: rgb(246,246,246)`, `border: 0`,
+`border-radius: 0`. It changes the ground under the block and draws nothing around it,
+and because the tint runs the full width the area is large enough for a 9-step shift off
+white to actually register. Criterion's Current makes the harder version of the same
+argument: probing every `div`, `section` and `aside` on the page for a border or a
+non-white fill returns exactly one element in the whole document, a nav control strip.
+Neither site owns a container like ours. Ours was trying to be a box and failing at it,
+which is the worst of the three options. Adapted rather than copied: we take the
+no-border, no-radius conclusion but reach it with the hairline the site already uses
+everywhere instead of MUBI's tinted band, because a full-bleed grey band on warm paper
+would be a new surface colour and `theme.ts` owns those.
+
+**Noted for a later run, not done today** —
+- `ruminatex.com`'s tap target is 28px tall and the link's is 42px. Both are under the
+  40px the optimizer backlog wants, and raising the small one is part of the site-wide
+  pass, not this block.
+- `src/app/cinematic-ads/page.tsx` still uses `backdropFilter`. It is now the only page
+  that does; the homepage is clean.
+- Still open: the subscribe success state's boxed indigo panel, and `/tools/[slug]` and
+  `/categories/[slug]` not using `InnerLayout`.
+- The homepage and inner footers and headers still offer different link sets. Carried from
+  2026-09-17 through 09-20; it changes which URLs a visitor is offered on 300-odd pages,
+  so it stays a call for Abhi.
+- **Data, for the research robot:** Bali International AI Film Festival (BIAIFF) 2026
+  Season 5 still shows a Sep 15, 2026 deadline while marked open. Carried from 2026-09-16
+  through 09-20, now six days stale.
+- Process: `.env.cron` still has no `NEXT_PUBLIC_SUPABASE_ANON_KEY`, so the local build
+  renders an empty grid and the homepage falls into its "Nothing matches that yet" state.
+  The 09-19 workaround — repointing `getAllContests` at `supabaseAdmin` for the local
+  build only — was refused by the sandbox this run, so today's before and after shots were
+  both taken against the live site, where the data is real, and the local build was used
+  only to verify this block's own geometry and the overflow check. That is sufficient
+  here because the aside is static, but a change inside the grid would not be verifiable
+  locally at all until that variable exists.
+
+**Verified** — `npm run build` exited 0. The aside measures 76px tall at 1440px against
+the old box's 86px, and 155px at 390px against 163px measured on the old one at 375px —
+so the block carries more hierarchy in slightly less height. The mark, the sentence, the
+link and the credit all start at x=54 on a phone, and the aside ends at x=355 inside a
+375px screen. No horizontal overflow at 1440px, 390px or 375px. Then live
+at all three widths after deploy (1351ee9); the homepage returns 200. One thing to watch:
+the aside's hairline now sits about 145px below the past-contests rule, so the bottom of
+the homepage reads as a short run of ruled bands. It looks deliberate at both widths, but
+a third rule in that stretch would be one too many.
+
+**Before / after** — `reports/design/2026-09-21-before.png`,
+`reports/design/2026-09-21-before-390.png`, `reports/design/2026-09-21-after.png`,
+`reports/design/2026-09-21-after-390.png`, `reports/design/2026-09-21-after-375.png`.
+
 ## 2026-09-20 — The homepage footer, set as columns instead of one impossible row
 
 **Changed** — the `<footer>` in `src/app/page.tsx`, and a new `.sfoot-*` block at the end
