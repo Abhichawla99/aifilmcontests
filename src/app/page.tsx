@@ -342,66 +342,32 @@ export default async function Home() {
 
         {/* ── Ruminatex / Cinematic AI advertising callout ── */}
         <section className="max-w-6xl mx-auto px-5 pb-12">
-          <div style={{
-            border: '1px solid rgba(27,25,22,0.05)',
-            borderRadius: 16,
-            padding: '24px 28px',
-            background: 'rgba(27,25,22,0.015)',
-            backdropFilter: 'blur(8px)',
-            display: 'flex',
-            flexWrap: 'wrap',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-            gap: 16,
-          }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
-              {/* Film frame icon */}
-              <div style={{
-                width: 36, height: 36, borderRadius: 8, flexShrink: 0,
-                background: 'rgba(99,102,241,0.08)',
-                border: '1px solid rgba(99,102,241,0.15)',
-                display: 'flex', alignItems: 'center', justifyContent: 'center',
-              }}>
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="rgba(165,180,252,0.7)" strokeWidth="1.8">
-                  <rect x="2" y="2" width="20" height="20" rx="2.5" />
-                  <path d="M7 2v20M17 2v20M2 12h20M2 7h5M2 17h5M17 7h5M17 17h5" />
-                </svg>
-              </div>
-              <div>
-                <p style={{ fontSize: 13, color: '#6F6A61', lineHeight: 1.6 }}>
-                  Looking to create{' '}
-                  <span style={{ color: '#3E3A33', fontWeight: 500 }}>cinematic AI content</span> for your brand?{' '}
-                  <a
-                    href="/cinematic-ads"
-                    style={{ color: '#4F46E5', textDecoration: 'none', fontWeight: 500 }}
-                    onMouseEnter={undefined}
-                  >
-                    Explore how AI is reshaping brand filmmaking →
-                  </a>
-                </p>
-              </div>
-            </div>
+          <aside className="rcal">
+            {/* Film frame, stroked in the accent at the left rail rather than
+                parked inside a tinted icon chip. */}
+            <svg
+              className="rcal-mark" width="20" height="20" viewBox="0 0 24 24"
+              fill="none" stroke="#4F46E5" strokeWidth="1.5" aria-hidden="true"
+            >
+              <rect x="2" y="2" width="20" height="20" rx="2.5" />
+              <path d="M7 2v20M17 2v20M2 12h20M2 7h5M2 17h5M17 7h5M17 17h5" />
+            </svg>
+            <p className="rcal-body">
+              Looking to create{' '}
+              <span className="rcal-em">cinematic AI content</span> for your brand?
+            </p>
+            <a className="rcal-link" href="/cinematic-ads">
+              Explore how AI is reshaping brand filmmaking →
+            </a>
             <a
+              className="rcal-site"
               href="https://ruminatex.com"
               target="_blank"
               rel="noopener noreferrer"
-              style={{
-                fontSize: 12,
-                color: '#A8A296',
-                textDecoration: 'none',
-                fontFamily: 'Space Grotesk, sans-serif',
-                fontWeight: 500,
-                letterSpacing: '0.02em',
-                border: '1px solid rgba(27,25,22,0.05)',
-                borderRadius: 8,
-                padding: '6px 14px',
-                transition: 'color 0.15s, border-color 0.15s',
-                whiteSpace: 'nowrap',
-              }}
             >
               ruminatex.com
             </a>
-          </div>
+          </aside>
         </section>
 
         {/* ── Bottom CTA ── */}

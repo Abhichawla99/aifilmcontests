@@ -696,3 +696,87 @@ img, svg, video, canvas { max-width: 100%; }
   .sfoot-grid { grid-template-columns: 1fr 1fr; gap: 26px 20px; }
   .sfoot-ident { grid-column: 1 / -1; }
 }
+
+/* ── Cinematic-ads aside (.rcal) ────────────────────────────────────────────
+   Was a box drawn at a weight nobody can see: a rgba(27,25,22,0.05) border and
+   a rgba(27,25,22,0.015) fill — a twentieth and a sixty-sixth of an opaque
+   line — around a 16px radius, plus the homepage's last backdropFilter,
+   blurring paper against paper. Sitting directly above the subscribe card's
+   real #E1DAF0 border and #F3F0F9 fill, it read as a component that had failed
+   to load, and the ruminatex.com link inside it was a pill in #A8A296 behind
+   the same 5%-black border, which is what a disabled button looks like.
+   It is now an aside under a hairline, the way the footer and the grid's
+   bucket headings are already set: no border, no radius, no fill, no blur.
+   Same words, same two URLs; the link the block exists for is now the loudest
+   thing in it instead of the seventh phrase of a 13px grey sentence. */
+.rcal {
+  border-top: 1px solid #E3DED3;
+  padding: 22px 0 4px;
+  display: grid;
+  /* A 20px left rail the mark sits in and the second line indents to, so the
+     two text rows share one edge instead of the icon floating beside them. */
+  grid-template-columns: 20px minmax(0, 1fr) auto;
+  grid-template-areas:
+    'mark body site'
+    '.    link site';
+  align-items: start;
+  column-gap: 14px;
+  row-gap: 7px;
+}
+.rcal-mark {
+  grid-area: mark;
+  /* Optical: aligns the frame with the x-height of the 13px line beside it. */
+  margin-top: 1px;
+}
+.rcal-body {
+  grid-area: body;
+  font-size: 13px;
+  line-height: 1.6;
+  color: #6F6A61;
+}
+.rcal-em { color: #3E3A33; font-weight: 500; }
+.rcal-link {
+  grid-area: link;
+  justify-self: start;
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 15px;
+  font-weight: 600;
+  line-height: 1.4;
+  letter-spacing: -0.005em;
+  color: #4F46E5;
+  text-decoration: none;
+  text-underline-offset: 4px;
+}
+.rcal-link:hover { text-decoration: underline; }
+.rcal-site {
+  grid-area: site;
+  /* Baselines with the opening sentence rather than floating between the two
+     rows, so the credit reads as part of the first line, not as a stray. */
+  align-self: start;
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  /* #A8A296 inside a border read as a disabled control. Plain text one step
+     darker reads as what it is: the name of the studio, quietly credited. */
+  color: #8B867C;
+  text-decoration: none;
+  text-underline-offset: 3px;
+  white-space: nowrap;
+  padding: 4px 0;
+}
+.rcal-site:hover { color: #3E3A33; text-decoration: underline; }
+
+@media (max-width: 720px) {
+  /* The studio name drops under the link rather than squeezing it: at 390px
+     the link alone measures about 300px and has nothing left to share. */
+  .rcal {
+    grid-template-columns: 20px minmax(0, 1fr);
+    grid-template-areas:
+      'mark body'
+      '.    link'
+      '.    site';
+    row-gap: 8px;
+  }
+  .rcal-site { align-self: start; justify-self: start; }
+}
