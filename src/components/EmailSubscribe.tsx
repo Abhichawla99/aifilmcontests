@@ -60,37 +60,29 @@ export default function EmailSubscribe({ compact = false }: { compact?: boolean 
 
   if (status === 'success') {
     return (
-      <div className="py-2">
-        <p className="text-[#1B1916] font-semibold mb-1" style={{ fontFamily: 'Space Grotesk, sans-serif', fontSize: 15 }}>
-          You&apos;re in. Check your inbox now.
-        </p>
-        <p className="text-sm mb-3" style={{ color: '#7A7469', lineHeight: 1.6 }}>
-          We just sent you a welcome email.
-        </p>
+      <div className="sok" role="status">
+        <p className="sok-head">You&apos;re in. Check your inbox now.</p>
+        <p className="sok-sub">We just sent you a welcome email.</p>
 
-        {/* Reply nudge */}
-        <div style={{
-          border: '1px solid rgba(99,102,241,0.2)',
-          borderRadius: 10,
-          padding: '14px 16px',
-          background: 'rgba(79,70,229,0.05)',
-          marginBottom: 12,
-        }}>
-          <p style={{ fontSize: 13, fontWeight: 600, color: '#4F46E5', marginBottom: 5, fontFamily: 'Space Grotesk, sans-serif' }}>
-            One quick step to guarantee delivery →
+        {/* The instruction, set as a ruled note in the same grammar as
+            SubscribeError — the two outcomes of one form should be one object
+            in two colours, not a ruled note and a tinted panel. */}
+        <div className="sok-step">
+          <p className="sok-step-label">One quick step to guarantee delivery</p>
+          <p className="sok-step-do">
+            <strong>Reply to that email</strong> — even just &ldquo;got it&rdquo; works.
           </p>
-          <p style={{ fontSize: 13, color: '#6F6A61', lineHeight: 1.65, margin: 0 }}>
-            <strong style={{ color: '#26231E' }}>Reply to that email</strong> — even just &ldquo;got it&rdquo; works.
+          <p className="sok-step-why">
             This tells your inbox we&apos;re legit and ensures every future contest alert lands in
-            your <strong style={{ color: '#26231E' }}>Primary</strong> inbox, not Promotions.
+            your <strong>Primary</strong> inbox, not Promotions.
             The more you reply to our emails, the better your delivery gets.
           </p>
         </div>
 
         <button
+          type="button"
           onClick={() => { setStatus('idle'); setMessage('') }}
-          className="text-xs underline underline-offset-2 transition-colors"
-          style={{ color: '#8B867C' }}
+          className="sok-again"
         >
           Subscribe another email
         </button>

@@ -780,3 +780,83 @@ img, svg, video, canvas { max-width: 100%; }
   }
   .rcal-site { align-self: start; justify-self: start; }
 }
+
+/* ── Subscribe success state (.sok) ─────────────────────────────────────────
+   The one screen a visitor sees after doing the single thing this site asks
+   of them, and it was the last tinted panel on the homepage: a 10px-radius
+   box filled rgba(79,70,229,0.05) behind a rgba(99,102,241,0.2) border,
+   nested inside the subscribe card's own #E3DED3 border — a box inside a box,
+   two levels of containment that neither It's Nice That nor Are.na uses even
+   once on a whole homepage. Its heading, "One quick step to guarantee
+   delivery →", was 13px indigo 600 with a trailing arrow on text that is not
+   a link and goes nowhere. And the instruction the block exists for — reply
+   to the email — was the first four words of a seven-line 13px grey run, set
+   no louder than the explanation of why.
+   It is now the same object as SubscribeError directly below it: a 2px rule,
+   a small-caps label, and body text. The action leads at 13.5px in near-ink,
+   the reasoning follows at 12.5px in grey, and the arrow is gone. Same words
+   in the same order, split across two paragraphs so the instruction reads as
+   the instruction. */
+.sok { padding-top: 2px; }
+.sok-head {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 16px;
+  font-weight: 700;
+  letter-spacing: -0.015em;
+  line-height: 1.35;
+  color: #1B1916;
+  margin: 0 0 4px;
+}
+.sok-sub {
+  font-size: 13px;
+  line-height: 1.6;
+  color: #7A7469;
+  margin: 0 0 16px;
+}
+/* 2px rule, 12px indent — the geometry SubscribeError already uses, in indigo
+   rather than the #C2410C it reserves for a failure. */
+.sok-step {
+  border-left: 2px solid #4F46E5;
+  padding: 1px 0 1px 12px;
+}
+.sok-step-label {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #4F46E5;
+  margin: 0 0 5px;
+}
+/* The thing to do, one step up in size and most of the way to ink. */
+.sok-step-do {
+  font-size: 13.5px;
+  line-height: 1.55;
+  color: #26231E;
+  margin: 0 0 6px;
+}
+.sok-step-do strong { font-weight: 600; color: #1B1916; }
+/* Why it matters, one step down and in grey, so it reads as the footnote it is. */
+.sok-step-why {
+  font-size: 12.5px;
+  line-height: 1.65;
+  color: #6F6A61;
+  margin: 0;
+}
+.sok-step-why strong { font-weight: 600; color: #3E3A33; }
+/* Was 12px grey with no padding — a 15px-tall tap target on a phone. */
+.sok-again {
+  margin-top: 15px;
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 12px;
+  font-weight: 500;
+  color: #8B867C;
+  background: none;
+  border: 0;
+  padding: 7px 0;
+  cursor: pointer;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  transition: color 0.15s ease;
+}
+.sok-again:hover { color: #3E3A33; }
