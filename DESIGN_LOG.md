@@ -36,6 +36,115 @@ describe the old dark theme; the reasoning still applies, the colours do not.)*
 
 ---
 
+## 2026-09-22 — The subscribe success state, a ruled note instead of a tinted panel
+
+**Changed** — the `status === 'success'` branch of `src/components/EmailSubscribe.tsx`,
+and a new `.sok-*` block at the end of `globals.css` replacing the inline styles it was
+built from. This is the screen a visitor sees after doing the single thing this site asks
+of them, and it renders in two places: inside the homepage subscribe card, and as the
+compact form now sitting at the foot of every guide, tool, comparison, prize, location,
+category and topic page.
+
+**Was** — a box inside a box, with the instruction buried in it.
+- **The last tinted panel on the homepage.** A 10px-radius box filled
+  `rgba(79,70,229,0.05)` behind a `rgba(99,102,241,0.2)` border, nested inside the
+  subscribe card's own `#E3DED3` border and white fill. Two levels of containment for one
+  short instruction. It is the same failure the 09-21 aside had, only inverted: that box
+  was too faint to read as a box, this one was solid enough to read as a second card.
+- **An arrow on text that is not a link.** `One quick step to guarantee delivery →` was
+  13px Space Grotesk 600 in `#4F46E5` — indigo, semibold, trailing arrow, which is the
+  exact signature every link on this site uses. It is a heading. It goes nowhere, and
+  nothing happens when you tap it.
+- **The instruction was the first four words of a paragraph about the instruction.**
+  "Reply to that email" opened a single 13px `#6F6A61` run that continued for another 38
+  words explaining inbox placement. At 390px that was seven lines of grey at one size,
+  with two mid-sentence bolds (`Reply to that email`, `Primary`) as the only hierarchy.
+  The thing to do and the reason to do it were set identically.
+- **A 16px tap target.** `Subscribe another email` was 12px with an underline and no
+  padding at all — a 137.6 x 16px hit area, the smallest control anywhere on the page.
+- **Nothing announced it.** The failure branch carries `role="alert"`; the success branch
+  carried no role, so the one state a screen reader most needs told after submitting a
+  form arrived silently.
+
+**Now** —
+- **The same object as the error state directly below it in the same file.** A 2px rule
+  and a 12px indent — the geometry `SubscribeError` has used since 09-12 — in `#4F46E5`
+  rather than the `#C2410C` reserved for a failure. No fill, no radius, no border. The two
+  outcomes of one form are now one thing in two colours.
+- **A small-caps label instead of a fake link.** `ONE QUICK STEP TO GUARANTEE DELIVERY` at
+  10.5px Space Grotesk 700, 0.08em, indigo — the same label grammar as `NOT SUBSCRIBED
+  YET` beneath it, `PRIZE POOL` on the spotlight and `BROWSE` in the footer. The arrow is
+  gone.
+- **The action leads.** `Reply to that email — even just "got it" works.` is its own
+  paragraph at 13.5px in `#26231E`; the reasoning follows at 12.5px in `#6F6A61`. Same
+  words, same order, split at the sentence break that was already there.
+- **A 34px control.** `Subscribe another email` keeps its size and colour but gains
+  `7px 0` padding, so the hit area goes from 16px tall to 34.4px. Still short of the 40px
+  the optimizer backlog wants; that is a site-wide pass.
+- `role="status"` on the container, so success is announced the way failure already is.
+
+Same words, same word order. No copy, data or ordering changed.
+
+**Inspiration** — the question was whether a panel is ever the right container for a short
+notice, so I counted them. It's Nice That's homepage has exactly one element with a corner
+radius wider than 120px and *zero* elements over 120x40 with either a fill or a full
+border. Are.na's homepage carries 6,282 characters of real content and also returns zero
+on both counts — no filled container, no fully bordered container, at any size over
+150x50. Neither site draws a panel even once, let alone a panel inside another panel.
+Neither has a single arrow glyph on non-link text; It's Nice That has no trailing arrows
+anywhere on the page. Adapted rather than copied: both sites reach zero panels by using
+whitespace and type size alone, which our success state cannot do because it lives inside
+a card that has to hold the form. So we take the conclusion — no second container — and
+mark the note with the 2px rule the component already owned for its error, which is a
+border our own house grammar had already answered this exact question with.
+
+**Noted for a later run, not done today** —
+- **The card keeps selling after the sale.** `FREE ALERTS`, "Never miss a deadline" and
+  "Get notified when new contests open and 7 days before any deadline closes." sit in
+  `page.tsx` above the form and stay put when the form succeeds, so the pitch is still
+  addressed to someone who already subscribed. Hiding them on success means lifting
+  `status` out of `EmailSubscribe` into the page, which is a bigger change than one day.
+- **The success state offers no way back into the site.** A visitor who just subscribed is
+  given one grey underlined button that puts the form back. Any link out would be new
+  copy, which is a call for Abhi.
+- The spotlight card's contest title may be clipping its first glyph — `1 Billion AI Film
+  Award` and `1 BILLION FOLLOWERS SUMMIT` both read as though the leading `1` is cut at
+  the card's left padding edge in the 1440px live shot. Worth measuring on a run that owns
+  `FeaturedSpotlight`.
+- `src/app/cinematic-ads/page.tsx` is still the only page using `backdropFilter`. Carried
+  from 09-21.
+- Still open: `/tools/[slug]` and `/categories/[slug]` not using `InnerLayout`.
+- The homepage and inner footers and headers still offer different link sets. Carried from
+  2026-09-17 through 09-21; it changes which URLs a visitor is offered on 300-odd pages,
+  so it stays a call for Abhi.
+- **Data, for the research robot:** Bali International AI Film Festival (BIAIFF) 2026
+  Season 5 still shows a Sep 15, 2026 deadline while marked open. Carried from 2026-09-16
+  through 09-21, now seven days stale.
+- Process: `.env.cron` still has no `NEXT_PUBLIC_SUPABASE_ANON_KEY`, so the local build
+  renders an empty grid. It did not matter today — the subscribe card renders the same
+  with zero contests — but a change inside the grid still is not verifiable locally.
+
+**Verified** — `npm run build` exited 0 before and after the rebase onto `05d5528`. This
+state cannot be reached by clicking, so both the before and the after shots were taken on
+`next start` with the component's initial `status` temporarily set to `'success'`; that
+shim was reverted before the committed build, and the diff is `EmailSubscribe.tsx` and
+`globals.css` only. It is also why the after shots are local rather than live: reaching
+the real success state means actually subscribing, which sends an email, which robots do
+not do. Measured: the whole success block is 269px tall at 390px against 303.1px before,
+248px against 281.7px at 1440px, and 289.6px against 303.1px at 375px — more hierarchy in
+less height at every width. The note itself is 155.2px against the old box's 185.7px at
+390px. `Subscribe another email` is 140.7 x 34.4px against 137.6 x 16px. The block sits
+between x=45 and x=330 inside a 375px screen, and between x=20 and x=370 in the compact
+form on `/topics/ai-film-festivals-2026`. No horizontal overflow at 1440px, 390px or
+375px, checked with the idle form as well as the success state. Live homepage returns 200
+after deploy.
+
+**Before / after** — `reports/design/2026-09-22-before.png`,
+`reports/design/2026-09-22-before-390.png`, `reports/design/2026-09-22-after.png`,
+`reports/design/2026-09-22-after-390.png`, `reports/design/2026-09-22-after-375.png`. The
+live homepage after deploy (idle form, since the success state needs a real signup) is at
+`reports/design/2026-09-22-after-live.png` and `-after-live-390.png`.
+
 ## 2026-09-21 — The cinematic-ads callout, a ruled aside instead of a ghost box
 
 **Changed** — the Ruminatex / cinematic-ads block in `src/app/page.tsx`, and a new
