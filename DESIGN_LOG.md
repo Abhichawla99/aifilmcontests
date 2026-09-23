@@ -36,6 +36,55 @@ describe the old dark theme; the reasoning still applies, the colours do not.)*
 
 ---
 
+## 2026-09-23 — The Apply block, one control stack, and a source URL that isn't cut in half
+
+**Changed** — the deadline block at the top of the contest page's spec rail
+(`src/app/contests/[id]/page.tsx`), `src/components/DeadlineReminder.tsx`, and a new
+`.dlr-*` block at the end of `globals.css` replacing the inline styles it was built from.
+This is the block a visitor decides from: how long they have, where to apply, and whether
+to believe the date.
+
+**Was** —
+- **A URL cut mid-word.** The line whose entire job is to prove the deadline was checked
+  against the organizer's own page printed `contest.url` through `.slice(0, 28)` with no
+  ellipsis. Against live data that mangles **102 of 195 contests, 92 of them mid-word**:
+  `app.pixverse.ai/challenge/pi`, `curiousrefuge.com/ai-animati`,
+  `runwayml.com/hundred-film-fu`, `aiforgood.itu.int/ai-for-goo`. The one element on the
+  page carrying our credibility read as a rendering bug.
+- **An emoji standing in for a UI icon.** `🔔 Get a reminder 3 days before this deadline`.
+  The Principles name this exactly: our category emoji are a private set defined in
+  `theme.ts`, and no emoji stands in for an icon. A bell is the single most generic
+  notification glyph on the web.
+- **A 16px tap target.** The reminder was a `<button>` with `padding: 0` and a 12.5px
+  label — the same failure the 09-22 entry found on `Subscribe another email`, on a
+  control that matters more.
+- **The secondary action above the primary one.** The reminder sat between the verified
+  line and the Apply button, so the first indigo thing in the block was the fallback and
+  the actual call to action came second.
+
+**Now** —
+- **The domain, whole.** A `host()` helper returns the hostname with `www.` stripped, so
+  the line reads `app.pixverse.ai` — complete on all 195 contests, never truncated,
+  fitting at 390px. The full URL stays in the `href`. The domain is what proves whose page
+  we read; the path never was.
+- **One control stack.** Apply first as the full-width indigo button, a `#ECE9E2` hairline
+  under it, then the reminder as a second full-width row in indigo at 12.5px — same width,
+  one step down in contrast. Two rows of one object instead of two competing things.
+- **A 42px tap target** (`padding: 13px 0`, full width) and `outline-offset: -2px` so the
+  focus ring sits inside the card rather than straddling its border.
+- **No emoji.** The words were already specific enough.
+
+**Inspired by** — Letterboxd's film rail stacks its secondary action directly beneath the
+primary at the same width and lower contrast, so the pair reads as one control group and
+neither fights the other; Mubi's Awards & Festivals block names the awarding institution in
+full and puts the detail in small grey beneath it — the authority's name is never
+abbreviated, because the name is the evidence. Ours was abbreviating exactly that.
+
+**Before/after** — `reports/design/2026-09-23-before.png`, `-before-390.png`,
+`-after.png`, `-after-390.png`.
+
+---
+
 ## 2026-09-22 — The subscribe success state, a ruled note instead of a tinted panel
 
 **Changed** — the `status === 'success'` branch of `src/components/EmailSubscribe.tsx`,

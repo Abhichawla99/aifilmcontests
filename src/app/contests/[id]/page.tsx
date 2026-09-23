@@ -15,6 +15,18 @@ function fmt(d: string) {
   return new Date(d).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })
 }
 
+// The organizer's domain, whole. This line's job is to show whose page the
+// deadline was checked against, and a domain is what carries that — the path
+// does not. It used to print the first 28 characters of the full URL, which cut
+// 92 of 195 contests mid-word ("app.pixverse.ai/challenge/pi").
+function host(url: string) {
+  try {
+    return new URL(url).hostname.replace(/^www\./, '')
+  } catch {
+    return url.replace(/^https?:\/\//, '').replace(/^www\./, '').split('/')[0]
+  }
+}
+
 function daysLeft(deadline: string) {
   return Math.ceil((new Date(deadline).getTime() - Date.now()) / 86_400_000)
 }
@@ -351,7 +363,6 @@ export default async function ContestPage({ params }: { params: Promise<{ id: st
                       Verified {fmt(contest.updatedAt)}
                     </div>
                   )}
-                  {isOpen && <DeadlineReminder contestName={contest.name} />}
                   {!isClosed && (
                     <a
                       href={contest.url}
@@ -363,6 +374,7 @@ export default async function ContestPage({ params }: { params: Promise<{ id: st
                       Apply on official site →
                     </a>
                   )}
+                  {isOpen && <DeadlineReminder contestName={contest.name} />}
                 </div>
 
                 <SpecRow label="Entry fee" value={contest.entryFee || 'See official site'} highlight={contest.entryFee === 'Free'} />
@@ -396,7 +408,7 @@ export default async function ContestPage({ params }: { params: Promise<{ id: st
                   <p style={{ fontSize: 11.5, color: '#8B867C', lineHeight: 1.55, margin: 0 }}>
                     Checked against the organizer&apos;s official page every morning.
                     {' '}<a href={contest.url} target="_blank" rel="noopener noreferrer" className="link-muted" style={{ textDecoration: 'underline' }}>
-                      {contest.url.replace(/^https?:\/\//, '').replace(/\/$/, '').slice(0, 28)}
+                      {host(contest.url)}
                     </a>
                   </p>
                 </div>

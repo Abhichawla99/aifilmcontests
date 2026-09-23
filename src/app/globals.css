@@ -860,3 +860,38 @@ img, svg, video, canvas { max-width: 100%; }
   transition: color 0.15s ease;
 }
 .sok-again:hover { color: #3E3A33; }
+
+/* ── The deadline block's second action (2026-09-23) ─────────────────────────
+   Was a 🔔-led run of 12.5px text with padding: 0 — an emoji standing in for a
+   UI icon, and a 16px-tall tap target, sitting ABOVE the primary Apply button.
+   Now it is the second row of one control stack: full width, same width as the
+   button above it, one step down in contrast, with a rule separating them. ── */
+.dlr-trigger {
+  display: block;
+  width: 100%;
+  margin-top: 12px;
+  padding: 13px 0;
+  border: 0;
+  border-top: 1px solid #ECE9E2;
+  background: none;
+  text-align: center;
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 12.5px;
+  font-weight: 600;
+  color: #4F46E5;
+  cursor: pointer;
+  transition: color 0.15s ease;
+}
+.dlr-trigger:hover { color: #3730A3; }
+.dlr-trigger:focus-visible { outline-offset: -2px; }
+.dlr-open {
+  margin-top: 14px;
+  padding-top: 14px;
+  border-top: 1px solid #ECE9E2;
+}
+.dlr-open-note {
+  font-size: 12.5px;
+  line-height: 1.55;
+  color: #6F6A61;
+  margin: 0 0 8px;
+}
