@@ -36,6 +36,85 @@ describe the old dark theme; the reasoning still applies, the colours do not.)*
 
 ---
 
+## 2026-09-24 — The /feature contest picker, set as a ruled index
+
+**Changed** — the contest picker at the foot of `src/app/feature/page.tsx`, plus a new
+`.feat-*` block at the end of `globals.css`. This is the page that sells the one paid
+thing on the site, and the picker is the step between "I want this" and paying.
+
+**Was** —
+- **Eighty identical rounded grey boxes.** Same radius, same fill, same border, stacked
+  with an 8px gap. The Principles say hairlines over boxes; this was the opposite of that
+  eighty times in a row.
+- **"Feature →" printed eighty times.** The same two words in indigo at the right edge of
+  every row. Nothing distinguished one row from another, so the eye read chrome, not names.
+- **A colliding line.** Name and organizer shared one line separated by a middot, so
+  `World AI Cinema Festival — Remember the Future (Oct 2026 cycle) · World Film Festival in
+  Cannes — Remember the Future` wrapped into a grey-and-black tangle and the rows came out
+  at wildly different heights.
+- **A sort order it never printed.** The list arrives sorted by deadline and showed no
+  deadline anywhere, so an order that is actually meaningful read as random.
+- **A silent cut at eighty.** `open.slice(0, 80)` against 82 open contests. Two organizers
+  could not find their own listing on the page built to sell to them, and nothing on the
+  page said so.
+- **A section heading quieter than the body above it** — "Pick your contest" at 15px in
+  `#6F6A61`, lighter than the paragraph it was meant to lead.
+
+**Now** —
+- **Hairline rows.** No fill, no radius, one `#ECE9E2` rule under each row and a slightly
+  darker one opening the list. The whole row is the link; hover and `:focus-visible` fill
+  it faintly and slide one indigo arrow in from the right. One arrow that arrives instead
+  of eighty-two shouting at once.
+- **The deadline, in the house language.** Right column, the same figure-then-caption shape
+  every card has used since 09-08: time remaining as a 13px tabular Space Grotesk figure,
+  the date beneath it at 9.5px small caps. Tabular so the column scans straight down.
+  Burnt orange inside seven days, as everywhere else.
+- **Month rules.** `SEPTEMBER 2026 · 14`, reusing the `.cbg` heading from the browse grid
+  rather than inventing a second dialect. They are the only wayfinding in a list this long,
+  and they are what makes the closing-soonest order visible at all.
+- **Name and organizer on their own lines**, 15px Space Grotesk 600 over 11.5px grey, so a
+  70-character festival name and a 74-character organizer stop fighting.
+- **All 82, and the count stated** — "All 82 contests open right now, closing soonest
+  first." The slice is gone.
+- **A written empty state** instead of a heading over nothing: what happened, that new
+  contests go up most mornings, and a Submit button.
+
+**Why not alphabetical** — it was the first instinct, since an organizer arrives knowing
+their contest's name. The data killed it: 36 of the 82 open contests begin with "AI", so
+letter markers would have produced one block holding 44% of the list and twenty markers
+holding one row each. Deadline order buckets cleanly instead — 14 / 30 / 7 / 13 / 9 and a
+tail — and the deadline is information the organizer actually needs here, because it tells
+them whether a 30-day feature outlives their own close date.
+
+**On the orange** — eleven of the first fourteen rows currently read burnt orange, because
+eleven contests genuinely close within seven days. That is loud, and it is true, and it is
+the same rule the browse grid's "Closing this week" bucket already follows. Left as is.
+
+**Inspired by** — Criterion's Shop All Films list view, which sets 1,891 films as a ruled
+index: one hairline under each row, no fill and no radius, the title the only bold thing,
+director / country / year holding fixed grey columns the eye can travel straight down, and
+no per-row button at all — the row is the target. One heavier rule under the column header
+says "this is a table" once, instead of drawing a box around every item. Adapted, not
+copied: our columns are a deadline rather than a filmography, and the month rules do the
+work Criterion's spine numbers do. (Metrograph, looked at second, sets the date as a fixed
+stacked block at the head of every listing — the same instinct that keeps our deadline
+column in one place at both widths.)
+
+**Verified** — 1440px and a true 390px viewport, no horizontal overflow at either. The
+local build has no Supabase anon key, so the page itself renders the empty state locally;
+the row layout was checked against all 82 real contests through a throwaway harness that
+loaded the built CSS bundle, and against the live page after deploy.
+
+**Before / after** — `reports/design/2026-09-24-before.png`,
+`reports/design/2026-09-24-before-list.png`, `reports/design/2026-09-24-before-390.png`,
+`reports/design/2026-09-24-after.png`, `reports/design/2026-09-24-after-390.png`.
+
+**Noted for a later run, not done today** — the two panels above the picker ("What
+featuring includes" and the price) are the same rounded grey box at the same radius with
+the same fill, and when no contest is picked the price panel's only control is the
+*secondary* action, "Not listed yet? Submit it (free)". The page asks for $49 and shows no
+primary button until you have chosen a contest. That is the next thing on this page.
+
 ## 2026-09-23 — The Apply block, one control stack, and a source URL that isn't cut in half
 
 **Changed** — the deadline block at the top of the contest page's spec rail
