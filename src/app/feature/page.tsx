@@ -22,6 +22,33 @@ function payUrl(contestId: string) {
   return `${PAY_LINK}${sep}client_reference_id=${encodeURIComponent(contestId)}`
 }
 
+/* The picker speaks the same deadline language as every card on the site:
+   the figure is what remains, the date beneath it is the proof. */
+function timeLeft(deadline: string) {
+  const diff = new Date(deadline).getTime() - Date.now()
+  if (diff <= 0) return { label: 'closing', days: 0 }
+  const days = Math.floor(diff / 86_400_000)
+  if (days >= 1) return { label: `${days} ${days === 1 ? 'day' : 'days'} left`, days }
+  const hours = Math.floor(diff / 3_600_000)
+  return { label: `${hours} ${hours === 1 ? 'hour' : 'hours'} left`, days: 0 }
+}
+
+const shortDate = (d: string) =>
+  new Date(d).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
+
+/* Contests arrive sorted by deadline. Month rules are the only wayfinding in a
+   list this long, and they are what make the sort order visible at all. */
+function byMonth<T extends { deadline: string }>(list: T[]) {
+  const out: [string, T[]][] = []
+  for (const c of list) {
+    const label = new Date(c.deadline).toLocaleDateString('en-US', { month: 'long', year: 'numeric' })
+    const last = out[out.length - 1]
+    if (last && last[0] === label) last[1].push(c)
+    else out.push([label, [c]])
+  }
+  return out
+}
+
 export default async function FeaturePage({ searchParams }: { searchParams: Promise<{ contest?: string }> }) {
   const { contest: contestId } = await searchParams
   const open = await getContestsByStatus('open')
@@ -84,17 +111,63 @@ export default async function FeaturePage({ searchParams }: { searchParams: Prom
 
         {!picked && (
           <>
-            <h2 style={{ fontFamily: 'Space Grotesk, sans-serif', fontSize: 15, fontWeight: 700, color: '#6F6A61', margin: '8px 0 12px', letterSpacing: '0.02em' }}>
+            <h2 style={{ fontFamily: 'Space Grotesk, sans-serif', fontSize: 19, fontWeight: 700, color: '#1B1916', margin: '4px 0 6px', letterSpacing: '-0.015em' }}>
               Pick your contest
             </h2>
-            <div style={{ display: 'grid', gap: 8 }}>
-              {open.slice(0, 80).map(c => (
-                <Link key={c.id} href={`/feature?contest=${encodeURIComponent(c.id)}`} style={{ ...box, padding: '14px 18px', textDecoration: 'none', color: '#26231E', display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 12 }}>
-                  <span style={{ fontSize: 14 }}>{c.name} <span style={{ color: '#8B867C', fontSize: 12 }}>· {c.organizer}</span></span>
-                  <span style={{ color: '#4f46e5', fontSize: 13, fontWeight: 600, whiteSpace: 'nowrap' }}>Feature →</span>
-                </Link>
-              ))}
-            </div>
+            {open.length > 0 && (
+              <p style={{ fontSize: 13.5, lineHeight: 1.6, color: '#7A7469', margin: '0 0 22px' }}>
+                All {open.length} contest{open.length === 1 ? '' : 's'} open right now, closing soonest first.
+              </p>
+            )}
+
+            {open.length === 0 ? (
+              <div className="feat-empty">
+                <p style={{ fontFamily: 'Space Grotesk, sans-serif', fontSize: 16, fontWeight: 600, color: '#1B1916', marginBottom: 6 }}>
+                  No contest is open right now
+                </p>
+                <p style={{ fontSize: 14, color: '#7A7469', marginBottom: 16, lineHeight: 1.6 }}>
+                  New ones go up most mornings. Send yours over and it gets listed free, then you can feature it from here.
+                </p>
+                <Link href="/submit" className="btn">Submit a contest</Link>
+              </div>
+            ) : (
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 30 }}>
+                {byMonth(open).map(([label, list]) => {
+                  const id = 'feat-' + label.toLowerCase().replace(/[^a-z0-9]+/g, '-')
+                  return (
+                    <section key={label} aria-labelledby={id}>
+                      <h3 id={id} className="cbg">
+                        <span className="cbg-label">{label}</span>
+                        <span className="cbg-count" aria-hidden="true">{list.length}</span>
+                        <span className="sr-only">, {list.length} contest{list.length === 1 ? '' : 's'}</span>
+                        <span className="cbg-rule" aria-hidden="true" />
+                      </h3>
+                      <div className="feat-list">
+                        {list.map(c => {
+                          const t = timeLeft(c.deadline)
+                          return (
+                            <Link
+                              key={c.id}
+                              href={`/feature?contest=${encodeURIComponent(c.id)}`}
+                              className={`feat-row${t.days <= 7 ? ' feat-urgent' : ''}`}
+                            >
+                              <span className="feat-name">{c.name}</span>
+                              <span className="feat-org">{c.organizer}</span>
+                              <span className="feat-when">
+                                <span className="feat-left">{t.label}</span>
+                                <span className="feat-date">{shortDate(c.deadline)}</span>
+                              </span>
+                              <span className="feat-go" aria-hidden="true">→</span>
+                              <span className="sr-only">Feature this contest</span>
+                            </Link>
+                          )
+                        })}
+                      </div>
+                    </section>
+                  )
+                })}
+              </div>
+            )}
           </>
         )}
 
