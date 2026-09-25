@@ -36,6 +36,74 @@ describe the old dark theme; the reasoning still applies, the colours do not.)*
 
 ---
 
+## 2026-09-25 — The unsubscribe page, with the site still around it
+
+**Changed** — `src/app/unsubscribe/page.tsx` and a new `.unsub-*` block at the end of
+`globals.css`. This was the last orphan page on the site.
+
+**Was** —
+- **No site.** Every other page carries the header and the footer; the 404 was given them
+  deliberately on 09-13 for exactly this reason. `/unsubscribe` rendered as a bare 440px
+  column with `min-height: 100vh` centring, so a subscriber who clicked through from an
+  alert landed on a page that did not look like the thing that had emailed them. The only
+  identification was a 14px indigo wordmark floating 40px above the heading.
+- **The accent spent on leaving.** The Unsubscribe button was the full-fill indigo `.btn` —
+  the same object as "Get Alerts" on the homepage — at full width, and it was the loudest
+  element on the screen. Indigo is the site's one accent and it means "the good stuff is
+  here". Pointing it at the exit is the one place it actively misleads.
+- **Content that moved between states.** Vertically centred in the viewport, with loading
+  at two lines and the form at five, so the heading jumped as the state changed.
+- **A generic success mark.** A 40px tinted indigo circle holding a `✓` glyph — the
+  pattern the 09-22 run already replaced on the *subscribe* side with a ruled note. The
+  same family of state, unconverged.
+- **Vague about what stops.** "You won't receive any more emails from us."
+- **An input with no accessible name** (placeholder only) and a ~40px tap target.
+
+**Now** —
+- **`InnerLayout` around it**, and the column left-aligned at `max-width: 520px` with
+  `.nf-wrap`'s 64px top set, so all four states begin at the same line and nothing jumps.
+- **The button in ink** `#1B1916`. It is still the widest, tallest, first control on the
+  page — demoted in colour only, never in prominence, because making an unsubscribe harder
+  to find would be the worst thing this page could do. The indigo goes to "← Back to
+  contests", which is the only place on this page where it is honest.
+- **What actually stops, named**: the alerts when new contests open, and the reminder seven
+  days before a deadline closes. Those are the two promises the homepage form already
+  makes, quoted back rather than invented.
+- **The three outcome notes share one object** — a 2px rule, a 10.5px small-caps label,
+  12.5px body — the geometry `SubscribeError` and `.sok-step` already use. Grey for the
+  neutral note, indigo for removed, `#C2410C` for the failure.
+- **The success state names the address it removed** when the person typed one, set in the
+  Space Grotesk tabular figure language the cards use. Specificity as the aesthetic: "you're
+  unsubscribed" is a claim, the address printed back is evidence.
+- **A note that saves typing** — the one-click link at the foot of any alert removes that
+  address on its own — for the person who cannot remember which address they used.
+- **An `aria-label` on the input** and a 46px button.
+
+**On demoting the button** — considered and rejected: shrinking it, making it a ghost
+outline, or adding a "keep getting fewer emails instead" step. All three make leaving
+harder or slower, and there is no reduced-frequency option in the product to offer
+honestly. Colour was the only thing safe to change.
+
+**Inspired by** — Dense Discovery. Its subscribe control is a plain black button; the
+accent is spent entirely on the content, the issue titles and the links, never on the
+transactional control. And underneath the form it prints a fact rather than a promise:
+"Next issue is dispatched in 3 days." The reassurance comes from the specific thing being
+stated, not from the button shouting. Adapted here by taking the indigo off the leaving
+control and letting the sentence about the two emails that stop do the reassuring instead.
+(Criterion and Metrograph were both behind a Cloudflare check today and could not be read.)
+
+**Verified** — 1440px and a true 390px viewport, no horizontal overflow at either, on idle,
+success and error. The error state was checked against the real API with a bad token.
+
+**Before / after** — `reports/design/2026-09-25-before.png`,
+`reports/design/2026-09-25-before-390.png`, `reports/design/2026-09-25-after.png`,
+`reports/design/2026-09-25-after-390.png`.
+
+**Noted for a later run, not done today** — `/creators` carries the two things the taste
+rules name directly: a "Why be featured" three-column grid of identical rounded boxes, each
+a bold title over two lines of body, and creator cards at the same radius and fill as each
+other. It was the other candidate today.
+
 ## 2026-09-24 — The /feature contest picker, set as a ruled index
 
 **Changed** — the contest picker at the foot of `src/app/feature/page.tsx`, plus a new
