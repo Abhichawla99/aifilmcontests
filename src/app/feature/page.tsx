@@ -95,6 +95,41 @@ export default async function FeaturePage({ searchParams }: { searchParams: Prom
           </ul>
         </div>
 
+        <div style={{ marginBottom: 28 }}>
+          <div style={{ fontSize: 11, fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', color: '#7A7469', marginBottom: 14, fontFamily: 'Space Grotesk, sans-serif' }}>
+            How it works
+          </div>
+          <ol style={{ margin: '0 0 20px', padding: 0, listStyle: 'none', display: 'grid', gap: 12 }}>
+            {[
+              ['Pick your contest and pay', `${PRICE_LABEL}, one payment, no subscription.`],
+              ['We pin it', 'Automatically, usually within minutes of payment — allow up to a day if anything needs a manual check.'],
+              ['It runs for 30 days', 'Spotlighted on the homepage, a Featured badge on the listing, and a slot in the next subscriber email.'],
+            ].map(([title, body], i) => (
+              <li key={title} style={{ display: 'flex', gap: 14, alignItems: 'flex-start' }}>
+                <span style={{
+                  flexShrink: 0, width: 26, height: 26, borderRadius: '50%', background: 'rgba(99,102,241,0.1)',
+                  border: '1px solid rgba(99,102,241,0.2)', color: '#4338CA', fontFamily: 'Space Grotesk, sans-serif',
+                  fontSize: 12, fontWeight: 700, display: 'flex', alignItems: 'center', justifyContent: 'center',
+                }}>{i + 1}</span>
+                <div>
+                  <div style={{ fontSize: 15, fontWeight: 600, color: '#1B1916' }}>{title}</div>
+                  <div style={{ fontSize: 13.5, color: '#7A7469', lineHeight: 1.55 }}>{body}</div>
+                </div>
+              </li>
+            ))}
+          </ol>
+          <img
+            src="/feature-spotlight-example.png"
+            alt="The homepage spotlight card as it appears live on aifilmcontests.com"
+            width={420}
+            height={506}
+            style={{ width: '100%', maxWidth: 320, height: 'auto', borderRadius: 16, border: '1px solid rgba(27,25,22,0.07)', boxShadow: '0 1px 2px rgba(27,25,22,0.04), 0 18px 40px -22px rgba(27,25,22,0.16)', display: 'block' }}
+          />
+          <div style={{ fontSize: 12, color: '#8B867C', marginTop: 8 }}>
+            The homepage spotlight, live right now — this is exactly what a featured contest gets.
+          </div>
+        </div>
+
         <div style={{ ...box, marginBottom: 28, display: 'flex', flexWrap: 'wrap', alignItems: 'center', justifyContent: 'space-between', gap: 16 }}>
           <div>
             <div style={{ fontFamily: 'Space Grotesk, sans-serif', fontSize: 26, fontWeight: 700, color: '#1B1916', letterSpacing: '-0.02em' }}>{PRICE_LABEL}</div>
