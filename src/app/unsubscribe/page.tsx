@@ -4,6 +4,11 @@ import { useEffect, useState } from 'react'
 import { useSearchParams } from 'next/navigation'
 import Link from 'next/link'
 import { Suspense } from 'react'
+import InnerLayout from '@/components/InnerLayout'
+
+// What actually stops, in the words the homepage form already uses.
+const WHAT_STOPS =
+  'the alerts when new contests open and the reminder that goes out seven days before a deadline closes'
 
 function UnsubscribeContent() {
   const params = useSearchParams()
@@ -15,6 +20,8 @@ function UnsubscribeContent() {
   )
   const [message, setMessage] = useState('')
   const [email, setEmail] = useState('')
+  // The address we removed, kept only so the success state can name it.
+  const [removed, setRemoved] = useState('')
 
   // If token present, auto-unsubscribe on load
   useEffect(() => {
@@ -52,6 +59,7 @@ function UnsubscribeContent() {
       })
       const data = await res.json()
       if (data.success) {
+        setRemoved(email.trim())
         setStatus('success')
         setMessage(data.message)
       } else {
@@ -65,83 +73,78 @@ function UnsubscribeContent() {
   }
 
   return (
-    <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '40px 24px' }}>
-      <div style={{ maxWidth: '440px', width: '100%' }}>
+    <div className="max-w-5xl mx-auto px-5">
+      <div className="unsub">
 
-        {/* Wordmark */}
-        <Link href="/" style={{ display: 'inline-block', marginBottom: '40px', textDecoration: 'none' }}>
-          <span style={{ fontFamily: 'Space Grotesk, sans-serif', fontSize: '14px', fontWeight: 700, letterSpacing: '0.06em', textTransform: 'uppercase', color: '#4f46e5' }}>
-            AI Film Contests
-          </span>
-        </Link>
-
-        {/* Loading */}
         {status === 'loading' && (
-          <div>
-            <h1 style={{ fontSize: '22px', fontWeight: 700, marginBottom: '8px' }}>Unsubscribing…</h1>
-            <p style={{ color: '#7A7469', fontSize: '14px' }}>Just a moment.</p>
-          </div>
+          <>
+            <p className="unsub-label">Deadline alerts</p>
+            <h1 className="unsub-title">Unsubscribing…</h1>
+            <p className="unsub-body">Just a moment.</p>
+          </>
         )}
 
-        {/* Success */}
         {status === 'success' && (
-          <div>
-            <div style={{ width: '40px', height: '40px', borderRadius: '50%', background: 'rgba(79,70,229,0.1)', border: '1px solid rgba(79,70,229,0.3)', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '20px', fontSize: '18px' }}>
-              ✓
-            </div>
-            <h1 style={{ fontSize: '22px', fontWeight: 700, marginBottom: '8px' }}>You&apos;re unsubscribed.</h1>
-            <p style={{ color: '#7A7469', fontSize: '14px', lineHeight: 1.6, marginBottom: '28px' }}>
-              {message || "You won't receive any more emails from us."} If you change your mind, you can always re-subscribe on the homepage.
+          <>
+            <p className="unsub-label unsub-label-ok">Removed</p>
+            <h1 className="unsub-title">You&apos;re unsubscribed.</h1>
+            <p className="unsub-body">
+              {message || "You won't receive any more emails from us."} That stops {WHAT_STOPS}.
             </p>
-            <Link
-              href="/"
-              style={{ color: '#4f46e5', fontSize: '13px', fontWeight: 600, textDecoration: 'none' }}
-            >
-              ← Back to contests
-            </Link>
-          </div>
+            {removed && (
+              <div className="unsub-note unsub-note-ok">
+                <p className="unsub-note-label">Address removed</p>
+                <span className="unsub-addr">{removed}</span>
+              </div>
+            )}
+            <div className="unsub-note">
+              <p className="unsub-note-label">If that was a mistake</p>
+              <p>You can subscribe again from the homepage at any time.</p>
+            </div>
+            <Link href="/" className="unsub-back">← Back to contests</Link>
+          </>
         )}
 
-        {/* Error */}
         {status === 'error' && (
-          <div>
-            <h1 style={{ fontSize: '22px', fontWeight: 700, marginBottom: '8px' }}>Something went wrong.</h1>
-            <p style={{ color: '#7A7469', fontSize: '14px', marginBottom: '24px' }}>{message}</p>
-            <button
-              onClick={() => { setStatus('idle') }}
-              style={{ color: '#4f46e5', fontSize: '13px', fontWeight: 600, background: 'none', border: 'none', cursor: 'pointer', padding: 0 }}
-            >
+          <>
+            <p className="unsub-label unsub-label-bad">Not removed</p>
+            <h1 className="unsub-title">We couldn&apos;t remove you.</h1>
+            <p className="unsub-body" role="alert">{message}</p>
+            <button type="button" className="unsub-retry" onClick={() => setStatus('idle')}>
               Try with your email address instead →
             </button>
-          </div>
+          </>
         )}
 
-        {/* Email form (no token, or after error) */}
         {status === 'idle' && (
-          <div>
-            <h1 style={{ fontSize: '22px', fontWeight: 700, marginBottom: '8px' }}>Unsubscribe</h1>
-            <p style={{ color: '#7A7469', fontSize: '14px', lineHeight: 1.6, marginBottom: '24px' }}>
-              Enter your email address and we&apos;ll remove you immediately.
+          <>
+            <p className="unsub-label">Deadline alerts</p>
+            <h1 className="unsub-title">Unsubscribe</h1>
+            <p className="unsub-body">
+              Enter the address you subscribed with and we&apos;ll remove you immediately.
+              You&apos;ll stop getting {WHAT_STOPS}.
             </p>
-            <form onSubmit={handleEmailUnsubscribe} style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+            <form onSubmit={handleEmailUnsubscribe} className="unsub-form">
               <input
                 type="email"
                 value={email}
                 onChange={e => setEmail(e.target.value)}
                 placeholder="your@email.com"
+                aria-label="The email address to unsubscribe"
                 required
                 className="input"
               />
-              <button type="submit" className="btn" style={{ padding: '11px 18px', justifyContent: 'center' }}>
-                Unsubscribe
-              </button>
+              <button type="submit" className="unsub-go">Unsubscribe</button>
             </form>
-            <div style={{ marginTop: '20px' }}>
-              <Link href="/" style={{ color: '#A8A296', fontSize: '13px', textDecoration: 'none' }}>
-                ← Back to contests
-              </Link>
+            <div className="unsub-note">
+              <p className="unsub-note-label">Not sure which address</p>
+              <p>
+                The Unsubscribe link at the foot of any alert we sent you removes that
+                address on its own, with nothing to type.
+              </p>
             </div>
-          </div>
+            <Link href="/" className="unsub-back">← Back to contests</Link>
+          </>
         )}
 
       </div>
@@ -151,12 +154,18 @@ function UnsubscribeContent() {
 
 export default function UnsubscribePage() {
   return (
-    <Suspense fallback={
-      <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-        <span style={{ color: '#8B867C', fontSize: '14px' }}>Loading…</span>
-      </div>
-    }>
-      <UnsubscribeContent />
-    </Suspense>
+    <InnerLayout>
+      <Suspense fallback={
+        <div className="max-w-5xl mx-auto px-5">
+          <div className="unsub">
+            <p className="unsub-label">Deadline alerts</p>
+            <h1 className="unsub-title">Unsubscribe</h1>
+            <p className="unsub-body">Loading…</p>
+          </div>
+        </div>
+      }>
+        <UnsubscribeContent />
+      </Suspense>
+    </InnerLayout>
   )
 }
