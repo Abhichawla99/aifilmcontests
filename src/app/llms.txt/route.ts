@@ -82,6 +82,19 @@ export async function GET() {
 - [Contests closing this week](https://aifilmcontests.com/guide/ai-film-contests-closing-this-week) and monthly deadline roundups
 - Festival playbooks: [How to win the Runway AI Film Festival](https://aifilmcontests.com/guide/how-to-win-runway-ai-film-festival), [How to win the Higgsfield Global Film Festival 2026](https://aifilmcontests.com/guide/how-to-win-higgsfield-global-film-festival-2026), [How to apply to the Runway Hundred Film Fund](https://aifilmcontests.com/guide/how-to-apply-to-runway-hundred-film-fund-2026)
 
+## Guides for brand and commercial work
+
+- [How to build a look bible for an AI film or commercial](https://aifilmcontests.com/guide/look-bible-for-ai-films): palette with hex codes, light, lens, grain and format written the way a model reads them, with a real kept prompt and the jury criteria it protects
+- [How to use a mood board for an AI film without copying it](https://aifilmcontests.com/guide/mood-board-for-ai-film-without-copying): turning a board into words and a ban list, what US and UK law and contest rules say about references, and a reference log
+- [Storyboards and shot lists for an AI commercial](https://aifilmcontests.com/guide/ai-commercial-storyboard-and-shot-list): contest and platform lengths, clip limits per tool, a copyable shot-list block and a 30-second render budget
+- [How to keep a character consistent across AI film shots](https://aifilmcontests.com/guide/consistent-characters-in-ai-film): character sheets, each video tool's reference features as of September 2026, and contest rules on real faces
+- [How to keep the product accurate in an AI commercial](https://aifilmcontests.com/guide/product-accuracy-in-ai-commercials): reference sets, stills first, label compositing, and what contest juries and advertising law expect
+- [How to make a clean first frame for image-to-video](https://aifilmcontests.com/guide/first-frame-for-image-to-video): input rules for Runway, Kling, Veo, Seedance, Luma and Hailuo, a ten-point frame check and motion prompts
+- [The packshot and end card of an AI commercial](https://aifilmcontests.com/guide/ai-commercial-packshot-and-end-card): the last seconds as controlled stills, UK super hold times and platform safe zones
+- [How to make an AI food or drink commercial](https://aifilmcontests.com/guide/ai-food-and-drink-commercials): texture, pours and labels, 120 real renders, and the rules on food images and alcohol casting
+- [Can you use a real brand in an AI spec ad?](https://aifilmcontests.com/guide/real-brands-in-ai-spec-ads): contest rules from Runway, Formula E, Atlanta AI Ad Fest, Luma and Cannes Lions, and US trademark basics
+- [How to price AI commercial work](https://aifilmcontests.com/guide/how-to-price-ai-commercial-work): per-second video and per-image model prices as of September 2026, renders per keeper, and quoting time, rounds and usage
+
 ## Comparisons and topics
 
 - [Runway vs Kling](https://aifilmcontests.com/vs/runway-vs-kling): quality, consistency, style, contest compatibility
