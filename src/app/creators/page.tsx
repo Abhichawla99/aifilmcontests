@@ -59,6 +59,13 @@ const sectionLabel: React.CSSProperties = {
   marginBottom: 16,
 }
 
+/** "Sep 8, 2026" — the same shape the "Verified <date>" line uses on a card. */
+function since(iso: string) {
+  return new Date(iso + 'T00:00:00Z').toLocaleDateString('en-US', {
+    month: 'short', day: 'numeric', year: 'numeric', timeZone: 'UTC',
+  })
+}
+
 export default function CreatorsPage() {
   const jsonLd = {
     '@context': 'https://schema.org',
@@ -108,68 +115,49 @@ export default function CreatorsPage() {
           </p>
         </div>
 
-        {/* Grid */}
+        {/* Roster */}
         <section style={{ marginBottom: 44 }}>
           <h2 style={sectionLabel}>
             {creators.length === 1 ? '1 Creator' : `${creators.length} Creators`}
           </h2>
-          <div style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fill, minmax(260px, 1fr))',
-            gap: 12,
-          }}>
-            {creators.map(c => (
-              <Link key={c.slug} href={`/creators/${c.slug}`} style={{ textDecoration: 'none' }}>
-                <div className="card" style={{ padding: '20px 22px', height: '100%', display: 'flex', flexDirection: 'column', gap: 8 }}>
-                  <span style={{
-                    alignSelf: 'flex-start',
-                    fontSize: 10,
-                    fontWeight: 700,
-                    letterSpacing: '0.08em',
-                    textTransform: 'uppercase',
-                    color: '#4338CA',
-                    background: 'rgba(99,102,241,0.12)',
-                    border: '1px solid rgba(99,102,241,0.22)',
-                    borderRadius: 999,
-                    padding: '3px 9px',
-                    fontFamily: 'Space Grotesk, sans-serif',
-                  }}>
-                    {c.type === 'studio' ? 'Studio' : 'Filmmaker'}
-                  </span>
-                  <div className="card-title" style={{ fontFamily: 'Space Grotesk, sans-serif', fontWeight: 600, fontSize: 17, color: '#1B1916' }}>
-                    {c.name}
+          <div className="cr-list">
+            {creators.map(c => {
+              const shown = c.workLinks.slice(0, 3)
+              const rest = c.workLinks.length - shown.length
+              return (
+                <Link key={c.slug} href={`/creators/${c.slug}`} className="cr-row">
+                  <div>
+                    <div className="cr-kind">{c.type === 'studio' ? 'Studio' : 'Filmmaker'}</div>
+                    <div className="cr-name">{c.name}</div>
+                    <div className="cr-where">{c.location}</div>
+                    <p className="cr-one">{c.oneLiner}</p>
+                    {shown.length > 0 && (
+                      <div className="cr-work">
+                        <span className="cr-work-label">Work</span>
+                        {shown.map(w => w.title).join(' \u00B7 ')}
+                        {rest > 0 && <span className="cr-work-more">{` \u00B7 +${rest} more`}</span>}
+                      </div>
+                    )}
                   </div>
-                  <div style={{ fontSize: 12, color: '#8B867C' }}>{c.location}</div>
-                  <p style={{ fontSize: 13, color: '#6F6A61', lineHeight: 1.6, margin: 0, flex: 1 }}>{c.oneLiner}</p>
-                  <span className="card-cta" style={{ fontSize: 13, fontWeight: 600, color: '#4F46E5' }}>
-                    View profile <span className="card-arrow" style={{ display: 'inline-block' }}>→</span>
-                  </span>
-                </div>
-              </Link>
-            ))}
+                  <div className="cr-since">
+                    <span className="cr-since-label">Featured</span>
+                    <span className="cr-since-date">{since(c.featuredSince)}</span>
+                  </div>
+                  <span className="cr-go" aria-hidden="true">&rarr;</span>
+                </Link>
+              )
+            })}
           </div>
         </section>
 
         {/* Why be featured */}
         <section style={{ marginBottom: 44 }}>
           <h2 style={sectionLabel}>Why be featured</h2>
-          <div style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))',
-            gap: 12,
-          }}>
+          <div className="cr-why">
             {WHY.map(w => (
-              <div key={w.title} className="card" style={{ padding: '20px 22px' }}>
-                <div style={{
-                  fontFamily: 'Space Grotesk, sans-serif',
-                  fontWeight: 600,
-                  fontSize: 15,
-                  color: '#1B1916',
-                  marginBottom: 8,
-                }}>
-                  {w.title}
-                </div>
-                <p style={{ fontSize: 13, color: '#6F6A61', lineHeight: 1.65, margin: 0 }}>{w.body}</p>
+              <div key={w.title} className="cr-why-row">
+                <div className="cr-why-t">{w.title}</div>
+                <p className="cr-why-b">{w.body}</p>
               </div>
             ))}
           </div>

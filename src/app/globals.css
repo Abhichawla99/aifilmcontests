@@ -1063,3 +1063,126 @@ img, svg, video, canvas { max-width: 100%; }
   .unsub { padding: 40px 0 72px; }
   .unsub-title { font-size: 25px; }
 }
+
+/* ── The creator index, set as a ruled roster (2026-09-26) ───────────────────
+   Was six identical rounded boxes: two creators, three "why be featured"
+   panels and the CTA all wearing the same radius, border and fill, so a real
+   person and a marketing claim were handed the same object and the same
+   weight. The rows also printed "View profile →" once each — the pattern the
+   2026-09-24 run took off the /feature picker — and showed none of the
+   evidence already sitting in creators.ts: the finished films, the clients,
+   the date the profile went live. Now hairline rows in the .feat-* language,
+   the whole row carrying the link, the work named on the row, and exactly one
+   box left on the page — the one you are meant to click. */
+.cr-list { border-top: 1px solid #E3DED3; }
+.cr-row {
+  display: grid;
+  grid-template-columns: 1fr auto 18px;
+  align-items: start;
+  gap: 18px;
+  padding: 17px 8px 18px 2px;
+  border-bottom: 1px solid #ECE9E2;
+  text-decoration: none;
+  color: #26231E;
+  transition: background 0.14s ease;
+}
+.cr-row:hover { background: rgba(27,25,22,0.035); }
+.cr-row:focus-visible { outline: 2px solid #4F46E5; outline-offset: -2px; }
+/* Studio or filmmaker was an indigo pill. It is a taxonomy, not the accent:
+   set as a caption over the name, the way a programme labels a strand. */
+.cr-kind {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 9.5px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #A39D91;
+  margin-bottom: 4px;
+}
+.cr-name {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 17px;
+  font-weight: 600;
+  line-height: 1.25;
+  letter-spacing: -0.01em;
+  color: #1B1916;
+}
+.cr-where { font-size: 11.5px; line-height: 1.4; color: #8B867C; margin-top: 3px; }
+.cr-one {
+  font-size: 13px;
+  line-height: 1.6;
+  color: #6F6A61;
+  margin: 8px 0 0;
+  max-width: 56ch;
+}
+/* The evidence. A one-liner is a claim; the titles of finished pieces are the
+   proof, and they were already in the data — the index just never printed them. */
+.cr-work { margin-top: 9px; font-size: 12px; line-height: 1.6; color: #7A7469; }
+.cr-work-label {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 9.5px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #A39D91;
+  margin-right: 9px;
+}
+.cr-work-more { color: #A39D91; white-space: nowrap; }
+/* The site's "Verified <date>" trust language (2026-09-17), on the one fact
+   about a profile that is nowhere else on the row. Tabular so it scans down. */
+.cr-since { text-align: right; white-space: nowrap; min-width: 84px; }
+.cr-since-label {
+  display: block;
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 9.5px;
+  font-weight: 600;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  color: #A39D91;
+}
+.cr-since-date {
+  display: block;
+  margin-top: 3px;
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 12px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  color: #3E3A33;
+}
+/* One arrow that arrives on hover, instead of "View profile →" on every row. */
+.cr-go {
+  font-size: 14px;
+  line-height: 1.3;
+  color: #4F46E5;
+  opacity: 0;
+  transform: translateX(-3px);
+  transition: opacity 0.14s ease, transform 0.14s ease;
+}
+.cr-row:hover .cr-go,
+.cr-row:focus-visible .cr-go { opacity: 1; transform: none; }
+
+/* "Why be featured" as a ruled definition list rather than a three-up grid of
+   identical boxes — a label, one sentence, a hairline between. */
+.cr-why { border-top: 1px solid #E3DED3; }
+.cr-why-row {
+  display: grid;
+  grid-template-columns: 215px 1fr;
+  gap: 4px 26px;
+  padding: 15px 2px 16px;
+  border-bottom: 1px solid #ECE9E2;
+}
+.cr-why-t {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 13.5px;
+  font-weight: 600;
+  line-height: 1.4;
+  color: #1B1916;
+}
+.cr-why-b { font-size: 13px; line-height: 1.65; color: #6F6A61; margin: 0; max-width: 56ch; }
+
+@media (max-width: 620px) {
+  .cr-row { grid-template-columns: 1fr auto; gap: 14px; padding-right: 2px; }
+  .cr-go { display: none; }
+  .cr-since { min-width: 72px; }
+  .cr-why-row { grid-template-columns: 1fr; gap: 5px; }
+}
