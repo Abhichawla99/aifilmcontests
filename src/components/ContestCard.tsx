@@ -38,6 +38,7 @@ export default function ContestCard({ contest }: { contest: Contest }) {
   const isOpen   = contest.status === 'open'
   const isClosed = contest.status === 'closed'
   const isUrgent = isOpen && cd && cd.days <= 7
+  const isFeatured = !!contest.featuredUntil && new Date(contest.featuredUntil).getTime() > Date.now()
 
   /* The first category gives the card its identity: emoji + pastel tint. */
   const tint = isClosed ? closedStyle : contest.categories?.[0] ? normalizeCategory(contest.categories[0]) : categoryStyle()
@@ -72,6 +73,16 @@ export default function ContestCard({ contest }: { contest: Contest }) {
                   letterSpacing: '0.06em', textTransform: 'uppercase',
                   background: 'rgba(255,255,255,0.6)',
                 }}>Free</span>
+              )}
+              {isFeatured && (
+                <span style={{
+                  fontSize: 9, color: '#4F46E5',
+                  border: '1px solid rgba(79,70,229,0.35)',
+                  borderRadius: 4, padding: '1px 6px',
+                  fontFamily: 'Space Grotesk, sans-serif', fontWeight: 700,
+                  letterSpacing: '0.06em', textTransform: 'uppercase',
+                  background: 'rgba(255,255,255,0.6)',
+                }}>Featured</span>
               )}
             </div>
           </div>

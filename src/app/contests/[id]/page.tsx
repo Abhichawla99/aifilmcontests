@@ -89,6 +89,7 @@ export default async function ContestPage({ params }: { params: Promise<{ id: st
   const isUpcoming = contest.status === 'upcoming'
   const dl         = daysLeft(contest.deadline)
   const isUrgent   = isOpen && dl <= 7
+  const isFeatured = !!contest.featuredUntil && new Date(contest.featuredUntil).getTime() > Date.now()
 
   // Category identity: the same tint and emoji the card used, so the page and the
   // card that led here are visibly the same object. Freeform strings are normalized
@@ -237,6 +238,14 @@ export default async function ContestPage({ params }: { params: Promise<{ id: st
                       fontFamily: 'Space Grotesk, sans-serif', fontWeight: 700,
                       letterSpacing: '0.06em', textTransform: 'uppercase',
                     }}>Free entry</span>
+                  )}
+                  {isFeatured && (
+                    <span style={{
+                      fontSize: 11, color: '#4F46E5', border: '1px solid rgba(79,70,229,0.35)',
+                      borderRadius: 4, padding: '1px 6px', background: 'rgba(255,255,255,0.6)',
+                      fontFamily: 'Space Grotesk, sans-serif', fontWeight: 700,
+                      letterSpacing: '0.06em', textTransform: 'uppercase',
+                    }}>Featured</span>
                   )}
                 </div>
                 <h1 style={{
