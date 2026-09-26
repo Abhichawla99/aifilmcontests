@@ -36,6 +36,88 @@ describe the old dark theme; the reasoning still applies, the colours do not.)*
 
 ---
 
+## 2026-09-26 — The creator index, as a ruled roster with the work named
+
+**Changed** — `src/app/creators/page.tsx` and a new `.cr-*` block at the end of
+`globals.css`. The 09-25 entry named this page as the other candidate that day; it carried
+two of the taste rules' avoid-list items at once.
+
+**Was** —
+- **Six identical rounded boxes.** Two creators, three "Why be featured" panels and the
+  "Get featured" CTA, all the same `.card` radius, border and fill. So a real person and a
+  marketing claim were handed the same object and the same weight, and nothing on the page
+  told you which one you were supposed to click.
+- **A three-column feature grid with a bold title and two lines of body** — named in the
+  taste rules, almost word for word, as a thing that reads as generated.
+- **"View profile →" printed once per row.** The same pattern the 09-24 run took off the
+  /feature picker, where "Feature →" appeared eighty times and the eye read chrome instead
+  of names.
+- **No evidence on any row.** `creators.ts` already holds the titles of each creator's
+  finished pieces, the clients, and the date the profile went live. The index printed none
+  of it. "Cinematic story studio making brand films" is a claim; *Calgary Stampede 2026 ·
+  The Love of Trail Running · Keen Footwear — Spec Ad* is the proof, and it was sitting
+  right there in the data.
+- **The type as an indigo pill.** Studio / Filmmaker is a taxonomy, not the accent.
+
+**Now** —
+- **Hairline rows in the `.feat-*` language** — `#E3DED3` on top, `#ECE9E2` between, the
+  whole row as the link, one indigo arrow that arrives on hover instead of two shouting at
+  once. The same object the /feature picker (09-24), the grid group headings (09-19) and
+  the homepage figures (09-10) already use, so the page stops being its own dialect.
+- **The work named on every row.** Up to three titles, middot-separated, under a 9.5px
+  `WORK` caption, with `+N more` when there are more. Specificity as the aesthetic: the
+  row now says what the person has actually finished, not what they would like you to
+  think about them.
+- **Featured-since in the right column**, set in the site's "Verified &lt;date&gt;" trust
+  language from 09-17 — tabular Space Grotesk, caption over figure, so the column scans
+  vertically as the roster grows. It is the one fact about a profile that is nowhere else
+  on the row, and it differs per creator where a month alone would not.
+- **Studio / Filmmaker demoted to a grey 9.5px caption over the name**, the way a festival
+  programme labels a strand. The indigo now goes only to the hover arrow and the one
+  button on the page.
+- **"Why be featured" as a ruled definition list** — a 215px label column, one sentence
+  beside it, a hairline between, collapsing to label-over-body under 620px. No boxes, no
+  icons, no third column of filler.
+- **One box left on the page**, the "Get featured" panel, which needed no edit at all to
+  become the obvious action once the five decoys around it were gone.
+
+**Not changed** — no copy meaning, no data, no URL, no JSON-LD. Every string on the page is
+the one that was there this morning; the film titles and dates came out of `creators.ts`
+untouched. The profile pages, the badge embed, the subscribe form and the CTA are all as
+they were.
+
+**Considered and rejected** — resolving the `contests` ids to live contest names on the
+index, the way `/creators/[slug]` does. It would put "Rome AI Festival (RAIF) 2026" on
+Ariel Kotzer's row, which is the strongest credential on the page. But it makes a static
+index depend on a Supabase round trip, and a timeout would silently empty the roster — the
+failure mode the notify robot already hit this month. The profile page carries that fact
+one click away. Also rejected: shortening the three "Why" titles to one word each, the way
+the sites below do. They are Abhi's sentences and they say something; re-setting them was
+allowed, rewriting them was not.
+
+**Inspired by** — Dense Discovery and Are.na, which reached the same answer independently.
+Dense Discovery sets its eight-item "What to expect" as a one-word label and a single
+sentence with no container at all, and puts its credibility in two plain ticked facts under
+the form — 407 issues since 2018, over 36,000 readers — rather than in decorated boxes.
+Are.na's five-step "How it works" is the same shape, and its about section states its team
+size outright instead of adjectivising it. It's Nice That's index pointed at the other half:
+every entry's link text names the person *and* the specific thing they made, never "read
+more". Adapted here by taking the boxes off the claims and putting the named films on the
+rows.
+
+**Verified** — 1440px and a true 390px viewport, no horizontal overflow at either, build
+clean, live page checked after deploy. The keyboard focus ring on a row is a 2px indigo
+outline inset by 2px, so it reads inside the hairline rather than outside it.
+
+**Before / after** — `reports/design/2026-09-26-before.png`,
+`reports/design/2026-09-26-before-390.png`, `reports/design/2026-09-26-after.png`,
+`reports/design/2026-09-26-after-390.png`.
+
+**Noted for a later run, not done today** — `/creators/[slug]` still opens with a tinted
+header band and then a stack of `.card` panels for bio, work links, contests and the badge
+embed, all at the same radius. The index and the profile now speak differently; the profile
+is the one to bring across next.
+
 ## 2026-09-25 — The unsubscribe page, with the site still around it
 
 **Changed** — `src/app/unsubscribe/page.tsx` and a new `.unsub-*` block at the end of
