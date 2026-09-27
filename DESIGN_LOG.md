@@ -36,6 +36,72 @@ describe the old dark theme; the reasoning still applies, the colours do not.)*
 
 ---
 
+## 2026-09-27 — A long spec value stacks under its caption instead of ragging right
+
+**Changed** — `SpecRow` in `src/app/contests/[id]/page.tsx`, about 20 lines. The
+spec rail is the densest data on the site and the part a visitor actually decides
+with; the 09-23 run fixed the Apply block above it and left the rows alone.
+
+**Was** — every fact in the rail was forced into one shape: caption left, value
+right-aligned, `13.5px/1.4`. That shape is right for a figure. `Free`,
+`June 1, 2026`, `November 24, 2026` line up down the right edge and the rail
+scans in a second.
+
+It is wrong for a sentence, and a fifth of the rail's values are sentences. Once
+the caption and the 20px padding have taken their share, the value column is
+about 160px wide, so anything past roughly 28 characters wraps two, three or
+four times — and every one of those lines has to be read ragged-left, which is
+the hardest thing you can ask of body-sized text. Checked against live data:
+**22 of 195 entry fees and 4 of 171 locations are over 40 characters**, the
+longest running to 110 and 136.
+
+The two worst were the two that matter most:
+
+- `Tiered: Earlybird $25 (May 14) through Final $55 (Jan 21, 2027)` — the entry
+  fee is the second thing anyone decides on after the deadline, and it was the
+  hardest line on the page to read.
+- `Paris, France (Festival at Forum des Images with international screenings in
+  New York, São Paulo, Johannesburg, Geneva and other cities)` — five ragged
+  lines on a phone, set as though it were a date.
+
+**Now** — the row switches on the value's length. Under 28 characters nothing
+changes at all: the figure-right row stays, because it earns its keep. Over it,
+the caption keeps its own line and the value sets beneath it at full column
+measure, left-aligned, `14px/1.5`. Same hairline, same 11px row padding, same
+family and colour — no new token, no box, no rule added. Several values now take
+*fewer* lines than they did right-aligned: `$10–$25 (varies by deadline tier)`
+went from two ragged lines to one.
+
+The threshold is a character count rather than a media query on purpose. The
+break is caused by the value, not the viewport — the rail is 320px on desktop
+and about 350px on a phone, so the same sentences overflow at both widths and
+should behave the same way at both.
+
+**Inspiration** — Metrograph's *Now Playing* programme. Every fact under a film
+sits in one left-aligned column: the short ones (`2001 / 120MIN / DIGITAL`) run
+together on a single line, and the one long fact — a sentence about a
+post-screening discussion — simply drops to its own line at full measure.
+Nothing is ever right-aligned into a figure's column, so a sentence never has to
+be read ragged-left. Mubi's film pages do the same thing more bluntly: no
+captions at all, everything left, hierarchy from size and colour only. We keep
+our captions, because an entry fee needs naming in a way a director credit does
+not, but the rule is theirs.
+
+**Verified** — the local build cannot render contest rows (the `.env.cron` file
+has no `NEXT_PUBLIC_SUPABASE_ANON_KEY`, so `getAllContests()` returns nothing
+and every `/contests/<id>` page 404s locally). So the typography was proved
+first in a standalone harness carrying the rail's exact CSS at its exact 320px
+width, against the ten real values above — that comparison is saved as
+`reports/design/2026-09-27-specrow-study.png` — and then on the live page after
+deploy. `npm run build` exits 0.
+
+**Before / after** — `reports/design/2026-09-27-before.png` (390px),
+`2026-09-27-before-desktop.png`, `2026-09-27-after.png` (390px),
+`2026-09-27-after-desktop.png`. The study is
+`2026-09-27-specrow-study.png`.
+
+---
+
 ## 2026-09-26 — The creator index, as a ruled roster with the work named
 
 **Changed** — `src/app/creators/page.tsx` and a new `.cr-*` block at the end of
