@@ -512,11 +512,27 @@ function Section({ label, children }: { label: string; children: React.ReactNode
   )
 }
 
+// A spec value stops being a figure somewhere around here. The rail's value
+// column is about 160px once the caption and the padding have taken their
+// share, so anything longer than this wraps two or three times and has to be
+// read ragged-left — which is how "Tiered: Earlybird $25 (May 14) through
+// Final $55 (Jan 21, 2027)" ends up harder to read than the sentence it is.
+// 22 of 195 entry fees and 4 locations are over 40 characters today.
+const SPEC_VALUE_IS_A_SENTENCE = 28
+
 function SpecRow({ label, value, highlight = false }: { label: string; value: string; highlight?: boolean }) {
+  // Short facts keep the label-left / figure-right row that makes the rail
+  // scannable. A long one drops under its caption and sets at full measure,
+  // left-aligned, the way a programme sets a note under a screening.
+  const stacked = value.length > SPEC_VALUE_IS_A_SENTENCE
   return (
     <div style={{
       borderTop: '1px solid #ECE9E2', padding: '11px 20px',
-      display: 'flex', alignItems: 'baseline', justifyContent: 'space-between', gap: 14,
+      display: 'flex',
+      flexDirection: stacked ? 'column' : 'row',
+      alignItems: stacked ? 'stretch' : 'baseline',
+      justifyContent: stacked ? 'flex-start' : 'space-between',
+      gap: stacked ? 5 : 14,
     }}>
       <span style={{
         fontSize: 10, color: '#8B867C', textTransform: 'uppercase', letterSpacing: '0.1em',
@@ -525,9 +541,10 @@ function SpecRow({ label, value, highlight = false }: { label: string; value: st
         {label}
       </span>
       <span style={{
-        fontSize: 13.5, color: highlight ? '#15803D' : '#26231E', textAlign: 'right',
+        fontSize: stacked ? 14 : 13.5, color: highlight ? '#15803D' : '#26231E',
+        textAlign: stacked ? 'left' : 'right',
         fontFamily: 'Space Grotesk, sans-serif', fontWeight: highlight ? 700 : 500,
-        fontVariantNumeric: 'tabular-nums', lineHeight: 1.4,
+        fontVariantNumeric: 'tabular-nums', lineHeight: stacked ? 1.5 : 1.4,
       }}>
         {value}
       </span>
