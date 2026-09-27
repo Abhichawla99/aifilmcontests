@@ -17,6 +17,12 @@ function daysLeft(deadline: string) {
 function fmtShort(d: string) {
   return new Date(d).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })
 }
+const FREE_ENTRY_TERMS = ['free', 'no fee', 'no entry fee', '$0', 'none']
+function isFreeEntry(entryFee: string): boolean {
+  if (!entryFee) return true
+  const lower = entryFee.toLowerCase()
+  return FREE_ENTRY_TERMS.some(t => lower.includes(t))
+}
 
 export default async function Home() {
   const allContests: Contest[] = await getAllContests()
@@ -43,6 +49,23 @@ export default async function Home() {
 
   const ticker = [...open].sort((a, b) => new Date(a.deadline).getTime() - new Date(b.deadline).getTime())
   const tickerItems = [...ticker, ...ticker]
+
+  const freeOpenCount = open.filter(c => isFreeEntry(c.entryFee)).length
+
+  const homeFaqs = [
+    {
+      q: 'What counts as an AI film contest on this site?',
+      a: 'Any competition, festival, grant or challenge built around AI-made or AI-assisted film, video or animation. Eligibility is set by each organizer, not by us — some require the entry to be generated entirely by AI, others only require AI to be part of the process. Check each contest’s own rules page for what qualifies.',
+    },
+    {
+      q: 'Are there free contests to enter?',
+      a: `Yes — ${freeOpenCount} of the ${open.length} contests open right now have no entry fee. See the full, always-current list on the Free to Enter page.`,
+    },
+    {
+      q: 'How do the deadline alerts work?',
+      a: 'They’re free. Subscribe once with your email and we’ll notify you when a new contest opens and again 7 days before any deadline closes — no account or payment needed.',
+    },
+  ]
 
   // JSON-LD: ItemList of open contests for rich results
   const jsonLdItemList = {
@@ -76,12 +99,26 @@ export default async function Home() {
     })),
   }
 
+  const jsonLdFaq = {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: homeFaqs.map(f => ({
+      '@type': 'Question',
+      name: f.q,
+      acceptedAnswer: { '@type': 'Answer', text: f.a },
+    })),
+  }
+
   return (
     <div style={{ background: '#FBFAF8', minHeight: '100vh', position: 'relative' }}>
 
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLdItemList) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLdFaq) }}
       />
 
       {/* ── Animated WebGL shader + film grain ── */}
@@ -411,6 +448,38 @@ export default async function Home() {
             <div style={{ minWidth: 280, flex: '1 1 280px', maxWidth: 360, position: 'relative' }}>
               <EmailSubscribe compact />
             </div>
+          </div>
+        </section>
+
+        {/* ── FAQ (mirrors the FAQPage JSON-LD above) ── */}
+        <section className="max-w-6xl mx-auto px-5" style={{ padding: '56px 20px' }}>
+          <h2 style={{
+            fontFamily: 'Space Grotesk, sans-serif',
+            fontSize: 'clamp(22px, 3.5vw, 30px)',
+            fontWeight: 700,
+            color: '#1B1916',
+            marginBottom: 28,
+            letterSpacing: '-0.03em',
+          }}>
+            Frequently asked
+          </h2>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 24, maxWidth: 640 }}>
+            {homeFaqs.map((f, i) => (
+              <div key={i}>
+                <h3 style={{
+                  fontFamily: 'Space Grotesk, sans-serif',
+                  fontSize: 16,
+                  fontWeight: 600,
+                  color: '#26231E',
+                  marginBottom: 8,
+                }}>
+                  {f.q}
+                </h3>
+                <p style={{ fontSize: 14, color: '#7A7469', lineHeight: 1.7 }}>
+                  {f.a}
+                </p>
+              </div>
+            ))}
           </div>
         </section>
 
