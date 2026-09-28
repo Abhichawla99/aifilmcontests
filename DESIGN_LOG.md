@@ -36,6 +36,87 @@ describe the old dark theme; the reasoning still applies, the colours do not.)*
 
 ---
 
+## 2026-09-28 — The card's prize, at the card's full width
+
+**Changed** — the footer row of `src/components/ContestCard.tsx`, about 35 lines.
+The card is the site's most repeated object — sixty to ninety of them on a browse
+page — and the 09-08 run set its deadline language and has not been back since.
+
+**Was** — the footer was one flex row: a `Prize` caption and value on the left,
+`View details →` on the right, vertically centred against each other.
+
+That shape assumes the prize is a figure. It usually is not. Checked against live
+data: **56 of the 89 open contests have a prize string over 45 characters, and the
+median is 53**. Once the CTA had taken its ~100px, the prize was setting in about
+170px on desktop, so the real ones wrapped four, five and six times:
+
+- `US$30 / US$20 / US$10 cash + feature on orhena's official accounts + 1 year of
+  orhena Pro for winners (every entrant also gets 1 month of orhena Pro)` — five
+  lines on desktop, six on a phone, in a column narrower than the description
+  directly above it.
+- `Trophies and certificates across all award categories` — two cramped lines next
+  to a CTA, where it fits comfortably on two wide ones.
+
+Two more faults lived in the same row. `View details →` floated at a different
+height on every card, because it was centred against a prize of unpredictable
+depth — so a grid of cards had a ragged column of blue arrows down it. And closed
+contests never got a CTA, so the footer was one shape for an open contest and
+another for a closed one, in the same grid.
+
+Separately, `Verified <date>` — added by the optimizer on 09-17, and the one line
+on the card that says this directory is maintained — was set at **8.5px in
+`#A8A296`**, as a third right-aligned tier underneath `12 days left` and
+`OCT 10, 2026`. The credibility line was the least legible thing on the card, and
+it was competing with the deadline instead of supporting it.
+
+**Now** — the caption line carries both 10px meta items, `Prize` on the left and
+`Verified <date>` on the right, and the value sets underneath at the card's full
+measure (273px on desktop, 308px at 390px, up from ~170px). Line-height goes
+1.2 → 1.35, because the value is now a paragraph rather than a figure.
+
+It is still two lines, so no card got taller; the long ones got shorter. The
+orhena prize went from six lines to four on a phone, taking about 90px off that
+card. `Verified` is legible at the caption's own size and colour, and reads as the
+footnote it is. The footer is now the same shape whether a contest is open or
+closed.
+
+Nothing was added to replace the CTA. The whole card is an `<a>`, and it already
+lifts, darkens its border and turns its title indigo on hover — the affordance
+survives losing the arrow. This is the third time this pattern has come off:
+`Feature →` eighty times on /feature (09-24), `View profile →` per row on
+/creators (09-26), and now the last and largest instance of it.
+
+**What the verified date is not** — the relative phrasing the deadline uses
+(`12 days left`) was considered for this line and rejected. `updated_at` is when
+the row last *changed*, not when it was last *looked at*: the median open contest
+is 14 days old by that column and twenty are past 31 days. Printing
+"checked 44 days ago" would have stated something the data does not know. The
+absolute date says exactly as much as the column actually carries.
+
+**Inspiration** — Are.na's Explore grid. Each channel card puts the title at size,
+then a small stack of provenance underneath: author, block count, and how long ago
+it was touched, all at one small size rather than three descending ones. There is
+no "View channel →" on any card — the title is the affordance and the last line is
+a footnote, not a button. The idea we took is the ranking: on a directory, the
+freshness stamp belongs at the bottom with the other provenance, quiet but
+readable, and never in the middle of the decision.
+
+**Verified** — the local build cannot render contest rows (`.env.cron` has no
+`NEXT_PUBLIC_SUPABASE_ANON_KEY`, so `getAllContests()` returns nothing), so the
+card was proved in a throwaway route that fed the real `ContestCard` six real
+rows pulled from Supabase — the longest prize on the site, the median one, a
+three-character one, a closed contest, one inside seven days and one free entry —
+built with `next start` and shot at both widths, before and after. That pair is
+`reports/design/2026-09-28-card-study-{before,after}-{desktop,390}.png`. The route
+was deleted before the commit. Longest unbroken token in any prize is 18
+characters, so the wider measure cannot overflow. `npm run build` exits 0.
+
+**Before / after** — `reports/design/2026-09-28-before.png` (390px),
+`2026-09-28-before-desktop.png`, `2026-09-28-after.png` (390px),
+`2026-09-28-after-desktop.png`, on /contests/closing-soon.
+
+---
+
 ## 2026-09-27 — A long spec value stacks under its caption instead of ragging right
 
 **Changed** — `SpecRow` in `src/app/contests/[id]/page.tsx`, about 20 lines. The
