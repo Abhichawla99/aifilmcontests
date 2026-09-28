@@ -107,15 +107,6 @@ export default function ContestCard({ contest }: { contest: Contest }) {
             }}>
               {isOpen && cd ? fmt(contest.deadline) : 'Deadline'}
             </div>
-            {contest.updatedAt && (
-              <div style={{
-                fontSize: 8.5, color: '#A8A296',
-                fontFamily: 'Space Grotesk, sans-serif', fontWeight: 500,
-                marginTop: 3,
-              }}>
-                Verified {fmt(contest.updatedAt)}
-              </div>
-            )}
           </div>
         </div>
 
@@ -175,40 +166,40 @@ export default function ContestCard({ contest }: { contest: Contest }) {
           ))}
         </div>
 
-        {/* Row 5: prize + CTA */}
         <hr style={{ border: 'none', borderTop: `1px solid ${tint.border}` }} />
-        <div className="flex items-center justify-between gap-3">
-          <div>
-            <div style={{
+        {/* Row 5: the prize, at the card's full measure.
+             Most prizes are sentences, not figures — 56 of 89 open ones run past 45
+             characters — so they were wrapping four and five times inside the ~170px
+             left of the row. The caption line carries the two 10px meta items instead,
+             and the value gets the whole width underneath. Same two lines as before. */}
+        <div>
+          <div className="flex items-baseline justify-between gap-3">
+            <span style={{
               fontSize: 10, color: '#8B867C',
               textTransform: 'uppercase', letterSpacing: '0.08em',
               fontFamily: 'Space Grotesk, sans-serif', fontWeight: 600,
-              marginBottom: 4,
-            }}>Prize</div>
-            <div style={{
-              fontSize: 14, fontWeight: 700,
-              fontFamily: 'Space Grotesk, sans-serif',
-              fontVariantNumeric: 'tabular-nums',
-              color: tint.text, lineHeight: 1.2,
-            }}>
-              {contest.prize}
-            </div>
+            }}>Prize</span>
+            {contest.updatedAt && (
+              <span style={{
+                fontSize: 10, color: '#8B867C',
+                fontFamily: 'Space Grotesk, sans-serif', fontWeight: 500,
+                fontVariantNumeric: 'tabular-nums',
+                letterSpacing: '0.01em',
+                flexShrink: 0,
+              }}>
+                Verified {fmt(contest.updatedAt)}
+              </span>
+            )}
           </div>
-          {!isClosed && (
-            <span className="card-cta" style={{
-              fontSize: 12, fontWeight: 500,
-              fontFamily: 'Space Grotesk, sans-serif',
-              color: '#4F46E5',
-              display: 'flex', alignItems: 'center', gap: 5,
-              flexShrink: 0,
-              transition: 'color 0.15s',
-            }}>
-              View details
-              <svg className="card-arrow" width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="currentColor" style={{ transition: 'transform 0.2s' }}>
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M17 8l4 4m0 0l-4 4m4-4H3" />
-              </svg>
-            </span>
-          )}
+          <div style={{
+            fontSize: 14, fontWeight: 700,
+            fontFamily: 'Space Grotesk, sans-serif',
+            fontVariantNumeric: 'tabular-nums',
+            color: tint.text, lineHeight: 1.35,
+            marginTop: 4,
+          }}>
+            {contest.prize}
+          </div>
         </div>
 
       </div>
