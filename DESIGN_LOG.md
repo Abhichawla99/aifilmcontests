@@ -36,6 +36,81 @@ describe the old dark theme; the reasoning still applies, the colours do not.)*
 
 ---
 
+## 2026-09-29 — The homepage FAQ, as a ruled question list in real ink
+
+**Changed** — the `Frequently asked` section of `src/app/page.tsx` and a new
+`.hfaq-*` block in `globals.css`, 74 lines added and 19 removed.
+
+**Was** — the optimizer shipped this section on 09-27 to back the FAQPage
+JSON-LD with content a visitor can actually see. It went up in default
+styling and has not been looked at since, so it was the only section on the
+homepage with no structure at all: three question/answer pairs in a flex
+column, 24px apart, no rules, nothing marking where one answer ended and the
+next question began except the gap.
+
+Two faults in it:
+
+- The answers were set 14px in `#7A7469`. That is the palest body text
+  anywhere on the site, on its most substantive prose — the passage that
+  explains what this directory actually lists. The Principles set body ink at
+  `#3E3A33`; the hero paragraph and the footer tagline are both darker than
+  this was. The credibility copy was the hardest thing on the page to read.
+- On a 1440px viewport it filled a 640px column and left the right 45% of the
+  section empty. Every other block on the homepage either spans or is
+  deliberately two-column; this one just stopped.
+
+And one dead end: the second answer says *"See the full, always-current list
+on the Free to Enter page"* — naming a page that exists, links from the nav,
+and appears in the footer forty pixels below it — as plain text.
+
+**Now** — the same ruled definition list `/creators` got on 09-26 for "Why be
+featured" (`.cr-why`). Question in its own 300px column, answer stepped
+across a 32px gap, a hairline under each row and one over the first. The
+answer is body copy: `#3E3A33`, 14.5px, line-height 1.75, capped at 56ch so
+lines land around 72 characters instead of the 80 the old 640px column was
+setting. `Free to Enter page` is a link.
+
+At 760px and below the two columns stack, which is exactly what the before
+state looked like on a phone — so the phone keeps its shape and gains the
+rules and the ink.
+
+The section is slightly *taller*, not shorter: measured on the live page from
+the `Frequently asked` heading to the footer, 514px → 535px on desktop and
+762px → 814px at 390px. The 56ch cap is narrower than the 640px column it
+replaced, so no answer lost a line, and the row padding and the looser
+leading add the rest. That was the trade — the block is 21px longer on
+desktop and the answers are readable. It is the last section before the
+footer, so nothing was pushed down that a visitor was trying to reach.
+
+**What did not change** — a word of copy. The answer strings are still the
+single source the `FAQPage` JSON-LD reads; the link is applied at render by
+splitting the string on the phrase, so the marked-up answer and the visible
+answer are still character-for-character the same, which is what Google's FAQ
+guidance asks for. No new question was added, and the three that are there
+still say what the optimizer wrote.
+
+**Inspiration** — two, and they agree. Criterion's FAQ indents each answer
+away from its question and sets it as full-weight reading matter at a narrow
+measure, so the indent carries the hierarchy and the answer is as legible as
+any body copy on the site — it is not treated as caption text under a label.
+Siteinspire's About page links every destination its prose names: eight
+phrases in five paragraphs, so the writing doubles as navigation and nothing
+that could be a link is left sitting there as text. Ours named a page and
+left it dead; that was the whole of the second fix.
+
+**Verified** — `npm run build` exits 0. Shot against a local `next start` at
+1440px and at 390px; `✓ no horizontal overflow` clean at both. The local
+build renders `0 of the 0 contests` in the second answer because `.env.cron`
+still has no `NEXT_PUBLIC_SUPABASE_ANON_KEY` — the live figures are 66 of 92,
+which is two characters longer and changes no line break. The after shots are
+from the live page.
+
+**Before / after** — `reports/design/2026-09-29-before.png` (390px),
+`2026-09-29-before-desktop.png`, `2026-09-29-after.png` (390px),
+`2026-09-29-after-desktop.png`, on the homepage.
+
+---
+
 ## 2026-09-28 — The card's prize, at the card's full width
 
 **Changed** — the footer row of `src/components/ContestCard.tsx`, about 35 lines.
