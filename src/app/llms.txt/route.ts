@@ -105,6 +105,7 @@ export async function GET() {
 - [AI short drama and series contests 2026](https://aifilmcontests.com/topics/ai-short-drama-and-series-contests-2026): Vigloo Short Drama Festival, PixLight's Pilot Track and Gossip Goblin x Showrunner, with vertical and pilot rules
 - [WAIFF 2027, World AI Film Festival Road to Cannes](https://aifilmcontests.com/topics/waiff-world-ai-film-festival-2027): Buenos Aires, London and Los Angeles feeder editions, fees, runtime rules and the 2026 Cannes winners
 - [AI horror film contests 2026](https://aifilmcontests.com/topics/ai-horror-film-contests-2026): Curious Refuge's $12,000 AI Horror Film Competition (closes October 9) plus horror awards at FESTIAV Valencia, AI London, WAIMF Marbella and HASFA Hollywood
+- [AI film contests closing in October 2026](https://aifilmcontests.com/topics/ai-film-contests-closing-october-2026): all 30 October deadlines by week, from PixLight ($300,000, Oct 31) and Vigloo ($20,000, Oct 11) to Slamdance DIG (Oct 6), with fees, formats and eligibility
 - [PixLight 2026, PixVerse's $300,000 AI film contest](https://aifilmcontests.com/topics/pixlight-2026-pixverse-ai-film-contest): free, 33 awards ($100,000 grand prize), Pilot and Script Tracks, deadline extended to October 31, 2026
 - [Text-to-video filmmaking](https://aifilmcontests.com/topics/text-to-video-filmmaking) and [generative AI narrative](https://aifilmcontests.com/topics/generative-ai-narrative): craft deep dives
 - [Creators](https://aifilmcontests.com/creators): profiles of the studios and filmmakers making AI film work
