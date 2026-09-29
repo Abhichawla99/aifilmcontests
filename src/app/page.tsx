@@ -60,6 +60,9 @@ export default async function Home() {
     {
       q: 'Are there free contests to enter?',
       a: `Yes — ${freeOpenCount} of the ${open.length} contests open right now have no entry fee. See the full, always-current list on the Free to Enter page.`,
+      // The answer text stays one plain string for the FAQPage JSON-LD; the
+      // visible copy links the page it names. Same words either way.
+      link: { text: 'Free to Enter page', href: '/contests/free' },
     },
     {
       q: 'How do the deadline alerts work?',
@@ -458,29 +461,33 @@ export default async function Home() {
             fontSize: 'clamp(22px, 3.5vw, 30px)',
             fontWeight: 700,
             color: '#1B1916',
-            marginBottom: 28,
+            marginBottom: 22,
             letterSpacing: '-0.03em',
           }}>
             Frequently asked
           </h2>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 24, maxWidth: 640 }}>
-            {homeFaqs.map((f, i) => (
-              <div key={i}>
-                <h3 style={{
-                  fontFamily: 'Space Grotesk, sans-serif',
-                  fontSize: 16,
-                  fontWeight: 600,
-                  color: '#26231E',
-                  marginBottom: 8,
-                }}>
-                  {f.q}
-                </h3>
-                <p style={{ fontSize: 14, color: '#7A7469', lineHeight: 1.7 }}>
-                  {f.a}
-                </p>
-              </div>
-            ))}
-          </div>
+          <dl className="hfaq">
+            {homeFaqs.map((f, i) => {
+              const link = 'link' in f ? f.link : null
+              const [before, after] = link && f.a.includes(link.text)
+                ? [f.a.slice(0, f.a.indexOf(link.text)), f.a.slice(f.a.indexOf(link.text) + link.text.length)]
+                : [f.a, null]
+              return (
+                <div className="hfaq-row" key={i}>
+                  <dt className="hfaq-q">{f.q}</dt>
+                  <dd className="hfaq-a">
+                    {before}
+                    {after !== null && link && (
+                      <>
+                        <a href={link.href}>{link.text}</a>
+                        {after}
+                      </>
+                    )}
+                  </dd>
+                </div>
+              )
+            })}
+          </dl>
         </section>
 
         {/* ── Footer ── */}

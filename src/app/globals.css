@@ -1186,3 +1186,51 @@ img, svg, video, canvas { max-width: 100%; }
   .cr-since { min-width: 72px; }
   .cr-why-row { grid-template-columns: 1fr; gap: 5px; }
 }
+
+/* ── Homepage "Frequently asked" ───────────────────────────────────────────
+   Was a flush-left stack of Q/A pairs with no rules, the answers set 14px in
+   #7A7469 — the palest body text anywhere on the site, on its most
+   substantive prose, occupying the left 45% of a 1440px page with nothing
+   beside it. Now the same ruled definition list as .cr-why: the question in
+   its own column, the answer stepped across the rule at the site's body ink
+   and a real measure, a hairline between each. Criterion indents the answer
+   away from the question and sets it as full-weight reading matter rather
+   than caption text, which is what an answer is. Siteinspire links every
+   destination its prose names; ours named the Free to Enter page in plain
+   text, so it is a link now. */
+.hfaq { border-top: 1px solid #E3DED3; max-width: 940px; }
+.hfaq-row {
+  display: grid;
+  grid-template-columns: 300px 1fr;
+  gap: 6px 32px;
+  padding: 18px 2px 20px;
+  border-bottom: 1px solid #ECE9E2;
+}
+.hfaq-q {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 15px;
+  font-weight: 600;
+  line-height: 1.4;
+  letter-spacing: -0.005em;
+  color: #1B1916;
+  margin: 0;
+}
+.hfaq-a {
+  font-size: 14.5px;
+  line-height: 1.75;
+  color: #3E3A33;
+  margin: 0;
+  max-width: 56ch;
+}
+.hfaq-a a {
+  color: #4F46E5;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  text-decoration-color: rgba(79,70,229,0.35);
+}
+.hfaq-a a:hover { color: #3730A3; text-decoration-color: currentColor; }
+.hfaq-a a:focus-visible { outline: 2px solid #4F46E5; outline-offset: 3px; border-radius: 2px; }
+
+@media (max-width: 760px) {
+  .hfaq-row { grid-template-columns: 1fr; gap: 7px; padding: 16px 2px 18px; }
+}
