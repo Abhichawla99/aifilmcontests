@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
+import { track } from '@vercel/analytics/server'
 import { addSubscriber } from '@/lib/subscribers'
 import { sendWelcomeEmail } from '@/lib/email'
 
@@ -30,6 +31,7 @@ export async function POST(request: NextRequest) {
       .catch(err => ({ success: false, error: err }))
     if (!welcome.success) console.error('[Email] Welcome send failed:', welcome.error)
 
+    await track('subscribe', { source: safeSource ?? 'unknown' }).catch(() => {})
     return NextResponse.json({ success: true, message: result.message })
   } catch (error) {
     console.error('Subscribe error:', error)

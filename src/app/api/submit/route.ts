@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
+import { track } from '@vercel/analytics/server'
 import { supabaseAdmin } from '@/lib/supabase'
 import { getSetting, logAgentRun, withDbRetry } from '@/lib/db-health'
 import { sendPlainEmail } from '@/lib/email'
@@ -99,6 +100,7 @@ export async function POST(request: NextRequest) {
         { status: 500 },
       )
     }
+    await track('submit_contest', { role: role || 'not stated', saved, emailed }).catch(() => {})
     return NextResponse.json({ ok: true })
   } catch (error) {
     console.error('[submit] error:', error)

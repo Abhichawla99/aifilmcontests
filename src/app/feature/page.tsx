@@ -137,8 +137,8 @@ export default async function FeaturePage({ searchParams }: { searchParams: Prom
           </div>
           {picked ? (
             payUrl(picked.id)
-              ? <a href={payUrl(picked.id)!} style={btn}>Feature {picked.name.length > 28 ? 'this contest' : picked.name} →</a>
-              : <a href={mailto(picked.name)} style={btn}>Email us to feature it →</a>
+              ? <a href={payUrl(picked.id)!} data-track="feature_pay" style={btn}>Feature {picked.name.length > 28 ? 'this contest' : picked.name} →</a>
+              : <a href={mailto(picked.name)} data-track="feature_email" style={btn}>Email us to feature it →</a>
           ) : (
             <a href="/submit" style={{ ...btn, background: 'rgba(27,25,22,0.06)', boxShadow: 'none', color: '#3E3A33' }}>Not listed yet? Submit it (free) →</a>
           )}
