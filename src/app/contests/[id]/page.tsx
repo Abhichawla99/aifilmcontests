@@ -487,6 +487,8 @@ export default async function ContestPage({ params }: { params: Promise<{ id: st
               <span style={{ color: '#E7E4DC' }}>·</span>
               <Link href={`/feature?contest=${contest.id}`} className="link-muted">Organizer? Feature this contest</Link>
               <span style={{ color: '#E7E4DC' }}>·</span>
+              <a href="mailto:abhixchawla@gmail.com" className="link-muted">Contact</a>
+              <span style={{ color: '#E7E4DC' }}>·</span>
               <Link href="/" className="link-muted">Browse All</Link>
             </div>
           </div>

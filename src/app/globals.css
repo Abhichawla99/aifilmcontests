@@ -624,8 +624,8 @@ img, svg, video, canvas { max-width: 100%; }
   display: grid;
   /* The 1fr identity column absorbs the slack, so the two link columns sit to
      the right the way the old left/right split did. */
-  grid-template-columns: minmax(200px, 1fr) minmax(128px, auto) minmax(128px, auto);
-  gap: 28px 64px;
+  grid-template-columns: minmax(200px, 1fr) minmax(128px, auto) minmax(128px, auto) minmax(128px, auto);
+  gap: 28px 48px;
   align-items: start;
 }
 .sfoot-mark {

@@ -43,7 +43,10 @@ export default function InnerLayout({ children }: InnerLayoutProps) {
             <Link href="/" className="link-muted" style={{ fontSize: 12 }}>Browse All</Link>
             <Link href="/contests/closing-soon" className="link-muted" style={{ fontSize: 12 }}>Closing Soon</Link>
             <a href="/submit" className="link-muted" style={{ fontSize: 12 }}>Submit a Contest</a>
+            <Link href="/feature" className="link-muted" style={{ fontSize: 12 }}>Feature a Contest</Link>
             <Link href="/creators" className="link-muted" style={{ fontSize: 12 }}>Featured Creators</Link>
+            <a href="mailto:abhixchawla@gmail.com" className="link-muted" style={{ fontSize: 12 }}>Contact</a>
+            <a href="https://www.linkedin.com/in/abhixchawla" target="_blank" rel="noopener noreferrer" className="link-muted" style={{ fontSize: 12 }}>LinkedIn</a>
             <a
               href="https://ruminatex.com"
               target="_blank"

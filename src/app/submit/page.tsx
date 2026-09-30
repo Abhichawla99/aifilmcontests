@@ -25,6 +25,15 @@ export default function SubmitPage() {
           Organizers can also <Link href="/feature" style={{ color: '#4338CA' }}>feature a listing</Link> once it is live.
         </p>
         <SubmitForm />
+
+        <aside style={{ marginTop: 40, paddingTop: 22, borderTop: '1px solid #ECE9E2', fontSize: 13.5, lineHeight: 1.65, color: '#6F6A61' }}>
+          <p style={{ margin: '0 0 6px' }}>
+            Prefer a person? Email Abhi at <a href="mailto:abhixchawla@gmail.com" style={{ color: '#4338CA' }}>abhixchawla@gmail.com</a> or message him on <a href="https://www.linkedin.com/in/abhixchawla" target="_blank" rel="noopener noreferrer" style={{ color: '#4338CA' }}>LinkedIn</a>.
+          </p>
+          <p style={{ margin: 0 }}>
+            Running the contest and want more entries? <Link href="/feature" style={{ color: '#4338CA' }}>Feature it</Link>: pinned on the homepage, a Featured badge, and a slot in the next email to every subscriber.
+          </p>
+        </aside>
       </div>
     </main>
   )

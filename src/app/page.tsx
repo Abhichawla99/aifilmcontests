@@ -526,8 +526,17 @@ export default async function Home() {
               <h2 className="sfoot-head" id="sfoot-more">More</h2>
               <div className="sfoot-links">
                 <a href="/submit" className="link-muted">Submit a Contest</a>
+                <a href="/feature" className="link-muted">Feature a Contest</a>
                 <a href="/creators" className="link-muted">Featured Creators</a>
                 <a href="/cinematic-ads" className="link-muted">Cinematic AI Ads</a>
+              </div>
+            </nav>
+
+            <nav aria-labelledby="sfoot-contact">
+              <h2 className="sfoot-head" id="sfoot-contact">Contact</h2>
+              <div className="sfoot-links">
+                <a href="mailto:abhixchawla@gmail.com" className="link-muted">abhixchawla@gmail.com</a>
+                <a href="https://www.linkedin.com/in/abhixchawla" target="_blank" rel="noopener noreferrer" className="link-muted">Abhi on LinkedIn</a>
               </div>
             </nav>
           </div>

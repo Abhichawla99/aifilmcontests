@@ -49,6 +49,9 @@ export default function SubmitForm() {
           We check every contest against its official page before it goes live, usually within a day.
           If anything is unclear we will reply to the email you gave.
         </p>
+        <p style={{ fontSize: 14, color: '#6F6A61', lineHeight: 1.65, margin: '10px 0 0' }}>
+          Running it yourself? Once it is live you can <a href="/feature" style={{ color: '#4338CA' }}>feature it</a> to reach every subscriber.
+        </p>
       </div>
     )
   }
@@ -135,6 +138,9 @@ export default function SubmitForm() {
             Not sent
           </div>
           <p style={{ fontSize: 13.5, lineHeight: 1.55, color: '#3E3A33', margin: 0 }}>{message}</p>
+          <p style={{ fontSize: 12.5, lineHeight: 1.55, color: '#8B867C', margin: '6px 0 0' }}>
+            Stuck? Email the details to <a href="mailto:abhixchawla@gmail.com" style={{ color: '#4338CA' }}>abhixchawla@gmail.com</a>.
+          </p>
         </div>
       )}
 
