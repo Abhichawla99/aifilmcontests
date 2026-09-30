@@ -298,7 +298,9 @@ export default async function Home() {
                       Never miss a deadline
                     </h2>
                     <p style={{ fontSize: 13, color: '#6F6A61', marginBottom: 18, lineHeight: 1.7 }}>
-                      Get notified when new contests open and 7 days before any deadline closes.
+                      New contests within a day of opening, a last call before deadlines close, and
+                      what&apos;s closing each week — a few emails a month, never daily. {open.length} contests
+                      are open right now.
                     </p>
                     <EmailSubscribe />
                   </div>
