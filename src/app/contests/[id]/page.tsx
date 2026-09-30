@@ -6,6 +6,7 @@ import { normalizeCategory, closedStyle } from '@/lib/theme'
 import ContestCard from '@/components/ContestCard'
 import EmailSubscribe from '@/components/EmailSubscribe'
 import DeadlineReminder from '@/components/DeadlineReminder'
+import SiteFooter from '@/components/SiteFooter'
 
 export const dynamic = 'force-dynamic'
 export const revalidate = 0
@@ -474,25 +475,7 @@ export default async function ContestPage({ params }: { params: Promise<{ id: st
         </main>
 
         {/* ── Footer ── */}
-        <footer style={{ borderTop: '1px solid rgba(27,25,22,0.05)', padding: '24px 0' }}>
-          <div className="max-w-4xl mx-auto px-5 flex flex-col sm:flex-row items-center justify-between gap-3">
-            <span style={{ fontFamily: 'Space Grotesk, sans-serif', fontSize: 13, fontWeight: 600, color: '#8B867C' }}>
-              AI Film Contests
-            </span>
-            <span style={{ fontSize: 12, color: '#A8A296' }}>
-              Tracking every AI film competition · Updated daily
-            </span>
-            <div className="flex items-center gap-4" style={{ fontSize: 12 }}>
-              <a href="/submit" className="link-muted">Submit a Contest</a>
-              <span style={{ color: '#E7E4DC' }}>·</span>
-              <Link href={`/feature?contest=${contest.id}`} className="link-muted">Organizer? Feature this contest</Link>
-              <span style={{ color: '#E7E4DC' }}>·</span>
-              <a href="mailto:abhixchawla@gmail.com" className="link-muted">Contact</a>
-              <span style={{ color: '#E7E4DC' }}>·</span>
-              <Link href="/" className="link-muted">Browse All</Link>
-            </div>
-          </div>
-        </footer>
+        <SiteFooter container="max-w-4xl" featureContestId={contest.id} />
 
       </div>
     </>

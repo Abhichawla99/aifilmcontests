@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import Link from 'next/link'
 import { getAllContests } from '@/lib/contests-db'
 import BackgroundFX from '@/components/BackgroundFX'
+import SiteFooter from '@/components/SiteFooter'
 
 export const metadata: Metadata = {
   title: 'Cinematic AI Advertising — How AI is Transforming Brand Filmmaking',
@@ -429,39 +430,7 @@ export default async function CinematicAdsPage() {
         )}
 
         {/* ── Footer ── */}
-        <footer style={{
-          borderTop: '1px solid rgba(27,25,22,0.04)',
-          padding: '28px 0',
-          marginTop: 40,
-          background: 'rgba(251,250,248,0.8)',
-          backdropFilter: 'blur(8px)',
-        }}>
-          <div className="max-w-5xl mx-auto px-5 flex flex-col sm:flex-row items-center justify-between gap-4">
-            <Link href="/" style={{
-              display: 'flex', alignItems: 'center', gap: 8, textDecoration: 'none',
-            }}>
-              <div style={{
-                width: 20, height: 20, borderRadius: 4,
-                background: '#4F46E5',
-                display: 'flex', alignItems: 'center', justifyContent: 'center',
-                fontSize: 7, fontWeight: 800, color: '#fff',
-              }}>AI</div>
-              <span style={{ fontFamily: 'Space Grotesk, sans-serif', fontSize: 12, fontWeight: 600, color: '#A8A296' }}>
-                AI Film Contests
-              </span>
-            </Link>
-            <span style={{ fontSize: 12, color: '#D8D4C9', textAlign: 'center' }}>
-              Every AI film competition · Updated daily by an agent
-            </span>
-            <div style={{ display: 'flex', gap: 16, alignItems: 'center', fontSize: 12 }}>
-              <Link href="/#contests" className="link-muted">Browse Contests</Link>
-              <span style={{ color: '#D8D4C9' }}>·</span>
-              <a href="https://ruminatex.com" target="_blank" rel="noopener noreferrer" className="link-muted">
-                Ruminatex ↗
-              </a>
-            </div>
-          </div>
-        </footer>
+        <SiteFooter />
 
       </div>
     </div>

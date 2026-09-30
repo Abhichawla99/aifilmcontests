@@ -5,6 +5,7 @@ import { getAllContests } from '@/lib/contests-db'
 import ContestCard from '@/components/ContestCard'
 import { ArticleHeader } from '@/components/ArticleLayout'
 import EmailSubscribe from '@/components/EmailSubscribe'
+import SiteFooter from '@/components/SiteFooter'
 
 export const dynamic = 'force-dynamic'
 
@@ -270,13 +271,7 @@ export default async function ToolPage({ params }: { params: Promise<{ slug: str
 
         </main>
 
-        <footer style={{ borderTop: '1px solid rgba(27,25,22,0.05)', padding: '24px 0' }}>
-          <div className="max-w-4xl mx-auto px-5 flex flex-col sm:flex-row items-center justify-between gap-3">
-            <span style={{ fontFamily: 'Space Grotesk, sans-serif', fontSize: 13, fontWeight: 600, color: '#8B867C' }}>AI Film Contests</span>
-            <span style={{ fontSize: 12, color: '#A8A296' }}>Tracking every AI film competition · Updated daily</span>
-            <Link href="/" className="link-muted" style={{ fontSize: 12 }}>Browse All</Link>
-          </div>
-        </footer>
+        <SiteFooter container="max-w-4xl" />
       </div>
     </>
   )

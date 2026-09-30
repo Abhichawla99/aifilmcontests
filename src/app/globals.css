@@ -615,10 +615,16 @@ img, svg, video, canvas { max-width: 100%; }
    at 390px the row did not wrap at all and both end links ran off the edges of
    the screen, unreachable. A single-line footer is a function of label length,
    not of taste — so the links now stack one per line under two named columns,
-   the way a footer of phrases has to be set. */
+   the way a footer of phrases has to be set.
+
+   2026-09-30: this is now every page's footer, drawn by <SiteFooter>. The four
+   others the site was still serving had the same fault or worse — see the log.
+   margin-top:auto is for InnerLayout's flex column, where a short page would
+   otherwise leave the footer floating mid-screen; in normal flow it is 0. */
 .sfoot {
   border-top: 1px solid #E3DED3;
   padding: 34px 0 34px;
+  margin-top: auto;
 }
 .sfoot-grid {
   display: grid;
@@ -633,19 +639,6 @@ img, svg, video, canvas { max-width: 100%; }
   align-items: center;
   gap: 10px;
   text-decoration: none;
-}
-.sfoot-tile {
-  width: 22px;
-  height: 22px;
-  border-radius: 5px;
-  flex: none;
-  background: #4F46E5;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 8px;
-  font-weight: 800;
-  color: #fff;
 }
 .sfoot-name {
   font-family: 'Space Grotesk', sans-serif;

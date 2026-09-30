@@ -7,6 +7,7 @@ import BackgroundFX from '@/components/BackgroundFX'
 import MouseOrbs from '@/components/MouseOrbs'
 import FeaturedSpotlight from '@/components/FeaturedSpotlight'
 import LogoMark from '@/components/LogoMark'
+import SiteFooter from '@/components/SiteFooter'
 
 export const dynamic  = 'force-dynamic'
 export const revalidate = 0
@@ -493,56 +494,7 @@ export default async function Home() {
         </section>
 
         {/* ── Footer ── */}
-        <footer className="sfoot">
-          <div className="max-w-6xl mx-auto px-5 sfoot-grid">
-            <div className="sfoot-ident">
-              <a href="/" className="sfoot-mark">
-                <span className="sfoot-tile" aria-hidden>AI</span>
-                <span className="sfoot-name">AI Film Contests</span>
-              </a>
-              <p className="sfoot-tagline">
-                {'Tracking every AI film competition ·\u00A0Updated daily'}
-              </p>
-              <p className="sfoot-credit">
-                <a
-                  href="https://ruminatex.com"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="link-muted"
-                >
-                  Crafted by Ruminatex
-                </a>
-              </p>
-            </div>
-
-            <nav aria-labelledby="sfoot-browse">
-              <h2 className="sfoot-head" id="sfoot-browse">Browse</h2>
-              <div className="sfoot-links">
-                <a href="/contests/closing-soon" className="link-muted">Closing Soon</a>
-                <a href="/contests/free" className="link-muted">Free to Enter</a>
-                <a href="/contests/cash-prizes" className="link-muted">Cash Prizes</a>
-              </div>
-            </nav>
-
-            <nav aria-labelledby="sfoot-more">
-              <h2 className="sfoot-head" id="sfoot-more">More</h2>
-              <div className="sfoot-links">
-                <a href="/submit" className="link-muted">Submit a Contest</a>
-                <a href="/feature" className="link-muted">Feature a Contest</a>
-                <a href="/creators" className="link-muted">Featured Creators</a>
-                <a href="/cinematic-ads" className="link-muted">Cinematic AI Ads</a>
-              </div>
-            </nav>
-
-            <nav aria-labelledby="sfoot-contact">
-              <h2 className="sfoot-head" id="sfoot-contact">Contact</h2>
-              <div className="sfoot-links">
-                <a href="mailto:abhixchawla@gmail.com" className="link-muted">abhixchawla@gmail.com</a>
-                <a href="https://www.linkedin.com/in/abhixchawla" target="_blank" rel="noopener noreferrer" className="link-muted">Abhi on LinkedIn</a>
-              </div>
-            </nav>
-          </div>
-        </footer>
+        <SiteFooter container="max-w-6xl" atHome />
 
       </div>
     </div>
