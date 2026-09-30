@@ -36,6 +36,102 @@ describe the old dark theme; the reasoning still applies, the colours do not.)*
 
 ---
 
+## 2026-09-30 — One footer, on every page
+
+**Changed** — a new `src/components/SiteFooter.tsx` (79 lines), swapped into the
+five places the site was drawing a footer: `src/app/page.tsx`,
+`src/components/InnerLayout.tsx`, `src/app/contests/[id]/page.tsx`,
+`src/app/tools/[slug]/page.tsx`, `src/app/categories/[slug]/page.tsx` and
+`src/app/cinematic-ads/page.tsx`. 19 lines added and 163 removed across those
+seven files, so the whole change is 65 lines lighter than what it replaced.
+
+**Was** — the 09-20 run rebuilt the homepage footer as named columns, because a
+row of two- and three-word labels has no width to live in. It fixed one footer.
+There were five, and the other four had the same fault or worse:
+
+- **InnerLayout**, which is every `/guide`, `/topics`, `/prize`, `/location`,
+  `/vs`, `/creators` and `/unsubscribe` page, the 404, and the four `/contests`
+  index pages: eight links, the wordmark and a 47-character tagline in one
+  `space-between` row. It carried `flexWrap`, so it wrapped rather than
+  overflowed, but each item was squeezed under its own label width and broke
+  inside itself.
+- **The contest page**, the most-visited page type on the site: four links at
+  `gap-4` with no wrap at all and middot separators. At 1440px every label
+  broke in half — `Submit a / Contest`, `Organizer? Feature this / contest`,
+  `Browse / All`, and the wordmark itself as `AI Film / Contests` — while each
+  middot stayed vertically centred, so it sat beside the gap between the two
+  lines rather than between two links. This is the 09-20 bug, unchanged, on the
+  page most visitors actually land on.
+- **`/tools/[slug]` and `/categories/[slug]`**: the wordmark, the tagline, and a
+  single `Browse All` link. Twenty-odd pages built to be landed on from search,
+  each offering one way onward.
+- **`/cinematic-ads`**: the last glassmorphism left on the site. A
+  `backdropFilter: blur(8px)` over `rgba(251,250,248,0.8)`, which is the page
+  ground at 80% — paper blurred against paper, the exact thing 09-20 stripped
+  off the homepage. Its border was `rgba(27,25,22,0.04)`, and its tagline was
+  set in `#D8D4C9` on `#FBFAF8`: about 1.4:1, which is not a colour, it is an
+  absence.
+
+**Now** — all five are `<SiteFooter>`, reusing the `.sfoot` grid the homepage
+already proved rather than inventing a sixth. Links stack one per line under
+`Browse`, `More` and `Contact`; the identity column takes the slack so the link
+columns sit right, the way the old left/right split did; below 640px the three
+collapse to two with the identity block on its own full-width line. The
+`container` prop keeps each page at the measure it already used — `max-w-6xl`
+on the homepage, `max-w-5xl` through InnerLayout, `max-w-4xl` on contest, tool
+and category pages — so nothing above the footer moved. Measured on the live
+pages, the footer's top offset is identical before and after at both widths
+(contest page 1853px at 1440, 3261px at 390); only the footer itself grew, by
+121px on desktop and 271px on a phone, and it is the last thing on the page.
+
+Three things came with it, none of them a new idea:
+
+- **The contest page keeps its contextual CTA.** `featureContestId` swaps
+  `Feature a Contest` for `Feature this contest` pointing at the same
+  `/feature?contest=<id>` it pointed at before. An organizer who has scrolled
+  their own listing still gets one click to the prefilled form.
+- **Nothing lost, a lot gained.** No link was removed anywhere. The pages that
+  offered one now offer ten; the contest page went from four to ten.
+- **One mark.** The footer draws `<LogoMark size={22} />` instead of the
+  separate `.sfoot-tile` "AI" square the homepage footer had kept. LogoMark's
+  own comment says it exists so the two headers stop drawing near-copies; the
+  homepage footer was the third copy. `.sfoot-tile` is deleted.
+
+The tagline is now `#8B867C`, the same as the homepage's, which is about 3.5:1
+on paper instead of 1.4:1.
+
+**What did not change** — a word of copy, any URL, or the layout of anything
+above the footer. `/cinematic-ads` still has ten other `backdropFilter` uses in
+its cards and hero; they were not today's change and are still there.
+
+**Inspiration** — Criterion serves one identical footer on every page and it is
+the site's whole map: `Shop the Collection`, `Current`, `The Criterion Channel`,
+`Our Mission`, `Terms of Use`, each a heading in the display face that is itself
+a destination, with its links stacked beneath in letterspaced caps. Nothing is
+shortened because a given page is "deep". And Letterboxd is the counterexample
+that proves the rule: its footer *is* one row, eleven links wide, and it works
+because every label is a single word — `About`, `Pro`, `News`, `Apps`, `Help`,
+`Terms`, `API`, `Contact`. Ours are phrases. A row was never going to hold
+`Organizer? Feature this contest`.
+
+**Verified** — `npm run build` exits 0. Shot against a local `next start` at
+1440px and 390px on `/`, `/creators`, `/cinematic-ads`, `/contests/closing-soon`
+and `/tools/runway`; `✓ no horizontal overflow` clean on all ten. After the
+push, all eight live page types serve the same three-column footer (checked by
+counting `sfoot-head` in the delivered HTML) and return 200. The local build
+renders no contests, because `.env.cron` still has no
+`NEXT_PUBLIC_SUPABASE_ANON_KEY`; the footer does not read contest data, and the
+before and after shots are both from the live site.
+
+**Before / after** — `reports/design/2026-09-30-before.png` (390px),
+`2026-09-30-before-desktop.png`, `2026-09-30-after.png`,
+`2026-09-30-after-desktop.png` on the contest page, and
+`2026-09-30-before-tools.png`, `2026-09-30-before-tools-desktop.png`,
+`2026-09-30-after-tools.png`, `2026-09-30-after-tools-desktop.png` on
+`/tools/runway`, where one link became ten.
+
+---
+
 ## 2026-09-29 — The homepage FAQ, as a ruled question list in real ink
 
 **Changed** — the `Frequently asked` section of `src/app/page.tsx` and a new
