@@ -57,14 +57,6 @@ export default async function FeaturePage({ searchParams }: { searchParams: Prom
   const subscribers = count ?? 0
   const roundedSubs = subscribers >= 1000 ? `${Math.floor(subscribers / 100) * 100}+` : subscribers >= 100 ? `${Math.floor(subscribers / 10) * 10}+` : String(subscribers)
 
-  const box: React.CSSProperties = {
-    border: '1px solid rgba(27,25,22,0.07)', borderRadius: 14, padding: '22px 24px', background: 'rgba(27,25,22,0.02)',
-  }
-  const btn: React.CSSProperties = {
-    display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: 8, padding: '13px 24px', borderRadius: 10,
-    background: '#4F46E5', color: '#fff', fontWeight: 600, fontSize: 14,
-    textDecoration: 'none', fontFamily: 'Space Grotesk, sans-serif', boxShadow: 'none',
-  }
   const mailto = (name?: string) =>
     `mailto:abhixchawla@gmail.com?subject=${encodeURIComponent(`Feature ${name ?? 'my contest'} on AI Film Contests`)}`
 
@@ -83,22 +75,16 @@ export default async function FeaturePage({ searchParams }: { searchParams: Prom
           Featuring puts your contest where they all look first.
         </p>
 
-        <div style={{ ...box, marginBottom: 20 }}>
-          <div style={{ fontSize: 11, fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', color: '#7A7469', marginBottom: 14, fontFamily: 'Space Grotesk, sans-serif' }}>
-            What featuring includes
-          </div>
-          <ul style={{ margin: 0, padding: 0, listStyle: 'none', display: 'grid', gap: 10, fontSize: 15, lineHeight: 1.5 }}>
-            <li>❋&nbsp;&nbsp;Pinned in the homepage spotlight for 30 days</li>
-            <li>❋&nbsp;&nbsp;A <strong style={{ color: '#4338CA' }}>Featured</strong> badge on your listing and in search</li>
-            <li>❋&nbsp;&nbsp;A dedicated slot in the next email to all {roundedSubs} subscribers</li>
-            <li>❋&nbsp;&nbsp;Deadline verified daily and a last-call reminder sent 3 days before close</li>
-          </ul>
-        </div>
+        <div className="feat-cap">What featuring includes</div>
+        <ul className="feat-inc">
+          <li>Pinned in the homepage spotlight for 30 days</li>
+          <li>A <strong style={{ color: '#4338CA' }}>Featured</strong> badge on your listing and in search</li>
+          <li>A dedicated slot in the next email to all {roundedSubs} subscribers</li>
+          <li>Deadline verified daily and a last-call reminder sent 3 days before close</li>
+        </ul>
 
         <div style={{ marginBottom: 28 }}>
-          <div style={{ fontSize: 11, fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', color: '#7A7469', marginBottom: 14, fontFamily: 'Space Grotesk, sans-serif' }}>
-            How it works
-          </div>
+          <div className="feat-cap">How it works</div>
           <ol style={{ margin: '0 0 20px', padding: 0, listStyle: 'none', display: 'grid', gap: 12 }}>
             {[
               ['Pick your contest and pay', `${PRICE_LABEL}, one payment, no subscription.`],
@@ -130,18 +116,21 @@ export default async function FeaturePage({ searchParams }: { searchParams: Prom
           </div>
         </div>
 
-        <div style={{ ...box, marginBottom: 28, display: 'flex', flexWrap: 'wrap', alignItems: 'center', justifyContent: 'space-between', gap: 16 }}>
+        <div className="feat-cap" style={{ marginBottom: 0 }}>Price</div>
+        <div className="feat-price">
           <div>
-            <div style={{ fontFamily: 'Space Grotesk, sans-serif', fontSize: 26, fontWeight: 700, color: '#1B1916', letterSpacing: '-0.02em' }}>{PRICE_LABEL}</div>
-            <div style={{ fontSize: 13, color: '#7A7469' }}>One payment. No subscription. Listing stays free forever.</div>
+            <div className="feat-price-fig">{PRICE_LABEL}</div>
+            <div className="feat-price-note">One payment. No subscription. Listing stays free forever.</div>
           </div>
-          {picked ? (
-            payUrl(picked.id)
-              ? <a href={payUrl(picked.id)!} data-track="feature_pay" style={btn}>Feature {picked.name.length > 28 ? 'this contest' : picked.name} →</a>
-              : <a href={mailto(picked.name)} data-track="feature_email" style={btn}>Email us to feature it →</a>
-          ) : (
-            <a href="/submit" style={{ ...btn, background: 'rgba(27,25,22,0.06)', boxShadow: 'none', color: '#3E3A33' }}>Not listed yet? Submit it (free) →</a>
-          )}
+          <div className="feat-price-cta">
+            {picked ? (
+              payUrl(picked.id)
+                ? <a href={payUrl(picked.id)!} data-track="feature_pay" className="feat-btn">Feature {picked.name.length > 28 ? 'this contest' : picked.name} →</a>
+                : <a href={mailto(picked.name)} data-track="feature_email" className="feat-btn">Email us to feature it →</a>
+            ) : (
+              <a href="/submit" className="feat-btn is-quiet">Not listed yet? Submit it (free) →</a>
+            )}
+          </div>
         </div>
 
         {!picked && (
