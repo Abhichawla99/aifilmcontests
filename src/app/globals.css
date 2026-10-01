@@ -160,6 +160,7 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
   align-items: center;
   gap: 6px;
   padding: 9px 18px;
+  min-height: 40px;
   border-radius: 8px;
   font-family: 'Space Grotesk', sans-serif;
   font-size: 13px;
@@ -185,6 +186,7 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
   font-size: 14px;
   font-family: inherit;
   padding: 10px 14px;
+  min-height: 40px;
   outline: none;
   transition: border-color 0.15s, box-shadow 0.15s;
 }
