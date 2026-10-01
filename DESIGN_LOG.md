@@ -36,6 +36,91 @@ describe the old dark theme; the reasoning still applies, the colours do not.)*
 
 ---
 
+## 2026-10-01 — /feature's value list and price, ruled instead of boxed
+
+**Changed** — the two panels above the contest picker in
+`src/app/feature/page.tsx`, and a new `.feat-cap` / `.feat-inc` /
+`.feat-price` / `.feat-btn` block in `globals.css`. 117 lines added and 32
+removed, about 45 of the additions being the comment in the stylesheet.
+
+**Was** — `/feature` is the only page on the site that asks for money, and the
+two things an organizer reads before paying — what $49 buys, and what $49 is —
+both sat in the same local `box` style: a 14px radius, a 1px border at 7% ink,
+and a fill of `#1B1916` at 2% over `#FBFAF8` paper. That fill is roughly a
+quarter of a percent of luminance away from the ground, so it is not a fill,
+it is a rounding error; the border was doing all the work and the result read
+as an empty form field. It is the same ghost box the 09-21 run took off the
+cinematic-ads callout and the 09-22 run took off the subscribe success state.
+This was the last place on the site still drawing it.
+
+Inside the first one, each of the four benefits was written as
+`❋&nbsp;&nbsp;text` — the glyph inside the paragraph rather than a marker
+outside it, which is the whole difference between a list and four sentences
+that happen to start with an asterisk. At 390px all four wrapped, and because
+there was no hanging indent every wrapped line started back at the asterisk's
+own left edge:
+
+- `Pinned in the homepage spotlight for` / `30 days`
+- `A Featured badge on your listing and` / `in search`
+- `A dedicated slot in the next email to` / `all 310+ subscribers`
+- `Deadline verified daily and a last-call` / `reminder sent 3 days before close`
+
+So the page that asks for $49 was at its least legible on a phone, in the
+block that states what the $49 is for.
+
+**Now** — both are hairline rows in the `.feat-list` language the contest
+picker directly below them has used since 09-24: a `#E3DED3` rule over the
+first row, `#ECE9E2` under each one, body ink at `#3E3A33`, 15px over a 1.6
+leading. There is no bullet glyph at all, so there is nothing to hang off —
+the rule carries the list, the way the spec rail on a contest page does. The
+rules run the full 720px column rather than a text measure, so they line up
+with the lede above them; the longest benefit is 72 characters, which sets on
+one line on desktop and never needed a narrower cap.
+
+The price takes the 2px ink rule that `SubscribeError` and `.sok-step`
+already use for their one important line: a small-caps `Price` label, the
+rule, then `$49 for 30 days` at 30px in Space Grotesk with tabular figures,
+the terms beneath it in `#7A7469`, and a closing hairline. The figure is now
+the heaviest thing on the page after the headline, which is the right ranking
+for a page whose whole job is the figure. Below 560px the band stacks and the
+CTA takes the full measure instead of sitting in a 200px island against the
+left edge — the pay button and the "Not listed yet?" fallback both, since
+they are now one `.feat-btn` class instead of a spread inline-style object.
+
+**What did not change** — a word of copy, to the character. The four benefit
+strings, the price label (still read from `FEATURED_PRICE_LABEL`), the terms
+line and both CTA labels are the same strings they were. No URL moved, the
+`data-track` attributes on both pay paths are intact, and the "How it works"
+steps, the live spotlight screenshot and the picker below are untouched — the
+only thing that happened to "How it works" is that its caption now shares the
+`.feat-cap` class instead of repeating the same six properties inline.
+
+**Inspiration** — Metrograph's membership page. Its benefits are grouped under
+three headings and every benefit is one line of plain text with no bullet
+glyph anywhere on the page: `Get one $11 ticket per screening (save $7)`,
+`10% discount at The Commissary Restaurant`. The heading does the grouping,
+the line does the listing, and every line names a number. Nothing is in a box.
+Mubi says the same thing more bluntly: its offer is one sentence —
+`Try 7 days free, then C$16.99/month` — set directly on the ground above the
+form, not in a pricing card. The idea taken is that a marker is only worth its
+space when the list is unordered and long; four statements under a label are
+better served by the rule between them, and the figure deserves the page's
+heaviest rule rather than its softest fill.
+
+**Verified** — `npm run build` exits 0. Shot against a local `next start` at
+1440px, 390px and 375px; `✓ no horizontal overflow` clean at all three. The
+local build renders the picker's empty state because `.env.cron` still has no
+`NEXT_PUBLIC_SUPABASE_ANON_KEY`, so `getContestsByStatus('open')` returns
+nothing — the subscriber count in the third benefit still comes through live
+(the admin client has its own key), and the after shots are from the live
+page, where the picker holds all 87 open contests.
+
+**Before / after** — `reports/design/2026-10-01-before.png` (390px),
+`2026-10-01-before-desktop.png`, `2026-10-01-after.png` (390px),
+`2026-10-01-after-desktop.png`, on /feature.
+
+---
+
 ## 2026-09-30 — One footer, on every page
 
 **Changed** — a new `src/components/SiteFooter.tsx` (79 lines), swapped into the
