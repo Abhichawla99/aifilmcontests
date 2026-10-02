@@ -36,6 +36,76 @@ describe the old dark theme; the reasoning still applies, the colours do not.)*
 
 ---
 
+## 2026-10-02 — The article band's footer strip, ruled instead of dot-separated
+
+**Changed** — the meta row in `ArticleHeader` (`src/components/ArticleLayout.tsx`)
+and a new `.ah-meta` / `.ah-facts` / `.ah-fact` / `.ah-trust` block in
+`globals.css`. 65 lines added, 16 removed, about 20 of the additions being the
+comment in the stylesheet. `ArticleHeader` is the band on 14 page types —
+/guide, /topics, /tools, /vs, /prize, /location, /categories, /creators and the
+four /contests index pages — so this is one component and every page but the
+homepage, a contest page, /submit, /feature and /unsubscribe.
+
+**Was** — one flex row with `flexWrap: 'wrap'`, a 14px gap, 12px type at 0.85
+opacity, and a `·` rendered as its own flex item between each pair. The items
+were, in order: `Updated <date>`, `<n> min read`, whatever counts the page
+passes, and then `Contest facts checked against live sources daily`. That last
+string is 47 characters; the longest thing beside it is `Updated September 24,
+2026` at 26, and most are nearer ten. A dot-separated run only holds while the
+whole run fits a line, and at 390px it does not: the row wrapped between the
+last fact and the sentence, and because the separator is its own flex item it
+stayed behind on the line it ended:
+
+- `8 min read ·` / `Contest facts checked against live sources daily` (/topics)
+- `21 contests closing within 14 days ·` / `Contest facts checked…` (/contests/closing-soon)
+
+So on a phone, on every one of those pages, the band ended with a dangling
+glyph. And the sentence that carries the whole claim — these dates were read off
+the organizer's own page this morning — was set as the fourth item in a list,
+at the lowest contrast of anything in the band.
+
+**Now** — a hairline in the band's own tint runs across the foot of the band,
+and the separating is done by rules, which cannot be stranded. Above 640px the
+facts hold one row divided by 1px vertical rules at 15px either side; below it
+`.ah-facts` goes to `display: block` and each fact takes its own line with the
+rules off, because a wrapping run is the thing that strands a separator in the
+first place. The verification line sits on its own underneath at 0.75 opacity —
+quieter than the facts, which are hard data, but standing alone rather than
+queued behind them. Figures are tabular, so `58 open now` / `3 coming soon` /
+`79 closed` align down the stack on a phone. The `·` spans are gone, which also
+takes a meaningless glyph out of the accessibility tree.
+
+**What did not change** — any copy, to the character, and no page passes a
+different `meta` array than it did yesterday. The band's tint, radius, padding,
+kind pill, headline and standfirst are untouched; `--ah-rule` is set inline per
+page from `tintForSlug(slug).border`, the same colour the band's own border
+already uses, so nothing new entered the palette.
+
+**Inspiration** — Metrograph's Now Playing listings. A film there gets
+`DIRECTOR: ELIZABETH LENNARD` on one line and `1985 / 62MIN / DCP` on the next:
+the only inline-separated line is the one where every item is a handful of
+characters and the run can never wrap, and the long facts — the director, the
+note that a composer introduces the screening on Saturday — each take a line of
+their own. Criterion's essays do the same with two items and stop:
+`ESSAYS — NOV 26, 2024`. The idea taken is that a separator glyph is a
+promise the line will not break, and the moment one item is five times the
+length of its neighbours that promise is not yours to make — so either shorten
+the run or let a rule do the work.
+
+**Verified** — `npm run build` exits 0. Shot against a local `next start` at
+1440px, 390px and 375px on /topics, /categories, /guide and /creators;
+`✓ no horizontal overflow` clean at all three. The local build shows zeroes in
+the counts because `.env.cron` still has no `NEXT_PUBLIC_SUPABASE_ANON_KEY`, so
+the after shots are from the live page, where /categories/short-film reads
+58 open now / 3 coming soon / 79 closed.
+
+**Before / after** — `reports/design/2026-10-02-before.png` (390px),
+`2026-10-02-before-desktop.png`, `2026-10-02-after.png` (390px),
+`2026-10-02-after-desktop.png`, all on /topics/ai-film-festivals-2027, plus
+`2026-10-02-after-categories-375.png` for the three-fact stack at 375px.
+
+---
+
 ## 2026-10-01 — /feature's value list and price, ruled instead of boxed
 
 **Changed** — the two panels above the contest picker in
