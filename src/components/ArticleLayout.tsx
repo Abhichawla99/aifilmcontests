@@ -52,6 +52,11 @@ export function ArticleHeader({
     Location: '🗺️', Category: '🗂️', Creator: '🎥',
   } as Record<string, string>)[kind] ?? '🎬'
   const tint = tintForSlug(slug)
+  const facts = [
+    ...(updated ? [`Updated ${updated}`] : []),
+    ...(minutes ? [`${minutes} min read`] : []),
+    ...(meta ?? []),
+  ]
   return (
     <header style={{
       background: tint.bg,
@@ -90,22 +95,22 @@ export function ArticleHeader({
         </p>
       )}
 
-      <div style={{
-        display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: 14,
-        fontSize: 12, color: tint.text, opacity: 0.85,
-        fontFamily: 'Space Grotesk, sans-serif', fontWeight: 500,
-      }}>
-        {[
-          ...(updated ? [`Updated ${updated}`] : []),
-          ...(minutes ? [`${minutes} min read`] : []),
-          ...(meta ?? []),
-          'Contest facts checked against live sources daily',
-        ].map((bit, i) => (
-          <React.Fragment key={bit}>
-            {i > 0 && <span aria-hidden style={{ opacity: 0.5 }}>·</span>}
-            <span>{bit}</span>
-          </React.Fragment>
-        ))}
+      {/* The band's footer strip. The page's facts and the standing
+          verification line used to share one dot-separated flex row, so at
+          phone width the row wrapped and left a · hanging off the end of a
+          line, and the sentence that says why these dates can be believed read
+          as just one more item in the run. A hairline does the separating now:
+          the facts sit on one ruled row, divided by vertical rules on desktop
+          and stacked one per line below 640px — where a wrapping run is what
+          strands a separator in the first place — and the verification line
+          stands on its own underneath. */}
+      <div className="ah-meta" style={{ color: tint.text, '--ah-rule': tint.border } as React.CSSProperties}>
+        {facts.length > 0 && (
+          <div className="ah-facts">
+            {facts.map(bit => <span className="ah-fact" key={bit}>{bit}</span>)}
+          </div>
+        )}
+        <p className="ah-trust">Contest facts checked against live sources daily</p>
       </div>
       {children}
     </header>

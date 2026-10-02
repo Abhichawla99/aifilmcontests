@@ -1325,3 +1325,47 @@ img, svg, video, canvas { max-width: 100%; }
 @media (max-width: 760px) {
   .hfaq-row { grid-template-columns: 1fr; gap: 7px; padding: 16px 2px 18px; }
 }
+
+/* 2026-10-02 — the article band's footer strip (ArticleHeader, 14 page types).
+   It was one flex row: Updated, read time, the open/coming-soon counts and
+   "Contest facts checked against live sources daily", all 12px at 0.85 opacity
+   with a · between each. The sentence is five times the length of any fact
+   beside it, so at 390px the row wrapped between the last fact and the
+   sentence and left the separator dangling at the end of the line — "8 min
+   read ·" on one line, the claim on the next. A dot-separated run only holds
+   when every item is short enough that the whole run fits a line; Metrograph's
+   listings keep theirs to 1985 / 62MIN / DCP and give the director and the
+   programme note their own lines, which is why theirs never breaks.
+   So the facts keep one ruled row with a vertical hairline between them, and
+   stack one per line below 640px where that row would wrap; the separating is
+   done by rules, which cannot be stranded. The verification line gets its own
+   line under them, which is also the right ranking — it is the standing claim
+   the whole directory rests on, not the fourth item in a list. --ah-rule is
+   set per page from the band's own tint. */
+.ah-meta {
+  margin-top: 22px;
+  padding-top: 14px;
+  border-top: 1px solid var(--ah-rule, #E3DED3);
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 1.45;
+  letter-spacing: 0.01em;
+  font-variant-numeric: tabular-nums;
+}
+.ah-facts { display: flex; flex-wrap: wrap; align-items: baseline; }
+.ah-fact + .ah-fact {
+  margin-left: 15px;
+  padding-left: 15px;
+  border-left: 1px solid var(--ah-rule, #E3DED3);
+}
+.ah-trust { margin: 0; opacity: 0.75; }
+.ah-facts + .ah-trust { margin-top: 7px; }
+
+@media (max-width: 640px) {
+  .ah-meta { margin-top: 18px; padding-top: 12px; }
+  .ah-facts { display: block; }
+  .ah-fact { display: block; }
+  .ah-fact + .ah-fact { margin: 5px 0 0; padding-left: 0; border-left: 0; }
+  .ah-facts + .ah-trust { margin-top: 9px; }
+}
