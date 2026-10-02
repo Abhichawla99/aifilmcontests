@@ -74,6 +74,23 @@ export const creators: Creator[] = [
     contests: ['rome-ai-festival-2026'],
     featuredSince: '2026-09-11',
   },
+  {
+    slug: 'mathery',
+    name: 'Mathery',
+    type: 'studio',
+    location: 'Milan, Italy & Brooklyn, New York, USA',
+    website: 'https://mathery.it',
+    oneLiner: 'Italian directing duo whose AI short "Where Knights Fall" took Silver at the Runway AI Film Festival.',
+    bio:
+      'Mathery is Erika Zorzi and Matteo Sangalli, an Italian directing duo based between Milan and Brooklyn, working across film, photography, and object and space design. ' +
+      'Young Gun winners with a commercial client roster that includes Samsung, Amex, Delta, Klarna and IKEA, they also make independent work like Where Knights Fall, a Rapunzel story that won Silver at the Runway AI Film Festival 2026 and was an Official Selection at GIFF.',
+    tags: ['ai-film', 'directing-duo', 'milan', 'brooklyn', 'commercial'],
+    workLinks: [
+      { title: 'Where Knights Fall', url: 'https://mathery.it/project/where-knights-fall-ai/' },
+    ],
+    contests: ['runway-aif-2026'],
+    featuredSince: '2026-10-02',
+  },
 ]
 
 export function getCreator(slug: string): Creator | undefined {
