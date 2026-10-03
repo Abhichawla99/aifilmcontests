@@ -91,6 +91,24 @@ export const creators: Creator[] = [
     contests: ['runway-aif-2026'],
     featuredSince: '2026-10-02',
   },
+  {
+    slug: 'robert-gaudette',
+    name: 'Robert Gaudette',
+    type: 'filmmaker',
+    location: 'Welland, Ontario, Canada',
+    website: 'https://robertgaudette.com',
+    oneLiner: 'Canadian AI filmmaker whose short "A Face Only A Mother Could Love" won the Grand Prix at the Runway AI Film Festival.',
+    bio:
+      'Robert Gaudette is a Canadian filmmaker, AI creative technologist, author and former photographer based in Welland, Ontario, and the founder of Nolia Studios. ' +
+      'His short film A Face Only A Mother Could Love won the Grand Prix at the 2026 Runway AI Film Festival and Best Picture at Australia\'s Omni Film Festival, with further recognition including a Best Director award in Portugal and a selection for the Reply AI Film Festival. ' +
+      'He worked earlier as a photographer and in nonprofit work, experiences that shaped his focus on character, empathy and human vulnerability.',
+    tags: ['ai-film', 'grand-prix', 'welland-ontario', 'nolia-studios', 'canada'],
+    workLinks: [
+      { title: 'A Face Only A Mother Could Love', url: 'https://www.youtube.com/watch?v=UeX7yTc5zgY' },
+    ],
+    contests: ['runway-aif-2026'],
+    featuredSince: '2026-10-03',
+  },
 ]
 
 export function getCreator(slug: string): Creator | undefined {
