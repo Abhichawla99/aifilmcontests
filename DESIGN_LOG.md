@@ -36,6 +36,64 @@ describe the old dark theme; the reasoning still applies, the colours do not.)*
 
 ---
 
+## 2026-10-03 — /submit, with the site still around it
+
+**Changed** — `src/app/submit/page.tsx` (13 added, 16 removed) and a new `.sbp-`
+block in `globals.css` (34 added). One page. No copy changed, to the character.
+
+**Was** — of every page a visitor can reach, `/submit` and `/feature` were the
+last two rendering as a bare `<main>`: a 640px column centred on paper with no
+masthead, no nav and no footer. `/unsubscribe` got the site put back around it
+on Sep 25 and the 404 page on Sep 13; `/submit` never did. So the page that
+asks a festival organizer to hand us their official page showed them a form and
+nothing else — not the 90 open contests they would be joining, not Closing Soon,
+not the footer's twelve links. The only route back into the directory was a 12px
+uppercase `AI FILM CONTESTS` eyebrow which is a link but reads as a label, and
+at 390px it was the first thing on the screen with the brand mark nowhere in
+sight. That is the wrong page to make someone feel they have left the site on:
+it is the one asking for something.
+
+**Looked at** — Mubi's Film Database and Criterion's Shop All Films. Mubi puts
+*Contribute to the database* inside the database page itself: the masthead, the
+search and the genre/country/year filters all stay put, so contributing reads as
+part of browsing rather than a departure to a form. Criterion does the same with
+a 1,891-row utility list — the identical masthead as the editorial pages, no
+special treatment for the page that is "just a list". The adaptation here is not
+their layout, which we are not copying, but the posture: the page where someone
+gives you something should carry the same chrome as the page where they take
+something.
+
+**Now** — `/submit` is wrapped in `InnerLayout`, the same component `/unsubscribe`
+and the 404 page use, so it has the sticky wordmark, the six-link nav and the
+full footer. The page's inline styles moved into a `.sbp-` block in `globals.css`
+to match how those two siblings are written rather than being the one page still
+carrying its design in `style={{}}`. The text column keeps its 640px reading
+measure, but `.sbp-wrap` is now `max-w-5xl` with `.sbp-wrap > * { max-width: 640px }`,
+so the column is left-aligned in the container instead of centred in the viewport:
+the headline starts on the same vertical as the wordmark above it and the footer
+brand below it. The brand eyebrow, now redundant beside the header, becomes a kind
+label — `Submit a contest`, indigo, the vocabulary the article bands already use.
+
+**What did not change** — every value the page had, to the pixel: the 11px indigo
+label, the 16px `#3E3A33` standfirst at a 54ch measure, the 13.5px `#6F6A61`
+aside above its `#ECE9E2` hairline, the 640px form, and `SubmitForm.tsx` itself
+(untouched — its fields, its honeypot, its success state and its focus rings are
+exactly as the Sep 9 run left them). The one thing that did move is the headline,
+from `clamp(28px, 5vw, 38px)` to the `clamp(30px, 5vw, 44px)` page-title size
+`.nf-title` and the rest of the site use, because a page title that was six
+pixels smaller than every other page title was the only reason it had been one.
+
+**Still open** — `/feature` is now the last public page without the chrome. It was
+worked on Oct 1 and Sep 24–25, so it was left alone today rather than touched
+three days running; it is the obvious next one.
+
+**Screenshots** — before `reports/design/2026-10-03-before.png` (1440) and
+`-before-390.png`; after `reports/design/2026-10-03-after.png` and `-after-390.png`,
+both taken off the live site after the deploy. No horizontal overflow at 1440,
+390 or 375.
+
+---
+
 ## 2026-10-02 — The article band's footer strip, ruled instead of dot-separated
 
 **Changed** — the meta row in `ArticleHeader` (`src/components/ArticleLayout.tsx`)
