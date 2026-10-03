@@ -351,6 +351,40 @@ img, svg, video, canvas { max-width: 100%; }
   .nf-list { margin-top: 32px; }
 }
 
+/* ── /submit ────────────────────────────────────────────────────────────────── */
+/* The page sits inside InnerLayout like every other page, so the header, nav and
+   footer are present: someone who lands here from a search can see the directory
+   they are contributing to. The text column is capped at a reading measure but
+   left-aligned to the 5xl container, so the headline starts on the same vertical
+   as the wordmark above it and the footer below it, rather than floating in the
+   middle of the page on its own centre line. */
+.sbp-wrap { padding-top: 56px; padding-bottom: 80px; }
+/* Every block in the column — headline, standfirst, the form, the aside — shares
+   one reading measure; the container keeps the left edge. */
+.sbp-wrap > * { max-width: 640px; }
+.sbp-label {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 11px; font-weight: 600; color: #4F46E5;
+  letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 14px;
+}
+.sbp-title {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: clamp(30px, 5vw, 44px); font-weight: 600; line-height: 1.08;
+  letter-spacing: -0.025em; color: #1B1916; margin: 0 0 12px;
+}
+.sbp-body { margin: 0 0 32px; font-size: 16px; line-height: 1.65; color: #3E3A33; max-width: 54ch; }
+.sbp-body a { color: #4338CA; }
+.sbp-aside {
+  margin-top: 40px; padding-top: 22px; border-top: 1px solid #ECE9E2;
+  font-size: 13.5px; line-height: 1.65; color: #6F6A61;
+}
+.sbp-aside p { margin: 0 0 6px; }
+.sbp-aside p:last-child { margin-bottom: 0; }
+.sbp-aside a { color: #4338CA; }
+@media (max-width: 640px) {
+  .sbp-wrap { padding-top: 36px; padding-bottom: 56px; }
+}
+
 /* ── Inner-page header (InnerLayout + InnerNav) ─────────────────────────────── */
 /* Flat paper and a hairline, no blur. One row on desktop; on a phone the links
    become a single swipeable line under the logo instead of wrapping to three. */
