@@ -385,6 +385,37 @@ img, svg, video, canvas { max-width: 100%; }
   .sbp-wrap { padding-top: 36px; padding-bottom: 56px; }
 }
 
+/* ── /feature ───────────────────────────────────────────────────
+   The last public page still rendering as a bare <main>: a 720px column
+   centred on paper with no masthead, no nav and no footer. It is also the
+   page that asks a festival organizer to pay for placement in a directory,
+   so the directory had better be visible behind it. Same treatment /submit
+   got on Oct 3, in the same vocabulary — InnerLayout's chrome, the column
+   left-aligned under the wordmark instead of centred in the viewport, and a
+   kind label where a brand eyebrow was standing in for a header. The 720px
+   reading measure is unchanged; the contest picker needs all of it. */
+.ftp-wrap { padding-top: 56px; padding-bottom: 80px; }
+.ftp-wrap > * { max-width: 720px; }
+.ftp-label {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 11px; font-weight: 600; color: #4F46E5;
+  letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 14px;
+}
+.ftp-title {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: clamp(30px, 5vw, 44px); font-weight: 600; line-height: 1.08;
+  letter-spacing: -0.025em; color: #1B1916; margin: 0 0 12px;
+}
+/* Was #6F6A61, the muted tone the captions use. This is the first sentence on
+   the page and it carries the subscriber count, so it is body ink at the body
+   measure, like every other standfirst on the site. */
+.ftp-standfirst {
+  margin: 0 0 32px; font-size: 16px; line-height: 1.65; color: #3E3A33; max-width: 54ch;
+}
+@media (max-width: 640px) {
+  .ftp-wrap { padding-top: 36px; padding-bottom: 56px; }
+}
+
 /* ── Inner-page header (InnerLayout + InnerNav) ─────────────────────────────── */
 /* Flat paper and a hairline, no blur. One row on desktop; on a phone the links
    become a single swipeable line under the logo instead of wrapping to three. */

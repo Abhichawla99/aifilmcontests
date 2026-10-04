@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import Link from 'next/link'
 import { getContestsByStatus } from '@/lib/contests-db'
 import { supabaseAdmin } from '@/lib/supabase'
+import InnerLayout from '@/components/InnerLayout'
 
 export const dynamic = 'force-dynamic'
 export const revalidate = 0
@@ -61,16 +62,14 @@ export default async function FeaturePage({ searchParams }: { searchParams: Prom
     `mailto:abhixchawla@gmail.com?subject=${encodeURIComponent(`Feature ${name ?? 'my contest'} on AI Film Contests`)}`
 
   return (
-    <main style={{ minHeight: '100vh', background: '#FBFAF8', color: '#26231E', fontFamily: 'Inter, sans-serif' }}>
-      <div style={{ maxWidth: 720, margin: '0 auto', padding: '56px 24px 80px' }}>
-        <Link href="/" style={{ fontSize: 12, color: '#4f46e5', fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase', textDecoration: 'none', fontFamily: 'Space Grotesk, sans-serif' }}>
-          AI Film Contests
-        </Link>
+    <InnerLayout>
+      <div className="max-w-5xl mx-auto px-5 ftp-wrap">
+        <p className="ftp-label">Feature a contest</p>
 
-        <h1 style={{ fontFamily: 'Space Grotesk, sans-serif', fontSize: 'clamp(28px, 5vw, 40px)', fontWeight: 700, letterSpacing: '-0.02em', lineHeight: 1.15, margin: '20px 0 12px', color: '#1B1916' }}>
+        <h1 className="ftp-title">
           Get more entries for {picked ? picked.name : 'your AI film contest'}.
         </h1>
-        <p style={{ fontSize: 16, lineHeight: 1.65, color: '#6F6A61', margin: '0 0 32px' }}>
+        <p className="ftp-standfirst">
           {roundedSubs} AI filmmakers get our alerts, and thousands more find contests through this site every month.
           Featuring puts your contest where they all look first.
         </p>
@@ -200,6 +199,6 @@ export default async function FeaturePage({ searchParams }: { searchParams: Prom
           Questions or corrections: <a href="mailto:abhixchawla@gmail.com" style={{ color: '#7A7469' }}>abhixchawla@gmail.com</a>.
         </p>
       </div>
-    </main>
+    </InnerLayout>
   )
 }
