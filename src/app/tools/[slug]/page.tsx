@@ -248,7 +248,7 @@ export default async function ToolPage({ params }: { params: Promise<{ slug: str
 
           {/* Deadline alerts */}
           <section style={{ marginBottom: 48 }}>
-            <EmailSubscribe compact />
+            <EmailSubscribe compact openCount={all.filter(c => c.status === 'open').length} />
           </section>
 
           {/* Other tools */}

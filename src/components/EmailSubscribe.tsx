@@ -13,7 +13,7 @@ function SubscribeError({ message }: { message: string }) {
   )
 }
 
-export default function EmailSubscribe({ compact = false }: { compact?: boolean }) {
+export default function EmailSubscribe({ compact = false, openCount }: { compact?: boolean; openCount?: number }) {
   const [name,    setName]    = useState('')
   const [email,   setEmail]   = useState('')
   const [consent, setConsent] = useState(false)
@@ -93,6 +93,12 @@ export default function EmailSubscribe({ compact = false }: { compact?: boolean 
   if (compact) {
     return (
       <div className="w-full">
+        {typeof openCount === 'number' && (
+          <p style={{ fontSize: 12, color: '#6F6A61', marginBottom: 10, lineHeight: 1.55 }}>
+            New contests within a day of opening, plus a last call before deadlines close —{' '}
+            <strong style={{ color: '#1B1916' }}>{openCount} open right now</strong>.
+          </p>
+        )}
         <form onSubmit={handleSubmit} className="flex flex-col gap-2">
           <div className="flex gap-2">
             <input

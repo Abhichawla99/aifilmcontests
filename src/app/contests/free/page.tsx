@@ -113,7 +113,7 @@ export default async function FreeContestsPage() {
         {/* Subscribe */}
         <section style={{ borderTop: '1px solid rgba(27,25,22,0.05)', paddingTop: 32, marginBottom: 32 }}>
           <h2 style={sectionLabel}>Never miss a deadline</h2>
-          <EmailSubscribe compact />
+          <EmailSubscribe compact openCount={all.filter(c => c.status === 'open').length} />
         </section>
 
         <Link href="/" className="link-muted" style={{ fontSize: 13 }}>← Back to all AI film contests</Link>

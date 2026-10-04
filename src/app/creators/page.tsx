@@ -3,8 +3,11 @@ import Link from 'next/link'
 import InnerLayout from '@/components/InnerLayout'
 import EmailSubscribe from '@/components/EmailSubscribe'
 import { creators } from '@/data/creators'
+import { getAllContests } from '@/lib/contests-db'
 
 const BASE = 'https://aifilmcontests.com'
+
+export const dynamic = 'force-dynamic'
 
 export const metadata: Metadata = {
   title: 'Featured AI Filmmakers & Studios | AI Film Contests',
@@ -66,7 +69,9 @@ function since(iso: string) {
   })
 }
 
-export default function CreatorsPage() {
+export default async function CreatorsPage() {
+  const all = await getAllContests()
+  const openCount = all.filter(c => c.status === 'open').length
   const jsonLd = {
     '@context': 'https://schema.org',
     '@type': 'ItemList',
@@ -196,7 +201,7 @@ export default function CreatorsPage() {
         {/* Subscribe */}
         <section style={{ borderTop: '1px solid rgba(27,25,22,0.05)', paddingTop: 32, marginBottom: 32 }}>
           <h2 style={sectionLabel}>Never miss a deadline</h2>
-          <EmailSubscribe compact />
+          <EmailSubscribe compact openCount={openCount} />
         </section>
 
         <Link href="/" className="link-muted" style={{ fontSize: 13 }}>← Back to all AI film contests</Link>

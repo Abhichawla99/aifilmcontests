@@ -480,7 +480,7 @@ export default async function VSPage({ params }: { params: Promise<{ slug: strin
 
         {/* Deadline alerts */}
         <section style={{ marginBottom: 48 }}>
-          <EmailSubscribe compact />
+          <EmailSubscribe compact openCount={all.filter(c => c.status === 'open').length} />
         </section>
 
         {/* Other comparisons */}

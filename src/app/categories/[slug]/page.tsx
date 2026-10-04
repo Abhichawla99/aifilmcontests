@@ -185,7 +185,7 @@ export default async function CategoryPage({ params }: { params: Promise<{ slug:
 
           {/* Deadline alerts */}
           <section style={{ marginBottom: 48 }}>
-            <EmailSubscribe compact />
+            <EmailSubscribe compact openCount={all.filter(c => c.status === 'open').length} />
           </section>
 
           {/* Other categories */}

@@ -6,7 +6,7 @@ import InnerLayout from '@/components/InnerLayout'
 import EmailSubscribe from '@/components/EmailSubscribe'
 import BadgeEmbed from '@/components/BadgeEmbed'
 import { creators, getCreator } from '@/data/creators'
-import { getContestById } from '@/lib/contests-db'
+import { getAllContests, getContestById } from '@/lib/contests-db'
 
 const BASE = 'https://aifilmcontests.com'
 
@@ -56,6 +56,8 @@ export default async function CreatorProfile({ params }: { params: Promise<{ slu
   const entered = (
     await Promise.all((c.contests ?? []).map(id => getContestById(id)))
   ).filter((x): x is NonNullable<typeof x> => Boolean(x))
+
+  const openCount = (await getAllContests()).filter(x => x.status === 'open').length
 
   const mailto =
     'mailto:abhixchawla@gmail.com?subject=' +
@@ -202,7 +204,7 @@ export default async function CreatorProfile({ params }: { params: Promise<{ slu
         {/* Subscribe */}
         <section style={{ borderTop: '1px solid rgba(27,25,22,0.05)', paddingTop: 32, marginBottom: 32 }}>
           <h2 style={sectionLabel}>Never miss a deadline</h2>
-          <EmailSubscribe compact />
+          <EmailSubscribe compact openCount={openCount} />
         </section>
 
         <Link href="/creators" className="link-muted" style={{ fontSize: 13 }}>← All featured creators</Link>

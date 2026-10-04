@@ -1631,7 +1631,7 @@ export default async function GuidePage({ params }: { params: Promise<{ slug: st
 
         {/* Deadline alerts */}
         <section style={{ marginBottom: 48 }}>
-          <EmailSubscribe compact />
+          <EmailSubscribe compact openCount={all.filter(c => c.status === 'open').length} />
         </section>
 
         {/* Related guides */}
