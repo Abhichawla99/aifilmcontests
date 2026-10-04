@@ -36,6 +36,83 @@ describe the old dark theme; the reasoning still applies, the colours do not.)*
 
 ---
 
+## 2026-10-04 — /feature, with the site still around it
+
+**Changed** — `src/app/feature/page.tsx` (7 added, 8 removed) and a new `.ftp-`
+block in `globals.css` (31 added, 11 of them the comment). One page. No copy
+changed, to the character.
+
+**Was** — the last public page rendering as a bare `<main>`: a 720px column
+centred on paper with no masthead, no nav and no footer. /unsubscribe got the
+site put back around it on Sep 25, the 404 page on Sep 13, /submit yesterday;
+/feature never did. Yesterday's entry nominated it, and it was last touched on
+Oct 1, so it is not being worked three days running.
+
+It is also the worst page on the site to leave stranded, because it is the one
+that asks a festival organizer for $49 to be placed in a directory. The thing
+being sold is placement among 90 open contests, and the page selling it showed
+none of them above the fold and gave no way to go and look: the only route back
+into the directory was a 12px uppercase `AI FILM CONTESTS` eyebrow, which is a
+link but reads as a label. At 390px that eyebrow was the first thing on the
+screen with the brand mark nowhere in sight. A page asking for money that looks
+like it has been detached from the site is asking the buyer to take the site on
+trust at exactly the moment they are deciding whether to.
+
+**Looked at** — Metrograph's Membership page and Letterboxd's /pro. Both are
+the page that asks for money, and both carry the full chrome of the browsing
+pages with nothing special done to them: Metrograph's membership page has the
+identical banner — wordmark, sign-in, search, the six-item nav with Membership
+marked as current — and the identical mailing-list footer as the Journal;
+Letterboxd's upgrade page keeps its wordmark, nav, sign-in form and search. In
+both, the paid page is a peer in the nav rather than a landing page sealed off
+from the site. Neither strips the chrome to "focus" the sale. The adaptation is
+not their layout, which we are not copying, but that posture: what you are
+selling is access to the rest of the site, so the rest of the site should be
+one click away while someone reads the price.
+
+**Now** — `/feature` is wrapped in `InnerLayout`, the same component /submit,
+/unsubscribe and the 404 page use, so it has the sticky wordmark, the six-link
+nav and the full twelve-link footer. `.ftp-wrap` is `max-w-5xl` with
+`.ftp-wrap > * { max-width: 720px }`, so the column is left-aligned in the
+container instead of centred in the viewport and the headline starts on the
+same vertical as the wordmark above it and the footer brand below it — while
+the 720px measure the contest picker needs is preserved exactly. The brand
+eyebrow, now redundant beside a real header, becomes a kind label:
+`Feature a contest`, indigo, the same vocabulary /submit and the article bands
+use.
+
+**Two values moved**, both onto the sitewide default rather than to anything
+new. The headline went from `clamp(28px, 5vw, 40px)` at weight 700 to the
+`clamp(30px, 5vw, 44px)` at 600 that `.nf-title` and `.sbp-title` already use,
+for the same reason /submit's did yesterday: being a few pixels off every other
+page title was the only thing making it one. And the standfirst went from
+`#6F6A61`, the caption tone, to `#3E3A33` body ink at a 54ch measure — it is
+the first sentence on the page and it is the sentence carrying the subscriber
+count, which is the page's only piece of evidence, so it should not be set
+lighter than the body text underneath it.
+
+**What did not change** — everything else, to the pixel. The `.feat-cap`
+labels, the `.feat-inc` hairline list, the numbered How-it-works steps, the
+live spotlight screenshot and its caption, the `.feat-price` row and its
+button, the month-ruled `.feat-list` picker with its burnt-orange
+inside-seven-days deadlines, the `.feat-empty` state, and the closing note.
+Every string of copy is byte-identical, including the price label, the
+subscriber rounding and the closing email address — which now sits above a
+footer that also carries it, and was left alone rather than reworded.
+
+**Still open** — every public page now carries the site's chrome. The inline
+styles on this page are the next obvious thing: roughly 20 `style={{}}`
+attributes remain on the headline block's siblings (the steps, the image, the
+closing note), where /submit now keeps all of its in the stylesheet. Not worth
+a run of its own; fold it into whatever next touches this page.
+
+**Screenshots** — before `reports/design/2026-10-04-before.png` (1440) and
+`-before-390.png`; after `reports/design/2026-10-04-after.png` and
+`-after-390.png`, both taken off the live site after the deploy. No horizontal
+overflow at 1440, 390 or 375.
+
+---
+
 ## 2026-10-03 — /submit, with the site still around it
 
 **Changed** — `src/app/submit/page.tsx` (13 added, 16 removed) and a new `.sbp-`
