@@ -36,6 +36,98 @@ describe the old dark theme; the reasoning still applies, the colours do not.)*
 
 ---
 
+## 2026-10-05 — The tag line, as text under a caption instead of unlabelled chips
+
+**Changed** — the tag block on `src/app/contests/[id]/page.tsx` and on
+`src/app/creators/[slug]/page.tsx`, and a new `.ctags` rule in `globals.css`.
+41 lines added, 24 removed, 21 of the additions being the comment in the
+stylesheet. Two page types, one idea. No tag data, link target or string of
+copy changed.
+
+**Was** — both pages ended their facts with a row of boxed tags that nothing
+introduced. On a contest page it sat directly under the `AI tools allowed`
+chips: 11px `#8B867C` on an `#F4F2EE` fill with an `#E7E4DC` border and a 4px
+radius, against tool chips at 13px `#3E3A33` on white with an `#E0DCD2` border
+and a 6px radius. Same shape, same hairline, same rounding, four pixels and one
+grey apart — two adjacent clouds saying two different things, and only one of
+them labelled. A reader scanning down the London listing met `Runway  Sora  Veo
+Kling  Luma  Pika  Midjourney  Higgsfield  any AI tool` and then, under the same
+kind of boxes, `#london  #uk  #close-up-cinema  #quarterly`, with nothing to say
+the second row had stopped being about tools. On a creator profile the same row
+floated alone in the gap between the header band and `SELECTED WORK` — the one
+block on the page without a caption, filled with `rgba(27,25,22,0.03)` over
+paper, which is the ghost wash the 10-01 run took off /feature's price panel for
+being a rounding error rather than a fill. At 390px it took two rows and about
+170px of a phone screen to say five words.
+
+A box on this site is something you act on: the tool chips name what an entrant
+may use, the category pills tint a card and carry its colour, the rail holds
+Apply. These were neither pressable nor labelled — decoration that had been
+handed a database column.
+
+**Looked at** — Mubi's film page and Criterion's Shop All Films. Mubi sets a
+film's genres as plain text inside the credit stack, in the same size and ink as
+the country and the year: `Directed by Jonathan Glazer` / `United Kingdom,
+Poland, 2023` / `Drama, History, War, Crime` / `105`. No boxes anywhere near
+them; the DOM node is a generic, not even a link. Criterion's browse page is
+the complement — 1,891 films of plain text, and the only bordered objects on the
+screen are `FILTER`, `SORT` and the two view toggles. Between them the rule is
+the same one: a border is a promise that something happens when you press it,
+so facts are set as facts and controls get the boxes. The adaptation is not
+their layout but that rule, applied to the one place we were breaking it.
+
+**Now** — the contest page's tags use the page's own `<Section label="Tagged">`,
+which already supplied the exact `#ECE9E2` hairline, 18px top padding and 30px
+top margin the block was drawing by hand, so the rhythm of the column is
+unchanged and only the caption is new. The creator profile gets a matching
+`Tagged` heading in its own `sectionLabel`, so it now reads `TAGGED` /
+`SELECTED WORK` / `CONTESTS IN THIS DIRECTORY` down the page instead of starting
+with an unannounced row of boxes. Both set the tags as one comma run in `.ctags`
+— 13.5px, line-height 1.8, `#6F6A61`, a 56ch measure.
+
+Three small decisions inside that:
+- **Commas, not middots.** A comma travels with the word in front of it and so
+  cannot be left stranded on the line it ended, which is exactly what the 10-02
+  run found the `·` doing in the article band. Six tags wrap to two lines at
+  375px and the break is invisible.
+- **Lowercase.** The stored tags are 90% lowercase slugs with four capitalised
+  strays (`India`, `Jaipur`, `Australia`, `Asia`), so `text-transform` does what
+  the data should have: one register reads as a decision, a mixed one reads as a
+  bug. The tags themselves are untouched.
+- **Hyphens to spaces**, which is not new — the creator page has done
+  `t.replace(/-/g, ' ')` since the profiles shipped. The contest page now does
+  the same thing rather than printing `#close-up-cinema` with the sigil still on.
+  `#6F6A61` is also a step darker than either row's old text (`#8B867C` and
+  `#7A7469`), because the line is now carrying itself without a box around it.
+
+**What did not change** — the tool chips above, which keep their boxes because
+they are the one of the two that names a constraint you have to check. The
+category pills, the rail, the Apply block, the reminder form, the related-contest
+grid, the creator badge and work list. No tag was added, removed, reordered or
+rewritten in the database or in `creators.ts`.
+
+**Still open** — `/feature` still carries roughly 20 `style={{}}` attributes on
+the headline block's siblings, nominated by yesterday's entry and still worth
+folding into whatever next touches that page. New today: on a phone the inner
+nav's right-edge mask is permanent, so the last link stays half-faded even once
+you have scrolled to the end of the row.
+
+**Verified** — `npm run build` exits 0. Checked on a local `next start` at
+1440px, 390px and 375px on /creators/robert-gaudette, then live on the contest
+page at the same three widths once the deploy landed. `✓ no horizontal overflow`
+clean at all three on both. The local shots show the creator page without its
+`Contests in this directory` block because `.env.cron` still has no
+`NEXT_PUBLIC_SUPABASE_ANON_KEY`; the after shots are from the live pages.
+
+**Before / after** — creator profile: `reports/design/2026-10-05-before.png`
+(1440) and `-before-390.png`, `2026-10-05-after.png` and `-after-390.png`.
+Contest page: `2026-10-05-before-contest.png` (1440) and
+`-before-contest-390.png`, `2026-10-05-after-contest.png`,
+`-after-contest-390.png` and `-after-contest-375.png`. All taken off the live
+site.
+
+---
+
 ## 2026-10-04 — /feature, with the site still around it
 
 **Changed** — `src/app/feature/page.tsx` (7 added, 8 removed) and a new `.ftp-`
