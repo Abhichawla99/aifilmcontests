@@ -298,11 +298,52 @@ export default async function Home() {
                     <h2 style={{ fontFamily: 'Space Grotesk, sans-serif', fontSize: 17, fontWeight: 700, color: '#1B1916', marginBottom: 5, letterSpacing: '-0.02em' }}>
                       Never miss a deadline
                     </h2>
-                    <p style={{ fontSize: 13, color: '#6F6A61', marginBottom: 18, lineHeight: 1.7 }}>
+                    <p style={{ fontSize: 13, color: '#6F6A61', marginBottom: 14, lineHeight: 1.7 }}>
                       New contests within a day of opening, a last call before deadlines close, and
                       what&apos;s closing each week — a few emails a month, never daily. {open.length} contests
                       are open right now.
                     </p>
+
+                    {/* Soonest-closing contests, named — a signup here should see
+                        exactly what it will get alerted about, the way a contest
+                        page's spec rail does, not a generic promise. */}
+                    {ticker.length > 0 && (
+                      <div style={{ marginBottom: 18 }}>
+                        <div style={{
+                          fontSize: 10, color: '#8B867C', textTransform: 'uppercase',
+                          letterSpacing: '0.1em', fontFamily: 'Space Grotesk, sans-serif',
+                          fontWeight: 600, marginBottom: 7,
+                        }}>
+                          Closing soonest
+                        </div>
+                        <div style={{ borderTop: '1px solid #ECE9E2' }}>
+                          {ticker.slice(0, 3).map(c => {
+                            // Prize text is free-form prose on most rows ("Official
+                            // selection + screening..."); only show it here when it
+                            // reduces to a short cash figure, same regex the hero
+                            // stats already use, so the line never overflows.
+                            const cash = c.prize.match(/\$[0-9,]+(?:\.[0-9]+)?[KkMm]?\+?/)?.[0]
+                            return (
+                              <div key={c.id} style={{
+                                display: 'flex', justifyContent: 'space-between', gap: 10,
+                                padding: '7px 0', borderBottom: '1px solid #ECE9E2',
+                              }}>
+                                <span style={{ fontSize: 12.5, color: '#3E3A33', lineHeight: 1.4, flex: 1, minWidth: 0 }}>
+                                  {c.name}
+                                </span>
+                                <span style={{
+                                  fontSize: 12, color: '#6F6A61', whiteSpace: 'nowrap',
+                                  fontVariantNumeric: 'tabular-nums', flexShrink: 0,
+                                }}>
+                                  {fmtShort(c.deadline)}{cash ? ` · ${cash}` : ''}
+                                </span>
+                              </div>
+                            )
+                          })}
+                        </div>
+                      </div>
+                    )}
+
                     <EmailSubscribe />
                   </div>
                 </div>
