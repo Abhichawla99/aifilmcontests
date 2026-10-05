@@ -1434,3 +1434,32 @@ img, svg, video, canvas { max-width: 100%; }
   .ah-fact + .ah-fact { margin: 5px 0 0; padding-left: 0; border-left: 0; }
   .ah-facts + .ah-trust { margin-top: 9px; }
 }
+
+/* ── The tag line (contest page, creator profile) ───────────────────────────
+   Both pages ended their facts with an unlabelled row of boxed tags. On a
+   contest page it sat directly under the "AI tools allowed" chips — same
+   shape, same 1px border, same radius, 11px grey on grey — so two adjacent
+   clouds meant two different things and only one of them said which, and a
+   reader scanning down could take #london and #close-up-cinema for more
+   tools they were allowed to use. On a creator profile the same row floated
+   alone between the header band and SELECTED WORK, filled with the 3%-ink
+   ghost wash the 2026-10-01 run took off /feature: something that looks
+   pressable and goes nowhere.
+
+   A box on this site is something you act on — the tool chips name what an
+   entrant may use, the category pills tint a card, the rail holds Apply. A
+   tag is neither; it is a fact about the festival or the filmmaker. So it is
+   set as text under a caption of its own, in the same vocabulary as every
+   other block on its page.
+
+   Commas, not middots: a comma travels with the word in front of it and so
+   can never be stranded on the line it ended, which is the 2026-10-02
+   lesson. Lowercased because the stored tags mix `india` with `India` and a
+   single register reads as a decision where mixed casing reads as a bug. */
+.ctags {
+  font-size: 13.5px;
+  line-height: 1.8;
+  color: #6F6A61;
+  text-transform: lowercase;
+  max-width: 56ch;
+}

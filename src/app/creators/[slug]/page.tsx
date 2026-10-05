@@ -109,22 +109,14 @@ export default async function CreatorProfile({ params }: { params: Promise<{ slu
           </a>
         </ArticleHeader>
 
-        {/* Tags */}
+        {/* Tags — a fact line under a caption, not a row of chips. See .ctags. */}
         {c.tags.length > 0 && (
-          <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, marginBottom: 40 }}>
-            {c.tags.map(t => (
-              <span key={t} style={{
-                fontSize: 12,
-                color: '#7A7469',
-                background: 'rgba(27,25,22,0.03)',
-                border: '1px solid rgba(27,25,22,0.07)',
-                borderRadius: 6,
-                padding: '5px 12px',
-              }}>
-                {t.replace(/-/g, ' ')}
-              </span>
-            ))}
-          </div>
+          <section style={{ marginBottom: 40 }}>
+            <h2 style={{ ...sectionLabel, marginBottom: 10 }}>Tagged</h2>
+            <p className="ctags">
+              {c.tags.map(t => t.replace(/-/g, ' ')).join(', ')}
+            </p>
+          </section>
         )}
 
         {/* Work */}

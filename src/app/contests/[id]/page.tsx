@@ -328,15 +328,11 @@ export default async function ContestPage({ params }: { params: Promise<{ id: st
               </Section>
 
               {contest.tags && contest.tags.length > 0 && (
-                <div style={{ borderTop: '1px solid #ECE9E2', paddingTop: 18, marginTop: 30 }}>
-                  <div className="flex flex-wrap gap-1.5">
-                    {contest.tags.map(tag => (
-                      <span key={tag} style={{ fontSize: 11, color: '#8B867C', background: '#F4F2EE', border: '1px solid #E7E4DC', borderRadius: 4, padding: '2px 7px' }}>
-                        #{tag}
-                      </span>
-                    ))}
-                  </div>
-                </div>
+                <Section label="Tagged">
+                  <p className="ctags">
+                    {contest.tags.map(tag => tag.replace(/-/g, ' ')).join(', ')}
+                  </p>
+                </Section>
               )}
             </div>
 
