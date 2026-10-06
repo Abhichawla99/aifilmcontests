@@ -1,6 +1,9 @@
 'use client'
 
 import { useState } from 'react'
+import { isBlockedEmailDomain } from '@/lib/blocked-email-domains'
+
+const EMAIL_SYNTAX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 
 function SubscribeError({ message }: { message: string }) {
   return (
@@ -22,7 +25,18 @@ export default function EmailSubscribe({ compact = false, openCount }: { compact
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    if (!email.trim()) return
+    const cleanEmail = email.trim()
+    if (!cleanEmail) return
+    if (!EMAIL_SYNTAX.test(cleanEmail)) {
+      setStatus('error')
+      setMessage('Please enter a valid email address.')
+      return
+    }
+    if (isBlockedEmailDomain(cleanEmail)) {
+      setStatus('error')
+      setMessage("That looks like a phone carrier's text-message gateway, which can't receive a real email. Please use a regular email address.")
+      return
+    }
     if (!consent) {
       setStatus('error')
       setMessage('Please agree to receive email alerts to continue.')

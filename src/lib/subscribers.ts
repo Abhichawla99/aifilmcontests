@@ -1,4 +1,22 @@
+import { promises as dns } from 'node:dns'
 import { supabaseAdmin } from './supabase'
+import { isBlockedEmailDomain } from './blocked-email-domains'
+
+// Nonexistent or mail-less domains (typos like "ruseashighscholl.com") resolve
+// to no MX records at all — reject those before they ever reach the send queue.
+// A DNS hiccup (timeout, SERVFAIL) is not evidence the domain is bad, so only
+// ENOTFOUND/ENODATA (the resolver actually answered "no mail server") block
+// signup; anything else fails open rather than turning a real address away.
+async function domainAcceptsMail(domain: string): Promise<boolean> {
+  try {
+    const records = await dns.resolveMx(domain)
+    return records.length > 0
+  } catch (err) {
+    const code = (err as NodeJS.ErrnoException)?.code
+    if (code === 'ENOTFOUND' || code === 'ENODATA') return false
+    return true
+  }
+}
 
 export interface Subscriber {
   email: string
@@ -35,8 +53,24 @@ export async function addSubscriber(
   consentGivenAt: string = new Date().toISOString(),
   source: string | null = null,
 ): Promise<{ success: boolean; message: string; token?: string }> {
+  const cleanEmail = email.toLowerCase().trim()
+  const domain = cleanEmail.split('@')[1]
+
+  if (isBlockedEmailDomain(cleanEmail)) {
+    return {
+      success: false,
+      message: "That looks like a phone carrier's text-message gateway, which can't receive a real email. Please use a regular email address.",
+    }
+  }
+  if (domain && !(await domainAcceptsMail(domain))) {
+    return {
+      success: false,
+      message: "We couldn't find a mail server for that domain — please double-check it for a typo.",
+    }
+  }
+
   const base = {
-    email: email.toLowerCase().trim(),
+    email: cleanEmail,
     name,
     confirmed: true,
     consent_given_at: consentGivenAt,
