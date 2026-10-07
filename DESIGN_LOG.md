@@ -36,6 +36,110 @@ describe the old dark theme; the reasoning still applies, the colours do not.)*
 
 ---
 
+## 2026-10-07 — The phone nav's fade, only on an edge the row carries on past
+
+**Changed** — `src/components/InnerNav.tsx`, `src/app/page.tsx`, the `.inav`
+block in `globals.css`, and one new component, `src/components/NavRow.tsx`.
+25 lines added and 20 removed across the three existing files, plus 78 in the
+new one, about half of those its comment. No link, label, href or page copy
+changed, and nothing below 760px moved position.
+
+**Was** — under 760px the nav links are one swipeable line, and the line was
+masked down its right edge at all times: `linear-gradient(to right, #000 85%,
+transparent)`, about 58px of fade at 390px, applied regardless of where the row
+was scrolled or whether it scrolled at all. A fade on the edge of a scroller is
+a sentence — *there is more of this past here* — and this one was saying it in
+three places where it was not true.
+
+On `/creators` the row auto-scrolls to bring the current link into view, so it
+arrives at its end with `Creators` last. The fade then sat on top of the page
+you are on: sampling the indigo rule under the word, `#4F46E5` holds to CSS x
+331 and then washes to `#6E67E9` by x 342 — the one mark on the header whose
+whole job is to say *you are here*, printed at three-quarter strength. The left
+edge, meanwhile, with five links behind it and `Closing Soon` sliced to `oon`,
+was cut clean with nothing to say so: the hint was on the side with nothing
+behind it and absent from the side with everything. At 700px and 760px the six
+links fit the row with room to spare and the last one was still half-ghosted.
+On the homepage at 390px `Browse  Subscribe  Submit a Contest` measures 390 in
+390 — the row does not scroll at all, and a visitor on a slightly narrower
+phone got a fade over a link that has nowhere to go.
+
+**Looked at** — It's Nice That, Letterboxd's `/films`, Criterion's Shop All
+Films, Mubi, Metrograph, all at 390px. It's Nice That is the one that answers
+this directly: its phone header carries four sibling mastheads as one row of
+hairline-divided cells, and the fourth, `IF YOU COULD`, is sliced clean in half
+by the viewport edge. No fade, no arrow, no chevron. The cut *is* the
+affordance — a word chopped mid-letter says *more over here* more plainly than
+a gradient does, and costs nothing when it is wrong. The other three sidestep
+the question entirely: Mubi, Letterboxd and Criterion all fold their nav behind
+a hamburger at phone width, and Letterboxd's six filter controls wrap into a
+2×3 ruled grid so that not one of them is cut. We settled this on 09-14 and
+09-17 — the links stay a swipeable line rather than wrapping to three rows or
+hiding behind a button — so the rule to take from It's Nice That is not its
+layout but its restraint: whatever marks the edge has to be true.
+
+**Now** — `NavRow` owns the scroller and the one fact the stylesheet needs from
+it. It measures `scrollWidth`, `clientWidth` and `scrollLeft` on scroll, on
+resize via a `ResizeObserver`, and once `document.fonts.ready` resolves, and
+writes `data-overflow` as `none`, `start`, `end` or `both`. The stylesheet keys
+three mask variables off that attribute and applies none at all otherwise, so
+the four states are what you would want them to be:
+
+- homepage at 390px — `none`, no mask; `Submit a Contest` is in full ink
+- `/submit`, `/feature` (no current link, row at rest) — `end`, fade right only
+- `/contests/closing-soon` (current link mid-row) — `both`
+- `/creators` (current link last, row at its end) — `start`, fade left only,
+  and the indigo rule under `Creators` measures `#4F46E5` at every sample
+  across its width
+
+The fade is 24px now instead of 58px, roughly the row's own 20px gutter. It is
+a hint, not a vignette, and at 24px it never reaches a whole word. The
+server-rendered value is `none`: no fade until something has actually been
+measured, because a missing hint costs a visitor nothing and a false one costs
+them the page they are on.
+
+Two smaller things fell out of writing it. The alignment that brings the
+current link into view was landing 8px short of the end — the remainder of the
+row's 12px trailing `::after` spacer — which is how `/creators` managed to read
+as `both` on the first attempt at this fix; it now goes the whole way when the
+target is within a gutter of the end. And it was running against fallback font
+metrics, so the row sat a few pixels off once Space Grotesk and Inter landed;
+it realigns when they do.
+
+The homepage header was hand-rolling its own `<nav className="inav">` while
+every other page went through `InnerNav`. It uses `NavRow` now, so the two
+headers stay the one object they have been since 09-17 and the next thing this
+row learns is learned once.
+
+**What did not change** — the links themselves, their order, their labels, the
+60px desktop row, the `aria-current` underline, the Get Alerts button and its
+grid position, the brand lockup, `.inav-link`'s 40px tap target from 10-01, the
+`::after` spacer, or anything at all above 760px. The mask was the only thing
+removed.
+
+**Still open** — `/feature` still carries roughly 20 `style={{}}` attributes on
+the headline block's siblings, nominated on 10-04 and carried since. New today:
+`/cinematic-ads` is in the nav's own link list but the page renders no
+`.inav` header at all — it imports `BackgroundFX` and `SiteFooter` directly
+rather than `InnerLayout`, so it is the one linked page you can arrive at and
+not be able to navigate out of except through the footer.
+
+**Verified** — `npm run build` exits 0. Measured on a local `next start` at
+320, 375, 390, 700, 760 and 1440px: `data-overflow` and the computed
+`mask-image` are correct at each, `✓ no horizontal overflow` is clean at 375,
+390 and 1440, and desktop is pixel-identical. Re-measured on the live pages
+after the deploy. The local shots show `/creators` without its `Contests in
+this directory` block because `.env.cron` still has no
+`NEXT_PUBLIC_SUPABASE_ANON_KEY`; every before and after here is from the live
+site.
+
+**Before / after** — `/creators` at 390: `reports/design/2026-10-07-before-390.png`
+and `2026-10-07-after-390.png`, plus `-after-375.png`. Homepage at 390:
+`2026-10-07-before-home-390.png` and `2026-10-07-after-home-390.png`. Homepage
+at 1440: `2026-10-07-before.png` and `2026-10-07-after.png`.
+
+---
+
 ## 2026-10-05 — The tag line, as text under a caption instead of unlabelled chips
 
 **Changed** — the tag block on `src/app/contests/[id]/page.tsx` and on
