@@ -439,14 +439,28 @@ img, svg, video, canvas { max-width: 100%; }
   .inav-header { position: static; }
   .inav-row { flex-direction: column; align-items: stretch; gap: 0; min-height: 0; padding-left: 0; padding-right: 0; }
   .inav-brand { padding: 14px 20px 10px; }
-  .inav {
-    gap: 20px; overflow-x: auto; scrollbar-width: none; padding: 0 20px;
-    -webkit-mask-image: linear-gradient(to right, #000 85%, transparent);
-    mask-image: linear-gradient(to right, #000 85%, transparent);
-  }
+  .inav { gap: 20px; overflow-x: auto; scrollbar-width: none; padding: 0 20px; }
   .inav::-webkit-scrollbar { display: none; }
   .inav-link { min-height: 40px; }
   .inav::after { content: ''; flex: 0 0 12px; }
+
+  /* A fade on the edge of this row is a claim that the row carries on past it,
+     so it is drawn only on an end there is actually something past — NavRow
+     measures the scroller and writes data-overflow. It used to be painted down
+     the right at all times, at 15% of the row, which got it wrong at both ends:
+     on /creators the row auto-scrolls to its last link and the fade then washed
+     out `Creators` and the indigo rule marking it as the page you are on, while
+     the left edge, with five links behind it, was cut clean with nothing to say
+     so. 24px rather than 58px, because the fade is a hint, not a vignette. */
+  .inav[data-overflow='start'] { --inav-fade: linear-gradient(to right, transparent, #000 24px); }
+  .inav[data-overflow='end']   { --inav-fade: linear-gradient(to right, #000 calc(100% - 24px), transparent); }
+  .inav[data-overflow='both']  { --inav-fade: linear-gradient(to right, transparent, #000 24px, #000 calc(100% - 24px), transparent); }
+  .inav[data-overflow='start'],
+  .inav[data-overflow='end'],
+  .inav[data-overflow='both'] {
+    -webkit-mask-image: var(--inav-fade);
+    mask-image: var(--inav-fade);
+  }
 }
 
 /* ── Browse toolbar ─────────────────────────────────────────────────────────

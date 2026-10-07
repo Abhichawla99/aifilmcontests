@@ -7,6 +7,7 @@ import BackgroundFX from '@/components/BackgroundFX'
 import MouseOrbs from '@/components/MouseOrbs'
 import FeaturedSpotlight from '@/components/FeaturedSpotlight'
 import LogoMark from '@/components/LogoMark'
+import NavRow from '@/components/NavRow'
 import SiteFooter from '@/components/SiteFooter'
 
 export const dynamic  = 'force-dynamic'
@@ -146,11 +147,11 @@ export default async function Home() {
               <span>AI Film Contests</span>
             </div>
 
-            <nav className="inav" aria-label="Site">
+            <NavRow aria-label="Site">
               {([['Browse', '#contests'], ['Subscribe', '#subscribe'], ['Submit a Contest', '/submit']] as [string, string][]).map(([label, href]) => (
                 <a key={label} href={href} className="inav-link">{label}</a>
               ))}
-            </nav>
+            </NavRow>
 
             <a href="#subscribe" className="btn hnav-cta">
               Get Alerts

@@ -2,7 +2,7 @@
 
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { useEffect, useRef } from 'react'
+import NavRow from './NavRow'
 
 // Each link names the path prefix it owns, so /tools/pika still marks "Tools"
 // even though the link itself points at /tools/runway.
@@ -17,19 +17,9 @@ const LINKS: [label: string, href: string, owns: string | null][] = [
 
 export default function InnerNav() {
   const pathname = usePathname() || ''
-  const ref = useRef<HTMLElement>(null)
-
-  // On a phone the links scroll sideways; bring the current one into view.
-  useEffect(() => {
-    const nav = ref.current
-    const cur = nav?.querySelector<HTMLElement>('[aria-current="page"]')
-    if (nav && cur && nav.scrollWidth > nav.clientWidth) {
-      nav.scrollLeft = cur.offsetLeft - nav.offsetLeft - 20
-    }
-  }, [pathname])
 
   return (
-    <nav ref={ref} className="inav" aria-label="Site">
+    <NavRow aria-label="Site" currentKey={pathname}>
       {LINKS.map(([label, href, owns]) => {
         const current = owns !== null && (pathname === owns || pathname.startsWith(owns + '/'))
         return (
@@ -38,6 +28,6 @@ export default function InnerNav() {
           </Link>
         )
       })}
-    </nav>
+    </NavRow>
   )
 }
