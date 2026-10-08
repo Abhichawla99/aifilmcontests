@@ -45,6 +45,8 @@ export interface SendResult {
   recordFailed?: boolean
   /** Rows for emails that went out but aren't in email_sends yet. Record them or these people get it twice. */
   unrecorded?: SendLogRow[]
+  /** Addresses dropped before sending because Resend would refuse them; they get unconfirmed. */
+  dropped?: string[]
 }
 
 export interface SendLogRow {
@@ -198,6 +200,17 @@ export async function recordSends(rows: SendLogRow[], retry?: DbRetryOptions): P
   return false
 }
 
+// Resend rejects an ENTIRE batch over one malformed address (422 validation_error),
+// so anything that can't pass its `to` check is dropped before batching. Dot-atom
+// rule: no leading/trailing/consecutive dots in the local part, sane domain labels.
+// (Oct 4-8, 2026: four dotted-spam gmail addresses failed 2-3 batches of 20 every
+// day, nobody in those batches got emailed, and the backlog grew to 4 days.)
+const SENDABLE = /^[A-Za-z0-9!#$%&'*+\/=?^_`{|}~-]+(?:\.[A-Za-z0-9!#$%&'*+\/=?^_`{|}~-]+)*@[A-Za-z0-9](?:[A-Za-z0-9-]*[A-Za-z0-9])?(?:\.[A-Za-z0-9](?:[A-Za-z0-9-]*[A-Za-z0-9])?)+$/
+
+export function isSendableEmail(email: string): boolean {
+  return email.length <= 254 && SENDABLE.test(email)
+}
+
 export async function sendToRecipients(opts: {
   kind: EmailKind
   /** One subject for everyone, or a function for per-person subjects. */
@@ -213,75 +226,125 @@ export async function sendToRecipients(opts: {
   /** Tries at saving each batch's send record. Lower it where a slow response hurts (signup). */
   recordAttempts?: number
 }): Promise<SendResult> {
-  const recipients = normalizeRecipients(opts.recipients)
-  if (!recipients.length) return { success: true, sent: 0, failed: 0 }
+  const all = normalizeRecipients(opts.recipients)
+  if (!all.length) return { success: true, sent: 0, failed: 0 }
+
+  // Drop addresses Resend would refuse, and unconfirm them so they stop sitting
+  // at the front of the longest-waiting queue poisoning tomorrow's batches too.
+  const invalid = all.filter(r => !isSendableEmail(r.email))
+  const recipients = all.filter(r => isSendableEmail(r.email))
+  if (invalid.length) {
+    console.error(`[Email] ${opts.kind}: dropping ${invalid.length} undeliverable address(es): ${invalid.map(r => r.email).join(', ')}`)
+    try {
+      await supabaseAdmin.from('subscribers')
+        .update({ confirmed: false, bounced_at: new Date().toISOString() })
+        .in('email', invalid.map(r => r.email))
+    } catch (e) {
+      console.error('[Email] could not unconfirm undeliverable subscribers:', e)
+    }
+  }
+  const dropped = invalid.length ? invalid.map(r => r.email) : undefined
+  if (!recipients.length) return { success: true, sent: 0, failed: 0, dropped }
+
   const subjectFor = (r: Recipient) => (typeof opts.subject === 'function' ? opts.subject(r) : opts.subject)
   const idsFor = (r: Recipient) => (typeof opts.contestIds === 'function' ? opts.contestIds(r) : opts.contestIds ?? null)
   const size = Math.min(100, Math.max(1, opts.batchSize ?? BATCH))
 
   if (!process.env.RESEND_API_KEY) {
     console.log(`[Dev] ${opts.kind} → ${recipients.length} recipients: "${subjectFor(recipients[0])}"`)
-    return { success: true, sent: recipients.length, failed: 0 }
+    return { success: true, sent: recipients.length, failed: 0, dropped }
   }
 
   const resend = getResend()
   let sent = 0
   let failed = 0
+  let lastError: unknown
+
+  const payloadFor = (r: Recipient) => {
+    const unsub = unsubscribeUrl(r.token)
+    return {
+      from: `AI Film Contests <${FROM_EMAIL}>`,
+      to: [r.email],
+      reply_to: opts.replyTo ?? REPLY_TO,
+      subject: subjectFor(r),
+      headers: listUnsubscribeHeaders(unsub),
+      tags: [{ name: 'kind', value: opts.kind }],
+      html: opts.html(r, unsub),
+      ...(opts.text ? { text: opts.text(r, unsub) } : {}),
+    }
+  }
+  const rowFor = (r: Recipient, id: string | null): SendLogRow => ({
+    email_type: opts.kind,
+    recipient: r.email,
+    subject: subjectFor(r),
+    resend_email_id: id,
+    contest_ids: idsFor(r),
+  })
 
   for (let i = 0; i < recipients.length; i += size) {
     const chunk = recipients.slice(i, i + size)
-    const payload = chunk.map(r => {
-      const unsub = unsubscribeUrl(r.token)
-      return {
-        from: `AI Film Contests <${FROM_EMAIL}>`,
-        to: [r.email],
-        reply_to: opts.replyTo ?? REPLY_TO,
-        subject: subjectFor(r),
-        headers: listUnsubscribeHeaders(unsub),
-        tags: [{ name: 'kind', value: opts.kind }],
-        html: opts.html(r, unsub),
-        ...(opts.text ? { text: opts.text(r, unsub) } : {}),
-      }
-    })
-
+    let rows: SendLogRow[] = []
     try {
-      const res = await resend.batch.send(payload)
+      const res = await resend.batch.send(chunk.map(payloadFor))
       if (res.error) {
         console.error(`[Email] ${opts.kind} batch error:`, res.error)
-        failed += chunk.length
         if (isQuotaError(res.error)) {
-          return { success: false, sent, failed: failed + (recipients.length - i - chunk.length), quotaExceeded: true, error: res.error }
+          return { success: false, sent, failed: failed + (recipients.length - i), quotaExceeded: true, error: res.error, dropped }
         }
-        continue
-      }
-      const ids = res.data?.data ?? []
-      sent += chunk.length
-      const rows = chunk.map((r, idx) => ({
-        email_type: opts.kind,
-        recipient: r.email,
-        subject: subjectFor(r),
-        resend_email_id: ids[idx]?.id ?? null,
-        contest_ids: idsFor(r),
-      }))
-      if (!(await recordSends(rows, { attempts: opts.recordAttempts ?? 3 }))) {
-        // These people got the email but nothing says so. Stop here: every
-        // further batch we can't record is a duplicate in tomorrow's run.
-        const notSent = recipients.length - i - chunk.length
-        console.error(`[Email] ${opts.kind}: ${chunk.length} sent but not recorded; stopping with ${notSent} not sent`)
-        return { success: failed + notSent === 0, sent, failed: failed + notSent, recordFailed: true, unrecorded: rows }
+        if ((res.error as { name?: string }).name === 'validation_error') {
+          // One bad address fails the whole batch. Send one-by-one so the other
+          // 19 still get their email, and the log names the address that broke.
+          for (const r of chunk) {
+            try {
+              const single = await resend.emails.send(payloadFor(r))
+              if (single.error) {
+                console.error(`[Email] ${opts.kind} rejected for ${r.email}:`, single.error)
+                if (isQuotaError(single.error)) {
+                  return { success: false, sent, failed: failed + (recipients.length - i - chunk.indexOf(r)), quotaExceeded: true, error: single.error, dropped }
+                }
+                failed++
+                lastError = single.error
+              } else {
+                sent++
+                rows.push(rowFor(r, single.data?.id ?? null))
+              }
+            } catch (err) {
+              console.error(`[Email] ${opts.kind} send threw for ${r.email}:`, err)
+              failed++
+              lastError = err
+            }
+            await sleep(550) // stay under Resend's 2 req/s
+          }
+        } else {
+          failed += chunk.length
+          lastError = res.error
+        }
+      } else {
+        const ids = res.data?.data ?? []
+        sent += chunk.length
+        rows = chunk.map((r, idx) => rowFor(r, ids[idx]?.id ?? null))
       }
     } catch (err) {
       console.error(`[Email] ${opts.kind} batch threw:`, err)
-      failed += chunk.length
       if (isQuotaError(err)) {
-        return { success: false, sent, failed, quotaExceeded: true, error: err }
+        return { success: false, sent, failed, quotaExceeded: true, error: err, dropped }
       }
+      failed += chunk.length
+      lastError = err
     }
 
-    if (i + size < recipients.length) await sleep(600) // stay under Resend's 2 req/s
+    if (rows.length && !(await recordSends(rows, { attempts: opts.recordAttempts ?? 3 }))) {
+      // These people got the email but nothing says so. Stop here: every
+      // further batch we can't record is a duplicate in tomorrow's run.
+      const notSent = recipients.length - i - chunk.length
+      console.error(`[Email] ${opts.kind}: ${rows.length} sent but not recorded; stopping with ${notSent} not sent`)
+      return { success: failed + notSent === 0, sent, failed: failed + notSent, recordFailed: true, unrecorded: rows, error: lastError, dropped }
+    }
+
+    if (i + size < recipients.length) await sleep(600)
   }
 
-  return { success: failed === 0, sent, failed }
+  return { success: failed === 0, sent, failed, error: lastError, dropped }
 }
 
 /** One-off plain email (daily report, organizer outreach, admin custom). */
