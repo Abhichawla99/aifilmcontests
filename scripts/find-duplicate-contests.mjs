@@ -4,13 +4,22 @@
  *
  * Run: node scripts/find-duplicate-contests.mjs
  *
- * Groups rows that are probably the same contest by two signals:
- *   1. Name match after stripping year/edition numbers and punctuation
- *   2. Same URL domain + same deadline
- * For each group, picks the "most complete" row to keep — the one with the
- * most non-empty fields (description, prize, prize_details, categories,
- * ai_tools_allowed, eligibility, entry_fee, tags, location, event_date) —
- * and prints the rest as extras.
+ * Also supports screening a single new row before it is inserted:
+ *   node scripts/find-duplicate-contests.mjs --check "<name>|<url>|<deadline>"
+ * Prints any matching existing id(s) and exits 1 if a likely duplicate is
+ * found, exits 0 ("No match found.") otherwise. deadline is YYYY-MM-DD.
+ *
+ * Both modes run the same pairwise signals:
+ *   1. Name match (after stripping year/edition numbers and punctuation),
+ *      gated to a close deadline so next year's edition isn't flagged.
+ *   2. Same normalized URL (domain + path), corroborated by a close deadline
+ *      or real name overlap.
+ *   3. Same URL domain + exact deadline, corroborated by real name overlap.
+ *   4. Same organizer + exact deadline + exact event date, across any hosts
+ *      (catches one festival listed twice under different domains/names —
+ *      e.g. a festival's own domain and a country-specific subdomain).
+ * For a full scan, each group picks the "most complete" row to keep — the
+ * one with the most non-empty fields — and prints the rest as extras.
  */
 
 import { createClient } from '@supabase/supabase-js'
@@ -96,6 +105,88 @@ function nameTokenOverlap(nameA, nameB) {
 }
 const DOMAIN_MATCH_MIN_NAME_OVERLAP = 0.5
 
+function daysBetween(a, b) {
+  const da = new Date(a), db = new Date(b)
+  if (isNaN(da) || isNaN(db)) return Infinity
+  return Math.abs(da - db) / 86400000
+}
+
+// A name match only counts as a duplicate signal if the deadlines are close
+// together (same edition, entered twice) — not ~1 year apart, which is just
+// next year's edition of a recurring festival and belongs as its own row.
+const NAME_MATCH_MAX_DEADLINE_GAP_DAYS = 60
+
+// Same page (domain + path, case-insensitive, ignoring trailing slash) is a
+// useful signal, but not on its own: a generic hub page ("/competitions", a
+// bare homepage) can list several distinct, differently-timed programs. So
+// still require corroboration — either a close deadline (same round entered
+// twice) or real name overlap (near-identical title, deadline just corrected).
+const URL_MATCH_MAX_DEADLINE_GAP_DAYS = 14
+function normalizedUrlKey(u) {
+  try {
+    const parsed = new URL(u)
+    const host = parsed.hostname.replace(/^www\./, '')
+    const path = parsed.pathname.replace(/\/+$/, '').toLowerCase()
+    return `${host}${path}`
+  } catch { return '' }
+}
+
+function normalizedOrganizer(o) {
+  return String(o || '').trim().toLowerCase()
+}
+
+function normalizedDate(d) {
+  // Compare calendar dates only (same deadline/event_date string or
+  // timestamp), not exact time-of-day — "exact" means the same day.
+  const dt = new Date(d)
+  return isNaN(dt) ? '' : dt.toISOString().slice(0, 10)
+}
+
+// Decide whether two rows are the same contest. Returns the matching
+// signal's name, or null. Used both for the full scan (all pairs) and for
+// --check (one candidate against every existing row) so a new row is
+// screened with exactly the logic that will catch it later anyway.
+function duplicateSignal(a, b) {
+  const nameKey = normalizeName(a.name)
+  if (nameKey && nameKey === normalizeName(b.name) &&
+      daysBetween(a.deadline, b.deadline) <= NAME_MATCH_MAX_DEADLINE_GAP_DAYS) {
+    return 'name+deadline'
+  }
+
+  const urlKeyA = normalizedUrlKey(a.url), urlKeyB = normalizedUrlKey(b.url)
+  if (urlKeyA && urlKeyA === urlKeyB) {
+    const closeDeadline = daysBetween(a.deadline, b.deadline) <= URL_MATCH_MAX_DEADLINE_GAP_DAYS
+    const similarName = nameTokenOverlap(a.name, b.name) >= DOMAIN_MATCH_MIN_NAME_OVERLAP
+    if (closeDeadline || similarName) return 'same url'
+  }
+
+  const domainA = domainOf(a.url), domainB = domainOf(b.url)
+  if (domainA && domainA === domainB && !SUBMISSION_PLATFORM_DOMAINS.has(domainA) &&
+      a.deadline && a.deadline === b.deadline) {
+    // Same host + same deadline can still be two unrelated programs (e.g. a
+    // company running both a music and a film challenge), so also require
+    // their names to actually overlap.
+    if (nameTokenOverlap(a.name, b.name) >= DOMAIN_MATCH_MIN_NAME_OVERLAP) return 'same domain+deadline'
+  }
+
+  // Same organizer + same exact deadline + same exact event date, regardless
+  // of host — catches one festival listed twice under entirely different
+  // domains (its own site plus a country-specific subdomain, or a rebrand).
+  // Event date is required on both sides and must also match exactly: an
+  // organizer running two different programs that happen to share a deadline
+  // (seen live: one company's film festival and its separate music contest)
+  // is common enough that organizer+deadline alone is not safe — but their
+  // event dates differed, so requiring both closes that gap.
+  const orgA = normalizedOrganizer(a.organizer), orgB = normalizedOrganizer(b.organizer)
+  if (orgA && orgA.length >= 3 && orgA === orgB &&
+      a.deadline && a.deadline === b.deadline &&
+      a.event_date && b.event_date && normalizedDate(a.event_date) === normalizedDate(b.event_date)) {
+    return 'same organizer+deadline+event date'
+  }
+
+  return null
+}
+
 const FIELDS_FOR_COMPLETENESS = [
   'description', 'prize', 'prize_details', 'categories', 'ai_tools_allowed',
   'eligibility', 'entry_fee', 'tags', 'location', 'event_date', 'organizer',
@@ -122,125 +213,64 @@ if (error) {
   process.exit(1)
 }
 
-function daysBetween(a, b) {
-  const da = new Date(a), db = new Date(b)
-  if (isNaN(da) || isNaN(db)) return Infinity
-  return Math.abs(da - db) / 86400000
-}
-
-// A name match only counts as a duplicate signal if the deadlines are close
-// together (same edition, entered twice) — not ~1 year apart, which is just
-// next year's edition of a recurring festival and belongs as its own row.
-const NAME_MATCH_MAX_DEADLINE_GAP_DAYS = 60
-
-// Group by normalized name (gated by deadline proximity), and separately by
-// domain+deadline; merge groups that share any row so a contest caught by
-// either signal ends up together.
-const groups = new Map() // key -> Set of row ids
-const rowById = new Map(rows.map(r => [r.id, r]))
-
-function addToGroup(key, id) {
-  if (!groups.has(key)) groups.set(key, new Set())
-  groups.get(key).add(id)
-}
-
-const byNameKey = new Map()
-for (const row of rows) {
-  const nameKey = normalizeName(row.name)
-  if (!nameKey) continue
-  if (!byNameKey.has(nameKey)) byNameKey.set(nameKey, [])
-  byNameKey.get(nameKey).push(row)
-}
-for (const [nameKey, group] of byNameKey) {
-  for (let i = 0; i < group.length; i++) {
-    for (let j = i + 1; j < group.length; j++) {
-      if (daysBetween(group[i].deadline, group[j].deadline) <= NAME_MATCH_MAX_DEADLINE_GAP_DAYS) {
-        addToGroup(`name:${nameKey}:${group[i].deadline}`, group[i].id)
-        addToGroup(`name:${nameKey}:${group[i].deadline}`, group[j].id)
-      }
-    }
+const checkFlagIdx = process.argv.indexOf('--check')
+if (checkFlagIdx !== -1) {
+  const arg = process.argv[checkFlagIdx + 1]
+  if (!arg) {
+    console.error('Usage: node scripts/find-duplicate-contests.mjs --check "<name>|<url>|<deadline>"')
+    process.exit(2)
   }
-}
-
-// Same page (domain + path, case-insensitive, ignoring trailing slash) is a
-// useful signal, but not on its own: a generic hub page ("/competitions", a
-// bare homepage) can list several distinct, differently-timed programs. So
-// still require corroboration — either a close deadline (same round entered
-// twice) or real name overlap (near-identical title, deadline just corrected).
-const URL_MATCH_MAX_DEADLINE_GAP_DAYS = 14
-function normalizedUrlKey(u) {
-  try {
-    const parsed = new URL(u)
-    const host = parsed.hostname.replace(/^www\./, '')
-    const path = parsed.pathname.replace(/\/+$/, '').toLowerCase()
-    return `${host}${path}`
-  } catch { return '' }
-}
-const byUrl = new Map()
-for (const row of rows) {
-  const key = normalizedUrlKey(row.url)
-  if (!key) continue
-  if (!byUrl.has(key)) byUrl.set(key, [])
-  byUrl.get(key).push(row)
-}
-for (const [key, group] of byUrl) {
-  if (group.length < 2) continue
-  for (let i = 0; i < group.length; i++) {
-    for (let j = i + 1; j < group.length; j++) {
-      const closeDeadline = daysBetween(group[i].deadline, group[j].deadline) <= URL_MATCH_MAX_DEADLINE_GAP_DAYS
-      const similarName = nameTokenOverlap(group[i].name, group[j].name) >= DOMAIN_MATCH_MIN_NAME_OVERLAP
-      if (closeDeadline || similarName) {
-        addToGroup(`url:${key}`, group[i].id)
-        addToGroup(`url:${key}`, group[j].id)
-      }
-    }
+  const [name, candidateUrl, deadline] = arg.split('|').map(s => (s ?? '').trim())
+  if (!name || !deadline) {
+    console.error('Usage: node scripts/find-duplicate-contests.mjs --check "<name>|<url>|<deadline>" (deadline as YYYY-MM-DD)')
+    process.exit(2)
   }
-}
-
-const byDomainDeadline = new Map()
-for (const row of rows) {
-  const domain = domainOf(row.url)
-  if (!domain || !row.deadline || SUBMISSION_PLATFORM_DOMAINS.has(domain)) continue
-  const key = `${domain}|${row.deadline}`
-  if (!byDomainDeadline.has(key)) byDomainDeadline.set(key, [])
-  byDomainDeadline.get(key).push(row)
-}
-for (const [key, group] of byDomainDeadline) {
-  for (let i = 0; i < group.length; i++) {
-    for (let j = i + 1; j < group.length; j++) {
-      // Same host + same deadline can still be two unrelated programs
-      // (e.g. a company running both a music and a film challenge), so also
-      // require their names to actually overlap.
-      if (nameTokenOverlap(group[i].name, group[j].name) >= DOMAIN_MATCH_MIN_NAME_OVERLAP) {
-        addToGroup(`domain-deadline:${key}`, group[i].id)
-        addToGroup(`domain-deadline:${key}`, group[j].id)
-      }
-    }
+  const candidate = { id: '<new>', name, url: candidateUrl, deadline, organizer: '', event_date: null }
+  const matches = []
+  for (const row of rows) {
+    const signal = duplicateSignal(candidate, row)
+    if (signal) matches.push({ row, signal })
   }
+  if (matches.length === 0) {
+    console.log('No match found.')
+    process.exit(0)
+  }
+  console.log(`DUPLICATE CHECK: matches ${matches.map(m => m.row.id).join(', ')}`)
+  for (const { row, signal } of matches) {
+    console.log(`  matches: "${row.name}" (${row.id}, ${row.url}, deadline ${row.deadline}) — signal: ${signal}`)
+  }
+  process.exit(1)
 }
 
-// Union-find-lite: merge any groups sharing a row id
+// Union-find-lite: compare every pair once, merge groups that share a row.
 const idToGroupIdx = new Map()
 const merged = []
-for (const idSet of groups.values()) {
-  const ids = [...idSet]
-  if (ids.length < 2) continue // not a duplicate signal on its own
-  const touched = new Set(ids.map(id => idToGroupIdx.get(id)).filter(i => i !== undefined))
-  if (touched.size === 0) {
+function union(idA, idB) {
+  const a = idToGroupIdx.get(idA), b = idToGroupIdx.get(idB)
+  if (a === undefined && b === undefined) {
     const idx = merged.length
-    merged.push(new Set(ids))
-    for (const id of ids) idToGroupIdx.set(id, idx)
-  } else {
-    const [first, ...rest] = [...touched]
-    for (const id of ids) merged[first].add(id)
-    for (const idx of rest) {
-      for (const id of merged[idx]) { merged[first].add(id); idToGroupIdx.set(id, first) }
-      merged[idx] = null
-    }
-    for (const id of ids) idToGroupIdx.set(id, first)
+    merged.push(new Set([idA, idB]))
+    idToGroupIdx.set(idA, idx)
+    idToGroupIdx.set(idB, idx)
+  } else if (a === undefined) {
+    merged[b].add(idA)
+    idToGroupIdx.set(idA, b)
+  } else if (b === undefined) {
+    merged[a].add(idB)
+    idToGroupIdx.set(idB, a)
+  } else if (a !== b) {
+    for (const id of merged[b]) { merged[a].add(id); idToGroupIdx.set(id, a) }
+    merged[b] = null
   }
 }
 
+for (let i = 0; i < rows.length; i++) {
+  for (let j = i + 1; j < rows.length; j++) {
+    if (duplicateSignal(rows[i], rows[j])) union(rows[i].id, rows[j].id)
+  }
+}
+
+const rowById = new Map(rows.map(r => [r.id, r]))
 const finalGroups = merged.filter(g => g && g.size > 1)
 
 if (finalGroups.length === 0) {
