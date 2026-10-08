@@ -36,6 +36,68 @@ describe the old dark theme; the reasoning still applies, the colours do not.)*
 
 ---
 
+## 2026-10-08 — A card's blurb ends on a whole word
+
+**Changed** — `src/components/ContestCard.tsx` only. 90 lines added, 3 removed,
+about a third of the additions being the two comments. No copy, no data, no
+layout, no colour and no type setting moved; the paragraph keeps its 13px,
+its 1.7 line-height, its three lines and its place in the card.
+
+**Was** — the description is clamped with `-webkit-line-clamp: 3`, which ends
+the paragraph wherever the third line happens to run out of room. That is
+almost never the end of a word. Measured against the live grid with the real
+fonts, at 1440px eleven of the twelve cards the homepage opens with were cut
+inside one: `…and one evening t`, `…films are capped at 3 minut`, `…entries
+must be in Spanish with Englis`, `…plus a free Pro month fo`. At 390px it was
+eleven of twelve again, at 820px nine of ten, at 1180px four of four. And when
+the third line did happen to end on a full stop the browser put its ellipsis
+after it, so the card read `…a short film of up to two minutes....` — four
+dots. Nothing here was broken, which is why it had survived a month of these
+entries, but it is the kind of edge that tells a reader the page was assembled
+rather than set. Ninety-five of them are in view on the homepage.
+
+**Looked at** — Dense Discovery's archive, Are.na's Explore, It's Nice That's
+Nice Feed, all at 1440px. (Metrograph is behind Cloudflare today and returned
+a block page; noted and skipped.) The useful thing is what all three refuse to
+do. Dense Discovery lists 409 issues as a number and a title, and when a title
+is long — `Sonntagsruhe: frivolously unmonetised time` — it wraps to a second
+line rather than being cut. Are.na's channel cards carry a title, an author, a
+block count and an age, and nothing else; `Typographie et Variations - Projet
+2B` takes two lines in full. It's Nice That's feed gives each item a headline
+of up to three lines, a source and a relative time, and no blurb at all. Three
+listings built by people with taste, and not one truncated string among them:
+an index earns its density by setting short complete things, not by chopping
+long ones. We are not in a position to delete the blurb — it is the only place
+a card says what the contest actually wants — but we can at least stop it
+ending mid-syllable.
+
+**Now** — the card wraps the paragraph itself before the browser does. A canvas
+measures the text in the font the paragraph is actually painted in, at the
+paragraph's own measured width, greedily lays out three lines, and ends the
+third on the last whole word that fits, dropping any comma, semicolon, dash or
+full stop the cut leaves dangling before the ellipsis. It re-measures on resize
+— the one-, two- and three-column layouts hold very different amounts, from
+about 134 characters at 390px to about 240 at 1180px, and each now gets what it
+can hold — and again once the webfont has landed, so the first measurement is
+never made against the fallback. The CSS clamp stays on underneath as the
+backstop: if a measurement is ever off by a pixel, the worst case is exactly
+what the card did before.
+
+Checked against the deployed site at 1440px and 390px: twenty-three cuts
+between them, every one of them after a whole word, no paragraph past three
+lines, no doubled stop, no horizontal overflow at either width. The cost is at
+most one word per card against what the clamp was showing.
+
+One thing it does not fix: `…films are capped at 3…` still ends on a bare
+numeral, because `3` is a whole word and the next one is `minutes`. A rule
+against ending on a number or a preposition is a rule that would start
+rewriting the sentence, so it is left alone.
+
+**Before/after** — `reports/design/2026-10-08-before.png` and `-after.png`
+(1440px, the grid), `-before-390.png` and `-after-390.png` (390px).
+
+---
+
 ## 2026-10-07 — The phone nav's fade, only on an edge the row carries on past
 
 **Changed** — `src/components/InnerNav.tsx`, `src/app/page.tsx`, the `.inav`
