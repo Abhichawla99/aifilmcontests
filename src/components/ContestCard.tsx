@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import Link from 'next/link'
 import { Contest } from '@/data/contests'
 import { categoryStyle, closedStyle, normalizeCategory } from '@/lib/theme'
@@ -33,8 +33,95 @@ function timeLeft(cd: { days: number; hours: number }) {
   return `${cd.hours} ${cd.hours === 1 ? 'hour' : 'hours'} left`
 }
 
+/* ── The blurb, cut on a whole word ──────────────────────────────────────────
+   `-webkit-line-clamp` ends the paragraph wherever the third line happens to run
+   out of room, which is almost never the end of a word: measured against the
+   live grid, 11 of the 12 cards the homepage opens with were cut inside one
+   ("…and one evening t…", "…films are capped at 3 minut…"), and a blurb whose
+   third line ended on a full stop got four dots ("…up to two minutes.…").
+   A programme listing does not do that. So the paragraph is wrapped here, in the
+   font it is actually painted in and at its own measured width, and ends on the
+   last whole word that fits. The CSS clamp stays on underneath as the backstop:
+   if a measurement is ever off, the worst case is what the card did before. */
+
+const ELLIPSIS = '\u2026'
+
+let measureCtx: CanvasRenderingContext2D | null = null
+function measurer() {
+  if (!measureCtx && typeof document !== 'undefined') {
+    measureCtx = document.createElement('canvas').getContext('2d')
+  }
+  return measureCtx
+}
+
+/* A comma or a dash before an ellipsis reads as a typo; a full stop reads as
+   four dots. Drop whatever trailing punctuation the cut leaves behind. */
+function trimTail(s: string) {
+  return s.replace(/[\s,;:.\u2013\u2014-]+$/, '')
+}
+
+function cutToLines(text: string, width: number, font: string, spacing: string, lines: number) {
+  const m = measurer()
+  if (!m || !text || !(width > 0)) return text
+  m.font = font
+  try { (m as CanvasRenderingContext2D & { letterSpacing: string }).letterSpacing = spacing } catch { /* older engines */ }
+  const w = (s: string) => m.measureText(s).width
+  if (w(text) <= width) return text
+
+  const words = text.split(/\s+/).filter(Boolean)
+  const laid: string[] = []
+  let line = ''
+  let i = 0
+  for (; i < words.length; i++) {
+    const next = line ? line + ' ' + words[i] : words[i]
+    if (!line || w(next) <= width) { line = next; continue }
+    laid.push(line)
+    if (laid.length === lines) break      // words[i] onwards has nowhere to go
+    line = words[i]
+  }
+  if (laid.length < lines) { laid.push(line); i = words.length }
+  if (i >= words.length) return text      // all of it fit, nothing to cut
+
+  let last = laid[lines - 1]
+  while (w(trimTail(last) + ELLIPSIS) > width) {
+    const back = last.lastIndexOf(' ')
+    if (back < 0) break
+    last = last.slice(0, back)
+  }
+  laid[lines - 1] = trimTail(last) + ELLIPSIS
+  return laid.join(' ')
+}
+
+/* Renders the full text on the server and on first paint, then cuts it once the
+   paragraph has a width and the webfont has landed. Re-cuts on resize, so the
+   one-, two- and three-column layouts each get the length they can hold. */
+function useBlurb(text: string, lines = 3) {
+  const ref = useRef<HTMLParagraphElement>(null)
+  const [shown, setShown] = useState(text)
+  useEffect(() => {
+    const el = ref.current
+    if (!el) return
+    const fit = () => {
+      const cs = getComputedStyle(el)
+      /* A pixel of slack, so a rounding difference can never push a line over. */
+      setShown(cutToLines(
+        text, el.clientWidth - 1,
+        `${cs.fontStyle} ${cs.fontWeight} ${cs.fontSize} ${cs.fontFamily}`,
+        cs.letterSpacing, lines,
+      ))
+    }
+    fit()
+    const ro = new ResizeObserver(fit)
+    ro.observe(el)
+    document.fonts?.ready.then(fit).catch(() => { /* measured against the fallback */ })
+    return () => ro.disconnect()
+  }, [text, lines])
+  return { ref, shown }
+}
+
 export default function ContestCard({ contest }: { contest: Contest }) {
   const cd       = useCountdown(contest.deadline, contest.status)
+  const blurb    = useBlurb(contest.description)
   const isOpen   = contest.status === 'open'
   const isClosed = contest.status === 'closed'
   const isUrgent = isOpen && cd && cd.days <= 7
@@ -136,7 +223,7 @@ export default function ContestCard({ contest }: { contest: Contest }) {
              clamped paragraph itself lets it stretch past its line limit, which clipped
              text mid-word instead of ellipsing. */}
         <div style={{ flex: 1 }}>
-          <p style={{
+          <p ref={blurb.ref} style={{
             fontSize: 13, color: '#57524A',
             lineHeight: 1.7,
             display: '-webkit-box',
@@ -144,7 +231,7 @@ export default function ContestCard({ contest }: { contest: Contest }) {
             WebkitBoxOrient: 'vertical',
             overflow: 'hidden',
           }}>
-            {contest.description}
+            {blurb.shown}
           </p>
         </div>
 
