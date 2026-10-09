@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import Image from 'next/image'
 import Link from 'next/link'
 import { getContestsByStatus } from '@/lib/contests-db'
 import { supabaseAdmin } from '@/lib/supabase'
@@ -103,11 +104,12 @@ export default async function FeaturePage({ searchParams }: { searchParams: Prom
               </li>
             ))}
           </ol>
-          <img
+          <Image
             src="/feature-spotlight-example.png"
             alt="The homepage spotlight card as it appears live on aifilmcontests.com"
             width={420}
             height={506}
+            sizes="320px"
             style={{ width: '100%', maxWidth: 320, height: 'auto', borderRadius: 16, border: '1px solid rgba(27,25,22,0.07)', boxShadow: '0 1px 2px rgba(27,25,22,0.04), 0 18px 40px -22px rgba(27,25,22,0.16)', display: 'block' }}
           />
           <div style={{ fontSize: 12, color: '#8B867C', marginTop: 8 }}>
