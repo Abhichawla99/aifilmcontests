@@ -7,6 +7,7 @@ import ContestCard from '@/components/ContestCard'
 import EmailSubscribe from '@/components/EmailSubscribe'
 import DeadlineReminder from '@/components/DeadlineReminder'
 import SiteFooter from '@/components/SiteFooter'
+import PrizeValue from '@/components/PrizeValue'
 
 export const dynamic = 'force-dynamic'
 export const revalidate = 0
@@ -279,14 +280,11 @@ export default async function ContestPage({ params }: { params: Promise<{ id: st
               </p>
 
               <Section label="Prize">
-                <div style={{
-                  fontFamily: 'Space Grotesk, sans-serif', fontSize: 'clamp(20px, 2.4vw, 26px)',
-                  fontWeight: 700, color: tint.text, lineHeight: 1.25,
-                  letterSpacing: '-0.02em', marginBottom: contest.prizeDetails?.length ? 16 : 0,
-                  fontVariantNumeric: 'tabular-nums',
-                }}>
-                  {contest.prize}
-                </div>
+                <PrizeValue
+                  text={contest.prize}
+                  color={tint.text}
+                  gap={contest.prizeDetails?.length ? 16 : 0}
+                />
                 {contest.prizeDetails && contest.prizeDetails.length > 0 && (
                   <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column' }}>
                     {contest.prizeDetails.map((detail, i) => (
