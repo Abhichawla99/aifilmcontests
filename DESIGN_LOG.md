@@ -36,6 +36,72 @@ describe the old dark theme; the reasoning still applies, the colours do not.)*
 
 ---
 
+## 2026-10-09 — The contest page's prize, set as what the value actually is
+
+**Changed** — the Prize block on `src/app/contests/[id]/page.tsx`, lifted into
+`src/components/PrizeValue.tsx` so it could be rendered against every real prize
+string before it shipped. Six lines added to the page, eight removed; one new
+79-line component, about a third of it the comments. No copy, no data, no
+layout, no colour outside this one block, and the `prizeDetails` list under it
+is untouched.
+
+**Was** — every prize printed at `clamp(20px, 2.4vw, 26px)`, Space Grotesk 700,
+`-0.02em`, in the category tint: the display setting this page otherwise keeps
+for "22 days left". That is the right setting for "€10,000 Grand Prix". It is
+the wrong one for "Best Filmmaker, Best Ai, Best Short Film, Best Ai Fantasy
+Film and Best Fashion Film awards plus PR/publication placement (no cash prize
+published)", which is 147 characters and arrived as two and three lines of
+shouted sentence case, tinted, sitting above the quiet body prose of "Who can
+enter". Counted against live data: of the 91 open contests carrying prize text,
+65 name no money amount at all — "Official laurels, digital certificates and
+trophies for main award winners", "Not published by organizer" — and only 15
+are short enough to read as a figure. The headline treatment was wrong for five
+in six of them, and on the pages where it was wrong it was also the loudest
+thing in the left column, louder than the deadline it should defer to.
+
+**Looked at** — Criterion's Shop All Films in list view, It's Nice That's feed,
+and a run at Sundance's and Berlinale's award pages that both 404'd today
+(noted and skipped). Criterion's list is the useful one. It sets 1,891 films as
+spine number, title, director, country, year, and the number sits in its own
+column at the same size as everything around it; nothing is promoted to display
+size merely because it fills a field. The hierarchy is carried by the column and
+the heading, and the type stays level. Our page already knows this — `SpecRow`,
+40 lines below the block I changed, has carried a `SPEC_VALUE_IS_A_SENTENCE`
+threshold since 2026-09-27 that drops a long entry fee out of the figure-right
+row and sets it as a note. The Prize block was the one value on the page that
+never learned it, and it was the biggest.
+
+**Now** — the setting follows the value. A short string built around a money
+figure keeps the display size, because there the figure is the whole point:
+"$12,000 in cash prizes", "€1,200 total prize pool", "$300,000 USD Prize Pool" —
+15 of 91. Anything longer is set as a sentence at 16.5px in full ink `#1B1916`,
+one notch above the body copy around it so the section still answers its own
+label, held to a 58ch measure so a 149-character prize does not run the full
+column. When that sentence contains money, the figures inside it are picked out
+in the tint and the figure face, so the amounts stay scannable without the page
+promoting one of them to a headline — several of these prizes list three, and
+choosing one would misstate the award. Nothing is extracted, reordered or
+dropped: the string is always printed whole.
+
+The money pattern is deliberately narrow. It reads `US$`/`A$`/`CA$` and the
+seven symbols in the data, requires the digits to end on a digit so the comma in
+"up to ₹50,00,000, subject to government support" stays in the sentence, keeps a
+trailing `+` because "$25K+" is not "$25K", and takes K/M/million/lakh/crore only
+as whole words. "Recognition awards across 25+ categories" has no currency mark
+and is correctly left alone.
+
+Rendered all 91 live prize strings through the component on a local production
+build at 1440px and 390px before pushing: correct tier every time, no horizontal
+overflow at either width. On the AI M0V1E page three lines of tinted display type
+became two lines of prose with `$1,000`, `$700` and `$500` picked out; on AIFFA
+two became one, and "22 days left" is now the loudest thing on the page again.
+
+Before/after: `reports/design/2026-10-09-before.png` and `-after.png` (AIFFA,
+1440px), `-before-390.png` / `-after-390.png`, and `-before-mixed.png` /
+`-after-mixed.png` (AI M0V1E, the three-figure case).
+
+---
+
 ## 2026-10-08 — A card's blurb ends on a whole word
 
 **Changed** — `src/components/ContestCard.tsx` only. 90 lines added, 3 removed,

@@ -1,7 +1,7 @@
 // ── The prize, set as what it actually is ──────────────────────────────────
 // Every prize was printed at clamp(20px, 2.4vw, 26px) in the category tint —
 // the display setting this page otherwise keeps for "22 days left". It suits
-// "EUR10,000 Grand Prix". It does not suit "Best Filmmaker, Best Ai, Best Short
+// "€10,000 Grand Prix". It does not suit "Best Filmmaker, Best Ai, Best Short
 // Film, Best Ai Fantasy Film and Best Fashion Film awards plus PR/publication
 // placement (no cash prize published)": 147 characters arriving as two lines of
 // shouted sentence case. Of the 91 open contests carrying prize text today, 65
@@ -16,7 +16,7 @@ const PRIZE_IS_A_FIGURE = 32
 // Deliberately conservative. A trailing dot is excluded so a sentence-final
 // "$300." does not swallow its full stop, and the K/M/million/lakh/crore suffix
 // is only taken when it is a whole word. The digits must end on a digit, so
-// the comma in "up to \u20B950,00,000, subject to government support" stays in the
+// the comma in "up to ₹50,00,000, subject to government support" stays in the
 // sentence instead of being picked out with the figure. A trailing "+" is
 // kept, because "$25K+" means something different from "$25K".
 const MONEY = /(?:US\$|A\$|CA\$|NZ\$|S\$|HK\$|R\$|[$\u00A3\u20AC\u20B9\u00A5\u20BD\u20A9])\s?\d(?:[\d,]*\d)?(?:\.\d{1,2})?(?:\s?(?:[KkMm]|million|lakh|crore)\b)?\+?/g
@@ -51,7 +51,7 @@ export default function PrizeValue({ text, color, gap }: { text: string; color: 
   // unlike `test`.
   const figures = value.match(MONEY)
 
-  // "EUR10,000 Grand Prix" — short, and the figure is the whole point of it.
+  // "€10,000 Grand Prix" — short, and the figure is the whole point of it.
   if (figures && value.length <= PRIZE_IS_A_FIGURE) {
     return (
       <div style={{
