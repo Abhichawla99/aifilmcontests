@@ -3,37 +3,25 @@
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import { Contest } from '@/data/contests'
+import { daysUntilDeadline, formatDeadline, timeLeftPhrase } from '@/lib/deadline'
 
-function useCountdown(deadline: string) {
-  const calc = () => {
-    const diff = new Date(deadline).getTime() - Date.now()
-    if (diff <= 0) return null
-    return {
-      days:    Math.floor(diff / 86_400_000),
-      hours:   Math.floor((diff % 86_400_000) / 3_600_000),
-    }
-  }
-  const [t, setT] = useState(calc)
+/* Same words, and now the same arithmetic, as ContestCard — so the featured
+   contest and the grid under it agree. See src/lib/deadline.ts. */
+function useDaysLeft(deadline: string) {
+  const calc = () => daysUntilDeadline(deadline)
+  const [d, setD] = useState(calc)
   useEffect(() => {
-    const id = setInterval(() => setT(calc()), 30_000)
+    setD(calc())
+    const id = setInterval(() => setD(calc()), 30_000)
     return () => clearInterval(id)
   }, [deadline])
-  return t
-}
-
-function fmt(d: string) {
-  return new Date(d).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
-}
-
-/* Same words as ContestCard, so the featured contest and the grid under it agree. */
-function timeLeft(cd: { days: number; hours: number }) {
-  if (cd.days >= 1) return `${cd.days} ${cd.days === 1 ? 'day' : 'days'} left`
-  return `${cd.hours} ${cd.hours === 1 ? 'hour' : 'hours'} left`
+  return d
 }
 
 export default function FeaturedSpotlight({ contest }: { contest: Contest }) {
-  const cd = useCountdown(contest.deadline)
-  const isUrgent = cd && cd.days <= 7
+  const daysLeft = useDaysLeft(contest.deadline)
+  const left = timeLeftPhrase(daysLeft)
+  const isUrgent = daysLeft >= 0 && daysLeft <= 7
 
   return (
     <div style={{
@@ -98,15 +86,15 @@ export default function FeaturedSpotlight({ contest }: { contest: Contest }) {
               fontFamily: 'Space Grotesk, sans-serif', fontSize: 'clamp(18px, 2.2vw, 22px)', fontWeight: 700,
               color: isUrgent ? '#C2410C' : '#1B1916',
               letterSpacing: '-0.02em', lineHeight: 1.2, fontVariantNumeric: 'tabular-nums',
-            }}>
-              {cd ? timeLeft(cd) : fmt(contest.deadline)}
+            }} suppressHydrationWarning>
+              {left ?? formatDeadline(contest.deadline)}
             </span>
-            {cd && (
+            {left && (
               <span style={{
                 fontSize: 11, color: '#7A7469', fontFamily: 'Space Grotesk, sans-serif', fontWeight: 500,
                 letterSpacing: '0.07em', textTransform: 'uppercase', fontVariantNumeric: 'tabular-nums',
-              }}>
-                {fmt(contest.deadline)}
+              }} suppressHydrationWarning>
+                {formatDeadline(contest.deadline)}
               </span>
             )}
           </div>

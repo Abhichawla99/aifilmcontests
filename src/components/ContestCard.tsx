@@ -4,33 +4,25 @@ import { useEffect, useRef, useState } from 'react'
 import Link from 'next/link'
 import { Contest } from '@/data/contests'
 import { categoryStyle, closedStyle, normalizeCategory } from '@/lib/theme'
+import { daysUntilDeadline, formatDeadline, timeLeftPhrase } from '@/lib/deadline'
 
-function useCountdown(deadline: string, status: string) {
-  const calc = () => {
-    const diff = new Date(deadline).getTime() - Date.now()
-    if (diff <= 0 || status !== 'open') return null
-    return {
-      days:  Math.floor(diff / 86_400_000),
-      hours: Math.floor((diff % 86_400_000) / 3_600_000),
-    }
-  }
-  const [t, setT] = useState(calc)
+/* The deadline is a calendar day, not an instant — see src/lib/deadline.ts for
+   why that distinction was printing yesterday's date on every card west of
+   UTC. The count re-reads on an interval so a card left open overnight rolls
+   to "Closes today" on its own. */
+function useDaysLeft(deadline: string, status: string) {
+  const calc = () => (status === 'open' ? daysUntilDeadline(deadline) : null)
+  const [d, setD] = useState(calc)
   useEffect(() => {
-    const id = setInterval(() => setT(calc()), 60_000)
+    setD(calc())
+    const id = setInterval(() => setD(calc()), 60_000)
     return () => clearInterval(id)
   }, [deadline, status])
-  return t
+  return d
 }
 
 function fmt(d: string) {
   return new Date(d).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
-}
-
-/* Every card answers "how long do I have?" the same way: a figure, then a caption.
-   Time remaining for an open contest — that is the decision — the date for the rest. */
-function timeLeft(cd: { days: number; hours: number }) {
-  if (cd.days >= 1) return `${cd.days} ${cd.days === 1 ? 'day' : 'days'} left`
-  return `${cd.hours} ${cd.hours === 1 ? 'hour' : 'hours'} left`
 }
 
 /* ── The blurb, cut on a whole word ──────────────────────────────────────────
@@ -120,11 +112,12 @@ function useBlurb(text: string, lines = 3) {
 }
 
 export default function ContestCard({ contest }: { contest: Contest }) {
-  const cd       = useCountdown(contest.deadline, contest.status)
+  const daysLeft = useDaysLeft(contest.deadline, contest.status)
+  const left     = daysLeft === null ? null : timeLeftPhrase(daysLeft)
   const blurb    = useBlurb(contest.description)
   const isOpen   = contest.status === 'open'
   const isClosed = contest.status === 'closed'
-  const isUrgent = isOpen && cd && cd.days <= 7
+  const isUrgent = isOpen && daysLeft !== null && daysLeft >= 0 && daysLeft <= 7
   const isFeatured = !!contest.featuredUntil && new Date(contest.featuredUntil).getTime() > Date.now()
 
   /* The first category gives the card its identity: emoji + pastel tint. */
@@ -182,8 +175,8 @@ export default function ContestCard({ contest }: { contest: Contest }) {
               letterSpacing: '-0.01em',
               lineHeight: 1.15,
               color: isClosed ? '#8B867C' : isUrgent ? '#C2410C' : '#1B1916',
-            }}>
-              {isOpen && cd ? timeLeft(cd) : fmt(contest.deadline)}
+            }} suppressHydrationWarning>
+              {isOpen && left ? left : formatDeadline(contest.deadline)}
             </div>
             <div style={{
               fontSize: 9.5, color: '#8B867C',
@@ -191,8 +184,8 @@ export default function ContestCard({ contest }: { contest: Contest }) {
               fontVariantNumeric: 'tabular-nums',
               letterSpacing: '0.07em', textTransform: 'uppercase',
               marginTop: 3,
-            }}>
-              {isOpen && cd ? fmt(contest.deadline) : 'Deadline'}
+            }} suppressHydrationWarning>
+              {isOpen && left ? formatDeadline(contest.deadline) : 'Deadline'}
             </div>
           </div>
         </div>

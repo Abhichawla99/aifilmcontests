@@ -4,6 +4,7 @@ import { useState, useMemo, useEffect } from 'react'
 import { Contest } from '@/data/contests'
 import ContestCard from './ContestCard'
 import { normalizeCategory, categoryStyles } from '@/lib/theme'
+import { daysUntilDeadline, formatDeadlineShort } from '@/lib/deadline'
 
 type StatusFilter = 'all' | 'open' | 'upcoming'
 type SortKey = 'deadline' | 'prize' | 'newest'
@@ -41,9 +42,10 @@ function prizeValue(prize: string): number {
   return best
 }
 
-function daysUntil(d: string) {
-  return Math.ceil((new Date(d).getTime() - Date.now()) / 86_400_000)
-}
+/* A deadline is a calendar day, not an instant — see src/lib/deadline.ts.
+   The list view and the card view now count and print it the same way. */
+const daysUntil = daysUntilDeadline
+const fmtShort = formatDeadlineShort
 
 /** Deadline buckets. A directory's real question is "what can I still enter, and
     by when" — grouping answers it and breaks one long scroll into named chunks. */
@@ -56,10 +58,6 @@ function bucket(c: Contest): string {
   return 'Later in the year'
 }
 const BUCKET_ORDER = ['Closing this week', 'Closing this month', 'In the next three months', 'Later in the year', 'Not open yet']
-
-function fmtShort(d: string) {
-  return new Date(d).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })
-}
 
 /* ── One compact row. 70 contests are far easier to scan as rows than as cards,
      so the view toggle is a real feature, not decoration. ─────────────────── */
@@ -107,7 +105,7 @@ function Row({ c }: { c: Contest }) {
         color: c.status !== 'open' ? '#8B867C' : urgent ? '#C2410C' : '#3E3A33',
         minWidth: 76,
       }}>
-        {c.status === 'open' ? (d <= 0 ? 'today' : `${d}d left`) : fmtShort(c.deadline)}
+        {c.status === 'open' && d >= 0 ? (d === 0 ? 'today' : `${d}d left`) : fmtShort(c.deadline)}
       </span>
     </a>
   )
