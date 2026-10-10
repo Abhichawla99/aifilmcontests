@@ -52,6 +52,7 @@ export default function SiteFooter({
             <Link href="/contests/closing-soon" className="link-muted">Closing Soon</Link>
             <Link href="/contests/free" className="link-muted">Free to Enter</Link>
             <Link href="/contests/cash-prizes" className="link-muted">Cash Prizes</Link>
+            <Link href="/contests/student" className="link-muted">Student</Link>
           </div>
         </nav>
 
