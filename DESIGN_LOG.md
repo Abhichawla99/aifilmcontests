@@ -36,6 +36,96 @@ describe the old dark theme; the reasoning still applies, the colours do not.)*
 
 ---
 
+## 2026-10-10 — The deadline, read as the calendar day it is
+
+**Changed** — a new `src/lib/deadline.ts` (88 lines, half of it the comment
+explaining why), and the three client components that print a deadline:
+`ContestCard.tsx`, `FeaturedSpotlight.tsx`, `ContestBrowser.tsx`. 41 lines
+added, 62 removed across the three — the module replaces three near-copies of
+the same arithmetic. No copy outside the countdown phrase, no data, no layout,
+no colour, no type setting. The contest page and the homepage ticker are server
+components and were already correct; they are untouched.
+
+**Was** — wrong, in the one place the whole site cannot afford to be wrong.
+Every `deadline` in the table is a bare `YYYY-MM-DD`: all 240 rows, no time, no
+zone. `new Date('2026-10-10')` turns that into midnight UTC, which is an
+*instant*, and an instant lands on a different calendar day depending on where
+the reader is sitting. All three of these are `'use client'`, so that instant
+was being formatted in the visitor's own timezone. Captured on the live site
+today at 18:16 UTC, same page, same moment, Chrome at `TZ=America/Denver` and
+`TZ=America/New_York`: the three contests closing *today* each printed
+
+    Oct 9, 2026 / DEADLINE
+
+a date already gone, in plain ink, with no urgency on it at all — while the
+server-rendered ticker twelve hundred pixels above said `AI Movie Awards: AIMA
+· today · OCT 10`. The page contradicted itself about the only fact it exists
+to get right. At `TZ=UTC` and `TZ=Pacific/Auckland` the same page read Oct 10,
+so this was invisible to anyone checking from a server and visible to most of
+the audience.
+
+The countdown had the same fault one step worse. Midnight UTC on the deadline
+day is the *start* of it, so orhena AI Contest 2026 — deadline Oct 11, a full
+day still to run — read **"5 hours left · OCT 10, 2026"**, understating the
+time a filmmaker had and misnaming the day it ran out. Ai & Robots, closing
+Oct 12, read "1 day left · OCT 11, 2026". And the three closing that very day
+fell through `diff <= 0` to no countdown at all: the most urgent contests in
+the directory were the only ones with nothing urgent on them.
+
+Those hours were never in the data to begin with. 240 of 240 deadlines are
+date-only; "5 hours left" was an artefact of the parse, not a fact, and the
+same lesson as yesterday's prize block — the setting has to follow what the
+value actually is.
+
+**Looked at** — Mubi's Now Showing, and Metrograph's calendar, which is the
+useful one. Its date rail runs `Today / October / 10`, then `Sunday October 11`,
+`Monday October 12`, on across three weeks. The day the visitor is standing on
+is the only one given a word instead of a number, and it takes the accent
+colour; every other day gets its weekday and its numeral at the same size.
+The rail is authored as a calendar, so it cannot disagree with itself about
+what day it is. Ours was printing a numeral for the one day that deserved the
+word — and printing yesterday's.
+
+**Now** — a deadline is handled as what it is: a day on a calendar, not a point
+on a clock. The printed date is built from the string's own numerals and
+formatted with `timeZone: 'UTC'`, so it reads the same in Auckland and in
+Denver. The count is a difference of two calendar days — the deadline's, and
+the one the reader is actually having, in their own zone — taken at noon UTC
+so no offset or DST seam can nudge it onto the day either side. Whole days
+only, because whole days are all the data knows:
+
+- the closing day → **"Closes today"**, in the burnt orange already reserved
+  for a deadline inside seven days
+- tomorrow → "1 day left", unchanged
+- past → no countdown claimed; the card falls back to the date, as before
+
+"Closes today" sets at the same width as "22 days left" in the card's 13px
+Space Grotesk, so nothing reflows and nothing wraps at 390px. The list view's
+compact row already said "today" when it thought a deadline was up; it now says
+it on the right day, and falls back to the date instead of saying "today" about
+a day that has gone.
+
+**Checked** — all 128 distinct live deadlines rendered in seven zones (UTC,
+Denver, New York, Auckland, Honolulu, London, Sydney): every one prints its own
+day in every one of them. Walked 730 consecutive days from a fixed today,
+across both 2026 and 2027 DST transitions: the count steps by exactly one,
+no jumps. Rendered the nine soonest live contests through a throwaway local
+route at 1440px and 390px, at `TZ=America/Denver` and `TZ=Pacific/Auckland`
+(deleted before the commit) — Denver reads "Closes today · OCT 10, 2026" on the
+three, "1 day left · OCT 11" on orhena, "2 days left · OCT 12" on Ai & Robots;
+Auckland, already on Oct 11, correctly drops the three to the bare date and
+promotes orhena to "Closes today". No horizontal overflow at either width.
+`npm run build` exit 0.
+
+The two client renders now intentionally disagree with the server for the few
+hours a day when UTC and the reader's zone are on different dates — the reader's
+day is the honest one — so the two deadline nodes carry `suppressHydrationWarning`.
+
+Before/after: `reports/design/2026-10-10-before.png` / `-after.png` (1440px) and
+`-before-390.png` / `-after-390.png`.
+
+---
+
 ## 2026-10-09 — The contest page's prize, set as what the value actually is
 
 **Changed** — the Prize block on `src/app/contests/[id]/page.tsx`, lifted into
