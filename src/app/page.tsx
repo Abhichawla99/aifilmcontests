@@ -31,6 +31,13 @@ export default async function Home() {
   const open     = allContests.filter(c => c.status === 'open')
   const upcoming = allContests.filter(c => c.status === 'upcoming')
 
+  /* A read that comes back with nothing is a failed read, not an empty directory.
+     The table has never held fewer than 200 rows and nothing on this site deletes
+     one, so zero means the data did not arrive. Every figure below is computed
+     from this request, which is how an outage turned the homepage into a tracker
+     claiming it tracks nothing. When there is no data, print no numbers. */
+  const noListings = allContests.length === 0
+
   const totalPrize = [...open, ...upcoming].reduce((sum, c) => {
     const m = c.prize.match(/\$([0-9,]+)/)
     return m ? sum + parseInt(m[1].replace(/,/g, '')) : sum
@@ -61,7 +68,9 @@ export default async function Home() {
     },
     {
       q: 'Are there free contests to enter?',
-      a: `Yes — ${freeOpenCount} of the ${open.length} contests open right now have no entry fee. See the full, always-current list on the Free to Enter page.`,
+      a: noListings
+        ? 'Yes. The ones with no entry fee are collected, always current, on the Free to Enter page.'
+        : `Yes — ${freeOpenCount} of the ${open.length} contests open right now have no entry fee. See the full, always-current list on the Free to Enter page.`,
       // The answer text stays one plain string for the FAQPage JSON-LD; the
       // visible copy links the page it names. Same words either way.
       link: { text: 'Free to Enter page', href: '/contests/free' },
@@ -117,10 +126,15 @@ export default async function Home() {
   return (
     <div style={{ background: '#FBFAF8', minHeight: '100vh', position: 'relative' }}>
 
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLdItemList) }}
-      />
+      {/* An ItemList with numberOfItems: 0 tells Google this page lists nothing.
+          Same lie as the zeros, in machine-readable form — so it is simply not
+          emitted when the read came back empty. */}
+      {!noListings && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLdItemList) }}
+        />
+      )}
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLdFaq) }}
@@ -214,13 +228,16 @@ export default async function Home() {
                 <div style={{ display: 'flex', alignItems: 'center', gap: 14, flexWrap: 'wrap', marginBottom: 28 }}>
                   <div style={{
                     display: 'inline-flex', alignItems: 'center', gap: 8,
-                    border: '1px solid rgba(34,197,94,0.2)',
+                    border: noListings ? '1px solid #E3DED3' : '1px solid rgba(34,197,94,0.2)',
                     borderRadius: 100, padding: '5px 14px',
-                    background: 'rgba(34,197,94,0.05)',
+                    background: noListings ? '#FFFFFF' : 'rgba(34,197,94,0.05)',
                   }}>
-                    <span className="dot dot-open live" style={{ width: 5, height: 5 }} />
-                    <span style={{ fontSize: 12, color: '#15803D', fontFamily: 'Space Grotesk, sans-serif', fontWeight: 500, letterSpacing: '0.02em' }}>
-                      {open.length} contests open · updated daily
+                    <span
+                      className={noListings ? 'dot dot-closed' : 'dot dot-open live'}
+                      style={{ width: 5, height: 5 }}
+                    />
+                    <span style={{ fontSize: 12, color: noListings ? '#6F6A61' : '#15803D', fontFamily: 'Space Grotesk, sans-serif', fontWeight: 500, letterSpacing: '0.02em' }}>
+                      {noListings ? 'Listings unavailable · reload to retry' : `${open.length} contests open · updated daily`}
                     </span>
                   </div>
 
@@ -270,20 +287,44 @@ export default async function Home() {
                 </p>
 
                 {/* Figures row: ruled, not boxed. Four across on desktop, 2×2 on a phone
-                    (see .hero-stats in globals.css) so no figure is ever orphaned. */}
-                <div className="hero-stats">
-                  {[
-                    { n: open.length,     label: 'Open now',    color: '#15803D' },
-                    { n: upcoming.length, label: 'Coming soon', color: '#B45309' },
-                    { n: totalPrize >= 1_000_000 ? `$${(totalPrize / 1_000_000).toFixed(1)}M+` : `$${Math.round(totalPrize / 1000)}K+`, label: 'In prizes', color: '#4338CA' },
-                    { n: allContests.filter(c => c.status !== 'closed').length, label: 'Active', color: '#3E3A33' },
-                  ].map(s => (
-                    <div key={s.label} className="hero-stat">
-                      <span className="hero-stat-n" style={{ color: s.color }}>{s.n}</span>
-                      <span className="hero-stat-label">{s.label}</span>
-                    </div>
-                  ))}
-                </div>
+                    (see .hero-stats in globals.css) so no figure is ever orphaned.
+                    With no data it is replaced, in the same ruled slot and at the same
+                    height, by a sentence — four zeros under OPEN NOW / IN PRIZES is the
+                    one claim this site cannot survive making. */}
+                {noListings ? (
+                  <div style={{
+                    maxWidth: 480,
+                    marginBottom: 44,
+                    borderTop: '1px solid rgba(27,25,22,0.16)',
+                    borderBottom: '1px solid rgba(27,25,22,0.08)',
+                    padding: '15px 0 16px',
+                  }}>
+                    <p style={{
+                      fontFamily: 'Space Grotesk, sans-serif', fontSize: 15, fontWeight: 700,
+                      color: '#1B1916', letterSpacing: '-0.02em', marginBottom: 6,
+                    }}>
+                      The listings didn’t load
+                    </p>
+                    <p style={{ fontSize: 13.5, color: '#6F6A61', lineHeight: 1.7, margin: 0 }}>
+                      Nothing has been taken down — this page could not reach the contest
+                      data just now. Reload in a minute and the full directory should be back.
+                    </p>
+                  </div>
+                ) : (
+                  <div className="hero-stats">
+                    {[
+                      { n: open.length,     label: 'Open now',    color: '#15803D' },
+                      { n: upcoming.length, label: 'Coming soon', color: '#B45309' },
+                      { n: totalPrize >= 1_000_000 ? `$${(totalPrize / 1_000_000).toFixed(1)}M+` : `$${Math.round(totalPrize / 1000)}K+`, label: 'In prizes', color: '#4338CA' },
+                      { n: allContests.filter(c => c.status !== 'closed').length, label: 'Active', color: '#3E3A33' },
+                    ].map(s => (
+                      <div key={s.label} className="hero-stat">
+                        <span className="hero-stat-n" style={{ color: s.color }}>{s.n}</span>
+                        <span className="hero-stat-label">{s.label}</span>
+                      </div>
+                    ))}
+                  </div>
+                )}
 
                 {/* Subscribe card */}
                 <div id="subscribe" style={{ maxWidth: 420 }}>
@@ -301,8 +342,8 @@ export default async function Home() {
                     </h2>
                     <p style={{ fontSize: 13, color: '#6F6A61', marginBottom: 14, lineHeight: 1.7 }}>
                       New contests within a day of opening, a last call before deadlines close, and
-                      what&apos;s closing each week — a few emails a month, never daily. {open.length} contests
-                      are open right now.
+                      what&apos;s closing each week — a few emails a month, never daily.
+                      {!noListings && ` ${open.length} contests are open right now.`}
                     </p>
 
                     {/* Soonest-closing contests, named — a signup here should see
@@ -371,7 +412,9 @@ export default async function Home() {
               {
                 art: <ClapperDrawing />, bg: '#E7F1F8', border: '#CFE2EF', ink: '#31536B',
                 title: 'Every contest, one place',
-                body: `${allContests.length} tracked and ${open.length} open right now — festivals, studio challenges, grants and brand briefs, not just the famous ones.`,
+                body: noListings
+                  ? 'Festivals, studio challenges, grants and brand briefs, not just the famous ones.'
+                  : `${allContests.length} tracked and ${open.length} open right now — festivals, studio challenges, grants and brand briefs, not just the famous ones.`,
               },
               {
                 art: <CalendarDrawing />, bg: '#FBF4DE', border: '#F0E3BC', ink: '#6B5A22',
@@ -412,13 +455,20 @@ export default async function Home() {
             <h2 className="bmast-title">Browse Competitions</h2>
             <div className="bmast-meta">
               <p className="bmast-count">
-                {open.length + upcoming.length} active · verified against live sources daily
+                {noListings
+                  ? 'Verified against live sources daily'
+                  : `${open.length + upcoming.length} active · verified against live sources daily`}
               </p>
-              <p className="bmast-agent">
-                <span className="dot dot-open live" />
-                <span className="bmast-agent-name">Research agent running daily</span>{' '}
-                <span className="bmast-agent-note">{'· fresh contests added\u00A024/7'}</span>
-              </p>
+              {/* A live green dot beside a notice that the list did not load is the
+                  page disagreeing with itself. The agent still runs; it just has
+                  nothing to say here until there is something to show. */}
+              {!noListings && (
+                <p className="bmast-agent">
+                  <span className="dot dot-open live" />
+                  <span className="bmast-agent-name">Research agent running daily</span>{' '}
+                  <span className="bmast-agent-note">{'· fresh contests added\u00A024/7'}</span>
+                </p>
+              )}
             </div>
           </div>
 

@@ -202,6 +202,31 @@ export default function ContestBrowser({ contests }: { contests: Contest[] }) {
   )
   const render = (list: Contest[]) => (view === 'list' ? rows(list) : grid(list))
 
+  /* No rows at all means the read failed, not that the directory is empty — see
+     the note in src/app/page.tsx. A search field, five filter tabs each counting
+     (0) and a sort control are furniture with nothing to act on, and the standard
+     empty state tells the reader to widen filters they never set. Drop the whole
+     toolbar and say what happened. */
+  if (contests.length === 0) {
+    return (
+      <div style={{ border: '1px solid #E7E4DC', borderRadius: 12, background: '#fff', padding: '48px 24px' }}>
+        <div style={{ maxWidth: 420, margin: '0 auto', textAlign: 'center' }}>
+          <p style={{
+            fontFamily: 'Space Grotesk, sans-serif', fontSize: 16, fontWeight: 700,
+            color: '#1B1916', letterSpacing: '-0.02em', marginBottom: 8,
+          }}>
+            The contest list didn’t load
+          </p>
+          <p style={{ fontSize: 14, color: '#7A7469', lineHeight: 1.7, marginBottom: 18 }}>
+            Nothing has been taken down — the page could not reach the contest data
+            just now.
+          </p>
+          <button onClick={() => window.location.reload()} className="btn">Reload</button>
+        </div>
+      </div>
+    )
+  }
+
   return (
     <div>
       {/* ── Controls ── */}
