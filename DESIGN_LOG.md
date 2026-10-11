@@ -45,9 +45,9 @@ the normal path, no colour, no type setting, no layout. Every other page is
 untouched.
 
 **Was** — a lie, told confidently, all morning. Supabase has been unreachable
-since about 11:30Z (still down at 14:40Z as this ships: the REST endpoint
+since about 11:30Z (still down at 18:30Z as this ships: the REST endpoint
 answers 522, then nothing). The homepage kept returning 200 and rendered this,
-captured live at 12:14Z and kept at `reports/design/2026-10-11-before.png`:
+captured live at 18:14Z and kept at `reports/design/2026-10-11-before.png`:
 
     ● 0 contests open · updated daily
 
@@ -119,7 +119,7 @@ desktop and three on a phone, nothing wraps badly, the Reload button clears
 (32 seeded rows, reverted before the commit) to prove the normal path is
 byte-for-byte the old page: green pill with its count, four figures, ticker,
 spotlight, closing-soonest list, full browse toolbar, counted FAQ answer — all
-back exactly as they were. Deployed and confirmed on the live site at 14:41Z,
+back exactly as they were. Deployed and confirmed on the live site at 18:28Z,
 still mid-outage, which is why the after shots show the new state rather than a
 normal page.
 
