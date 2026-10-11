@@ -36,6 +36,104 @@ describe the old dark theme; the reasoning still applies, the colours do not.)*
 
 ---
 
+## 2026-10-11 — When the data does not arrive, the page says so instead of printing zeros
+
+**Changed** — the homepage: `src/app/page.tsx` and `src/components/ContestBrowser.tsx`,
+which only the homepage uses. 108 lines added, 33 removed, most of it the two
+branches of one conditional plus the comments explaining it. No data, no copy on
+the normal path, no colour, no type setting, no layout. Every other page is
+untouched.
+
+**Was** — a lie, told confidently, all morning. Supabase has been unreachable
+since about 11:30Z (still down at 14:40Z as this ships: the REST endpoint
+answers 522, then nothing). The homepage kept returning 200 and rendered this,
+captured live at 12:14Z and kept at `reports/design/2026-10-11-before.png`:
+
+    ● 0 contests open · updated daily
+
+    0            0              $0K+         0
+    OPEN NOW     COMING SOON    IN PRIZES    ACTIVE
+
+    0 tracked and 0 open right now — festivals, studio challenges, grants…
+
+    0 active · verified against live sources daily
+    SHOW  All active (0)   Open (0)   Coming soon (0)
+
+    Nothing matches that yet
+    Try widening the filters. New ones are added most mornings.
+    [ Clear filters ]
+
+and, in the FAQ, "Yes — 0 of the 0 contests open right now have no entry fee."
+A visitor arriving in those hours read a directory that tracks nothing, states
+it four times in 28px Space Grotesk, and then offers to clear filters they never
+set. The one thing this site sells is that the list is real and current.
+
+The fault is that every figure on the page is derived from *this request's*
+read. `getAllContests()` returns `[]` on error, so a transport failure and an
+empty table are the same value, and the page renders the second meaning. But
+the table has never held fewer than 200 rows and nothing on this site deletes
+one (COMMON rule 4), so zero rows means the data did not arrive. The page can
+know that, and now does: `const noListings = allContests.length === 0`.
+
+**Looked at** — Letterboxd's Browse Films, caught mid-load: a grid of empty
+poster frames, and above them the line *"There are 1,259,742 films."* The claim
+the page makes about its own scale is a constant, not a count of what this
+request managed to fetch, so a slow or failed load leaves a page that is
+visibly incomplete rather than one asserting it has nothing. Are.na's homepage
+does the near-opposite and arrives in the same place: its one live number sits
+inside a sentence ("For the last 15 years and 63 days…"), where a missing value
+would be a missing clause, not a giant zero. Big standalone figures are the
+most brittle thing you can put on a page: they fail loudly and say something
+false. Ours stay — the four figures are good when there is data — but they now
+yield the slot entirely when there is none.
+
+**Now** — with no rows:
+
+- the badge is neutral rather than green-and-live: `Listings unavailable ·
+  reload to retry`, grey dot, paper fill, same pill geometry so nothing moves
+- the figures row is replaced, in its own ruled slot and at roughly its own
+  height, by two lines someone wrote: **The listings didn't load** / "Nothing
+  has been taken down — this page could not reach the contest data just now.
+  Reload in a minute and the full directory should be back." Same top and
+  bottom hairlines, same 44px below, so the hero keeps its rhythm
+- the subscribe card drops its trailing "N contests are open right now"; the
+  rest of its promise is still true and stays
+- "Every contest, one place" drops "0 tracked and 0 open right now" and keeps
+  the half that does not need a count
+- the browse masthead drops the count, and the live green "Research agent
+  running daily" line goes with it — a live dot next to a failure notice is the
+  page disagreeing with itself
+- `ContestBrowser` returns early: no search field, no sort, no five filter tabs
+  counting (0), no "widen your filters" advice about filters nobody set. One
+  box: **The contest list didn't load**, the same one-sentence explanation, and
+  a Reload button that actually reloads
+- the FAQ answers the free-entry question without a count
+- the ItemList JSON-LD is not emitted at all. `numberOfItems: 0` with an empty
+  list is the same lie in the form Google reads, and this is the week the
+  sitemap already fell from 381 URLs to 142
+
+**Checked** — `npm run build` exit 0. Rendered the no-data state at 1440px and
+390px: no horizontal overflow at either, the notice sets on two lines on
+desktop and three on a phone, nothing wraps badly, the Reload button clears
+40px. Then stubbed `getAllContests()` locally against `src/data/contests.ts`
+(32 seeded rows, reverted before the commit) to prove the normal path is
+byte-for-byte the old page: green pill with its count, four figures, ticker,
+spotlight, closing-soonest list, full browse toolbar, counted FAQ answer — all
+back exactly as they were. Deployed and confirmed on the live site at 14:41Z,
+still mid-outage, which is why the after shots show the new state rather than a
+normal page.
+
+What this does **not** fix: the page still returns 200 while it has nothing,
+`/contests/<id>` still returns 404 during the outage, and `sitemap.xml` still
+publishes 142 URLs instead of 381. Those are status codes, not design, and they
+are the first unchecked item in `OPTIMIZER_BACKLOG.md`.
+
+Before/after: `reports/design/2026-10-11-before.png` / `-after.png` (1440px),
+`-before-390.png` / `-after-390.png`, and `-before-browse.png` / `-after-browse.png`
+for the grid.
+
+---
+
 ## 2026-10-10 — The deadline, read as the calendar day it is
 
 **Changed** — a new `src/lib/deadline.ts` (88 lines, half of it the comment
