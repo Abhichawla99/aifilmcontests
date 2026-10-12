@@ -36,6 +36,105 @@ describe the old dark theme; the reasoning still applies, the colours do not.)*
 
 ---
 
+## 2026-10-12 — An error page with the site around it, instead of the framework's
+
+**Changed** — a new `src/app/error.tsx` (93 lines, a third of it the comment
+recording which routes were checked and why the ways out are not the 404's)
+and one section of `src/app/globals.css` (+31/-1: the `.err-*` rules, and the
+`.nf-*` section header widened to say it is now shared by two pages). No data,
+no copy on any working page, no colour, no type scale, no layout anywhere
+else. Nothing that renders normally was touched.
+
+**Was** — the framework's, not ours. The site had a designed `not-found.tsx`
+(09-13) but no `error.tsx`, so every thrown render fell through to Next's own
+fallback. Captured from a local production build against the live outage and
+kept at `reports/design/2026-10-12-before.png`, the entire page was:
+
+    Application error: a server-side exception has occurred
+    (see the server logs for more information).
+    Digest: 504280306
+
+Two lines of 16px system grey, centred in 900px of empty paper. No header, no
+nav, no footer, no logo, no indigo, neither of the two typefaces — nothing to
+say which site this was, and no way to anywhere. It is not a page anyone
+designed; it is what you get when nobody writes one.
+
+It stopped being a rare path and became the whole site this week. Supabase has
+been unreachable since 10-11 11:30Z (still 522 at this commit, about 31 hours),
+and `contests-db.ts` now throws on a transport failure instead of returning
+`[]` — the right fix, shipped this morning, and the direct successor to
+yesterday's entry. Yesterday the page lied in our typefaces; today it told the
+truth in the framework's. The homepage, every contest page, every topic, tool
+and guide page has been serving that grey paragraph to every visitor since.
+
+**Looked at** — Letterboxd's 404 and Mubi's, which fail in opposite directions
+from each other and both better than ours. Letterboxd keeps the entire product
+around the failure: full nav, full search, its own voice — and it still shows a
+film, captioned *"Still from David Fincher's Fight Club (1999)"*. A film site
+stays a film site on the page where it has nothing to show you. Mubi strips
+back to three lines, but the single way out is named by what it actually is —
+"Go to Now Showing", not "go home" — so the one link is the product's own
+vocabulary rather than a generic escape. Criterion's adds the third idea:
+below the apology it names the one concrete thing a blocked visitor is most
+likely to need, and asks them to include details when they write in.
+
+**Now** — the error page and the 404 are one object. `error.tsx` reuses the
+`.nf-*` setting whole — burnt-orange label, 44px Space Grotesk statement, the
+clapper drawing, ruled rows under hairlines — so the two read as siblings
+rather than two near-copies, in the same way `SiteFooter` (09-30) and
+`deadline.ts` (10-10) each replaced a set of them. The `.err-*` rules are only
+what this page adds.
+
+What it deliberately does *not* reuse is the 404's four ways out. Curled every
+route against the live outage first: `/`, `/creators`, `/feature`,
+`/cinematic-ads`, `/contests/*`, `/topics/*` and `/tools/*` all return 500,
+because all of them read the contest table. "Browse every contest" and
+"Closing soon" — two of the 404's four rows — would hand someone a second
+identical failure from the page that just apologised for the first. Only
+`/submit` and `/unsubscribe` render without touching the listings, so only
+those two are listed, under a caption that says why: *These do not read the
+database, so they still load.* Mubi's lesson, applied to a page whose
+circumstances change which links are honest.
+
+The primary control is Next's `reset()`, the one action that actually resolves
+the common case, with a note beside it that does not oversell: retrying
+re-reads the live data, and if it keeps failing the database is down and the
+listing pages will not load until it is back. No count is claimed anywhere on
+the page — the data that would support one is exactly what is missing — which
+is the same restraint as yesterday's `noListings` branch.
+
+Next's digest is printed at the foot, quietly, in tabular figures: *Reference
+3753496310*. It means nothing to most visitors, but it is the string that
+matches this render to its Vercel function log entry, so anyone reporting the
+problem can quote it. Criterion's "include as many details as you can
+provide", supplied rather than requested.
+
+**Checked** — 1440px and 390px, `✓ no horizontal overflow` at both. At 390px
+the drawing drops out (inherited from `.nf-*`), the button takes the full
+measure and its note moves below it rather than sharing a row it cannot fit.
+The 404 renders unchanged. Clicked Try again on a local production build: it
+re-attempts the server render, fails again against the still-down database, and
+re-renders this page cleanly — no blank, no loop, no stale frame. `npm run
+build` exit 0. Verified live after deploy with a different digest
+(`3748852537`) than the local one, so the capture is the real Vercel render.
+
+Note for the next run: this page cannot be verified with `curl | grep`. It is a
+client error boundary, so Next ships a near-empty shell with
+`id="__next_error__"` and the boundary paints on the client — none of its words
+appear in the SSR HTML. (Neither did the framework's old fallback, which is why
+the "before" looked blank to curl too.) Use `tools/shot.mjs`, which runs a real
+headless Chrome.
+
+One honest limit: the nav above this page still lists Browse Contests, Closing
+Soon, Tools and Categories, all of which 500 during an outage. Keeping the site
+chrome is the point of the page, and the 404 keeps the same nav, so it stays —
+but the caption's promise covers the ruled list, not the header.
+
+Before/after: `reports/design/2026-10-12-before.png` / `-after.png` (1440px)
+and `-before-390.png` / `-after-390.png`.
+
+---
+
 ## 2026-10-11 — When the data does not arrive, the page says so instead of printing zeros
 
 **Changed** — the homepage: `src/app/page.tsx` and `src/components/ContestBrowser.tsx`,
