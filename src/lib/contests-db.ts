@@ -32,6 +32,11 @@ function rowToContest(row: Record<string, unknown>): Contest {
 // Status sort order for display: open → upcoming → closed
 const STATUS_ORDER: Record<string, number> = { open: 0, upcoming: 1, closed: 2 }
 
+// A 0-row result is never an `error` here — Supabase only populates `error` on
+// a genuine transport/query failure (bad connection, DNS, 5xx, timeout). An
+// empty table is just `data: []`. So any `error` means the read itself failed
+// and must not be mistaken for "no contests": throw and let the page/route
+// fail loudly (a 5xx) instead of silently rendering as if nothing exists.
 export async function getAllContests(): Promise<Contest[]> {
   const { data, error } = await supabase
     .from('contests')
@@ -39,8 +44,7 @@ export async function getAllContests(): Promise<Contest[]> {
     .order('deadline', { ascending: true })
 
   if (error) {
-    console.error('[Supabase] Failed to fetch contests:', error.message)
-    return []
+    throw new Error(`Failed to fetch contests: ${error.message}`)
   }
 
   return (data as Record<string, unknown>[])
@@ -56,8 +60,7 @@ export async function getContestsByStatus(status: Contest['status']): Promise<Co
     .order('deadline', { ascending: true })
 
   if (error) {
-    console.error('[Supabase] Failed to fetch contests by status:', error.message)
-    return []
+    throw new Error(`Failed to fetch contests by status "${status}": ${error.message}`)
   }
 
   return (data as Record<string, unknown>[]).map(rowToContest)
@@ -89,7 +92,12 @@ export async function upsertContest(contest: Contest) {
   if (error) throw new Error(`Failed to upsert contest ${contest.id}: ${error.message}`)
 }
 
-// Fetch a single contest by ID (public read)
+// Fetch a single contest by ID (public read). `.single()` makes PostgREST
+// itself report "0 rows" as an error (code PGRST116) — that's the one error
+// shape that means the row genuinely isn't there, so it maps to `null` the
+// same as before. Any other error (network failure, DNS, 5xx, timeout — see
+// getAllContests above) is a failed read, not a missing contest, and must
+// throw instead of being mistaken for a 404.
 export async function getContestById(id: string): Promise<Contest | null> {
   const { data, error } = await supabase
     .from('contests')
@@ -97,7 +105,11 @@ export async function getContestById(id: string): Promise<Contest | null> {
     .eq('id', id)
     .single()
 
-  if (error || !data) return null
+  if (error) {
+    if (error.code === 'PGRST116') return null
+    throw new Error(`Failed to fetch contest "${id}": ${error.message}`)
+  }
+  if (!data) return null
   return rowToContest(data as Record<string, unknown>)
 }
 

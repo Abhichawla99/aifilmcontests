@@ -42,9 +42,21 @@ function toolKeys(tools?: string[]): string[] {
 }
 
 // ── generateStaticParams ────────────────────────────────────────────────────
+// Pre-rendering every id here is purely a build-time optimization — this
+// route is `force-dynamic`, so any id Next doesn't pre-render still renders
+// correctly on request. A failed read at build time (the DB having a bad
+// moment during a Vercel build, say) should therefore fall back to "pre-render
+// nothing" rather than fail the whole build: that's a different problem from
+// getAllContests()/getContestById() throwing on a *request-time* read, which
+// is what makes a real outage come back as a 5xx instead of a false 404.
 export async function generateStaticParams() {
-  const contests = await getAllContests()
-  return contests.map(c => ({ id: c.id }))
+  try {
+    const contests = await getAllContests()
+    return contests.map(c => ({ id: c.id }))
+  } catch (err) {
+    console.error('[generateStaticParams] Failed to list contests, pre-rendering none:', err)
+    return []
+  }
 }
 
 // ── Metadata ────────────────────────────────────────────────────────────────
