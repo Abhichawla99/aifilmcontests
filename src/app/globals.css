@@ -313,7 +313,10 @@ img, svg, video, canvas { max-width: 100%; }
   margin-bottom: 6px;
 }
 
-/* ── 404: site chrome kept, a plain statement, then ruled ways out ─────────── */
+/* ── 404 and error: site chrome kept, a plain statement, then ruled ways out ── */
+/* The .nf-* set is shared by not-found.tsx and error.tsx — the two pages are the
+   same object, so they are set once here rather than as two near-copies. The
+   .err-* rules below are only what the error page adds: retry control and digest. */
 .nf-wrap { padding-top: 64px; padding-bottom: 88px; }
 .nf-head { display: grid; grid-template-columns: minmax(0, 1fr) 200px; gap: 48px; align-items: end; }
 .nf-label {
@@ -349,6 +352,33 @@ img, svg, video, canvas { max-width: 100%; }
   /* On a phone the drawing would push the ways out below the fold. */
   .nf-drawing { display: none; }
   .nf-list { margin-top: 32px; }
+}
+
+.err-actions {
+  display: flex; align-items: baseline; gap: 18px;
+  margin-top: 30px; padding-top: 22px; border-top: 1px solid #E3DED3;
+}
+.err-actions-note { max-width: 46ch; font-size: 13.5px; line-height: 1.6; color: #6F6A61; }
+.err-caption {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 11px; font-weight: 600; color: #7A7469;
+  letter-spacing: 0.08em; text-transform: uppercase;
+  margin-top: 40px;
+}
+/* The caption already sits above this list, so the list keeps its own top rule but
+   does not need the 44px gap .nf-list uses when it follows body copy directly. */
+.err-caption + .nf-list { margin-top: 14px; }
+.err-digest {
+  margin-top: 26px; font-size: 12px; color: #A8A296;
+  font-variant-numeric: tabular-nums;
+}
+.err-digest span { font-family: 'Space Grotesk', sans-serif; color: #7A7469; letter-spacing: 0.02em; }
+@media (max-width: 640px) {
+  /* The button and its note cannot share a 390px row without the note going to 12 lines. */
+  .err-actions { flex-direction: column; align-items: stretch; gap: 12px; margin-top: 26px; }
+  .err-actions .btn { width: 100%; justify-content: center; }
+  .err-actions-note { max-width: none; }
+  .err-caption { margin-top: 32px; }
 }
 
 /* ── /submit ────────────────────────────────────────────────────────────────── */
