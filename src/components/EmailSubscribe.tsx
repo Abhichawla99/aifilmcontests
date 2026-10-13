@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import { useRouter } from 'next/navigation'
 import { isBlockedEmailDomain } from '@/lib/blocked-email-domains'
 
 const EMAIL_SYNTAX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
@@ -17,10 +18,11 @@ function SubscribeError({ message }: { message: string }) {
 }
 
 export default function EmailSubscribe({ compact = false, openCount }: { compact?: boolean; openCount?: number }) {
+  const router = useRouter()
   const [name,    setName]    = useState('')
   const [email,   setEmail]   = useState('')
   const [consent, setConsent] = useState(false)
-  const [status,  setStatus]  = useState<'idle' | 'loading' | 'success' | 'error'>('idle')
+  const [status,  setStatus]  = useState<'idle' | 'loading' | 'error'>('idle')
   const [message, setMessage] = useState('')
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -57,11 +59,9 @@ export default function EmailSubscribe({ compact = false, openCount }: { compact
       })
       const data = await res.json()
       if (res.ok) {
-        setStatus('success')
-        setMessage(data.message || "You're subscribed.")
-        setName('')
-        setEmail('')
-        setConsent(false)
+        // Send them somewhere with contests on it, not a thank-you line —
+        // see /subscribed, which shows the next open contests instead.
+        router.push('/subscribed')
       } else {
         setStatus('error')
         setMessage(data.error || 'Something went wrong.')
@@ -70,38 +70,6 @@ export default function EmailSubscribe({ compact = false, openCount }: { compact
       setStatus('error')
       setMessage('Network error. Please try again.')
     }
-  }
-
-  if (status === 'success') {
-    return (
-      <div className="sok" role="status">
-        <p className="sok-head">You&apos;re in. Check your inbox now.</p>
-        <p className="sok-sub">We just sent you a welcome email.</p>
-
-        {/* The instruction, set as a ruled note in the same grammar as
-            SubscribeError — the two outcomes of one form should be one object
-            in two colours, not a ruled note and a tinted panel. */}
-        <div className="sok-step">
-          <p className="sok-step-label">One quick step to guarantee delivery</p>
-          <p className="sok-step-do">
-            <strong>Reply to that email</strong> — even just &ldquo;got it&rdquo; works.
-          </p>
-          <p className="sok-step-why">
-            This tells your inbox we&apos;re legit and ensures every future contest alert lands in
-            your <strong>Primary</strong> inbox, not Promotions.
-            The more you reply to our emails, the better your delivery gets.
-          </p>
-        </div>
-
-        <button
-          type="button"
-          onClick={() => { setStatus('idle'); setMessage('') }}
-          className="sok-again"
-        >
-          Subscribe another email
-        </button>
-      </div>
-    )
   }
 
   if (compact) {
