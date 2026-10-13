@@ -3,7 +3,7 @@ import { Metadata } from 'next'
 import Link from 'next/link'
 import { getAllContests } from '@/lib/contests-db'
 import InnerLayout from '@/components/InnerLayout'
-import { ArticleHeader, ArticleGrid, H2, P, readingMinutes, splitStandfirst } from '@/components/ArticleLayout'
+import { ArticleHeader, ArticleGrid, H2, P, FaqList, readingMinutes, splitStandfirst } from '@/components/ArticleLayout'
 import EmailSubscribe from '@/components/EmailSubscribe'
 
 export const dynamic = 'force-dynamic'
@@ -862,23 +862,7 @@ export default async function TopicPage({ params }: { params: Promise<{ slug: st
             }}>
               Frequently Asked Questions
             </h2>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 18 }}>
-              {faqs.map((f, i) => (
-                <div key={i} style={{
-                  borderTop: '1px solid rgba(27,25,22,0.05)',
-                  paddingTop: 18,
-                }}>
-                  <h3 style={{
-                    fontFamily: 'Space Grotesk, sans-serif',
-                    fontSize: 16,
-                    fontWeight: 600,
-                    color: '#1B1916',
-                    marginBottom: 8,
-                  }}>{f.q}</h3>
-                  <p style={{ fontSize: 14, color: '#6F6A61', lineHeight: 1.7, maxWidth: 720 }}>{f.a}</p>
-                </div>
-              ))}
-            </div>
+            <FaqList items={faqs.map(f => ({ q: f.q, a: f.a }))} />
           </section>
         )}
 

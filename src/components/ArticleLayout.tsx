@@ -176,3 +176,25 @@ export function P({ children }: { children: React.ReactNode }) {
     </p>
   )
 }
+
+/** The question list that sits under "Frequently Asked Questions" on the guide,
+ *  topic and craft-guide pages. All three hand-rolled the same block and all
+ *  three set the answer below the page's body size in a lighter grey — caption
+ *  treatment on prose that is reading matter. This is the `.hfaq` ruled
+ *  definition list the homepage got on 09-29 and /creators on 09-26: question
+ *  in its own column, answer stepped across the rule in body ink, a hairline
+ *  between. Answers take a ReactNode so the craft guides can keep their inline
+ *  links; the strings themselves are untouched, which is what the FAQPage
+ *  JSON-LD on every one of these pages reads. */
+export function FaqList({ items }: { items: { q: string; a: React.ReactNode }[] }) {
+  return (
+    <dl className="hfaq">
+      {items.map((f, i) => (
+        <div className="hfaq-row" key={i}>
+          <dt className="hfaq-q">{f.q}</dt>
+          <dd className="hfaq-a">{f.a}</dd>
+        </div>
+      ))}
+    </dl>
+  )
+}

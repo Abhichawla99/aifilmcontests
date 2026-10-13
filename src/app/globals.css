@@ -1387,7 +1387,7 @@ img, svg, video, canvas { max-width: 100%; }
   .cr-why-row { grid-template-columns: 1fr; gap: 5px; }
 }
 
-/* ── Homepage "Frequently asked" ───────────────────────────────────────────
+/* ── "Frequently asked" — homepage, guides, topics, craft guides ─────────────
    Was a flush-left stack of Q/A pairs with no rules, the answers set 14px in
    #7A7469 — the palest body text anywhere on the site, on its most
    substantive prose, occupying the left 45% of a 1440px page with nothing
@@ -1397,7 +1397,13 @@ img, svg, video, canvas { max-width: 100%; }
    away from the question and sets it as full-weight reading matter rather
    than caption text, which is what an answer is. Siteinspire links every
    destination its prose names; ours named the Free to Enter page in plain
-   text, so it is a link now. */
+   text, so it is a link now.
+
+   2026-10-13 — the same list now carries the FAQ on /guide/[slug],
+   /topics/[slug] and the craft guides, which had each hand-rolled their own
+   copy of the old flush-left stack (answers 14px in #6F6A61, and #7A7469 on
+   /guide — the pale value this block was written to replace). One
+   `FaqList` in ArticleLayout renders all four. */
 .hfaq { border-top: 1px solid #E3DED3; max-width: 940px; }
 .hfaq-row {
   display: grid;

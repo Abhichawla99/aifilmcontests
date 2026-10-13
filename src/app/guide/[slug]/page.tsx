@@ -3,7 +3,7 @@ import { Metadata } from 'next'
 import Link from 'next/link'
 import { getAllContests } from '@/lib/contests-db'
 import InnerLayout from '@/components/InnerLayout'
-import { ArticleHeader, ArticleGrid, H2, P, readingMinutes, splitStandfirst } from '@/components/ArticleLayout'
+import { ArticleHeader, ArticleGrid, H2, P, FaqList, readingMinutes, splitStandfirst } from '@/components/ArticleLayout'
 import EmailSubscribe from '@/components/EmailSubscribe'
 
 export const dynamic = 'force-dynamic'
@@ -1533,24 +1533,7 @@ export default async function GuidePage({ params }: { params: Promise<{ slug: st
             }}>
               Frequently Asked Questions
             </h2>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
-              {guide.faqs.map((f, i) => (
-                <div key={i}>
-                  <h3 style={{
-                    fontFamily: 'Space Grotesk, sans-serif',
-                    fontSize: 16,
-                    fontWeight: 600,
-                    color: '#26231E',
-                    marginBottom: 8,
-                  }}>
-                    {f.q}
-                  </h3>
-                  <p style={{ fontSize: 14, color: '#7A7469', lineHeight: 1.7 }}>
-                    {f.a}
-                  </p>
-                </div>
-              ))}
-            </div>
+            <FaqList items={guide.faqs.map(f => ({ q: f.q, a: f.a }))} />
           </section>
         )}
 
