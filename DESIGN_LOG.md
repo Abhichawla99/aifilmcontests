@@ -36,6 +36,93 @@ describe the old dark theme; the reasoning still applies, the colours do not.)*
 
 ---
 
+## 2026-10-13 — The FAQ on guides, topics and craft guides, as the ruled list the homepage already uses
+
+**Changed** — one new `FaqList` in `src/components/ArticleLayout.tsx` (22 lines,
+half of them its comment), the three places that had each hand-rolled the same
+block (`src/components/CraftGuidePage.tsx`, `src/app/guide/[slug]/page.tsx`,
+`src/app/topics/[slug]/page.tsx`), and the `.hfaq` comment in `globals.css`,
+widened to say the list now serves four page types instead of one. 36 lines
+added, 52 removed. No answer, no question, no section heading, no colour or
+rule outside the FAQ block itself.
+
+**Was** — three copies of the same mistake, on 65 pages: 42 topic pages, 13
+guide pages and all 10 craft guides carry an FAQ. Each one a flush-left stack
+of question-then-paragraph with the question in Space Grotesk 16px and the
+answer underneath at 14px — `#6F6A61` on topics and the craft guides, `#7A7469`
+on `/guide`. The body copy these same pages are built from is 17px at 1.75 in
+`#3E3A33`. So the answers sat three points below the page's own reading size
+and several steps lighter than its ink, on pages whose entire purpose is
+reading matter.
+
+`#7A7469` is not a coincidence. It is the exact value the homepage FAQ was
+rewritten on 09-29 to get rid of, described in that entry as the palest body
+text anywhere on the site. The homepage lost it that day; `/guide` kept it for
+a fortnight.
+
+The guide copy also set no measure at all. Its answers ran the full `max-w-5xl`
+container — 984px at 14px Inter, about 125 characters a line, where the
+paragraphs 40 pixels above it are capped at 700px. The topics and craft-guide
+copies capped at 720px, which is closer but still wider than anything else on
+those pages.
+
+**Looked at** — Are.na's About page, which settles the question by refusing to
+make a distinction. Sampled live: every section heading on it — "Pricing FAQs",
+"Education", "Team", "Business model" — and every paragraph of prose under them
+are the same 16px/23.2px in `rgb(51, 51, 51)`. The seven FAQ questions, set as
+disclosure buttons, are that size and that colour too; only their weight
+changes, 700 against the body's 400. Hierarchy is carried by weight and
+position, and by nothing else. One thing on the page is smaller: the 12.5px
+line under each "How it works" illustration. A caption under a picture earns a
+smaller size. A question and its answer do not, because both of them are things
+you read. Ours had it backwards, and had it backwards on the pages that are
+nothing but reading.
+
+**Now** — the `.hfaq` ruled definition list from 09-29, which `/creators` had
+first on 09-26. Question in its own 300px column, answer stepped across a 32px
+gap in body ink `#3E3A33` at 14.5/1.75 and capped at 56ch, a hairline under
+each row and one over the first, stacking to one column below 760px. Four page
+types now render it from one component, so the next thing this list learns is
+learned once.
+
+Answers take a `ReactNode` rather than a string, which is what lets the craft
+guides keep the inline links their markdown-lite body syntax produces; the
+other two pass their strings straight through.
+
+The questions were `<h3>` and are now `<dt>`, with the answer in a `<dd>`. They
+were never in the contents rail — `ArticleGrid` lists section headings only —
+so nothing lost a way to be reached, and a list of questions and answers is
+what a description list is for.
+
+**What did not change** — not one word. No answer string, no question, no
+section heading, neither its text nor its type: the craft guides and `/guide`
+keep their 22px "Frequently Asked Questions" and topics keeps its 13px
+uppercase label, because the fault was in the answers, not above them. The
+`FAQPage` JSON-LD on all 65 pages reads those same strings, and Google's
+guidance asks that the marked-up answer and the visible answer match. Checked
+on the live page after the deploy: 5 rows rendered, 5 questions in the
+JSON-LD, and question and answer compare character-for-character identical.
+
+**Verified** — `npm run build` exits 0. Shot against a local `next start` and
+then against the live page, at 1440px and at 390px; `✓ no horizontal overflow`
+clean at 390 on both.
+
+One real limit, stated plainly: `/guide/[slug]` and `/topics/[slug]` both call
+`getAllContests()`, and Supabase has been unreachable since 10-11 11:30Z — 522
+again at this run, about 50 hours — so those 55 pages return 500 and could not
+be photographed before or after. The 10 craft guides read no contest data,
+serve 200 live throughout the outage, and are where every shot here comes
+from. They render the same `FaqList`, and they pass it the harder argument: a
+React element per answer, where the other two pass a plain string. The build
+type-checked all three call sites.
+
+**Before / after** — `/guide/look-bible-for-ai-films` at the FAQ.
+Desktop: `reports/design/2026-10-13-before.png` and `2026-10-13-after.png`
+(the after from the live page, `2026-10-13-after-local.png` from the local
+build). 390px: `2026-10-13-before-390.png` and `2026-10-13-after-390.png`.
+
+---
+
 ## 2026-10-12 — An error page with the site around it, instead of the framework's
 
 **Changed** — a new `src/app/error.tsx` (93 lines, a third of it the comment
