@@ -23,13 +23,24 @@ export default function SubmitPage() {
         </p>
         <SubmitForm />
 
+        {/* Two different offers were sharing one unlabelled block of fine print: the
+            only human contact route on the page, and the paid placement. Each now
+            carries the caption idiom the rest of the site uses, and sits in body ink
+            at a reading size — an address a stranger is meant to write to should not
+            be the palest thing on the page. Captions reuse the footer's own words. */}
         <aside className="sbp-aside">
-          <p>
-            Prefer a person? Email Abhi at <a href="mailto:abhixchawla@gmail.com">abhixchawla@gmail.com</a> or message him on <a href="https://www.linkedin.com/in/abhixchawla" target="_blank" rel="noopener noreferrer">LinkedIn</a>.
-          </p>
-          <p>
-            Running the contest and want more entries? <Link href="/feature">Feature it</Link>: pinned on the homepage, a Featured badge, and a slot in the next email to every subscriber.
-          </p>
+          <div className="sbp-aside-block">
+            <p className="sbp-aside-caption">Contact</p>
+            <p>
+              Prefer a person? Email Abhi at <a href="mailto:abhixchawla@gmail.com">abhixchawla@gmail.com</a> or message him on <a href="https://www.linkedin.com/in/abhixchawla" target="_blank" rel="noopener noreferrer">LinkedIn</a>.
+            </p>
+          </div>
+          <div className="sbp-aside-block">
+            <p className="sbp-aside-caption">Featured listings</p>
+            <p>
+              Running the contest and want more entries? <Link href="/feature">Feature it</Link>: pinned on the homepage, a Featured badge, and a slot in the next email to every subscriber.
+            </p>
+          </div>
         </aside>
       </div>
     </InnerLayout>

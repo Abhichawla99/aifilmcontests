@@ -404,13 +404,31 @@ img, svg, video, canvas { max-width: 100%; }
 }
 .sbp-body { margin: 0 0 32px; font-size: 16px; line-height: 1.65; color: #3E3A33; max-width: 54ch; }
 .sbp-body a { color: #4338CA; }
+/* Was one 13.5px #6F6A61 block holding two unrelated paragraphs six pixels apart:
+   the page's only human contact route, and the paid placement. #6F6A61 at 13.5px is
+   two and a half points under the standfirst directly above it and several steps
+   lighter than its ink — the same gap 10-01 closed on /feature's standfirst and
+   10-13 closed on the FAQ answers. An email address a stranger is being invited to
+   write to was the palest text on the page. Now: two captioned blocks in the small-caps
+   idiom .err-caption established on 10-12, text in body ink at 15px, a hairline between
+   them so the paid option is not read as fine print attached to the contact line.
+   Captions are the footer's own words, not new copy. */
 .sbp-aside {
   margin-top: 40px; padding-top: 22px; border-top: 1px solid #ECE9E2;
-  font-size: 13.5px; line-height: 1.65; color: #6F6A61;
 }
-.sbp-aside p { margin: 0 0 6px; }
-.sbp-aside p:last-child { margin-bottom: 0; }
+.sbp-aside-block + .sbp-aside-block {
+  margin-top: 18px; padding-top: 18px; border-top: 1px solid #ECE9E2;
+}
+.sbp-aside .sbp-aside-caption {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 11px; font-weight: 600; color: #7A7469;
+  letter-spacing: 0.08em; text-transform: uppercase;
+  margin: 0 0 6px;
+}
+.sbp-aside-block > p:not(.sbp-aside-caption) { margin: 0; font-size: 15px; line-height: 1.65; color: #3E3A33; max-width: 54ch; }
 .sbp-aside a { color: #4338CA; }
+.sbp-aside a:hover { color: #3730A3; }
+.sbp-aside a:focus-visible { outline: 2px solid #4F46E5; outline-offset: 3px; border-radius: 2px; }
 @media (max-width: 640px) {
   .sbp-wrap { padding-top: 36px; padding-bottom: 56px; }
 }
