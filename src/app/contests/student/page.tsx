@@ -5,13 +5,9 @@ import EmailSubscribe from '@/components/EmailSubscribe'
 import ContestCard from '@/components/ContestCard'
 import { ArticleHeader } from '@/components/ArticleLayout'
 import { getAllContests } from '@/lib/contests-db'
+import { isForStudents } from '@/lib/contest-filters'
 
 const BASE = 'https://aifilmcontests.com'
-
-function isForStudents(eligibility: string): boolean {
-  if (!eligibility) return false
-  return /student/i.test(eligibility)
-}
 
 export const dynamic = 'force-dynamic'
 

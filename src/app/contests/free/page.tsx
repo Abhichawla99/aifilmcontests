@@ -5,15 +5,9 @@ import EmailSubscribe from '@/components/EmailSubscribe'
 import ContestCard from '@/components/ContestCard'
 import { ArticleHeader } from '@/components/ArticleLayout'
 import { getAllContests } from '@/lib/contests-db'
+import { isFree } from '@/lib/contest-filters'
 
 const BASE = 'https://aifilmcontests.com'
-const FREE_ENTRY_TERMS = ['free', 'no fee', 'no entry fee', '$0', 'none']
-
-function isFree(entryFee: string): boolean {
-  if (!entryFee) return true
-  const lower = entryFee.toLowerCase()
-  return FREE_ENTRY_TERMS.some(t => lower.includes(t))
-}
 
 export const dynamic = 'force-dynamic'
 

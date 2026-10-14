@@ -5,15 +5,9 @@ import EmailSubscribe from '@/components/EmailSubscribe'
 import ContestCard from '@/components/ContestCard'
 import { ArticleHeader } from '@/components/ArticleLayout'
 import { getAllContests } from '@/lib/contests-db'
+import { isRecent } from '@/lib/contest-filters'
 
 const BASE = 'https://aifilmcontests.com'
-const WINDOW_DAYS = 14
-
-function isRecent(createdAt: string | undefined): boolean {
-  if (!createdAt) return false
-  const cutoff = Date.now() - WINDOW_DAYS * 24 * 60 * 60 * 1000
-  return new Date(createdAt).getTime() >= cutoff
-}
 
 export const dynamic = 'force-dynamic'
 

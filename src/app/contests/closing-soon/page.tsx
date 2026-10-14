@@ -5,9 +5,9 @@ import EmailSubscribe from '@/components/EmailSubscribe'
 import ContestCard from '@/components/ContestCard'
 import { ArticleHeader } from '@/components/ArticleLayout'
 import { getAllContests } from '@/lib/contests-db'
+import { CLOSING_SOON_WINDOW_DAYS as WINDOW_DAYS } from '@/lib/contest-filters'
 
 const BASE = 'https://aifilmcontests.com'
-const WINDOW_DAYS = 14
 
 export const dynamic = 'force-dynamic'
 

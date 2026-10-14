@@ -5,14 +5,9 @@ import EmailSubscribe from '@/components/EmailSubscribe'
 import ContestCard from '@/components/ContestCard'
 import { ArticleHeader } from '@/components/ArticleLayout'
 import { getAllContests } from '@/lib/contests-db'
+import { hasCashPrize } from '@/lib/contest-filters'
 
 const BASE = 'https://aifilmcontests.com'
-const CURRENCY_PATTERN = /[$€£¥]\s?\d|\d\s?(usd|cad|eur|gbp|aud)/i
-
-function hasCashPrize(prize: string): boolean {
-  if (!prize) return false
-  return CURRENCY_PATTERN.test(prize)
-}
 
 export const dynamic = 'force-dynamic'
 
