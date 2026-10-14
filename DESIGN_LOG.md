@@ -36,6 +36,71 @@ describe the old dark theme; the reasoning still applies, the colours do not.)*
 
 ---
 
+## 2026-10-14 — /submit's closing aside, as two captioned blocks in body ink
+
+**Changed** — the `<aside>` on `src/app/submit/page.tsx` and the `.sbp-aside`
+section of `globals.css`. 38 lines added, 9 removed, 14 of the additions being
+the two comments. No copy, no link target, no data, no colour or type scale
+anywhere else. The form itself, which this block sits under, was not touched.
+
+**Was** — one undifferentiated block of fine print carrying two unrelated
+things. `.sbp-aside` set 13.5px `#6F6A61` on the whole thing and spaced its two
+paragraphs 6px apart, which is less than the 1.65 line-height inside either of
+them — so they read as one paragraph that happened to break. The two things are
+not one thing. The first is the only human contact route on the page: Abhi's
+name, his email address and his LinkedIn. The second is the paid placement,
+`/feature`, and what a festival gets for the money.
+
+The sizing is the same gap this log has now closed twice. The standfirst 500
+pixels above is 16px `#3E3A33`. The aside ran two and a half points under it
+and several steps lighter, on the one page where a stranger decides whether a
+real person is behind this directory — so the address they are being invited to
+write to was the palest text on the page. 10-01 closed exactly this on
+`/feature`'s standfirst, with the reasoning that a line carrying the subscriber
+count "is body ink at the body measure, like every other standfirst on the
+site". 10-13 closed it on the FAQ answers across 65 pages. `/submit`'s aside
+was the same mistake in the same stylesheet, eleven lines further down.
+
+It also meant the paid option looked like a disclaimer. A festival organizer
+who has just filled in the form and wants more entries met the offer set in the
+same grey, at the same size, as the sentence about verification above it.
+
+**Looked at** — It's Nice That's contact page, which answers the question
+directly. Every person on it gets a name, a role in small caps, a sentence of
+what they do, and their email address — and the address is set at the page's own
+reading size, in the page's own ink, not shrunk into fine print. The page
+opens "please email the relevant person below, or call the studio with anything
+urgent," and then makes that easy to act on by captioning who each person is.
+Also Criterion's list view, which carries 1,891 films with no boxes at all —
+spine number, title, director, country, year as a real table — and Dense
+Discovery's advertise page, which sets its paid offer as the main matter of a
+page rather than a footnote to something else.
+
+The adaptation is the captioning, not the layout. We have two things here, not
+eight, and they already had their words.
+
+**Now** — two `.sbp-aside-block`s, each a caption and its paragraph, with a
+hairline between them. Captions are 11px Space Grotesk 600 `#7A7469` at 0.08em,
+uppercase: the idiom `.err-caption` established on 10-12 and the one the footer
+directly below already uses for `BROWSE`, `MORE` and `CONTACT`. The caption
+words are `Contact` and `Featured listings` — both lifted from that footer, so
+nothing new was written. Body is 15px `#3E3A33` at 1.65 on a 54ch measure, one
+step under the standfirst because the block is genuinely secondary to the form,
+but in real ink at a real reading size. The aside's links also pick up the
+`:hover` and the 2px indigo `:focus-visible` ring that the FAQ links have had
+since 10-13 and this block never had.
+
+**Checked** — production build, exit 0. 1440px and 390px, both clean on the
+overflow line. The two captions sit 400px above the footer's own `CONTACT`
+column, which repeats the same address; that echo is deliberate and was already
+there, and the in-context block earns its place by inviting the contact rather
+than just listing it.
+
+Before and after: `reports/design/2026-10-14-before.png`,
+`2026-10-14-before-390.png`, `2026-10-14-after.png`, `2026-10-14-after-390.png`.
+
+---
+
 ## 2026-10-13 — The FAQ on guides, topics and craft guides, as the ruled list the homepage already uses
 
 **Changed** — one new `FaqList` in `src/components/ArticleLayout.tsx` (22 lines,
