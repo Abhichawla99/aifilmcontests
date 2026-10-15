@@ -199,6 +199,7 @@ const TOPICS = [
   'waiff-world-ai-film-festival-2027',
   'ai-horror-film-contests-2026',
   'pixlight-2026-pixverse-ai-film-contest',
+  'ai-film-contests-closing-november-2026',
   'ai-film-contests-closing-october-2026',
   'ai-film-festivals-2027',
   'ai-film-festivals-in-latin-america-2026',
