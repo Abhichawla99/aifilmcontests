@@ -36,6 +36,65 @@ describe the old dark theme; the reasoning still applies, the colours do not.)*
 
 ---
 
+## 2026-10-15 — An article section heading that reads as one on a phone
+
+**Changed** — one declaration in `H2` in `src/components/ArticleLayout.tsx`:
+`fontSize` from `clamp(20px, 2.2vw, 25px)` to `clamp(23px, 0.27vw + 21.9px, 25px)`.
+16 lines added, 2 removed, 14 of the additions being the comment. No margins, no
+colour, no weight, no copy, no data. Desktop renders byte-for-byte identical —
+the 1440px before and after screenshots have the same SHA-256.
+
+**Was** — the `2.2vw` middle term only does anything between 909px and 1136px.
+Below 909px the heading was pinned to the 20px floor, which is every phone and
+every portrait tablet. Against 17px body copy that is a step of 1.18. The same
+heading at 1440px is 25px, a step of 1.47, and reads correctly — so the floor
+was the broken end of a scale whose top was fine.
+
+Measured at 375px, the article's whole scale came out lopsided: 26px title, 20px
+section, 17px body. The smallest step in the document was sitting at the join a
+reader uses most — the one that says a new section has started — while the
+largest sat between a title and a standfirst that are already separated by a
+tinted band, a category pill and 500 pixels of page.
+
+It matters more here than the numbers suggest, because the contents rail is
+hidden under 1000px, deliberately and for good reason (09-08: on a phone it
+would just be a second copy of the headings before the article). The consequence
+is that on a phone the headings themselves are the only map through a
+seven-minute guide, and they were doing that job with three points of size.
+
+**Now** — 23px at phone width, a 1.35 step, ramping to the same 25px at the same
+width as before. A 768px tablet reads 23.97px, which is interpolation it never
+had: the old clamp gave a portrait iPad the same heading as a phone. Confirmed at
+375, 390, 768 and 1440px, no horizontal overflow at any of them. The longest
+single word in the heading corpus is "Gyeongsangbuk-do" at 16 characters, which
+still sets on one line in a 390px column.
+
+**Looked at** — Nielsen Norman Group's article pages, which hold 30px headings
+over 20px body — a 1.5 step — and do not shrink the heading at 375px at all;
+the heading stays 30px while the measure narrows. That is the opposite instinct
+to a clamp whose floor is its smallest value: they treat the step as the thing to
+preserve and let the column do the adapting. Also Criterion's Current essays,
+which run 32px headings over 18px body at weight 400 — hierarchy carried by size
+alone, with no extra weight at all, which is the reading our own Principles
+already call for.
+
+The adaptation is only the ratio. We keep Space Grotesk at 700 because that
+contrast against Inter body is the site's voice, and we keep the ramp because the
+range is two points wide and a step function would show its seam.
+
+**Not changed, deliberately** — the 46/14 margins. Measured before touching
+anything: 46px above plus the preceding paragraph's 18px is 64px of air above the
+heading against 14px below it, which already binds the heading to the body it
+introduces rather than floating it between two sections. That part was right.
+
+**Shared by** every guide, topic, tool, vs, prize, location, category, creator and
+contest-list page — 15 route families through one component.
+
+**Before/after** — `reports/design/2026-10-15-before.png` and
+`2026-10-15-after.png` (390px, scrolled to the "Use style references with care"
+section of `/guide/look-bible-for-ai-films`), plus `-before-desktop.png` and
+`-after-desktop.png` at 1440px, which are identical on purpose.
+
 ## 2026-10-14 — /submit's closing aside, as two captioned blocks in body ink
 
 **Changed** — the `<aside>` on `src/app/submit/page.tsx` and the `.sbp-aside`
