@@ -151,14 +151,28 @@ export function ArticleGrid({ children, headings }: { children: React.ReactNode;
   )
 }
 
-/** One section heading. Anchored, so the contents rail can reach it. */
+/** One section heading. Anchored, so the contents rail can reach it.
+ *
+ *  The size ramp is `0.27vw + 21.9px` rather than a bare `vw` term because the
+ *  range it has to cover is only two points wide. `clamp(20px, 2.2vw, 25px)`
+ *  held 25px from 1136px up and 20px from 909px DOWN — which is every phone and
+ *  every portrait tablet — so the step that tells a reader a new section has
+ *  started was 20px against 17px body copy, a ratio of 1.18. Desktop's 25px is
+ *  a 1.47 step and reads correctly; the floor was the broken end, and it left
+ *  the mobile scale lopsided: 26px title, 20px section, 17px body, with the
+ *  smallest step in the document sitting at the join a reader actually uses.
+ *  The floor is now 23px (1.35), and the ramp reaches the same 25px at the same
+ *  width, so desktop is unchanged to the pixel and a portrait tablet gets the
+ *  interpolation it never had. Nothing else about the heading moves: the 46/14
+ *  margins already bind it to the body below rather than floating it between
+ *  two sections. */
 export function H2({ children }: { children: string }) {
   return (
     <h2
       id={headingId(children)}
       style={{
         fontFamily: 'Space Grotesk, sans-serif',
-        fontSize: 'clamp(20px, 2.2vw, 25px)', fontWeight: 700,
+        fontSize: 'clamp(23px, 0.27vw + 21.9px, 25px)', fontWeight: 700,
         letterSpacing: '-0.02em', color: '#1B1916',
         marginTop: 46, marginBottom: 14, scrollMarginTop: 90, maxWidth: MEASURE,
       }}
