@@ -82,7 +82,18 @@ export default function EmailSubscribe({ compact = false, openCount }: { compact
           </p>
         )}
         <form onSubmit={handleSubmit} className="flex flex-col gap-2">
-          <div className="flex gap-2">
+          {/* The button keeps its 100px and the field takes whatever is left, which
+              on a phone is not enough: measured on the live site at 390px the field
+              is 200px wide, 174px of that text area, and a 21-character address sets
+              at 176px — you cannot read back what you typed before you send it.
+              What decides this is the row's width, not the viewport's, because the
+              same form sits in a 451px rail on desktop. So it wraps on a flex basis
+              rather than a media query: the field asks for 18rem, and any row that
+              cannot seat 18rem + gap + button drops the button onto its own line and
+              lets the field take the whole width. That is every phone placement
+              (308px on a contest page, 335px on a hub, 350px in a guide) and no
+              desktop one (451px and up still seat the pair, unchanged). */}
+          <div className="flex flex-wrap gap-2">
             <input
               type="email"
               value={email}
@@ -90,10 +101,15 @@ export default function EmailSubscribe({ compact = false, openCount }: { compact
               placeholder="your@email.com"
               aria-label="Email address"
               required
-              className="input flex-1"
-              style={{ padding: '9px 12px', fontSize: '13px' }}
+              className="input"
+              style={{ padding: '9px 12px', fontSize: '13px', flex: '1 1 18rem', minWidth: 0 }}
             />
-            <button type="submit" disabled={status === 'loading'} className="btn">
+            <button
+              type="submit"
+              disabled={status === 'loading'}
+              className="btn"
+              style={{ flex: '0 0 auto' }}
+            >
               {status === 'loading' ? '...' : 'Get Alerts'}
             </button>
           </div>
