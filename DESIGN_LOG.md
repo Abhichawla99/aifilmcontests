@@ -36,6 +36,59 @@ describe the old dark theme; the reasoning still applies, the colours do not.)*
 
 ---
 
+## 2026-10-16 — On a phone, the subscribe field gets the whole row
+
+**Changed** — two style declarations and a wrap in `EmailSubscribe.tsx`'s compact
+form: the field goes from `className="input flex-1"` to `flex: '1 1 18rem'` with
+`minWidth: 0`, the button gets `flex: '0 0 auto'`, and the row that holds them goes
+from `flex` to `flex flex-wrap`. 20 lines added, 4 removed, 11 of the additions
+being the comment. No colour, no type, no copy, no data, no new breakpoint.
+
+**Was** — the row handed the button its 100px and gave the field whatever was left.
+Measured on the live site at 390px, on a contest page that is a 200px field with
+174px of text area. A 21-character address — `abhixchawla@gmail.com`, the length of
+the address in our own footer — sets at 176px in that 13px face. It did not fit.
+The field scrolled as you typed and you could not read back what you had entered
+before pressing the button, on the one action the whole site is built to get.
+
+The reach is the part that matters. This compact form is on 18 page types — every
+contest page, every guide, topic, tool, vs, prize, location, category and creator
+page, and all six browse hubs — so it is the most widely deployed interactive
+element we have, and it was at its worst exactly where most people meet it.
+
+Three placements, three different row widths: 308px on a contest page, 335px on a
+hub, 350px in a guide. A viewport media query would have been the wrong instrument
+for all three, because the same form also sits in a 451px rail on a 1440px desktop,
+where the pair side by side is correct and a phone-shaped rule would have broken it.
+
+**Now** — the field asks for an 18rem basis and the row wraps, so the width that
+decides the layout is the row's own, not the window's. Any row that cannot seat
+18rem + gap + button drops the button onto its own line, flush left with the consent
+checkbox below it, and lets the field take the full width. The three phone
+placements show 33, 36 and 38 characters. The contest page, the narrowest and the
+one measured end to end, went from 20 characters to 33; typed into
+the live page, a 21- and a 28-character address are both fully visible at the
+narrowest of them, where 21 previously was not. Measured on the live site after the
+deploy, the 451px, 728px and 984px placements come back at 343/100, 620/100 and
+876/100 — the same numbers as before the change, so desktop is untouched. No
+horizontal overflow at 375, 390, 768 or 1440px.
+
+The 876px field on a 1440px guide page is its own problem — a text input eleven
+times longer than the longest thing anyone will type into it — but capping it means
+deciding what the button does with the slack, which is a different day's change.
+
+**Looked at** — It's Nice That's newsletter sign-up, measured at 390px: a 330px
+field at 85% of the viewport with the submit button on its own line beneath it, and
+notably *not* stretched to full width — 200px, sized to its label. That last detail
+settled the question here. My first pass stretched the button to the full width of
+the row, which made the strongest object on the block the control you press last.
+Leaving it at its natural 100px keeps the field the thing your eye lands on, which
+is the thing you actually have to fill in.
+
+**Before/after** — `reports/design/2026-10-16-before.png`,
+`reports/design/2026-10-16-after.png` (contest page at 390px),
+`reports/design/2026-10-16-after-desktop.png` (1440px, unchanged).
+
 ## 2026-10-15 — An article section heading that reads as one on a phone
 
 **Changed** — one declaration in `H2` in `src/components/ArticleLayout.tsx`:
