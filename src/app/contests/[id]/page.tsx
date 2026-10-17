@@ -265,13 +265,25 @@ export default async function ContestPage({ params }: { params: Promise<{ id: st
                 <h1 style={{
                   fontFamily: 'Space Grotesk, sans-serif',
                   fontSize: 'clamp(24px, 4vw, 40px)', fontWeight: 700,
-                  lineHeight: 1.1, letterSpacing: '-0.025em', color: '#1B1916', marginBottom: 8,
+                  lineHeight: 1.1, letterSpacing: '-0.025em', color: '#1B1916', marginBottom: 10,
                 }}>
                   {contest.name}
                 </h1>
+                {/* The organizer credit, set the way the organizer writes it.
+                    Caps-and-tracking is this site's label idiom — SUBMISSION
+                    DEADLINE, ENTRY FEE, PRIZE — and this line is a value, not a
+                    label. It is also the only place a person's name appears on
+                    the page: 96 of 243 organizers run past 24 characters, and
+                    many of them are sentences ("AI Filmfest Athens — Festival
+                    Director Christina Duxa"), partner lists, or names with
+                    casing of their own ("I'Mpossible", "AI FILM JAPAN inc.")
+                    that uppercasing flattens. Sentence case at 15px, weight
+                    500, keeps it quieter than the h1 above it while making it
+                    readable at the length it actually arrives in. */}
                 <p style={{
-                  fontSize: 12, color: tint.text, fontWeight: 600,
-                  textTransform: 'uppercase', letterSpacing: '0.07em',
+                  fontFamily: 'Space Grotesk, sans-serif',
+                  fontSize: 15, color: tint.text, fontWeight: 500,
+                  lineHeight: 1.45, letterSpacing: '-0.005em',
                 }}>
                   {contest.organizer}
                 </p>
