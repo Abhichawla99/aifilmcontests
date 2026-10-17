@@ -55,6 +55,7 @@ const RECORDED_DATES = {
   home:          new Date('2026-10-11T12:25:34-06:00'), // src/app/page.tsx
   cinematicAds:  new Date('2026-09-30T12:24:59-06:00'), // src/app/cinematic-ads/page.tsx
   creatorsIndex: new Date('2026-10-04T07:12:15-06:00'), // src/app/creators/page.tsx
+  toolsIndex:    new Date('2026-10-17T07:00:00-06:00'), // src/app/tools/page.tsx
   vsPages:       new Date('2026-10-04T07:12:15-06:00'), // src/app/vs/[slug]/page.tsx
 }
 
@@ -77,6 +78,12 @@ const STATIC_PAGES: MetadataRoute.Sitemap = [
   {
     url: `${BASE}/creators`,
     lastModified: RECORDED_DATES.creatorsIndex,
+    changeFrequency: 'weekly',
+    priority: 0.75,
+  },
+  {
+    url: `${BASE}/tools`,
+    lastModified: RECORDED_DATES.toolsIndex,
     changeFrequency: 'weekly',
     priority: 0.75,
   },

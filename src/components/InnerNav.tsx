@@ -5,11 +5,11 @@ import { usePathname } from 'next/navigation'
 import NavRow from './NavRow'
 
 // Each link names the path prefix it owns, so /tools/pika still marks "Tools"
-// even though the link itself points at /tools/runway.
+// even though the link itself points at /tools.
 const LINKS: [label: string, href: string, owns: string | null][] = [
   ['Browse Contests', '/', null],
   ['Closing Soon', '/contests/closing-soon', '/contests/closing-soon'],
-  ['Tools', '/tools/runway', '/tools'],
+  ['Tools', '/tools', '/tools'],
   ['Categories', '/categories/short-film', '/categories'],
   ['Cinematic Ads', '/cinematic-ads', '/cinematic-ads'],
   ['Creators', '/creators', '/creators'],
