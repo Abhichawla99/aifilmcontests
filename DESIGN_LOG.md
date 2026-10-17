@@ -36,6 +36,68 @@ describe the old dark theme; the reasoning still applies, the colours do not.)*
 
 ---
 
+## 2026-10-17 — The organizer credit, set the way the organizer writes it
+
+**Changed** — the `<p>` under the `<h1>` in the contest page's header band
+(`src/app/contests/[id]/page.tsx`): `fontSize` 12 to 15, `fontWeight` 600 to 500,
+`textTransform: 'uppercase'` and `letterSpacing: '0.07em'` dropped for
+`letterSpacing: '-0.005em'` and `lineHeight: 1.45`, and `fontFamily: 'Space
+Grotesk'` stated instead of inheriting Inter. The h1's `marginBottom` goes 8 to
+10. 15 lines added, 3 removed, 11 of the additions being the comment. No colour,
+no copy, no data, no layout, no new rule — it keeps the category's own ink on the
+category's own tint.
+
+**Was** — caps, 12px, weight 600, 0.07em tracking. That is exactly this page's
+label idiom: SUBMISSION DEADLINE, ENTRY FEE, FESTIVAL DATE, PRIZE, CATEGORIES all
+wear it, two of them within 200px of this line. But the organizer is a value, not
+a label, so the page was setting its content in the typeface of its furniture.
+
+The lengths are what made it bite. 96 of the 243 rows carry an organizer past 24
+characters, and the long ones are not brand names — they are sentences, partner
+lists and credits: "AI Filmfest Athens — Festival Director Christina Duxa" (53),
+"NZ Film Commission, NZ On Air, Te Māngai Pāho, Kōawa Studios" (60), "Asian
+American Engineer of the Year (AAEOY) / Chinese Institute of Engineers" (76).
+Uppercase threw away the one signal that tells those apart: "(AAEOY)" stopped
+looking like an acronym once the words around it were capitals too, "inc." in
+"AI FILM JAPAN inc." vanished, and "I'Mpossible Film Festival" — a name built on
+its own casing — came out as I'MPOSSIBLE. At 390px the two longest set as three
+tracked caps lines sitting directly under the h1, which read as a second,
+smaller headline rather than as the credit beneath the first.
+
+This is also the only place on the site where a person's name is printed, and a
+person's name in all caps is the one thing you can do to a name without
+misspelling it.
+
+**Now** — sentence case, Space Grotesk 15px at weight 500, line-height 1.45. Space
+Grotesk because the credit belongs to the title block, and because the cards
+already set the organizer in it. 15px/500 against a 24-to-40px h1 at 700 keeps the
+hierarchy the caps were enforcing by smallness, and the h1's extra 2px of bottom
+margin replaces the optical gap the tracking used to open. Checked on the live
+page after deploy at 390px and 1440px, and against the 76-character organizer
+rendered into the same markup: three lines at 390px either way, so nothing below
+the band moved. No horizontal overflow at either width.
+
+**Left alone** — ContestCard and FeaturedSpotlight still set the organizer in
+caps, deliberately. On a card the title is 15px and the organizer 11px: four
+points apart, in a grid of sixty, caps is what keeps the second line from
+competing with the first, and the string is clipped by the card's width long
+before anyone reads it as a sentence. The detail page is the opposite case — one
+credit, full width, under a 40px title, and the only page where the whole string
+is shown.
+
+**Looked at** — Metrograph's calendar sets the film title in caps and the credit
+line beneath it — director, year, runtime, format — in sentence case at a smaller
+size: caps for the title, the writer's own case for the credit. Criterion does put
+a director's name in tracked caps, but above the title as a kicker, and it is
+always one short name. Caps survives in a credit when the credit is short and
+fixed in shape; ours runs from 5 to 76 characters, so it cannot borrow that device.
+
+**Before/after** — `reports/design/2026-10-17-before.png`,
+`reports/design/2026-10-17-after.png` (AI Filmfest Athens at 390px),
+`reports/design/2026-10-17-before-desktop.png`,
+`reports/design/2026-10-17-after-desktop.png` (1440px),
+`reports/design/2026-10-17-after-short-390.png` (IA en Corto, a short organizer).
+
 ## 2026-10-16 — On a phone, the subscribe field gets the whole row
 
 **Changed** — two style declarations and a wrap in `EmailSubscribe.tsx`'s compact
