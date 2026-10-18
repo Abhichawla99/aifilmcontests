@@ -63,6 +63,7 @@ export default function SiteFooter({
             <a href="/submit" className="link-muted">Submit a Contest</a>
             <Link href={featureHref} className="link-muted">{featureLabel}</Link>
             <Link href="/creators" className="link-muted">Featured Creators</Link>
+            <Link href="/guide" className="link-muted">Guides</Link>
             <Link href="/cinematic-ads" className="link-muted">Cinematic AI Ads</Link>
           </div>
         </nav>
