@@ -26,8 +26,13 @@ async function main() {
   }
 
   const endpoint = `${url.replace(/\/$/, '')}/rest/v1/contests?select=*&order=deadline.asc`
+  // next.config.js runs this synchronously before `next build` starts, so a
+  // database that is slow to fail holds every deploy (the Oct 19 2026 build
+  // waited 91 seconds for Cloudflare's 522), and one that never answers would
+  // hang it. Twenty seconds, then keep the previous snapshot.
   const res = await fetch(endpoint, {
     headers: { apikey: key, Authorization: `Bearer ${key}` },
+    signal: AbortSignal.timeout(20_000),
   })
 
   if (!res.ok) {

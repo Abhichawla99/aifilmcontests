@@ -1,4 +1,5 @@
 import { promises as dns } from 'node:dns'
+import { unstable_cache } from 'next/cache'
 import { supabaseAdmin } from './supabase'
 import { isBlockedEmailDomain } from './blocked-email-domains'
 
@@ -17,6 +18,40 @@ async function domainAcceptsMail(domain: string): Promise<boolean> {
     return true
   }
 }
+
+// How many confirmed subscribers there are, for copy like "630+ AI filmmakers
+// get our alerts". Decoration, so it is read at most once every fifteen
+// minutes and shared through Next's data cache: a database that will not
+// answer costs the first caller five seconds and everyone else nothing until
+// the next window. Null means the count could not be read; print no number
+// rather than a zero.
+//
+// A plain fetch, on purpose. An explicit `cache: 'no-store'` inside an
+// unstable_cache callback counts as dynamic usage while a page is being
+// statically generated (see src/lib/supabase.ts), and this has to stay safe
+// to call from any page, static or not.
+export const getConfirmedSubscriberCount = unstable_cache(
+  async (): Promise<number | null> => {
+    const url = process.env.NEXT_PUBLIC_SUPABASE_URL || process.env.SUPABASE_URL
+    const key = process.env.SUPABASE_SERVICE_ROLE_KEY
+    if (!url || !key) return null
+    try {
+      const res = await fetch(`${url.replace(/\/$/, '')}/rest/v1/subscribers?select=id&confirmed=eq.true`, {
+        method: 'HEAD',
+        headers: { apikey: key, Authorization: `Bearer ${key}`, Prefer: 'count=exact' },
+        signal: AbortSignal.timeout(5_000),
+      })
+      // PostgREST answers a counted HEAD with "Content-Range: */632" (or "0-24/632").
+      const total = Number(res.headers.get('content-range')?.split('/')[1])
+      return res.ok && Number.isFinite(total) ? total : null
+    } catch (err) {
+      console.error('subscriber count failed:', err instanceof Error ? err.message : String(err))
+      return null
+    }
+  },
+  ['subscribers', 'confirmed-count'],
+  { revalidate: 900, tags: ['subscribers'] },
+)
 
 export interface Subscriber {
   email: string

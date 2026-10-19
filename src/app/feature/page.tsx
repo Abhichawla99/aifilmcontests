@@ -2,8 +2,7 @@ import type { Metadata } from 'next'
 import Image from 'next/image'
 import Link from 'next/link'
 import { getContestsByStatus } from '@/lib/contests-db'
-import { supabaseAdmin } from '@/lib/supabase'
-import { withDbRetry } from '@/lib/db-health'
+import { getConfirmedSubscriberCount } from '@/lib/subscribers'
 import InnerLayout from '@/components/InnerLayout'
 
 export const dynamic = 'force-dynamic'
@@ -56,15 +55,11 @@ export default async function FeaturePage({ searchParams }: { searchParams: Prom
   const { contest: contestId } = await searchParams
   const open = await getContestsByStatus('open')
   const picked = contestId ? open.find(c => c.id === contestId) ?? null : null
-  // The count is decoration. Give it five seconds, then carry on without it,
-  // so a slow database cannot hold the page. The contests above come from the
-  // shared cache and cost the database nothing.
-  const { count } = await withDbRetry(
-    signal => supabaseAdmin.from('subscribers').select('*', { count: 'exact', head: true }).eq('confirmed', true).abortSignal(signal),
-    { attempts: 1, timeoutMs: 5_000 },
-  )
-  const subscribers = count ?? 0
-  const roundedSubs = subscribers >= 1000 ? `${Math.floor(subscribers / 100) * 100}+` : subscribers >= 100 ? `${Math.floor(subscribers / 10) * 10}+` : String(subscribers)
+  // Both reads above are served from shared caches (src/lib/contests-db.ts,
+  // src/lib/subscribers.ts), so this page costs the database nothing between
+  // refreshes. A count that could not be read is left out of the copy.
+  const count = await getConfirmedSubscriberCount()
+  const roundedSubs = count === null ? null : count >= 1000 ? `${Math.floor(count / 100) * 100}+` : count >= 100 ? `${Math.floor(count / 10) * 10}+` : String(count)
 
   const mailto = (name?: string) =>
     `mailto:abhixchawla@gmail.com?subject=${encodeURIComponent(`Feature ${name ?? 'my contest'} on AI Film Contests`)}`
@@ -78,7 +73,7 @@ export default async function FeaturePage({ searchParams }: { searchParams: Prom
           Get more entries for {picked ? picked.name : 'your AI film contest'}.
         </h1>
         <p className="ftp-standfirst">
-          {roundedSubs} AI filmmakers get our alerts, and thousands more find contests through this site every month.
+          {roundedSubs ?? 'Hundreds of'} AI filmmakers get our alerts, and thousands more find contests through this site every month.
           Featuring puts your contest where they all look first.
         </p>
 
@@ -86,7 +81,7 @@ export default async function FeaturePage({ searchParams }: { searchParams: Prom
         <ul className="feat-inc">
           <li>Pinned in the homepage spotlight for 30 days</li>
           <li>A <strong style={{ color: '#4338CA' }}>Featured</strong> badge on your listing and in search</li>
-          <li>A dedicated slot in the next email to all {roundedSubs} subscribers</li>
+          <li>A dedicated slot in the next email to {roundedSubs ? `all ${roundedSubs} subscribers` : 'every subscriber'}</li>
           <li>Deadline verified daily and a last-call reminder sent 3 days before close</li>
         </ul>
 
