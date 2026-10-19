@@ -123,6 +123,12 @@ export default function ContestCard({ contest }: { contest: Contest }) {
   /* The first category gives the card its identity: emoji + pastel tint. */
   const tint = isClosed ? closedStyle : contest.categories?.[0] ? normalizeCategory(contest.categories[0]) : categoryStyle()
 
+  /* The robots write 140+ freeform category strings, so normalize, dedupe on the
+     canonical label and cap at four — the same list the chips used to render. */
+  const categories = Array.from(
+    new Set((contest.categories ?? []).map(cat => normalizeCategory(cat).label)),
+  ).slice(0, 4)
+
   return (
     <Link
       href={`/contests/${contest.id}`}
@@ -228,23 +234,25 @@ export default function ContestCard({ contest }: { contest: Contest }) {
           </p>
         </div>
 
-        {/* Row 4: category chips (white on the tint, labelled by their own emoji) */}
-        <div className="flex flex-wrap gap-1.5">
-          {Array.from(new Map((contest.categories ?? []).map(cat => { const c = normalizeCategory(cat); return [c.label, c] as const })).values()).slice(0, 4).map(c => (
-              <span key={c.label} style={{
-                fontSize: 10,
-                color: c.text,
-                border: `1px solid ${c.border}`,
-                borderRadius: 5, padding: '2px 7px',
-                fontFamily: 'Space Grotesk, sans-serif',
-                fontWeight: 500, letterSpacing: '0.04em',
-                textTransform: 'uppercase',
-                background: 'rgba(255,255,255,0.72)',
-              }}>
-                {c.emoji}&nbsp;{c.label}
-              </span>
-          ))}
-        </div>
+        {/* Row 4: the categories, as the card's filing line.
+             They were four bordered boxes, each in its own category ink. Nothing on a
+             card is pressable except the card, so the boxes promised a press that was
+             not there — the same rule the 10-05 run applied to the contest page's tags.
+             Worse, only the FIRST category tints the card, so a card with four chips
+             wore three inks belonging to colours it is not: 68 of the 82 open rows,
+             28 of them with four. And chip one always restated the 26px emoji above it.
+             Now it is one run of commas in the organizer's own muted ink — a programme's
+             genre line, which the emoji at the top of the card opens. */}
+        {categories.length > 0 && (
+          <div style={{
+            fontSize: 11.5, color: '#7A7469',
+            fontFamily: 'Space Grotesk, sans-serif',
+            fontWeight: 500, lineHeight: 1.55,
+            textTransform: 'lowercase',
+          }}>
+            {categories.join(', ')}
+          </div>
+        )}
 
         <hr style={{ border: 'none', borderTop: `1px solid ${tint.border}` }} />
         {/* Row 5: the prize, at the card's full measure.
