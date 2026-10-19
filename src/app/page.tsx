@@ -1,4 +1,4 @@
-import { getAllContests } from '@/lib/contests-db'
+import { getAllContests, getSnapshotStatus } from '@/lib/contests-db'
 import { Contest } from '@/data/contests'
 import ContestBrowser from '@/components/ContestBrowser'
 import { ClapperDrawing, CalendarDrawing, EnvelopeDrawing, FilmmakerDoodle } from '@/components/Illustrations'
@@ -37,6 +37,15 @@ export default async function Home() {
      from this request, which is how an outage turned the homepage into a tracker
      claiming it tracks nothing. When there is no data, print no numbers. */
   const noListings = allContests.length === 0
+
+  // Live Supabase read failed and this page is serving the build-time
+  // snapshot instead (see src/lib/contests-db.ts) — real data, just up to a
+  // day stale. Only set when there IS data to show; an outage with no
+  // snapshot still falls through to noListings above.
+  const { stale, generatedAt } = getSnapshotStatus()
+  const staleAsOf = stale && generatedAt
+    ? new Date(generatedAt).toLocaleString('en-US', { month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' })
+    : null
 
   const totalPrize = [...open, ...upcoming].reduce((sum, c) => {
     const m = c.prize.match(/\$([0-9,]+)/)
@@ -228,16 +237,20 @@ export default async function Home() {
                 <div style={{ display: 'flex', alignItems: 'center', gap: 14, flexWrap: 'wrap', marginBottom: 28 }}>
                   <div style={{
                     display: 'inline-flex', alignItems: 'center', gap: 8,
-                    border: noListings ? '1px solid #E3DED3' : '1px solid rgba(34,197,94,0.2)',
+                    border: noListings ? '1px solid #E3DED3' : staleAsOf ? '1px solid rgba(217,119,6,0.25)' : '1px solid rgba(34,197,94,0.2)',
                     borderRadius: 100, padding: '5px 14px',
-                    background: noListings ? '#FFFFFF' : 'rgba(34,197,94,0.05)',
+                    background: noListings ? '#FFFFFF' : staleAsOf ? 'rgba(217,119,6,0.06)' : 'rgba(34,197,94,0.05)',
                   }}>
                     <span
-                      className={noListings ? 'dot dot-closed' : 'dot dot-open live'}
+                      className={noListings ? 'dot dot-closed' : staleAsOf ? 'dot dot-upcoming' : 'dot dot-open live'}
                       style={{ width: 5, height: 5 }}
                     />
-                    <span style={{ fontSize: 12, color: noListings ? '#6F6A61' : '#15803D', fontFamily: 'Space Grotesk, sans-serif', fontWeight: 500, letterSpacing: '0.02em' }}>
-                      {noListings ? 'Listings unavailable · reload to retry' : `${open.length} contests open · updated daily`}
+                    <span style={{ fontSize: 12, color: noListings ? '#6F6A61' : staleAsOf ? '#B45309' : '#15803D', fontFamily: 'Space Grotesk, sans-serif', fontWeight: 500, letterSpacing: '0.02em' }}>
+                      {noListings
+                        ? 'Listings unavailable · reload to retry'
+                        : staleAsOf
+                          ? `Listings as of ${staleAsOf} · live data unavailable`
+                          : `${open.length} contests open · updated daily`}
                     </span>
                   </div>
 

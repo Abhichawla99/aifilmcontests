@@ -1,5 +1,6 @@
 import { supabase, supabaseAdmin } from './supabase'
 import { Contest } from '@/data/contests'
+import snapshotFile from '@/data/contests-snapshot.json'
 
 // Map a DB row → the Contest interface the UI expects
 function rowToContest(row: Record<string, unknown>): Contest {
@@ -32,6 +33,38 @@ function rowToContest(row: Record<string, unknown>): Contest {
 // Status sort order for display: open → upcoming → closed
 const STATUS_ORDER: Record<string, number> = { open: 0, upcoming: 1, closed: 2 }
 
+// Build-time snapshot of the contests table, refreshed by
+// scripts/generate-contests-snapshot.mjs (wired up from next.config.js,
+// since package.json is off-limits per robots/COMMON.md). Statically
+// imported rather than read from disk at request time: Vercel's serverless
+// bundler traces `require`/`import` calls reliably but can't resolve a
+// `fs.readFileSync(path.join(process.cwd(), ...))` path at build time, which
+// would risk the file silently not being in the deployed function bundle.
+// A JSON import gets compiled straight into the function's JS, so there's
+// nothing to trace. Used ONLY when a live read below comes back as a
+// genuine transport/query failure — never for an empty table, which is a
+// real, valid state handled by the callers.
+const SNAPSHOT = (() => {
+  const file = snapshotFile as { generatedAt: string; contests: Record<string, unknown>[] }
+  if (!file?.contests?.length) return null
+  return { generatedAt: file.generatedAt, contests: file.contests.map(rowToContest) }
+})()
+
+function loadSnapshot(): { generatedAt: string; contests: Contest[] } | null {
+  return SNAPSHOT
+}
+
+// Set by every read below so a page that wants to tell visitors the data is
+// a few hours stale (see the hero pill on src/app/page.tsx) can ask, without
+// threading an extra return value through every call site. Best-effort: on a
+// warm serverless instance handling overlapping requests this can show the
+// status of a sibling request for a moment, which only affects this text,
+// never which data is actually served.
+let lastServedSnapshotAt: string | null = null
+export function getSnapshotStatus(): { stale: boolean; generatedAt: string | null } {
+  return { stale: lastServedSnapshotAt !== null, generatedAt: lastServedSnapshotAt }
+}
+
 // A 0-row result is never an `error` here — Supabase only populates `error` on
 // a genuine transport/query failure (bad connection, DNS, 5xx, timeout). An
 // empty table is just `data: []`. So any `error` means the read itself failed
@@ -44,9 +77,16 @@ export async function getAllContests(): Promise<Contest[]> {
     .order('deadline', { ascending: true })
 
   if (error) {
+    const snapshot = loadSnapshot()
+    if (snapshot) {
+      console.error(`getAllContests: live read failed (${error.message}); serving snapshot from ${snapshot.generatedAt}`)
+      lastServedSnapshotAt = snapshot.generatedAt
+      return snapshot.contests.slice().sort((a, b) => STATUS_ORDER[a.status] - STATUS_ORDER[b.status])
+    }
     throw new Error(`Failed to fetch contests: ${error.message}`)
   }
 
+  lastServedSnapshotAt = null
   return (data as Record<string, unknown>[])
     .map(rowToContest)
     .sort((a, b) => STATUS_ORDER[a.status] - STATUS_ORDER[b.status])
@@ -60,9 +100,16 @@ export async function getContestsByStatus(status: Contest['status']): Promise<Co
     .order('deadline', { ascending: true })
 
   if (error) {
+    const snapshot = loadSnapshot()
+    if (snapshot) {
+      console.error(`getContestsByStatus(${status}): live read failed (${error.message}); serving snapshot from ${snapshot.generatedAt}`)
+      lastServedSnapshotAt = snapshot.generatedAt
+      return snapshot.contests.filter(c => c.status === status)
+    }
     throw new Error(`Failed to fetch contests by status "${status}": ${error.message}`)
   }
 
+  lastServedSnapshotAt = null
   return (data as Record<string, unknown>[]).map(rowToContest)
 }
 
@@ -106,9 +153,19 @@ export async function getContestById(id: string): Promise<Contest | null> {
     .single()
 
   if (error) {
-    if (error.code === 'PGRST116') return null
+    if (error.code === 'PGRST116') {
+      lastServedSnapshotAt = null
+      return null
+    }
+    const snapshot = loadSnapshot()
+    if (snapshot) {
+      console.error(`getContestById(${id}): live read failed (${error.message}); serving snapshot from ${snapshot.generatedAt}`)
+      lastServedSnapshotAt = snapshot.generatedAt
+      return snapshot.contests.find(c => c.id === id) ?? null
+    }
     throw new Error(`Failed to fetch contest "${id}": ${error.message}`)
   }
+  lastServedSnapshotAt = null
   if (!data) return null
   return rowToContest(data as Record<string, unknown>)
 }
