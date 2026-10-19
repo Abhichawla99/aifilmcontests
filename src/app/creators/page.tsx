@@ -7,7 +7,7 @@ import { getAllContests } from '@/lib/contests-db'
 
 const BASE = 'https://aifilmcontests.com'
 
-export const dynamic = 'force-dynamic'
+export const revalidate = 900
 
 export const metadata: Metadata = {
   title: 'Featured AI Filmmakers & Studios | AI Film Contests',

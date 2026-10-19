@@ -17,8 +17,7 @@ export const metadata: Metadata = {
   alternates: { canonical: 'https://aifilmcontests.com/cinematic-ads' },
 }
 
-export const dynamic = 'force-dynamic'
-export const revalidate = 0
+export const revalidate = 900
 
 const TOOLS = [
   { name: 'Runway Gen-3', desc: 'Text-to-video & video-to-video generation. The industry standard for cinematic AI production.' },

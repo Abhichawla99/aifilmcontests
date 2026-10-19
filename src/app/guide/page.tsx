@@ -8,7 +8,7 @@ import { CRAFT_GUIDES, CRAFT_GUIDE_ORDER } from '@/data/craft-guides'
 
 const BASE = 'https://aifilmcontests.com'
 
-export const dynamic = 'force-dynamic'
+export const revalidate = 900
 
 export const metadata: Metadata = {
   title: 'Guides | AI Film Contests',

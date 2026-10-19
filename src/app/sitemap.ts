@@ -14,11 +14,9 @@ import {
   isForStudents,
 } from '@/lib/contest-filters'
 
-// getAllContests() now reads through a no-store fetch (see src/lib/supabase.ts)
-// so new/closed contests show up immediately instead of a cached snapshot.
-// Next's static-export path rejects a no-store fetch inside a route that
-// isn't marked dynamic, so this route needs it too.
-export const dynamic = 'force-dynamic'
+// Contest reads are shared through a fifteen-minute cache (src/lib/contests-db.ts),
+// so the sitemap only needs rebuilding on the same schedule.
+export const revalidate = 900
 
 const BASE = 'https://aifilmcontests.com'
 

@@ -10,8 +10,7 @@ import LogoMark from '@/components/LogoMark'
 import NavRow from '@/components/NavRow'
 import SiteFooter from '@/components/SiteFooter'
 
-export const dynamic  = 'force-dynamic'
-export const revalidate = 0
+export const revalidate = 900
 
 function daysLeft(deadline: string) {
   return Math.ceil((new Date(deadline).getTime() - Date.now()) / 86_400_000)

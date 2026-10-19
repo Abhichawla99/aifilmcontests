@@ -9,7 +9,7 @@ import { getAllContests } from '@/lib/contests-db'
 import { Contest } from '@/data/contests'
 import { CATEGORIES } from '@/lib/content/categories'
 
-export const dynamic = 'force-dynamic'
+export const revalidate = 900
 
 export async function generateStaticParams() {
   return Object.keys(CATEGORIES).map(slug => ({ slug }))

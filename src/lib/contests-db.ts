@@ -1,3 +1,4 @@
+import { unstable_cache } from 'next/cache'
 import { supabase, supabaseAdmin } from './supabase'
 import { Contest } from '@/data/contests'
 import snapshotFile from '@/data/contests-snapshot.json'
@@ -56,61 +57,87 @@ function loadSnapshot(): { generatedAt: string; contests: Contest[] } | null {
 
 // Set by every read below so a page that wants to tell visitors the data is
 // a few hours stale (see the hero pill on src/app/page.tsx) can ask, without
-// threading an extra return value through every call site. Best-effort: on a
-// warm serverless instance handling overlapping requests this can show the
-// status of a sibling request for a moment, which only affects this text,
-// never which data is actually served.
+// threading an extra return value through every call site. The shared read
+// records where its data came from, so this stays right on cache hits too.
+// Best-effort: on a warm serverless instance handling overlapping requests
+// this can show the status of a sibling request for a moment, which only
+// affects this text, never which data is actually served.
 let lastServedSnapshotAt: string | null = null
 export function getSnapshotStatus(): { stale: boolean; generatedAt: string | null } {
   return { stale: lastServedSnapshotAt !== null, generatedAt: lastServedSnapshotAt }
 }
 
+// ── One read, shared by every page ──────────────────────────────────────────
+//
+// Every content page, the sitemap and llms.txt used to run their own
+// `select *` against Supabase on every request: one full-table query per page
+// view, on top of the daily robots. On the Free-plan instance that is what
+// saturated the database (from Oct 8 2026; outages Oct 11-14 and Oct 19).
+//
+// Now the table is read once and shared through Next's data cache for
+// CONTESTS_REVALIDATE_SECONDS. When that window passes, the next caller still
+// gets the cached list at once and the refresh runs in the background, so no
+// visitor waits on the database. A live read that fails, or hangs longer than
+// LIVE_READ_TIMEOUT_MS, falls back to the build-time snapshot, and that
+// fallback is cached like any other result: hammering a database that is
+// already down only keeps it down.
+//
+// A route handler that writes contests can call revalidateTag(CONTESTS_CACHE_TAG)
+// to publish sooner. The robots write straight to Supabase over REST, so their
+// changes take up to fifteen minutes to show.
+export const CONTESTS_CACHE_TAG = 'contests'
+const CONTESTS_REVALIDATE_SECONDS = 900
+const LIVE_READ_TIMEOUT_MS = 10_000
+
+type ContestsRead = { contests: Contest[]; snapshotGeneratedAt: string | null }
+
 // A 0-row result is never an `error` here — Supabase only populates `error` on
 // a genuine transport/query failure (bad connection, DNS, 5xx, timeout). An
 // empty table is just `data: []`. So any `error` means the read itself failed
-// and must not be mistaken for "no contests": throw and let the page/route
-// fail loudly (a 5xx) instead of silently rendering as if nothing exists.
-export async function getAllContests(): Promise<Contest[]> {
+// and must not be mistaken for "no contests": serve the snapshot, or throw and
+// let the page/route fail loudly (a 5xx) instead of silently rendering as if
+// nothing exists.
+async function readAllContestsLive(): Promise<ContestsRead> {
   const { data, error } = await supabase
     .from('contests')
     .select('*')
     .order('deadline', { ascending: true })
+    .abortSignal(AbortSignal.timeout(LIVE_READ_TIMEOUT_MS))
 
   if (error) {
     const snapshot = loadSnapshot()
     if (snapshot) {
       console.error(`getAllContests: live read failed (${error.message}); serving snapshot from ${snapshot.generatedAt}`)
-      lastServedSnapshotAt = snapshot.generatedAt
-      return snapshot.contests.slice().sort((a, b) => STATUS_ORDER[a.status] - STATUS_ORDER[b.status])
+      return { contests: snapshot.contests, snapshotGeneratedAt: snapshot.generatedAt }
     }
     throw new Error(`Failed to fetch contests: ${error.message}`)
   }
 
-  lastServedSnapshotAt = null
-  return (data as Record<string, unknown>[])
-    .map(rowToContest)
-    .sort((a, b) => STATUS_ORDER[a.status] - STATUS_ORDER[b.status])
+  return {
+    contests: (data as Record<string, unknown>[]).map(rowToContest),
+    snapshotGeneratedAt: null,
+  }
+}
+
+const readAllContests = unstable_cache(readAllContestsLive, ['contests', 'all'], {
+  revalidate: CONTESTS_REVALIDATE_SECONDS,
+  tags: [CONTESTS_CACHE_TAG],
+})
+
+async function sharedContests(): Promise<ContestsRead> {
+  const read = await readAllContests()
+  lastServedSnapshotAt = read.snapshotGeneratedAt
+  return read
+}
+
+export async function getAllContests(): Promise<Contest[]> {
+  const { contests } = await sharedContests()
+  return contests.slice().sort((a, b) => STATUS_ORDER[a.status] - STATUS_ORDER[b.status])
 }
 
 export async function getContestsByStatus(status: Contest['status']): Promise<Contest[]> {
-  const { data, error } = await supabase
-    .from('contests')
-    .select('*')
-    .eq('status', status)
-    .order('deadline', { ascending: true })
-
-  if (error) {
-    const snapshot = loadSnapshot()
-    if (snapshot) {
-      console.error(`getContestsByStatus(${status}): live read failed (${error.message}); serving snapshot from ${snapshot.generatedAt}`)
-      lastServedSnapshotAt = snapshot.generatedAt
-      return snapshot.contests.filter(c => c.status === status)
-    }
-    throw new Error(`Failed to fetch contests by status "${status}": ${error.message}`)
-  }
-
-  lastServedSnapshotAt = null
-  return (data as Record<string, unknown>[]).map(rowToContest)
+  const { contests } = await sharedContests()
+  return contests.filter(c => c.status === status)
 }
 
 // Admin: upsert a contest (used by the daily agent)
@@ -139,35 +166,39 @@ export async function upsertContest(contest: Contest) {
   if (error) throw new Error(`Failed to upsert contest ${contest.id}: ${error.message}`)
 }
 
-// Fetch a single contest by ID (public read). `.single()` makes PostgREST
-// itself report "0 rows" as an error (code PGRST116) — that's the one error
-// shape that means the row genuinely isn't there, so it maps to `null` the
-// same as before. Any other error (network failure, DNS, 5xx, timeout — see
-// getAllContests above) is a failed read, not a missing contest, and must
-// throw instead of being mistaken for a 404.
-export async function getContestById(id: string): Promise<Contest | null> {
-  const { data, error } = await supabase
-    .from('contests')
-    .select('*')
-    .eq('id', id)
-    .single()
+// Fetch a single contest by ID (public read). Served from the shared list, so
+// a contest page costs the database nothing. An id that is not in the list is
+// either gone or was added in the last few minutes (the research robot curls
+// a contest's page right after upserting it), and one cheap single-row read
+// settles which — unless the shared list itself came from the snapshot, in
+// which case the database was already unreachable and asking again only hangs.
+const readContestByIdLive = unstable_cache(
+  async (id: string): Promise<Contest | null> => {
+    const { data, error } = await supabase
+      .from('contests')
+      .select('*')
+      .eq('id', id)
+      .abortSignal(AbortSignal.timeout(LIVE_READ_TIMEOUT_MS))
+      .maybeSingle()
+    // Thrown rather than returned, so a failed read is never cached as "no such contest".
+    if (error) throw new Error(`Failed to fetch contest "${id}": ${error.message}`)
+    return data ? rowToContest(data as Record<string, unknown>) : null
+  },
+  ['contests', 'by-id'],
+  { revalidate: CONTESTS_REVALIDATE_SECONDS, tags: [CONTESTS_CACHE_TAG] },
+)
 
-  if (error) {
-    if (error.code === 'PGRST116') {
-      lastServedSnapshotAt = null
-      return null
-    }
-    const snapshot = loadSnapshot()
-    if (snapshot) {
-      console.error(`getContestById(${id}): live read failed (${error.message}); serving snapshot from ${snapshot.generatedAt}`)
-      lastServedSnapshotAt = snapshot.generatedAt
-      return snapshot.contests.find(c => c.id === id) ?? null
-    }
-    throw new Error(`Failed to fetch contest "${id}": ${error.message}`)
+export async function getContestById(id: string): Promise<Contest | null> {
+  const { contests, snapshotGeneratedAt } = await sharedContests()
+  const found = contests.find(c => c.id === id)
+  if (found) return found
+  if (snapshotGeneratedAt) return null
+  try {
+    return await readContestByIdLive(id)
+  } catch (err) {
+    console.error(err instanceof Error ? err.message : String(err))
+    return null
   }
-  lastServedSnapshotAt = null
-  if (!data) return null
-  return rowToContest(data as Record<string, unknown>)
 }
 
 // Admin: mark a contest closed by id

@@ -8,7 +8,7 @@ import EmailSubscribe from '@/components/EmailSubscribe'
 import SiteFooter from '@/components/SiteFooter'
 import { TOOLS } from '@/lib/content/tools'
 
-export const dynamic = 'force-dynamic'
+export const revalidate = 900
 
 export async function generateStaticParams() {
   return Object.keys(TOOLS).map(slug => ({ slug }))

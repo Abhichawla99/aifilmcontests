@@ -9,7 +9,7 @@ import { isForStudents } from '@/lib/contest-filters'
 
 const BASE = 'https://aifilmcontests.com'
 
-export const dynamic = 'force-dynamic'
+export const revalidate = 900
 
 export const metadata: Metadata = {
   title: 'AI Film Contests for Students | AI Film Contests',

@@ -7,7 +7,7 @@ import { TOOLS } from '@/lib/content/tools'
 
 const BASE = 'https://aifilmcontests.com'
 
-export const dynamic = 'force-dynamic'
+export const revalidate = 900
 
 export const metadata: Metadata = {
   title: 'AI Tools for Film Contests | AI Film Contests',

@@ -9,7 +9,7 @@ import { CLOSING_SOON_WINDOW_DAYS as WINDOW_DAYS } from '@/lib/contest-filters'
 
 const BASE = 'https://aifilmcontests.com'
 
-export const dynamic = 'force-dynamic'
+export const revalidate = 900
 
 export const metadata: Metadata = {
   title: 'AI Film Contests Closing Soon (Next 14 Days) | AI Film Contests',

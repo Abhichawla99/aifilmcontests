@@ -9,7 +9,7 @@ import { isRecent } from '@/lib/contest-filters'
 
 const BASE = 'https://aifilmcontests.com'
 
-export const dynamic = 'force-dynamic'
+export const revalidate = 900
 
 export const metadata: Metadata = {
   title: 'Newest AI Film Contests | AI Film Contests',

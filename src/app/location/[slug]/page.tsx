@@ -7,7 +7,7 @@ import Link from 'next/link'
 import { getAllContests } from '@/lib/contests-db'
 import InnerLayout from '@/components/InnerLayout'
 
-export const dynamic = 'force-dynamic'
+export const revalidate = 900
 
 interface LocationData {
   label: string

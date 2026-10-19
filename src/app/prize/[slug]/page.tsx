@@ -9,7 +9,7 @@ import { Contest } from '@/data/contests'
 import { PRIZE_PAGES } from '@/lib/content/prize-pages'
 import InnerLayout from '@/components/InnerLayout'
 
-export const dynamic = 'force-dynamic'
+export const revalidate = 900
 
 export async function generateStaticParams() {
   return Object.keys(PRIZE_PAGES).map(slug => ({ slug }))

@@ -9,8 +9,7 @@ import DeadlineReminder from '@/components/DeadlineReminder'
 import SiteFooter from '@/components/SiteFooter'
 import PrizeValue from '@/components/PrizeValue'
 
-export const dynamic = 'force-dynamic'
-export const revalidate = 0
+export const revalidate = 900
 
 // ── Helpers ────────────────────────────────────────────────────────────────
 function fmt(d: string) {

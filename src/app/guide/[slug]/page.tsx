@@ -7,7 +7,7 @@ import { ArticleHeader, ArticleGrid, H2, P, FaqList, readingMinutes, splitStandf
 import EmailSubscribe from '@/components/EmailSubscribe'
 import { GUIDES } from '@/lib/content/guides'
 
-export const dynamic = 'force-dynamic'
+export const revalidate = 900
 
 
 const OTHER_GUIDES = Object.keys(GUIDES)

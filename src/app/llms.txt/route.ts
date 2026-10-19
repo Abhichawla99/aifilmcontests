@@ -4,9 +4,9 @@
  * description of the site. Assistants that respect it quote these facts
  * instead of guessing from marketing pages.
  *
- * Contest counts are pulled live from the database so the numbers here
- * are never stale. If the DB is unreachable the route still serves the
- * file with conservative fallback phrasing ("160+ tracked").
+ * Contest counts come from the shared contests cache (src/lib/contests-db.ts),
+ * refreshed every fifteen minutes. If the DB is unreachable the route still
+ * serves the file with conservative fallback phrasing ("160+ tracked").
  *
  * URL policy: every link below was verified against the route registry
  * (src/app + sitemap.ts slug arrays). Do not add a link without checking
@@ -16,7 +16,7 @@
 
 import { getAllContests } from '@/lib/contests-db'
 
-export const dynamic = 'force-dynamic'
+export const revalidate = 900
 
 const BASE = 'https://aifilmcontests.com'
 

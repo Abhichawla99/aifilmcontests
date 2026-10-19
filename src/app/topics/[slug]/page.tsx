@@ -7,7 +7,7 @@ import { ArticleHeader, ArticleGrid, H2, P, FaqList, readingMinutes, splitStandf
 import EmailSubscribe from '@/components/EmailSubscribe'
 import { TOPICS } from '@/lib/content/topics'
 
-export const dynamic = 'force-dynamic'
+export const revalidate = 900
 
 
 const TOOL_NAMES: Record<string, string> = {

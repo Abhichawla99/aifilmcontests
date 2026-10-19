@@ -10,7 +10,7 @@ import { getAllContests, getContestById } from '@/lib/contests-db'
 
 const BASE = 'https://aifilmcontests.com'
 
-export const dynamic = 'force-dynamic'
+export const revalidate = 900
 
 export async function generateStaticParams() {
   return creators.map(c => ({ slug: c.slug }))

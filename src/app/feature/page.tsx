@@ -3,6 +3,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { getContestsByStatus } from '@/lib/contests-db'
 import { supabaseAdmin } from '@/lib/supabase'
+import { withDbRetry } from '@/lib/db-health'
 import InnerLayout from '@/components/InnerLayout'
 
 export const dynamic = 'force-dynamic'
@@ -55,7 +56,13 @@ export default async function FeaturePage({ searchParams }: { searchParams: Prom
   const { contest: contestId } = await searchParams
   const open = await getContestsByStatus('open')
   const picked = contestId ? open.find(c => c.id === contestId) ?? null : null
-  const { count } = await supabaseAdmin.from('subscribers').select('*', { count: 'exact', head: true }).eq('confirmed', true)
+  // The count is decoration. Give it five seconds, then carry on without it,
+  // so a slow database cannot hold the page. The contests above come from the
+  // shared cache and cost the database nothing.
+  const { count } = await withDbRetry(
+    signal => supabaseAdmin.from('subscribers').select('*', { count: 'exact', head: true }).eq('confirmed', true).abortSignal(signal),
+    { attempts: 1, timeoutMs: 5_000 },
+  )
   const subscribers = count ?? 0
   const roundedSubs = subscribers >= 1000 ? `${Math.floor(subscribers / 100) * 100}+` : subscribers >= 100 ? `${Math.floor(subscribers / 10) * 10}+` : String(subscribers)
 
