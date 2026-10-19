@@ -85,6 +85,12 @@ export function getSnapshotStatus(): { stale: boolean; generatedAt: string | nul
 // A route handler that writes contests can call revalidateTag(CONTESTS_CACHE_TAG)
 // to publish sooner. The robots write straight to Supabase over REST, so their
 // changes take up to fifteen minutes to show.
+//
+// Do not put `export const dynamic = 'force-dynamic'` on a page that reads
+// through here: Next 14 treats it as fetchCache = 'force-no-store', under
+// which unstable_cache never reads its cache, and every view hits Supabase
+// again. A page that needs request-time data should read searchParams or
+// headers instead; that renders per request and keeps this cache.
 export const CONTESTS_CACHE_TAG = 'contests'
 const CONTESTS_REVALIDATE_SECONDS = 900
 const LIVE_READ_TIMEOUT_MS = 10_000

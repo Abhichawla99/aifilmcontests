@@ -5,8 +5,9 @@ import { getContestsByStatus } from '@/lib/contests-db'
 import { getConfirmedSubscriberCount } from '@/lib/subscribers'
 import InnerLayout from '@/components/InnerLayout'
 
-export const dynamic = 'force-dynamic'
-export const revalidate = 0
+// Rendered per request because it reads searchParams (?contest=). Not
+// `force-dynamic`: Next 14 treats that as fetchCache = 'force-no-store', and
+// unstable_cache then skips its cache read, so every view would hit Supabase.
 
 const PRICE_LABEL = process.env.FEATURED_PRICE_LABEL || '$49 for 30 days'
 const PAY_LINK = process.env.STRIPE_PAYMENT_LINK || ''

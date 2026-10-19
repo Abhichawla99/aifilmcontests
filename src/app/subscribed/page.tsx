@@ -4,7 +4,7 @@ import InnerLayout from '@/components/InnerLayout'
 import ContestCard from '@/components/ContestCard'
 import { getAllContests } from '@/lib/contests-db'
 
-export const dynamic = 'force-dynamic'
+export const revalidate = 900
 
 // A destination people land on right after signing up, not a page for
 // Google — kept out of sitemap.ts and the footer on purpose.
