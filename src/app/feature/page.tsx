@@ -5,9 +5,9 @@ import { getContestsByStatus } from '@/lib/contests-db'
 import { getConfirmedSubscriberCount } from '@/lib/subscribers'
 import InnerLayout from '@/components/InnerLayout'
 
-// Rendered per request because it reads searchParams (?contest=). Not
-// `force-dynamic`: Next 14 treats that as fetchCache = 'force-no-store', and
-// unstable_cache then skips its cache read, so every view would hit Supabase.
+// Rendered per request because it reads searchParams (?contest=); no
+// `force-dynamic` needed for that. Its contests and subscriber count come
+// from the shared caches in src/lib, so a view costs the database nothing.
 
 const PRICE_LABEL = process.env.FEATURED_PRICE_LABEL || '$49 for 30 days'
 const PAY_LINK = process.env.STRIPE_PAYMENT_LINK || ''

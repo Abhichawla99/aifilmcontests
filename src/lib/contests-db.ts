@@ -86,11 +86,16 @@ export function getSnapshotStatus(): { stale: boolean; generatedAt: string | nul
 // to publish sooner. The robots write straight to Supabase over REST, so their
 // changes take up to fifteen minutes to show.
 //
-// Do not put `export const dynamic = 'force-dynamic'` on a page that reads
-// through here: Next 14 treats it as fetchCache = 'force-no-store', under
-// which unstable_cache never reads its cache, and every view hits Supabase
-// again. A page that needs request-time data should read searchParams or
-// headers instead; that renders per request and keeps this cache.
+// Two things defeat this cache, so leave them out of any page that reads
+// through here. `export const fetchCache = 'force-no-store'` makes
+// unstable_cache skip its own cache read, so every view hits Supabase.
+// `export const dynamic = 'force-dynamic'` keeps the cache but turns every
+// view into a function run, and Vercel's data cache warms per region: on
+// Oct 19 2026 /feature paid a full 10s live read five times over twenty
+// minutes while the database was down, once per region, before it served
+// from cache. Pages belong on ISR (`revalidate = 900`); one that truly needs
+// request-time data should read searchParams, which renders it per request
+// without either setting.
 export const CONTESTS_CACHE_TAG = 'contests'
 const CONTESTS_REVALIDATE_SECONDS = 900
 const LIVE_READ_TIMEOUT_MS = 10_000
