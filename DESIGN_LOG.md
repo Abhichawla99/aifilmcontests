@@ -36,6 +36,93 @@ describe the old dark theme; the reasoning still applies, the colours do not.)*
 
 ---
 
+## 2026-10-19 — The card's categories, as a genre line instead of four boxes
+
+**Changed** — row 4 of `src/components/ContestCard.tsx`, plus a four-line
+derivation next to the `tint` it already computes. 25 lines added, 17 removed,
+15 of the additions being the two comments. No category data, tint, emoji,
+caption or link target changed, and no CSS.
+
+**Was** — up to four chips: 10px caps on `rgba(255,255,255,0.72)`, a 5px radius,
+a hairline border, the category's own emoji, and — the part that did the damage —
+the category's own ink. `#31536B` for short film, `#6E3B57` for animation,
+`#7A4A1F` for commercial, `#7C3A31` for music video.
+
+Three things were wrong with that, in rising order.
+
+A border on this site is a promise that something happens when you press it.
+That is the rule the 10-05 run wrote down when it took the boxes off the contest
+page's tags, and the one place it did not reach was the card, where *nothing* is
+pressable except the card — the chips are `<span>`s inside one big `<Link>`. Four
+bordered objects that cannot be pressed, sitting inside a thing that can.
+
+Only the **first** category tints a card. So every chip after the first wore an
+ink belonging to a colour the card is not: `COMMERCIAL` in burnt orange and
+`MUSIC VIDEO` in rust, both on a short-film blue ground. Against the live rows,
+68 of the 82 open contests render more than one chip and 28 render four, which
+is four different inks and four different borders inside one 318px card. The
+grid stopped reading as colour-coded by category and started reading as noise
+with a tint behind it.
+
+And chip one was always a restatement. The card's identity is `categories[0]`,
+drawn at the top left as a 26px emoji; the chip row is the deduped list, which
+begins with `categories[0]`. Every card on the site printed its first category
+twice, once as the emoji that gives the card its colour and again as the first
+box in the row — 🎞️ at the top, `🎞️ SHORT FILM` 200px below it.
+
+On a phone the row cost about 110px, two wrapped lines of boxes, and it sat
+between the blurb and the hairline — so it pushed the prize and the `Verified`
+date, the two things that make the card worth trusting, below the first screen
+on a scroll.
+
+**Looked at** — Metrograph's Now Playing and It's Nice That's front page.
+Metrograph gives each film one unpunctuated spec run — `1976 / 104MIN / 35MM` —
+format, running time and print at the same size and the same ink as each other,
+sitting under `DIRECTOR: FRANÇOIS TRUFFAUT`. It's Nice That ends every card with
+its taxonomy as two words of plain small text under the timestamp: `Work`,
+`Animation`. Neither puts a box anywhere near a fact, and neither varies the ink
+to say which fact it is — the position in the stack already says that. Between
+them and Mubi's genre line, which the 10-05 run cited for the same reason, the
+pattern is settled enough to stop looking for it: in an editorial listing, the
+filing data is a line of text in the furniture ink, and it goes where the reader
+already knows to look.
+
+**Now** — one lowercase comma run: `short film, animation, commercial, music
+video`, at 11.5px Space Grotesk 500, line-height 1.55, in `#7A7469`. That ink and
+that weight are the organizer's, two rows above, which is the right company for
+it — both are the card's filing data, and neither is the thing you came for.
+Lowercase for the reason the 10-05 run gave: one register reads as a decision.
+Commas rather than middots or slashes, because a comma travels with the word in
+front of it and cannot be stranded at a wrap.
+
+The longest possible run across the 82 open rows is 50 characters (`short film,
+documentary, experimental, music video`), which sets on one line at 375px and at
+390px, and on at most two inside a desktop column. The card gives back about 70px
+on a phone, and the prize and the verified date come up with it. The top-left
+emoji is now the only place the first category is announced, which is what it was
+for.
+
+**Left alone** — the emoji itself, the tint, the `FREE` and `FEATURED` badges in
+row 1 and the `OPEN` dot. The badges keep their boxes on the same rule that kept
+the contest page's tool chips: `FREE` names a constraint you have to check before
+you enter, not a shelf the contest is filed on. `FeaturedSpotlight` sets its
+categories its own way and was not touched today; it is one card, not sixty, so
+the ink-count argument does not bite there — worth a look on a later run.
+
+**Verified** — `npm run build` exits 0. Checked on a local `next start` at 1440px,
+390px and 375px, then live at 1440px and 390px once the deploy landed, on
+/contests/closing-soon and on the homepage grid. `✓ no horizontal overflow` clean
+at all three widths. The local server reads `src/data/contests-snapshot.json`, so
+the local shots carry real contests despite `.env.cron` still having no
+`NEXT_PUBLIC_SUPABASE_ANON_KEY`; the snapshot the build regenerated was reverted
+before the commit, since it is data.
+
+**Before / after** — `reports/design/2026-10-19-before.png` (1440) and
+`-before-390.png`; `2026-10-19-after.png`, `-after-390.png` and
+`-after-home-390.png`. All off the live site.
+
+---
+
 ## 2026-10-17 — The organizer credit, set the way the organizer writes it
 
 **Changed** — the `<p>` under the `<h1>` in the contest page's header band
