@@ -4,6 +4,7 @@ import { creators } from '@/data/creators'
 import { Contest } from '@/data/contests'
 import { TOOLS as TOOL_CONTENT } from '@/lib/content/tools'
 import { GUIDES as GUIDE_CONTENT } from '@/lib/content/guides'
+import { CRAFT_GUIDES, CRAFT_GUIDE_ORDER } from '@/data/craft-guides'
 import { TOPICS as TOPIC_CONTENT } from '@/lib/content/topics'
 import { PRIZE_PAGES as PRIZE_CONTENT } from '@/lib/content/prize-pages'
 import {
@@ -122,48 +123,6 @@ const TOOLS = [
   'capcut',
   'topaz',
   'invideo',
-] as const
-
-// Guide pages
-const GUIDES = [
-  'ai-film-festivals-deadlines-october-2026',
-  'ai-film-festivals-deadlines-september-2026',
-  'ai-film-festivals-deadlines-august-2026',
-  'ai-film-contests-closing-this-week',
-  'how-to-submit-to-hong-kong-ai-film-festival-2026',
-  'how-to-enter-ai-film-contest',
-  'ai-filmmaking-tools-guide',
-  'winning-strategies-ai-film-competitions',
-  'ai-video-production-workflow',
-  'ai-film-submission-tips',
-  'ai-film-festivals-explained',
-  'generative-ai-filmmaking-2026',
-  'ai-brand-film-guide',
-  'building-ai-film-portfolio',
-  'ai-film-post-production',
-  'ai-film-festivals-deadlines-june-2026',
-  'ai-film-festivals-deadlines-july-2026',
-  'how-to-submit-to-reply-ai-film-festival-2026',
-  'how-to-submit-to-berlin-ai-film-festival-2026',
-  'how-to-submit-to-astana-ai-film-festival-2026',
-  'how-to-submit-to-future-vision-xprize-2026',
-  'how-to-win-runway-ai-film-festival',
-  'how-to-apply-to-runway-hundred-film-fund-2026',
-  'how-to-win-higgsfield-global-film-festival-2026',
-  'how-to-win-akool-creator-clash-2026',
-  'how-to-submit-to-we-are-human-festival-2026',
-  'ai-film-contests-closing-september-30-2026',
-  // Craft guides for brand and commercial work (static routes under src/app/guide/)
-  'look-bible-for-ai-films',
-  'mood-board-for-ai-film-without-copying',
-  'ai-commercial-storyboard-and-shot-list',
-  'consistent-characters-in-ai-film',
-  'product-accuracy-in-ai-commercials',
-  'first-frame-for-image-to-video',
-  'ai-commercial-packshot-and-end-card',
-  'ai-food-and-drink-commercials',
-  'real-brands-in-ai-spec-ads',
-  'how-to-price-ai-commercial-work',
 ] as const
 
 // Topic cluster pages
@@ -367,22 +326,45 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     }
   })
 
-  // Guide pages -- each guide cites specific contests via featuredContestIds
-  // and (usually) carries its own datePublished; lastModified is whichever is
+  // Guide pages come from two content sources, same as /guide/page.tsx:
+  // src/lib/content/guides.ts (deadline round-ups, how-to-enter/win pieces)
+  // and src/data/craft-guides.ts (the curated craft series). Reading both
+  // objects directly -- instead of keeping a separate slug list here -- is
+  // the fix for the 2026-10-18 optimizer finding: a hand-kept list had
+  // already drifted two guides behind what /guide actually lists, so a new
+  // guide could go live and stay invisible to Google (see OPTIMIZER_BACKLOG.md).
+  // Each guide.ts entry cites specific contests via featuredContestIds and
+  // (usually) carries its own datePublished; lastModified is whichever is
   // newer, since either a contest update or a prose edit counts as a change.
-  const guideUrls: MetadataRoute.Sitemap = GUIDES.map(slug => {
-    const g = GUIDE_CONTENT[slug]
-    const cited = g?.featuredContestIds?.length
+  const guideContentUrls: MetadataRoute.Sitemap = Object.entries(GUIDE_CONTENT).map(([slug, g]) => {
+    const cited = g.featuredContestIds?.length
       ? contests.filter(c => g.featuredContestIds!.includes(c.id))
       : []
-    const published = g?.datePublished ? new Date(g.datePublished) : null
+    const published = g.datePublished ? new Date(g.datePublished) : null
     return {
       url:             `${BASE}/guide/${slug}`,
       lastModified:    latestOf([published, newestUpdatedAt(cited)], now),
-      changeFrequency: 'monthly',
+      changeFrequency: 'monthly' as const,
       priority:        0.70,
     }
   })
+
+  // Craft guides don't cite contests; they carry their own datePublished/dateModified.
+  const craftGuideUrls: MetadataRoute.Sitemap = CRAFT_GUIDE_ORDER
+    .filter(slug => CRAFT_GUIDES[slug])
+    .map(slug => {
+      const g = CRAFT_GUIDES[slug]
+      const modified = g.dateModified ? new Date(g.dateModified) : null
+      const published = g.datePublished ? new Date(g.datePublished) : null
+      return {
+        url:             `${BASE}/guide/${slug}`,
+        lastModified:    latestOf([modified, published], now),
+        changeFrequency: 'monthly' as const,
+        priority:        0.70,
+      }
+    })
+
+  const guideUrls: MetadataRoute.Sitemap = [...guideContentUrls, ...craftGuideUrls]
 
   // Topic cluster pages -- same idea as guides, but TopicData has no
   // datePublished field, so this is just the cited contests' freshness.
