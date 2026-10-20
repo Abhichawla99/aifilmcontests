@@ -36,6 +36,87 @@ describe the old dark theme; the reasoning still applies, the colours do not.)*
 
 ---
 
+## 2026-10-20 — The contest page's AI tools, as a rule and its examples
+
+**Changed** — the `AI tools allowed` section of `src/app/contests/[id]/page.tsx`,
+now a small `ToolsAllowed` component beside `Section`, plus one new CSS rule
+`.ctools` next to `.ctags`. 75 lines added, 15 removed, 33 of the additions
+being comments. No tool data changed, no URL, no copy on any other block.
+
+**Was** — every entry in `ai_tools_allowed`, whatever it said, rendered as the
+same object: 13px Space Grotesk, white fill, a 1px `#E0DCD2` border, a 6px
+radius, in a wrapping row.
+
+Three different kinds of fact arrive in that one array, and the row flattened
+all three into one shape.
+
+`Any AI tool` is the **rule** — the thing an entrant must obey.
+`Runway` is an **example** of a tool that satisfies the rule.
+`Seedance (required, at least 70% of final film)` is a rule too, and on that
+contest's page it is the single most load-bearing line there is: get it wrong
+and the entry is void.
+
+Set identically, they cannot be told apart. On African AI Film Festival the
+section printed nine chips — `Runway`, `Adobe Firefly`, `Sora`, `Kling`, `Veo`,
+`Midjourney`, `Pika`, `ElevenLabs`, `Any AI tool` — with the only line that is
+actually a rule sitting ninth, after eight product names, reading as if it were
+a ninth product.
+
+The commoner failure was blunter. 43 of the 81 open contests carry nothing in
+that field but some spelling of a blanket permission, so for better than half
+the directory the whole section was one box. In nine of those the box said
+`any`: lowercase, alone, a 44px rounded rectangle under a caption reading
+AI TOOLS ALLOWED. And the branch immediately beside it, the one that runs when
+the field is empty, already said *"Any AI tools."* as a sentence in body ink —
+so the page had the right answer in it the whole time and used it only when it
+knew nothing.
+
+The 10-05 entry that de-boxed the tag row argued for keeping these: "the tool
+chips name what an entrant may use". That was the wrong cut. 10-19 wrote the
+rule the right way round — a border is a promise that pressing it does
+something — and these are `<span>`s. This was the last unpressable bordered
+cloud on the contest page.
+
+**Looked at** — Metrograph's Now Playing and Criterion's Current.
+
+Metrograph sets each film's specs as one unpunctuated run: `1993 / 139MIN /
+35MM`. Which print is screening is exactly the fact a Metrograph audience
+decides on — a 35mm booking sells out where the DCP does not — and it is still
+plain caps text with no box around it, because at Metrograph the boxes are the
+showtimes, the thing you press. Criterion does the same split one level up:
+`ESSAYS — OCT 6, 2026` is a muted caption run, the byline underneath is body
+ink. What a thing *is* goes quiet; what it *says* gets the ink.
+
+**Now** —
+
+- The rule is a line of body text at 15px `#3E3A33`, the same setting as WHO CAN
+  ENTER directly above it. A bare `any` becomes `Any AI tool`; every other entry
+  keeps the organizer's own wording, clauses included — `Any AI tool with
+  disclosure`, `Any AI tools (Production Journal of AI tools required)` — with
+  only a lowercase first letter lifted.
+- Named tools follow as one comma run at 13.5px `#6F6A61` (`.ctools`),
+  subordinate by size and ink, which is the whole statement: these are instances
+  of the rule, not more rules. Casing is kept, unlike `.ctags`, because
+  `elevenlabs` reads as a typo where `red carpet` does not.
+- Where there is no blanket permission the named entries *are* the restriction,
+  so they lead instead of trailing, set as the same ruled list the prize details
+  above them already use. PixLight's two lines — `PixVerse Canvas (required as
+  primary platform for the Pilot Track)` and `Live-action footage and
+  traditional VFX may be incorporated` — now read as the two conditions they
+  are, hairline between them.
+
+Checked at 390px and 1440px against all three shapes: blanket only (Golden
+Dunes), blanket plus examples (African AI Film Festival), required tool only
+(1 Billion Followers Summit, `Seedance (required, at least 70% of final film)`).
+No horizontal overflow at either width.
+
+**Before/after** — `reports/design/2026-10-20-before.png` and
+`2026-10-20-after.png` are the same page at the same scroll, Golden Dunes Dubai.
+`2026-10-20-after-mixed.png` is the rule-plus-examples shape and
+`2026-10-20-after-required.png` the required-tool shape.
+
+---
+
 ## 2026-10-19 — The card's categories, as a genre line instead of four boxes
 
 **Changed** — row 4 of `src/components/ContestCard.tsx`, plus a four-line
