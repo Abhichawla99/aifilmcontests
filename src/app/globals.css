@@ -1531,3 +1531,16 @@ img, svg, video, canvas { max-width: 100%; }
   text-transform: lowercase;
   max-width: 56ch;
 }
+
+/* The named tools under a blanket permission. Same quiet comma run as .ctags
+   and for the same reason — a list of facts nobody presses — but it keeps the
+   stored casing, because these are products and `ElevenLabs` lowercased reads
+   as a typo where `red carpet` does not. Sat beneath the rule it illustrates,
+   so it carries the gap rather than the rule's own line. */
+.ctools {
+  font-size: 13.5px;
+  line-height: 1.8;
+  color: #6F6A61;
+  max-width: 56ch;
+  margin-top: 10px;
+}

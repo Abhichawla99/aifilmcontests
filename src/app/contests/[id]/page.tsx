@@ -331,21 +331,7 @@ export default async function ContestPage({ params }: { params: Promise<{ id: st
               </Section>
 
               <Section label="AI tools allowed">
-                {contest.aiToolsAllowed && contest.aiToolsAllowed.length > 0 ? (
-                  <div className="flex flex-wrap gap-2">
-                    {contest.aiToolsAllowed.map((tool, i) => (
-                      <span key={i} style={{
-                        fontSize: 13, color: '#3E3A33', background: '#fff',
-                        border: '1px solid #E0DCD2', borderRadius: 6, padding: '4px 10px',
-                        fontFamily: 'Space Grotesk, sans-serif',
-                      }}>
-                        {tool}
-                      </span>
-                    ))}
-                  </div>
-                ) : (
-                  <p style={{ fontSize: 15, color: '#3E3A33' }}>Any AI tools.</p>
-                )}
+                <ToolsAllowed items={contest.aiToolsAllowed} />
               </Section>
 
               {contest.tags && contest.tags.length > 0 && (
@@ -511,6 +497,67 @@ function Section({ label, children }: { label: string; children: React.ReactNode
       </h2>
       {children}
     </section>
+  )
+}
+
+// ── AI tools allowed ───────────────────────────────────────────────────────
+// Two different kinds of fact arrive in one array. "Any AI tool" is the rule;
+// "Runway" is an example of a tool that satisfies it; "Seedance (required, at
+// least 70% of final film)" is a rule too, and the single most load-bearing
+// line on that contest's page. The old row set all three identically — a 13px
+// chip, white fill, 1px border, 6px radius — so a reader could not tell which
+// of eight chips was the one they had to obey, and 43 of 81 open contests
+// printed a whole section whose only content was a box saying `any`.
+//
+// A box on this site is a promise that pressing it does something (2026-10-19).
+// Nothing here is pressable. So the rule is set as a line of body text, the way
+// WHO CAN ENTER directly above it already is, and the named tools follow as one
+// quiet comma run beneath — subordinate by size and ink, which is the whole
+// statement: these are instances of the rule, not more rules.
+const BLANKET_PERMISSION = /^(any|all)\b/i
+
+// The field is hand-entered, so the blanket entry arrives as `any`, `Any AI
+// tool`, `any AI tool` and nine other spellings. Only the bare token is
+// rewritten — a bare `any` under a caption reading AI TOOLS ALLOWED says
+// nothing a reader can act on. Everything else keeps the organizer's own
+// wording, including the clauses that matter ("with disclosure", "Production
+// Journal of AI tools required"); only a lowercase first letter is lifted.
+function toolRule(raw: string) {
+  const t = raw.replace(/\s+/g, ' ').trim()
+  const s = /^any$/i.test(t) ? 'Any AI tool' : t
+  return s.charAt(0).toUpperCase() + s.slice(1)
+}
+
+function ToolsAllowed({ items }: { items?: string[] }) {
+  const all = (items ?? []).map(t => t.replace(/\s+/g, ' ').trim()).filter(Boolean)
+  const blanket = all.filter(t => BLANKET_PERMISSION.test(t))
+  // No blanket permission means the named tools are themselves the restriction,
+  // so they lead instead of trailing. With one, they are examples under it.
+  const named = all.filter(t => !BLANKET_PERMISSION.test(t))
+  const rules = (blanket.length ? blanket : named).map(toolRule)
+  const examples = blanket.length ? named : []
+
+  if (rules.length === 0) return <p style={{ fontSize: 15, color: '#3E3A33', lineHeight: 1.7 }}>Any AI tool.</p>
+
+  return (
+    <>
+      <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column' }}>
+        {rules.map((rule, i) => (
+          <li key={i} style={{
+            fontSize: 15, color: '#3E3A33', lineHeight: 1.7,
+            padding: i === 0 ? 0 : '9px 0 0',
+            marginTop: i === 0 ? 0 : 9,
+            borderTop: i === 0 ? 'none' : '1px solid #ECE9E2',
+            maxWidth: '56ch',
+          }}>
+            {rule}
+          </li>
+        ))}
+      </ul>
+      {examples.length > 0 && (
+        <p className="ctools">{examples.join(', ')}</p>
+      )}
+    </>
   )
 }
 
