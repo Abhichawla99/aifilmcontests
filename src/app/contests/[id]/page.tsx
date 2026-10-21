@@ -429,13 +429,23 @@ export default async function ContestPage({ params }: { params: Promise<{ id: st
             </aside>
           </div>
 
-          {/* ── Don't lose the deadline ── */}
+          {/* ── Don't lose the deadline ──
+               This was the one panel left on the page: a 14px radius filled
+               #F3F0F9 behind an #E1DAF0 hairline, its sentence set in #4C3F72.
+               Those three values are not a CTA palette — they are the Feature
+               tint out of src/lib/theme.ts, where purple means feature film.
+               So on every contest that is not one, the page's most important
+               control arrived wearing another category's colour, sitting a
+               screen below a header band tinted in the contest's own: blue on
+               a short film, sand on a documentary, purple down here regardless.
+               Every other block on this page is a hairline and a label on
+               paper. This one now is too, and the fill stays where it means
+               something — on the Get Alerts button, the thing you press. */}
           {!isClosed && (
-            <div style={{
-              background: '#F3F0F9', border: '1px solid #E1DAF0', borderRadius: 14,
-              padding: 'clamp(20px, 3vw, 28px)', marginBottom: 48,
+            <section style={{
+              borderTop: '1px solid #ECE9E2', paddingTop: 26, marginBottom: 48,
               display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))',
-              gap: 24, alignItems: 'center',
+              gap: 'clamp(18px, 3vw, 32px)', alignItems: 'start',
             }}>
               <div>
                 <h2 style={{
@@ -444,12 +454,12 @@ export default async function ContestPage({ params }: { params: Promise<{ id: st
                 }}>
                   Don&apos;t miss this deadline
                 </h2>
-                <p style={{ fontSize: 14, color: '#4C3F72', lineHeight: 1.6, margin: 0 }}>
+                <p style={{ fontSize: 14, color: '#3E3A33', lineHeight: 1.6, margin: 0 }}>
                   We&apos;ll email you three days before {contest.name} closes, and when contests like it open.
                 </p>
               </div>
               <EmailSubscribe compact />
-            </div>
+            </section>
           )}
 
           {/* ── Related ── */}
