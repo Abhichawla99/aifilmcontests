@@ -12,8 +12,11 @@
  * Both modes run the same pairwise signals:
  *   1. Name match (after stripping year/edition numbers and punctuation),
  *      gated to a close deadline so next year's edition isn't flagged.
- *   2. Same normalized URL (domain + path), corroborated by a close deadline
- *      or real name overlap.
+ *   2. Same normalized URL (domain + path), corroborated by a close,
+ *      non-null deadline on both sides — name overlap alone used to also
+ *      qualify, but a shared hub page (e.g. one FilmFreeway listing reused
+ *      for an organizer's separate seasonal activations) can carry near-
+ *      identical names months apart, so it's no longer enough on its own.
  *   3. Same URL domain + exact deadline, corroborated by real name overlap.
  *   4. Same organizer + exact deadline + exact event date, across any hosts
  *      (catches one festival listed twice under different domains/names —
@@ -154,10 +157,9 @@ function duplicateSignal(a, b) {
   }
 
   const urlKeyA = normalizedUrlKey(a.url), urlKeyB = normalizedUrlKey(b.url)
-  if (urlKeyA && urlKeyA === urlKeyB) {
-    const closeDeadline = daysBetween(a.deadline, b.deadline) <= URL_MATCH_MAX_DEADLINE_GAP_DAYS
-    const similarName = nameTokenOverlap(a.name, b.name) >= DOMAIN_MATCH_MIN_NAME_OVERLAP
-    if (closeDeadline || similarName) return 'same url'
+  if (urlKeyA && urlKeyA === urlKeyB &&
+      daysBetween(a.deadline, b.deadline) <= URL_MATCH_MAX_DEADLINE_GAP_DAYS) {
+    return 'same url'
   }
 
   const domainA = domainOf(a.url), domainB = domainOf(b.url)

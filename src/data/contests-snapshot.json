@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-10-21T12:09:27.112Z",
+  "generatedAt": "2026-10-21T13:13:08.014Z",
   "contests": [
     {
       "id": "wsxa-hailuo-2026",
@@ -4625,6 +4625,55 @@
       "outreach_status": null
     },
     {
+      "id": "ai-motion-milan-2026",
+      "name": "AI.motion — Italy's AI Cinema Festival at IULM Milan",
+      "organizer": "IULM AI Lab & Neural Network Cultural Association",
+      "description": "Italy's biggest AI cinema festival lands at IULM University Milan Oct 9–10. Zero entry fee, real Italian broadcaster eyeballs — the festival hands out the coveted RAI Cinema Channel Prize alongside Best Short, Best Commercial, Best Music Video and the PROMPT Magazine Prize.",
+      "deadline": "2026-09-10",
+      "submission_open": null,
+      "prize": "RAI Cinema Channel Prize + PROMPT Magazine Prize",
+      "prize_details": [
+        "RAI Cinema Channel Prize",
+        "PROMPT Magazine Prize",
+        "Best Short Film",
+        "Best Commercial",
+        "Best Music Video",
+        "Best Digital AI Art Project"
+      ],
+      "url": "https://filmfreeway.com/AI_motion",
+      "status": "closed",
+      "categories": [
+        "short",
+        "commercial",
+        "music-video",
+        "ai-art"
+      ],
+      "ai_tools_allowed": [
+        "any"
+      ],
+      "eligibility": "Open globally. Films must be AI-generated and submitted with list of algorithms used",
+      "entry_fee": "Free (no submission fee per FilmFreeway rules)",
+      "featured": false,
+      "tags": [
+        "italy",
+        "milan",
+        "iulm",
+        "rai-cinema",
+        "free-entry",
+        "academic"
+      ],
+      "location": "Milan, Italy",
+      "event_date": "2026-10-09",
+      "created_at": "2026-05-22T23:58:40.289553+00:00",
+      "updated_at": "2026-10-10T12:06:35.273688+00:00",
+      "featured_until": null,
+      "featured_paid_at": null,
+      "organizer_email": null,
+      "organizer_contact_url": null,
+      "outreach_sent_at": null,
+      "outreach_status": null
+    },
+    {
       "id": "rome-ai-festival-2026",
       "name": "Rome AI Festival (RAIF) 2026 — 3rd Edition",
       "organizer": "Rome AI Festival by VIA (Festival Director Riccardo Vincenzi)",
@@ -4670,55 +4719,6 @@
       "event_date": "2026-09-19",
       "created_at": "2026-09-07T22:25:34.625153+00:00",
       "updated_at": "2026-09-11T08:00:06.151045+00:00",
-      "featured_until": null,
-      "featured_paid_at": null,
-      "organizer_email": null,
-      "organizer_contact_url": null,
-      "outreach_sent_at": null,
-      "outreach_status": null
-    },
-    {
-      "id": "ai-motion-milan-2026",
-      "name": "AI.motion — Italy's AI Cinema Festival at IULM Milan",
-      "organizer": "IULM AI Lab & Neural Network Cultural Association",
-      "description": "Italy's biggest AI cinema festival lands at IULM University Milan Oct 9–10. Zero entry fee, real Italian broadcaster eyeballs — the festival hands out the coveted RAI Cinema Channel Prize alongside Best Short, Best Commercial, Best Music Video and the PROMPT Magazine Prize.",
-      "deadline": "2026-09-10",
-      "submission_open": null,
-      "prize": "RAI Cinema Channel Prize + PROMPT Magazine Prize",
-      "prize_details": [
-        "RAI Cinema Channel Prize",
-        "PROMPT Magazine Prize",
-        "Best Short Film",
-        "Best Commercial",
-        "Best Music Video",
-        "Best Digital AI Art Project"
-      ],
-      "url": "https://filmfreeway.com/AI_motion",
-      "status": "closed",
-      "categories": [
-        "short",
-        "commercial",
-        "music-video",
-        "ai-art"
-      ],
-      "ai_tools_allowed": [
-        "any"
-      ],
-      "eligibility": "Open globally. Films must be AI-generated and submitted with list of algorithms used",
-      "entry_fee": "Free (no submission fee per FilmFreeway rules)",
-      "featured": false,
-      "tags": [
-        "italy",
-        "milan",
-        "iulm",
-        "rai-cinema",
-        "free-entry",
-        "academic"
-      ],
-      "location": "Milan, Italy",
-      "event_date": "2026-10-09",
-      "created_at": "2026-05-22T23:58:40.289553+00:00",
-      "updated_at": "2026-10-10T12:06:35.273688+00:00",
       "featured_until": null,
       "featured_paid_at": null,
       "organizer_email": null,
@@ -4941,41 +4941,6 @@
       "outreach_status": null
     },
     {
-      "id": "akool-creator-clash-2026",
-      "name": "AKOOL Creator Clash – Seedance 2 Global AI Video Competition",
-      "organizer": "AKOOL",
-      "description": "The AKOOL Creator Clash invites creators to showcase their talent using AI video generation powered by Seedance 2. Participants can submit original videos published on social media platforms. Winners will be announced on September 30, 2026.",
-      "deadline": "2026-09-15",
-      "submission_open": null,
-      "prize": "$300,000 in Creator Rewards",
-      "prize_details": [
-        "$30,000 Grand Prize",
-        "$100 Creator Bonus for every qualified submission"
-      ],
-      "url": "https://www.prnewswire.com/news-releases/the-future-of-ai-storytelling-belongs-to-creators-akool-launches-global-competition-with-300-000-in-creator-rewards-302830264.html",
-      "status": "closed",
-      "categories": [
-        "short-film"
-      ],
-      "ai_tools_allowed": [
-        "Seedance 2"
-      ],
-      "eligibility": "Open to creators worldwide.",
-      "entry_fee": "Free",
-      "featured": true,
-      "tags": [],
-      "location": null,
-      "event_date": null,
-      "created_at": "2026-08-17T08:16:11.293973+00:00",
-      "updated_at": "2026-09-16T08:00:05.727396+00:00",
-      "featured_until": null,
-      "featured_paid_at": null,
-      "organizer_email": null,
-      "organizer_contact_url": null,
-      "outreach_sent_at": null,
-      "outreach_status": null
-    },
-    {
       "id": "future-frames-corfu-2026",
       "name": "Future Frames: Corfu International AI & Film Festival",
       "organizer": "V Museum Corfu",
@@ -5013,42 +4978,37 @@
       "outreach_status": null
     },
     {
-      "id": "new-world-ai-film-festival-2026",
-      "name": "New World AI Film Festival (NWAIFF)",
-      "organizer": "NWAIFF (Founder: Susie W)",
-      "description": "Independent international online festival open to AI-driven films of any genre, format or style, based in Paris with online screenings and jury from Cannes and international festival circuits.",
-      "deadline": "2026-09-16",
-      "submission_open": "2026-04-01",
-      "prize": "Best Film per category, Best First-Time AI Filmmaker/Film, Best Screenplay, Digital Award Certificate",
+      "id": "akool-creator-clash-2026",
+      "name": "AKOOL Creator Clash – Seedance 2 Global AI Video Competition",
+      "organizer": "AKOOL",
+      "description": "The AKOOL Creator Clash invites creators to showcase their talent using AI video generation powered by Seedance 2. Participants can submit original videos published on social media platforms. Winners will be announced on September 30, 2026.",
+      "deadline": "2026-09-15",
+      "submission_open": null,
+      "prize": "$300,000 in Creator Rewards",
       "prize_details": [
-        "Best Film — All Categories",
-        "Best First-Time AI Filmmaker / Film",
-        "Best Screenplay (human-written, AI visuals)",
-        "Global exposure across festival platforms for one week"
+        "$30,000 Grand Prize",
+        "$100 Creator Bonus for every qualified submission"
       ],
-      "url": "https://festhome.com/festival/new-world-ai-film-festival",
+      "url": "https://www.prnewswire.com/news-releases/the-future-of-ai-storytelling-belongs-to-creators-akool-launches-global-competition-with-300-000-in-creator-rewards-302830264.html",
       "status": "closed",
       "categories": [
-        "short-film",
-        "feature"
+        "short-film"
       ],
-      "ai_tools_allowed": [],
-      "eligibility": "Open worldwide, no restriction on genre, format or style.",
-      "entry_fee": "From €9",
-      "featured": false,
-      "tags": [
-        "Paris",
-        "online-festival",
-        "no-genre-limit"
+      "ai_tools_allowed": [
+        "Seedance 2"
       ],
-      "location": "Paris, France",
-      "event_date": "2026-10-01",
-      "created_at": "2026-09-30T11:11:50.88559+00:00",
-      "updated_at": "2026-09-30T11:11:50.88559+00:00",
+      "eligibility": "Open to creators worldwide.",
+      "entry_fee": "Free",
+      "featured": true,
+      "tags": [],
+      "location": null,
+      "event_date": null,
+      "created_at": "2026-08-17T08:16:11.293973+00:00",
+      "updated_at": "2026-09-16T08:00:05.727396+00:00",
       "featured_until": null,
       "featured_paid_at": null,
       "organizer_email": null,
-      "organizer_contact_url": "https://nwaiff.lovable.app/",
+      "organizer_contact_url": null,
       "outreach_sent_at": null,
       "outreach_status": null
     },
@@ -5101,39 +5061,44 @@
       "outreach_status": null
     },
     {
-      "id": "tyrannus-angel-awards-2026",
-      "name": "Tyrannus Angel Awards 2026",
-      "organizer": "Tyrannus Foundation",
-      "description": "Faith-driven AI film awards seeking stories of courage, restoration, redemption and hope, judged on emotional impact rather than technical showmanship.",
-      "deadline": "2026-09-20",
-      "submission_open": null,
-      "prize": "$50,000 total prize pool",
+      "id": "new-world-ai-film-festival-2026",
+      "name": "New World AI Film Festival (NWAIFF)",
+      "organizer": "NWAIFF (Founder: Susie W)",
+      "description": "Independent international online festival open to AI-driven films of any genre, format or style, based in Paris with online screenings and jury from Cannes and international festival circuits.",
+      "deadline": "2026-09-16",
+      "submission_open": "2026-04-01",
+      "prize": "Best Film per category, Best First-Time AI Filmmaker/Film, Best Screenplay, Digital Award Certificate",
       "prize_details": [
-        "Total prize pool: $50,000"
+        "Best Film — All Categories",
+        "Best First-Time AI Filmmaker / Film",
+        "Best Screenplay (human-written, AI visuals)",
+        "Global exposure across festival platforms for one week"
       ],
-      "url": "https://www.tyrannusangelawards.org/",
+      "url": "https://festhome.com/festival/new-world-ai-film-festival",
       "status": "closed",
       "categories": [
         "short-film",
-        "animation"
+        "feature"
       ],
-      "ai_tools_allowed": [
-        "Any AI tools"
+      "ai_tools_allowed": [],
+      "eligibility": "Open worldwide, no restriction on genre, format or style.",
+      "entry_fee": "From €9",
+      "featured": false,
+      "tags": [
+        "Paris",
+        "online-festival",
+        "no-genre-limit"
       ],
-      "eligibility": "Open to all filmmakers, no restrictions.",
-      "entry_fee": "Free",
-      "featured": true,
-      "tags": [],
-      "location": null,
-      "event_date": "2026-10-24",
-      "created_at": "2026-09-20T08:15:22.153335+00:00",
-      "updated_at": "2026-09-21T08:00:05.784355+00:00",
+      "location": "Paris, France",
+      "event_date": "2026-10-01",
+      "created_at": "2026-09-30T11:11:50.88559+00:00",
+      "updated_at": "2026-09-30T11:11:50.88559+00:00",
       "featured_until": null,
       "featured_paid_at": null,
-      "organizer_email": "info@tyrannusangelawards.org",
-      "organizer_contact_url": "https://www.tyrannusangelawards.org/submit",
+      "organizer_email": null,
+      "organizer_contact_url": "https://nwaiff.lovable.app/",
       "outreach_sent_at": null,
-      "outreach_status": "draft"
+      "outreach_status": null
     },
     {
       "id": "tyrannus-angel-ai-film-awards-2026",
@@ -5173,6 +5138,41 @@
       "location": "Los Angeles, California, USA",
       "event_date": "2026-10-24",
       "created_at": "2026-09-07T22:25:34.625153+00:00",
+      "updated_at": "2026-09-21T08:00:05.784355+00:00",
+      "featured_until": null,
+      "featured_paid_at": null,
+      "organizer_email": "info@tyrannusangelawards.org",
+      "organizer_contact_url": "https://www.tyrannusangelawards.org/submit",
+      "outreach_sent_at": null,
+      "outreach_status": "draft"
+    },
+    {
+      "id": "tyrannus-angel-awards-2026",
+      "name": "Tyrannus Angel Awards 2026",
+      "organizer": "Tyrannus Foundation",
+      "description": "Faith-driven AI film awards seeking stories of courage, restoration, redemption and hope, judged on emotional impact rather than technical showmanship.",
+      "deadline": "2026-09-20",
+      "submission_open": null,
+      "prize": "$50,000 total prize pool",
+      "prize_details": [
+        "Total prize pool: $50,000"
+      ],
+      "url": "https://www.tyrannusangelawards.org/",
+      "status": "closed",
+      "categories": [
+        "short-film",
+        "animation"
+      ],
+      "ai_tools_allowed": [
+        "Any AI tools"
+      ],
+      "eligibility": "Open to all filmmakers, no restrictions.",
+      "entry_fee": "Free",
+      "featured": true,
+      "tags": [],
+      "location": null,
+      "event_date": "2026-10-24",
+      "created_at": "2026-09-20T08:15:22.153335+00:00",
       "updated_at": "2026-09-21T08:00:05.784355+00:00",
       "featured_until": null,
       "featured_paid_at": null,
@@ -5471,47 +5471,60 @@
       "outreach_status": null
     },
     {
-      "id": "ai-film-fest-italy-2026",
-      "name": "AI Film Fest Italy — 2nd Edition",
-      "organizer": "AI Film Fest Italy",
-      "description": "Second edition of a non-profit Italian festival for films generated with AI, with AI Short, AI Doc, AI Promo and AI Animate sections. Fees are kept to €5–€10 and the extended deadline is September 30.",
+      "id": "ai-international-music-video-festival-2026",
+      "name": "AI International Music Video Festival 2026",
+      "organizer": "The AI Project (501(c)(3) nonprofit)",
+      "description": "Monthly Hollywood music video festival spun out of the AI International Film Festival, for music videos whose visuals, animation or music are made with AI tools, plus live-action and documentary videos on AI themes. The next edition screens at the Los Angeles Performing Arts Conservatory on 14 November 2026.",
       "deadline": "2026-09-30",
-      "submission_open": "2025-12-07",
-      "prize": "Awards: Best AI Short Film, Best AI Concept, AI Critics Award, Special Mention",
+      "submission_open": "2026-09-02",
+      "prize": "Jury and Audience Choice awards plus Winners Circle Guild membership",
       "prize_details": [
-        "Best AI Short Film",
-        "Best AI Concept",
-        "AI Critics Award",
-        "Special Mention",
-        "Regular deadline was March 31, 2026; extended deadline September 30, 2026"
+        "Best Music Video (Overall), Best Director, Best Cinematography, Best Editing",
+        "Best Use of AI in Music Composition and in Visual Creation",
+        "Best AI-Human Collaboration, Best Student or Emerging Creator",
+        "Winners Circle Guild: free tools and a private filmmaker channel",
+        "Winning videos featured for global screening on watch.eventive.org"
       ],
-      "url": "https://aifilmfest.it/",
+      "url": "https://filmfreeway.com/AIMusicVideoFestival",
       "status": "closed",
       "categories": [
-        "short-film",
+        "music-video",
+        "experimental",
         "documentary",
         "animation"
       ],
-      "ai_tools_allowed": [],
-      "eligibility": "Films generated or supported by AI; submitted through FilmFreeway.",
-      "entry_fee": "€5–€10",
+      "ai_tools_allowed": [
+        "Runway",
+        "Sora",
+        "Veo",
+        "Suno",
+        "Luma",
+        "Kaiber",
+        "ElevenLabs",
+        "Stable Diffusion",
+        "Any AI tools"
+      ],
+      "eligibility": "Open worldwide. Horizontal and vertical formats accepted. Work must be original to the artist, who is responsible for copyright compliance.",
+      "entry_fee": "See FilmFreeway",
       "featured": false,
       "tags": [
-        "italy",
-        "europe",
-        "non-profit",
-        "low-fee"
+        "hollywood",
+        "los-angeles",
+        "usa",
+        "music-video",
+        "monthly",
+        "filmfreeway"
       ],
-      "location": "Italy",
-      "event_date": "2026-11-27",
-      "created_at": "2026-09-21T11:09:42.444542+00:00",
+      "location": "Hollywood, CA, United States",
+      "event_date": "2026-11-14",
+      "created_at": "2026-09-08T11:09:04.814147+00:00",
       "updated_at": "2026-10-01T01:10:41.17535+00:00",
       "featured_until": null,
       "featured_paid_at": null,
-      "organizer_email": null,
-      "organizer_contact_url": "https://aifilmfest.it/contatti",
+      "organizer_email": "bert@aifilmfest.org",
+      "organizer_contact_url": "https://aifilmfest.org/",
       "outreach_sent_at": null,
-      "outreach_status": null
+      "outreach_status": "draft"
     },
     {
       "id": "call-for-films-ai-2026",
@@ -5586,143 +5599,6 @@
       "outreach_status": null
     },
     {
-      "id": "we-are-human-festival-2026",
-      "name": "We Are Human Festival – Film & AI International Open Call 2026",
-      "organizer": "Film Resource Africa",
-      "description": "The We Are Human Festival invites filmmakers to submit works that explore the intersection of humanity and AI. The festival emphasizes human creative direction in AI-generated works and offers a range of prizes for outstanding submissions. Selected films will be screened internationally.",
-      "deadline": "2026-09-30",
-      "submission_open": null,
-      "prize": "€10,000 total prize pool",
-      "prize_details": [
-        "Grand Prix: €5,000",
-        "Best Screenplay: €3,000",
-        "Ethics Award: €2,000"
-      ],
-      "url": "https://wearehuman.foundation/en/call-for-films/",
-      "status": "closed",
-      "categories": [
-        "short-film"
-      ],
-      "ai_tools_allowed": [
-        "AI tools for image, sound, music or text generation"
-      ],
-      "eligibility": "Open internationally to filmmakers, visual artists, studios, independent creators and collectives aged 18 and over.",
-      "entry_fee": "Free",
-      "featured": false,
-      "tags": [],
-      "location": null,
-      "event_date": "2026-11-24",
-      "created_at": "2026-08-15T08:16:06.7885+00:00",
-      "updated_at": "2026-10-01T01:10:41.17535+00:00",
-      "featured_until": null,
-      "featured_paid_at": null,
-      "organizer_email": "contact@wearehuman.foundation",
-      "organizer_contact_url": null,
-      "outreach_sent_at": null,
-      "outreach_status": null
-    },
-    {
-      "id": "formula-e-creators-challenge-2026",
-      "name": "Formula E Creators Challenge 2026",
-      "organizer": "Bionic Awards × Google Cloud (with Formula E)",
-      "description": "Make a 60-second AI film about the Formula E GEN4 car using Google's generative video models. Shortlisted films premiere at BFI IMAX London on Oct 22, 2026, and category winners get a trip to a Formula E race.",
-      "deadline": "2026-09-30",
-      "submission_open": null,
-      "prize": "Formula E race trip + BFI IMAX London premiere",
-      "prize_details": [
-        "Shortlist: screening at BFI IMAX London (Oct 22, 2026) plus two premiere tickets",
-        "Category winners: Emotion Club tickets at a 2026/27 Formula E E-Prix for winner and a guest",
-        "Up to US$2,000 travel contribution per person",
-        "Categories include independent creators, agencies and best use of Google Flow"
-      ],
-      "url": "https://gen4challenge.com/",
-      "status": "closed",
-      "categories": [
-        "advertising",
-        "short-film"
-      ],
-      "ai_tools_allowed": [
-        "Google Veo 3.1",
-        "Gemini Omni",
-        "Google Flow"
-      ],
-      "eligibility": "18+, worldwide except UK-sanctioned territories. Max 60 seconds; 100% of runtime must be generative video from Google models; must use the GEN4 Asset Kit for at least 4 seconds. Submit via FilmFreeway.",
-      "entry_fee": "Free",
-      "featured": false,
-      "tags": [
-        "free-entry",
-        "brand-challenge",
-        "google",
-        "formula-e",
-        "filmfreeway",
-        "uk",
-        "60-seconds"
-      ],
-      "location": "Online — premiere at BFI IMAX, London",
-      "event_date": "2026-10-22",
-      "created_at": "2026-09-19T11:07:59.002899+00:00",
-      "updated_at": "2026-10-01T01:10:41.17535+00:00",
-      "featured_until": null,
-      "featured_paid_at": null,
-      "organizer_email": "creatorschallenge@fiaformulae.com",
-      "organizer_contact_url": "https://gen4challenge.com/rules",
-      "outreach_sent_at": null,
-      "outreach_status": "draft"
-    },
-    {
-      "id": "on-art-ai-warsaw-2026",
-      "name": "On Art AI Film Festival — Warsaw",
-      "organizer": "On Art Festival",
-      "description": "Poland's flagship AI film showcase in Warsaw. New sub-section spotlights films made by AI or created with AI tools — 40 short films and 10 medium/feature entries screen at the November finale in Warsaw. Deadline is closer than you think, submissions close September 30.",
-      "deadline": "2026-09-30",
-      "submission_open": null,
-      "prize": "Warsaw festival screening + professional jury recognition",
-      "prize_details": [
-        "3-day finale in Warsaw (Puławska 20) with screenings, panels, and AI-video masterclass",
-        "Professional jury will select 40 short films and 10 medium/feature-length films",
-        "Global visibility across On Art Festival network"
-      ],
-      "url": "https://filmfreeway.com/OnAI",
-      "status": "closed",
-      "categories": [
-        "Short Film",
-        "Animation",
-        "Documentary",
-        "Experimental",
-        "Video Art"
-      ],
-      "ai_tools_allowed": [
-        "Any generative AI tool",
-        "Runway",
-        "Sora",
-        "Kling",
-        "Veo",
-        "Midjourney",
-        "Luma",
-        "Pika"
-      ],
-      "eligibility": "Open to professional and independent filmmakers worldwide. All genres accepted: fiction, animation, documentary, video art, experimental.",
-      "entry_fee": "See FilmFreeway page for current tiered fee",
-      "featured": false,
-      "tags": [
-        "Poland",
-        "Europe",
-        "Warsaw",
-        "open call",
-        "2026"
-      ],
-      "location": "Warsaw, Poland",
-      "event_date": "2026-11-15",
-      "created_at": "2026-07-23T12:43:18.329899+00:00",
-      "updated_at": "2026-10-01T01:10:41.17535+00:00",
-      "featured_until": null,
-      "featured_paid_at": null,
-      "organizer_email": null,
-      "organizer_contact_url": "https://onart.eu/en/contact/",
-      "outreach_sent_at": null,
-      "outreach_status": null
-    },
-    {
       "id": "project-odyssey-ai-film-championship-2026",
       "name": "Project Odyssey — AI Film Championship",
       "organizer": "AIFC",
@@ -5751,58 +5627,6 @@
       "featured_paid_at": null,
       "organizer_email": "hello@projectodyssey.ai",
       "organizer_contact_url": null,
-      "outreach_sent_at": null,
-      "outreach_status": "draft"
-    },
-    {
-      "id": "ai-film-festival-japan-november-2026",
-      "name": "AI Film Festival Japan (AIFJ) 2026 — Tokyo, Oct 31 – Nov 2",
-      "organizer": "AI Film Festival Japan 2026 Executive Committee (AI FILM JAPAN inc.)",
-      "description": "Asia's largest AI film festival returns to Tokyo Innovation Base for a three-day edition from October 31 to November 2, 2026, with awards for Best AI Movie, Animation, Creative, Film Score and Vocal Track plus sponsored prizes from CapCut and ElevenLabs. Films 90 seconds to 15 minutes completed on or after January 1, 2026.",
-      "deadline": "2026-09-30",
-      "submission_open": "2026-07-01",
-      "prize": "Best AI Movie / Animation / Creative / Film Music awards + CapCut and ElevenLabs sponsored awards",
-      "prize_details": [
-        "Best AI Movie",
-        "Best AI Animation",
-        "Best AI Creative (experimental / hybrid)",
-        "Best AI Film Music / Score and Best AI Vocal Track",
-        "CapCut AI Creative Award: 1-year CapCut Pro, 50,000 AI credits and a presentation slot in Tokyo",
-        "All official selections screened live in Tokyo"
-      ],
-      "url": "https://filmfreeway.com/AIFilmFestivalJapan2026",
-      "status": "closed",
-      "categories": [
-        "short-film",
-        "animation",
-        "experimental",
-        "music",
-        "music-video"
-      ],
-      "ai_tools_allowed": [
-        "Any AI tools with mandatory disclosure (e.g. Midjourney, Veo, Runway, Kling, Suno, Udio)",
-        "CapCut AI for the CapCut AI Creative Award"
-      ],
-      "eligibility": "Open to all nationalities and ages (under-18s need parental consent). Films 90 sec to 15 min completed on or after Jan 1, 2026; AI music entries 60 sec to 5 min scored to the official visual asset. Regular deadline Sept 10, late deadline Sept 30, 2026 (12:00 JST).",
-      "entry_fee": "From $29 (Festhome standard; FilmFreeway tiers vary)",
-      "featured": false,
-      "tags": [
-        "japan",
-        "tokyo",
-        "asia",
-        "filmfreeway",
-        "capcut",
-        "elevenlabs",
-        "second-edition"
-      ],
-      "location": "Tokyo Innovation Base, Tokyo, Japan",
-      "event_date": "2026-10-31",
-      "created_at": "2026-09-07T22:25:34.625153+00:00",
-      "updated_at": "2026-10-01T01:10:41.17535+00:00",
-      "featured_until": null,
-      "featured_paid_at": null,
-      "organizer_email": "info@aifilm.jp",
-      "organizer_contact_url": "https://aifilm.jp/message.html",
       "outreach_sent_at": null,
       "outreach_status": "draft"
     },
@@ -5852,107 +5676,52 @@
       "outreach_status": "draft"
     },
     {
-      "id": "ai-international-music-video-festival-2026",
-      "name": "AI International Music Video Festival 2026",
-      "organizer": "The AI Project (501(c)(3) nonprofit)",
-      "description": "Monthly Hollywood music video festival spun out of the AI International Film Festival, for music videos whose visuals, animation or music are made with AI tools, plus live-action and documentary videos on AI themes. The next edition screens at the Los Angeles Performing Arts Conservatory on 14 November 2026.",
+      "id": "formula-e-creators-challenge-2026",
+      "name": "Formula E Creators Challenge 2026",
+      "organizer": "Bionic Awards × Google Cloud (with Formula E)",
+      "description": "Make a 60-second AI film about the Formula E GEN4 car using Google's generative video models. Shortlisted films premiere at BFI IMAX London on Oct 22, 2026, and category winners get a trip to a Formula E race.",
       "deadline": "2026-09-30",
-      "submission_open": "2026-09-02",
-      "prize": "Jury and Audience Choice awards plus Winners Circle Guild membership",
+      "submission_open": null,
+      "prize": "Formula E race trip + BFI IMAX London premiere",
       "prize_details": [
-        "Best Music Video (Overall), Best Director, Best Cinematography, Best Editing",
-        "Best Use of AI in Music Composition and in Visual Creation",
-        "Best AI-Human Collaboration, Best Student or Emerging Creator",
-        "Winners Circle Guild: free tools and a private filmmaker channel",
-        "Winning videos featured for global screening on watch.eventive.org"
+        "Shortlist: screening at BFI IMAX London (Oct 22, 2026) plus two premiere tickets",
+        "Category winners: Emotion Club tickets at a 2026/27 Formula E E-Prix for winner and a guest",
+        "Up to US$2,000 travel contribution per person",
+        "Categories include independent creators, agencies and best use of Google Flow"
       ],
-      "url": "https://filmfreeway.com/AIMusicVideoFestival",
+      "url": "https://gen4challenge.com/",
       "status": "closed",
       "categories": [
-        "music-video",
-        "experimental",
-        "documentary",
-        "animation"
+        "advertising",
+        "short-film"
       ],
       "ai_tools_allowed": [
-        "Runway",
-        "Sora",
-        "Veo",
-        "Suno",
-        "Luma",
-        "Kaiber",
-        "ElevenLabs",
-        "Stable Diffusion",
-        "Any AI tools"
+        "Google Veo 3.1",
+        "Gemini Omni",
+        "Google Flow"
       ],
-      "eligibility": "Open worldwide. Horizontal and vertical formats accepted. Work must be original to the artist, who is responsible for copyright compliance.",
-      "entry_fee": "See FilmFreeway",
+      "eligibility": "18+, worldwide except UK-sanctioned territories. Max 60 seconds; 100% of runtime must be generative video from Google models; must use the GEN4 Asset Kit for at least 4 seconds. Submit via FilmFreeway.",
+      "entry_fee": "Free",
       "featured": false,
       "tags": [
-        "hollywood",
-        "los-angeles",
-        "usa",
-        "music-video",
-        "monthly",
-        "filmfreeway"
+        "free-entry",
+        "brand-challenge",
+        "google",
+        "formula-e",
+        "filmfreeway",
+        "uk",
+        "60-seconds"
       ],
-      "location": "Hollywood, CA, United States",
-      "event_date": "2026-11-14",
-      "created_at": "2026-09-08T11:09:04.814147+00:00",
+      "location": "Online — premiere at BFI IMAX, London",
+      "event_date": "2026-10-22",
+      "created_at": "2026-09-19T11:07:59.002899+00:00",
       "updated_at": "2026-10-01T01:10:41.17535+00:00",
       "featured_until": null,
       "featured_paid_at": null,
-      "organizer_email": "bert@aifilmfest.org",
-      "organizer_contact_url": "https://aifilmfest.org/",
+      "organizer_email": "creatorschallenge@fiaformulae.com",
+      "organizer_contact_url": "https://gen4challenge.com/rules",
       "outreach_sent_at": null,
       "outreach_status": "draft"
-    },
-    {
-      "id": "waimf-marbella-2026",
-      "name": "WAIMF — World AI Movie Festival 2026 (Marbella)",
-      "organizer": "FILM6",
-      "description": "Inaugural edition of the World AI Movie Festival, a live screening and awards event for AI-generated and hybrid AI filmmaking. It runs 7–8 October 2026 at the Red Dog Cinema in Puerto Banús, Marbella, with an international jury of producers, directors and VFX professionals.",
-      "deadline": "2026-09-30",
-      "submission_open": "2026-06-30",
-      "prize": "WAIMF Grand Prix ($500 + Crystal Trophy) plus nine category awards",
-      "prize_details": [
-        "WAIMF Grand Prix: cash prize and trophy",
-        "Best Sci-Fi, Animation, Comedy, Drama, Thriller-Horror, Action-Adventure, Fantasy, Music Clip",
-        "Talent Award",
-        "Official selection laurels, winner certificates and partner gifts"
-      ],
-      "url": "https://filmfreeway.com/WAIMF",
-      "status": "closed",
-      "categories": [
-        "short-film",
-        "feature",
-        "animation",
-        "music-video",
-        "experimental"
-      ],
-      "ai_tools_allowed": [
-        "Any AI tools"
-      ],
-      "eligibility": "Open worldwide to filmmakers, artists, production companies and studios. Minimum running time 4 minutes including credits, completed after 1 January 2025. Fully AI-generated and hybrid works both eligible; no premiere requirement. English subtitles required for non-English films.",
-      "entry_fee": "See FilmFreeway",
-      "featured": false,
-      "tags": [
-        "spain",
-        "europe",
-        "cash-prize",
-        "inaugural",
-        "filmfreeway"
-      ],
-      "location": "Puerto Banús, Marbella, Spain",
-      "event_date": "2026-10-07",
-      "created_at": "2026-09-08T11:09:04.814147+00:00",
-      "updated_at": "2026-10-01T01:10:41.17535+00:00",
-      "featured_until": null,
-      "featured_paid_at": null,
-      "organizer_email": null,
-      "organizer_contact_url": "https://filmfreeway.com/WAIMF",
-      "outreach_sent_at": null,
-      "outreach_status": null
     },
     {
       "id": "csfcca-intl-ai-film-festival-2026",
@@ -6010,6 +5779,237 @@
       "outreach_status": null
     },
     {
+      "id": "waimf-marbella-2026",
+      "name": "WAIMF — World AI Movie Festival 2026 (Marbella)",
+      "organizer": "FILM6",
+      "description": "Inaugural edition of the World AI Movie Festival, a live screening and awards event for AI-generated and hybrid AI filmmaking. It runs 7–8 October 2026 at the Red Dog Cinema in Puerto Banús, Marbella, with an international jury of producers, directors and VFX professionals.",
+      "deadline": "2026-09-30",
+      "submission_open": "2026-06-30",
+      "prize": "WAIMF Grand Prix ($500 + Crystal Trophy) plus nine category awards",
+      "prize_details": [
+        "WAIMF Grand Prix: cash prize and trophy",
+        "Best Sci-Fi, Animation, Comedy, Drama, Thriller-Horror, Action-Adventure, Fantasy, Music Clip",
+        "Talent Award",
+        "Official selection laurels, winner certificates and partner gifts"
+      ],
+      "url": "https://filmfreeway.com/WAIMF",
+      "status": "closed",
+      "categories": [
+        "short-film",
+        "feature",
+        "animation",
+        "music-video",
+        "experimental"
+      ],
+      "ai_tools_allowed": [
+        "Any AI tools"
+      ],
+      "eligibility": "Open worldwide to filmmakers, artists, production companies and studios. Minimum running time 4 minutes including credits, completed after 1 January 2025. Fully AI-generated and hybrid works both eligible; no premiere requirement. English subtitles required for non-English films.",
+      "entry_fee": "See FilmFreeway",
+      "featured": false,
+      "tags": [
+        "spain",
+        "europe",
+        "cash-prize",
+        "inaugural",
+        "filmfreeway"
+      ],
+      "location": "Puerto Banús, Marbella, Spain",
+      "event_date": "2026-10-07",
+      "created_at": "2026-09-08T11:09:04.814147+00:00",
+      "updated_at": "2026-10-01T01:10:41.17535+00:00",
+      "featured_until": null,
+      "featured_paid_at": null,
+      "organizer_email": null,
+      "organizer_contact_url": "https://filmfreeway.com/WAIMF",
+      "outreach_sent_at": null,
+      "outreach_status": null
+    },
+    {
+      "id": "on-art-ai-warsaw-2026",
+      "name": "On Art AI Film Festival — Warsaw",
+      "organizer": "On Art Festival",
+      "description": "Poland's flagship AI film showcase in Warsaw. New sub-section spotlights films made by AI or created with AI tools — 40 short films and 10 medium/feature entries screen at the November finale in Warsaw. Deadline is closer than you think, submissions close September 30.",
+      "deadline": "2026-09-30",
+      "submission_open": null,
+      "prize": "Warsaw festival screening + professional jury recognition",
+      "prize_details": [
+        "3-day finale in Warsaw (Puławska 20) with screenings, panels, and AI-video masterclass",
+        "Professional jury will select 40 short films and 10 medium/feature-length films",
+        "Global visibility across On Art Festival network"
+      ],
+      "url": "https://filmfreeway.com/OnAI",
+      "status": "closed",
+      "categories": [
+        "Short Film",
+        "Animation",
+        "Documentary",
+        "Experimental",
+        "Video Art"
+      ],
+      "ai_tools_allowed": [
+        "Any generative AI tool",
+        "Runway",
+        "Sora",
+        "Kling",
+        "Veo",
+        "Midjourney",
+        "Luma",
+        "Pika"
+      ],
+      "eligibility": "Open to professional and independent filmmakers worldwide. All genres accepted: fiction, animation, documentary, video art, experimental.",
+      "entry_fee": "See FilmFreeway page for current tiered fee",
+      "featured": false,
+      "tags": [
+        "Poland",
+        "Europe",
+        "Warsaw",
+        "open call",
+        "2026"
+      ],
+      "location": "Warsaw, Poland",
+      "event_date": "2026-11-15",
+      "created_at": "2026-07-23T12:43:18.329899+00:00",
+      "updated_at": "2026-10-01T01:10:41.17535+00:00",
+      "featured_until": null,
+      "featured_paid_at": null,
+      "organizer_email": null,
+      "organizer_contact_url": "https://onart.eu/en/contact/",
+      "outreach_sent_at": null,
+      "outreach_status": null
+    },
+    {
+      "id": "we-are-human-festival-2026",
+      "name": "We Are Human Festival – Film & AI International Open Call 2026",
+      "organizer": "Film Resource Africa",
+      "description": "The We Are Human Festival invites filmmakers to submit works that explore the intersection of humanity and AI. The festival emphasizes human creative direction in AI-generated works and offers a range of prizes for outstanding submissions. Selected films will be screened internationally.",
+      "deadline": "2026-09-30",
+      "submission_open": null,
+      "prize": "€10,000 total prize pool",
+      "prize_details": [
+        "Grand Prix: €5,000",
+        "Best Screenplay: €3,000",
+        "Ethics Award: €2,000"
+      ],
+      "url": "https://wearehuman.foundation/en/call-for-films/",
+      "status": "closed",
+      "categories": [
+        "short-film"
+      ],
+      "ai_tools_allowed": [
+        "AI tools for image, sound, music or text generation"
+      ],
+      "eligibility": "Open internationally to filmmakers, visual artists, studios, independent creators and collectives aged 18 and over.",
+      "entry_fee": "Free",
+      "featured": false,
+      "tags": [],
+      "location": null,
+      "event_date": "2026-11-24",
+      "created_at": "2026-08-15T08:16:06.7885+00:00",
+      "updated_at": "2026-10-01T01:10:41.17535+00:00",
+      "featured_until": null,
+      "featured_paid_at": null,
+      "organizer_email": "contact@wearehuman.foundation",
+      "organizer_contact_url": null,
+      "outreach_sent_at": null,
+      "outreach_status": null
+    },
+    {
+      "id": "ai-film-festival-japan-november-2026",
+      "name": "AI Film Festival Japan (AIFJ) 2026 — Tokyo, Oct 31 – Nov 2",
+      "organizer": "AI Film Festival Japan 2026 Executive Committee (AI FILM JAPAN inc.)",
+      "description": "Asia's largest AI film festival returns to Tokyo Innovation Base for a three-day edition from October 31 to November 2, 2026, with awards for Best AI Movie, Animation, Creative, Film Score and Vocal Track plus sponsored prizes from CapCut and ElevenLabs. Films 90 seconds to 15 minutes completed on or after January 1, 2026.",
+      "deadline": "2026-09-30",
+      "submission_open": "2026-07-01",
+      "prize": "Best AI Movie / Animation / Creative / Film Music awards + CapCut and ElevenLabs sponsored awards",
+      "prize_details": [
+        "Best AI Movie",
+        "Best AI Animation",
+        "Best AI Creative (experimental / hybrid)",
+        "Best AI Film Music / Score and Best AI Vocal Track",
+        "CapCut AI Creative Award: 1-year CapCut Pro, 50,000 AI credits and a presentation slot in Tokyo",
+        "All official selections screened live in Tokyo"
+      ],
+      "url": "https://filmfreeway.com/AIFilmFestivalJapan2026",
+      "status": "closed",
+      "categories": [
+        "short-film",
+        "animation",
+        "experimental",
+        "music",
+        "music-video"
+      ],
+      "ai_tools_allowed": [
+        "Any AI tools with mandatory disclosure (e.g. Midjourney, Veo, Runway, Kling, Suno, Udio)",
+        "CapCut AI for the CapCut AI Creative Award"
+      ],
+      "eligibility": "Open to all nationalities and ages (under-18s need parental consent). Films 90 sec to 15 min completed on or after Jan 1, 2026; AI music entries 60 sec to 5 min scored to the official visual asset. Regular deadline Sept 10, late deadline Sept 30, 2026 (12:00 JST).",
+      "entry_fee": "From $29 (Festhome standard; FilmFreeway tiers vary)",
+      "featured": false,
+      "tags": [
+        "japan",
+        "tokyo",
+        "asia",
+        "filmfreeway",
+        "capcut",
+        "elevenlabs",
+        "second-edition"
+      ],
+      "location": "Tokyo Innovation Base, Tokyo, Japan",
+      "event_date": "2026-10-31",
+      "created_at": "2026-09-07T22:25:34.625153+00:00",
+      "updated_at": "2026-10-01T01:10:41.17535+00:00",
+      "featured_until": null,
+      "featured_paid_at": null,
+      "organizer_email": "info@aifilm.jp",
+      "organizer_contact_url": "https://aifilm.jp/message.html",
+      "outreach_sent_at": null,
+      "outreach_status": "draft"
+    },
+    {
+      "id": "ai-film-fest-italy-2026",
+      "name": "AI Film Fest Italy — 2nd Edition",
+      "organizer": "AI Film Fest Italy",
+      "description": "Second edition of a non-profit Italian festival for films generated with AI, with AI Short, AI Doc, AI Promo and AI Animate sections. Fees are kept to €5–€10 and the extended deadline is September 30.",
+      "deadline": "2026-09-30",
+      "submission_open": "2025-12-07",
+      "prize": "Awards: Best AI Short Film, Best AI Concept, AI Critics Award, Special Mention",
+      "prize_details": [
+        "Best AI Short Film",
+        "Best AI Concept",
+        "AI Critics Award",
+        "Special Mention",
+        "Regular deadline was March 31, 2026; extended deadline September 30, 2026"
+      ],
+      "url": "https://aifilmfest.it/",
+      "status": "closed",
+      "categories": [
+        "short-film",
+        "documentary",
+        "animation"
+      ],
+      "ai_tools_allowed": [],
+      "eligibility": "Films generated or supported by AI; submitted through FilmFreeway.",
+      "entry_fee": "€5–€10",
+      "featured": false,
+      "tags": [
+        "italy",
+        "europe",
+        "non-profit",
+        "low-fee"
+      ],
+      "location": "Italy",
+      "event_date": "2026-11-27",
+      "created_at": "2026-09-21T11:09:42.444542+00:00",
+      "updated_at": "2026-10-01T01:10:41.17535+00:00",
+      "featured_until": null,
+      "featured_paid_at": null,
+      "organizer_email": null,
+      "organizer_contact_url": "https://aifilmfest.it/contatti",
+      "outreach_sent_at": null,
+      "outreach_status": null
+    },
+    {
       "id": "festiav-valencia-2026",
       "name": "FESTIAV 2026 — Valencia International AI Film Festival (2nd Edition)",
       "organizer": "Galaxia Televisión, S.L.",
@@ -6057,6 +6057,60 @@
       "organizer_contact_url": "https://www.festiav.com/",
       "outreach_sent_at": null,
       "outreach_status": "draft"
+    },
+    {
+      "id": "ai-film-awards-brasil-2026",
+      "name": "AI Film Awards Brasil 2026",
+      "organizer": "KM Universe",
+      "description": "The Brazilian edition of the AI Film Awards circuit run by KM Universe, presented with Itaú and Brazil’s Ministry of Culture. Entries must be 100% AI-generated, across short, long, animation, music video, documentary, vertical and ad categories. Final deadline Oct 6, notifications Oct 9, ceremony Nov 6–8, 2026 at Itaú Cultural Auditorium in São Paulo. Brazilian filmmakers enter free with the festival code.",
+      "deadline": "2026-10-06",
+      "submission_open": "2026-06-12",
+      "prize": "Official selection + Itaú Cultural São Paulo screening, free entry for Brazilian filmmakers",
+      "prize_details": [
+        "Crystal Brain Award trophy for winners of the seven main categories (handed over in person at the ceremony)",
+        "Screening and awards ceremony at Itaú Cultural Auditorium, Av. Paulista, São Paulo, Nov 6–8, 2026",
+        "Selected films may be programmed on Itaú Cultural Play and Wedo Entertainment online",
+        "Free entry for Brazilian filmmakers with the festival code"
+      ],
+      "url": "https://filmfreeway.com/aifilmawardsBrasil2026",
+      "status": "closed",
+      "categories": [
+        "Short Film",
+        "Generative AI",
+        "Experimental",
+        "Animation"
+      ],
+      "ai_tools_allowed": [
+        "Runway",
+        "Sora",
+        "Kling",
+        "Veo",
+        "Midjourney",
+        "Luma",
+        "Pika",
+        "Any generative AI tool"
+      ],
+      "eligibility": "Open internationally; productions developed entirely with AI technologies. Free registration for Brazilian participants.",
+      "entry_fee": "Free for Brazilian filmmakers with the festival code; paid FilmFreeway tiers for everyone else",
+      "featured": false,
+      "tags": [
+        "brazil",
+        "sao-paulo",
+        "latin-america",
+        "first-edition",
+        "free-entry",
+        "generative-ai"
+      ],
+      "location": "São Paulo, Brazil",
+      "event_date": "2026-11-06",
+      "created_at": "2026-09-07T20:53:48.54262+00:00",
+      "updated_at": "2026-10-07T08:00:05.813581+00:00",
+      "featured_until": null,
+      "featured_paid_at": null,
+      "organizer_email": null,
+      "organizer_contact_url": "https://www.filmawards.ai/About-us/",
+      "outreach_sent_at": null,
+      "outreach_status": null
     },
     {
       "id": "world-ai-cinema-festival-2026",
@@ -6145,60 +6199,6 @@
       "outreach_status": null
     },
     {
-      "id": "ai-film-awards-brasil-2026",
-      "name": "AI Film Awards Brasil 2026",
-      "organizer": "KM Universe",
-      "description": "The Brazilian edition of the AI Film Awards circuit run by KM Universe, presented with Itaú and Brazil’s Ministry of Culture. Entries must be 100% AI-generated, across short, long, animation, music video, documentary, vertical and ad categories. Final deadline Oct 6, notifications Oct 9, ceremony Nov 6–8, 2026 at Itaú Cultural Auditorium in São Paulo. Brazilian filmmakers enter free with the festival code.",
-      "deadline": "2026-10-06",
-      "submission_open": "2026-06-12",
-      "prize": "Official selection + Itaú Cultural São Paulo screening, free entry for Brazilian filmmakers",
-      "prize_details": [
-        "Crystal Brain Award trophy for winners of the seven main categories (handed over in person at the ceremony)",
-        "Screening and awards ceremony at Itaú Cultural Auditorium, Av. Paulista, São Paulo, Nov 6–8, 2026",
-        "Selected films may be programmed on Itaú Cultural Play and Wedo Entertainment online",
-        "Free entry for Brazilian filmmakers with the festival code"
-      ],
-      "url": "https://filmfreeway.com/aifilmawardsBrasil2026",
-      "status": "closed",
-      "categories": [
-        "Short Film",
-        "Generative AI",
-        "Experimental",
-        "Animation"
-      ],
-      "ai_tools_allowed": [
-        "Runway",
-        "Sora",
-        "Kling",
-        "Veo",
-        "Midjourney",
-        "Luma",
-        "Pika",
-        "Any generative AI tool"
-      ],
-      "eligibility": "Open internationally; productions developed entirely with AI technologies. Free registration for Brazilian participants.",
-      "entry_fee": "Free for Brazilian filmmakers with the festival code; paid FilmFreeway tiers for everyone else",
-      "featured": false,
-      "tags": [
-        "brazil",
-        "sao-paulo",
-        "latin-america",
-        "first-edition",
-        "free-entry",
-        "generative-ai"
-      ],
-      "location": "São Paulo, Brazil",
-      "event_date": "2026-11-06",
-      "created_at": "2026-09-07T20:53:48.54262+00:00",
-      "updated_at": "2026-10-07T08:00:05.813581+00:00",
-      "featured_until": null,
-      "featured_paid_at": null,
-      "organizer_email": null,
-      "organizer_contact_url": "https://www.filmawards.ai/About-us/",
-      "outreach_sent_at": null,
-      "outreach_status": null
-    },
-    {
       "id": "ai-london-film-festival-2026",
       "name": "AI London Film Festival 2026",
       "organizer": "AI London Film Festival",
@@ -6260,83 +6260,46 @@
       "outreach_status": null
     },
     {
-      "id": "curious-refuge-ai-horror-film-competition-2026",
-      "name": "Curious Refuge AI Horror Film Competition",
-      "organizer": "Curious Refuge & Epidemic Sound",
-      "description": "$12,000 up for grabs in Curious Refuge's 4th Annual AI Horror Film Competition — every shot must be AI-generated, films are capped at 3 minutes, and the community picks an Audience Favorite alongside the judged winners. Deadline: October 9, 2026 at 11:59 PM Pacific.",
+      "id": "curious-refuge-horror-2026",
+      "name": "2026 AI Horror Film Competition — Curious Refuge",
+      "organizer": "Curious Refuge + partner",
+      "description": "Curious Refuge 4th Annual AI Horror Film Competition with Epidemic Sound: $12,000 in cash prizes, films up to 3 minutes, AI in every shot. Deadline October 9, 2026 at 11:59 PM Pacific; winners announced October 29.",
       "deadline": "2026-10-09",
-      "submission_open": null,
+      "submission_open": "2026-09-01",
       "prize": "$12,000 in cash prizes",
       "prize_details": [
         "1st place: $7,000",
         "2nd place: $3,000",
         "3rd place: $2,000",
-        "Audience Favorite (community vote, Oct 21-28): course enrollment + t-shirt",
-        "Judges: Shelby Ward, Verena Puhm, Spooky Dan, Chris White, Dave Clark",
-        "Music and SFX must come from Epidemic Sound; up to 2 entries per person"
+        "Audience Favorite (community vote)"
       ],
-      "url": "https://curiousrefuge.com/2026-ai-horror-film-competition",
+      "url": "https://curiousrefuge.com/ai-filmmaking-competitions",
       "status": "closed",
       "categories": [
-        "Horror",
-        "Short Film"
+        "Short Film",
+        "Horror"
       ],
       "ai_tools_allowed": [
-        "Any AI video tool — AI must be used in every shot"
+        "Any AI tool",
+        "Voice generation encouraged"
       ],
-      "eligibility": "Open worldwide; films must be 3 minutes or less",
-      "entry_fee": "See official rules",
+      "eligibility": "Global",
+      "entry_fee": "Free",
       "featured": false,
       "tags": [
         "horror",
+        "halloween",
         "curious-refuge",
-        "short-film",
-        "epidemic-sound"
+        "annual"
       ],
       "location": "Online / Global",
       "event_date": "2026-10-29",
-      "created_at": "2026-09-24T01:07:18.271035+00:00",
+      "created_at": "2026-08-27T01:08:25.600037+00:00",
       "updated_at": "2026-10-10T08:00:05.638434+00:00",
       "featured_until": null,
       "featured_paid_at": null,
       "organizer_email": "hello@curiousrefuge.com",
       "organizer_contact_url": "https://curiousrefuge.com/contact",
-      "outreach_sent_at": null,
-      "outreach_status": null
-    },
-    {
-      "id": "ai-global-film-festival-lifeart-2026",
-      "name": "AI Global Film Festival | Lifeart",
-      "organizer": "LifeArt",
-      "description": "The AI Global Film Festival celebrates AI-driven creativity in film, art and music, offering IMDb-certified festival recognition and a certificate of official selection. Standard deadline was 1 August and late 20 August 2026; the final deadline is 9 October 2026, with notifications on 1 November 2026.",
-      "deadline": "2026-10-09",
-      "submission_open": null,
-      "prize": "Various awards for outstanding AI-driven projects",
-      "prize_details": [
-        "IMDb-Certified Festival Recognition",
-        "Certificate of Official Selection"
-      ],
-      "url": "https://festhome.com/en/festival/ai-global-film-festival-lifeart",
-      "status": "closed",
-      "categories": [
-        "short-film",
-        "feature-film"
-      ],
-      "ai_tools_allowed": [
-        "Any AI tools"
-      ],
-      "eligibility": "Open to filmmakers worldwide.",
-      "entry_fee": "Varies by category",
-      "featured": true,
-      "tags": [],
-      "location": null,
-      "event_date": null,
-      "created_at": "2026-08-17T08:16:11.293973+00:00",
-      "updated_at": "2026-10-10T08:00:05.638434+00:00",
-      "featured_until": null,
-      "featured_paid_at": null,
-      "organizer_email": "info@lifeartfestival.com",
-      "organizer_contact_url": null,
       "outreach_sent_at": null,
       "outreach_status": null
     },
@@ -6436,41 +6399,78 @@
       "outreach_status": "draft"
     },
     {
-      "id": "curious-refuge-horror-2026",
-      "name": "2026 AI Horror Film Competition — Curious Refuge",
-      "organizer": "Curious Refuge + partner",
-      "description": "Curious Refuge 4th Annual AI Horror Film Competition with Epidemic Sound: $12,000 in cash prizes, films up to 3 minutes, AI in every shot. Deadline October 9, 2026 at 11:59 PM Pacific; winners announced October 29.",
+      "id": "ai-global-film-festival-lifeart-2026",
+      "name": "AI Global Film Festival | Lifeart",
+      "organizer": "LifeArt",
+      "description": "The AI Global Film Festival celebrates AI-driven creativity in film, art and music, offering IMDb-certified festival recognition and a certificate of official selection. Standard deadline was 1 August and late 20 August 2026; the final deadline is 9 October 2026, with notifications on 1 November 2026.",
       "deadline": "2026-10-09",
-      "submission_open": "2026-09-01",
+      "submission_open": null,
+      "prize": "Various awards for outstanding AI-driven projects",
+      "prize_details": [
+        "IMDb-Certified Festival Recognition",
+        "Certificate of Official Selection"
+      ],
+      "url": "https://festhome.com/en/festival/ai-global-film-festival-lifeart",
+      "status": "closed",
+      "categories": [
+        "short-film",
+        "feature-film"
+      ],
+      "ai_tools_allowed": [
+        "Any AI tools"
+      ],
+      "eligibility": "Open to filmmakers worldwide.",
+      "entry_fee": "Varies by category",
+      "featured": true,
+      "tags": [],
+      "location": null,
+      "event_date": null,
+      "created_at": "2026-08-17T08:16:11.293973+00:00",
+      "updated_at": "2026-10-10T08:00:05.638434+00:00",
+      "featured_until": null,
+      "featured_paid_at": null,
+      "organizer_email": "info@lifeartfestival.com",
+      "organizer_contact_url": null,
+      "outreach_sent_at": null,
+      "outreach_status": null
+    },
+    {
+      "id": "curious-refuge-ai-horror-film-competition-2026",
+      "name": "Curious Refuge AI Horror Film Competition",
+      "organizer": "Curious Refuge & Epidemic Sound",
+      "description": "$12,000 up for grabs in Curious Refuge's 4th Annual AI Horror Film Competition — every shot must be AI-generated, films are capped at 3 minutes, and the community picks an Audience Favorite alongside the judged winners. Deadline: October 9, 2026 at 11:59 PM Pacific.",
+      "deadline": "2026-10-09",
+      "submission_open": null,
       "prize": "$12,000 in cash prizes",
       "prize_details": [
         "1st place: $7,000",
         "2nd place: $3,000",
         "3rd place: $2,000",
-        "Audience Favorite (community vote)"
+        "Audience Favorite (community vote, Oct 21-28): course enrollment + t-shirt",
+        "Judges: Shelby Ward, Verena Puhm, Spooky Dan, Chris White, Dave Clark",
+        "Music and SFX must come from Epidemic Sound; up to 2 entries per person"
       ],
-      "url": "https://curiousrefuge.com/ai-filmmaking-competitions",
+      "url": "https://curiousrefuge.com/2026-ai-horror-film-competition",
       "status": "closed",
       "categories": [
-        "Short Film",
-        "Horror"
+        "Horror",
+        "Short Film"
       ],
       "ai_tools_allowed": [
-        "Any AI tool",
-        "Voice generation encouraged"
+        "Any AI video tool — AI must be used in every shot"
       ],
-      "eligibility": "Global",
-      "entry_fee": "Free",
+      "eligibility": "Open worldwide; films must be 3 minutes or less",
+      "entry_fee": "See official rules",
       "featured": false,
       "tags": [
         "horror",
-        "halloween",
         "curious-refuge",
-        "annual"
+        "short-film",
+        "epidemic-sound"
       ],
       "location": "Online / Global",
       "event_date": "2026-10-29",
-      "created_at": "2026-08-27T01:08:25.600037+00:00",
+      "created_at": "2026-09-24T01:07:18.271035+00:00",
       "updated_at": "2026-10-10T08:00:05.638434+00:00",
       "featured_until": null,
       "featured_paid_at": null,
@@ -6478,6 +6478,52 @@
       "organizer_contact_url": "https://curiousrefuge.com/contact",
       "outreach_sent_at": null,
       "outreach_status": null
+    },
+    {
+      "id": "gossip-goblin-genjam-sf-2026",
+      "name": "A Gossip Goblin GenJam",
+      "organizer": "645 Ventures, Machine Cinema, Google DeepMind, Showrunner and Gossip Goblin",
+      "description": "An in-person generative AI film jam at Google DeepMind in San Francisco. Fifteen accepted teams get one Gossip Goblin seed clip and one evening to turn it into a short film of up to two minutes. Application only, reviewed on a rolling basis.",
+      "deadline": "2026-10-10",
+      "submission_open": null,
+      "prize": "$2,000 first place + credits",
+      "prize_details": [
+        "1st place: $2,000 cash plus credits and premiere tickets",
+        "2nd place: $1,000 cash plus tickets and credits",
+        "3rd place: $500 cash plus tickets and credits"
+      ],
+      "url": "https://luma.com/f7lrl8gr",
+      "status": "closed",
+      "categories": [
+        "short-film",
+        "experimental"
+      ],
+      "ai_tools_allowed": [
+        "Any AI tools"
+      ],
+      "eligibility": "Application only; 15 teams are accepted (apply as a team or solo). Applications close Oct 10 and are reviewed on a rolling basis, so apply early. Event is in person at Google DeepMind, San Francisco.",
+      "entry_fee": "Free (application only)",
+      "featured": false,
+      "tags": [
+        "cash-prize",
+        "hackathon",
+        "in-person",
+        "usa",
+        "san-francisco",
+        "google",
+        "machine-cinema",
+        "2026"
+      ],
+      "location": "San Francisco, USA",
+      "event_date": "2026-10-20",
+      "created_at": "2026-09-20T11:08:24.616765+00:00",
+      "updated_at": "2026-10-16T08:00:05.961499+00:00",
+      "featured_until": null,
+      "featured_paid_at": null,
+      "organizer_email": "yfaycurry@645ventures.com",
+      "organizer_contact_url": "https://luma.com/f7lrl8gr",
+      "outreach_sent_at": null,
+      "outreach_status": "draft"
     },
     {
       "id": "ai-movie-awards-2026-london",
@@ -6560,52 +6606,6 @@
       "organizer_contact_url": "https://www.aimovieawards.org/contact-us/",
       "outreach_sent_at": null,
       "outreach_status": null
-    },
-    {
-      "id": "gossip-goblin-genjam-sf-2026",
-      "name": "A Gossip Goblin GenJam",
-      "organizer": "645 Ventures, Machine Cinema, Google DeepMind, Showrunner and Gossip Goblin",
-      "description": "An in-person generative AI film jam at Google DeepMind in San Francisco. Fifteen accepted teams get one Gossip Goblin seed clip and one evening to turn it into a short film of up to two minutes. Application only, reviewed on a rolling basis.",
-      "deadline": "2026-10-10",
-      "submission_open": null,
-      "prize": "$2,000 first place + credits",
-      "prize_details": [
-        "1st place: $2,000 cash plus credits and premiere tickets",
-        "2nd place: $1,000 cash plus tickets and credits",
-        "3rd place: $500 cash plus tickets and credits"
-      ],
-      "url": "https://luma.com/f7lrl8gr",
-      "status": "closed",
-      "categories": [
-        "short-film",
-        "experimental"
-      ],
-      "ai_tools_allowed": [
-        "Any AI tools"
-      ],
-      "eligibility": "Application only; 15 teams are accepted (apply as a team or solo). Applications close Oct 10 and are reviewed on a rolling basis, so apply early. Event is in person at Google DeepMind, San Francisco.",
-      "entry_fee": "Free (application only)",
-      "featured": false,
-      "tags": [
-        "cash-prize",
-        "hackathon",
-        "in-person",
-        "usa",
-        "san-francisco",
-        "google",
-        "machine-cinema",
-        "2026"
-      ],
-      "location": "San Francisco, USA",
-      "event_date": "2026-10-20",
-      "created_at": "2026-09-20T11:08:24.616765+00:00",
-      "updated_at": "2026-10-16T08:00:05.961499+00:00",
-      "featured_until": null,
-      "featured_paid_at": null,
-      "organizer_email": "yfaycurry@645ventures.com",
-      "organizer_contact_url": "https://luma.com/f7lrl8gr",
-      "outreach_sent_at": null,
-      "outreach_status": "draft"
     },
     {
       "id": "orhena-ai-contest-2026",
@@ -6732,6 +6732,39 @@
       "outreach_status": null
     },
     {
+      "id": "ai-toronto-shorts-2026",
+      "name": "AI Toronto Shorts",
+      "organizer": "Easy Life Studio (Festival Director Oskar Pilarski)",
+      "description": "A curated screening night of AI-made short films in Toronto with a jury and live-audience-voted awards across craft categories.",
+      "deadline": "2026-10-14",
+      "submission_open": "2026-07-22",
+      "prize": "Laurels and trophies across seven craft categories; no cash prize stated",
+      "prize_details": [],
+      "url": "https://filmfreeway.com/torontoaishorts",
+      "status": "closed",
+      "categories": [
+        "short-film"
+      ],
+      "ai_tools_allowed": null,
+      "eligibility": "AI must be a meaningful part of the production; one submission per filmmaker/team; films up to 30 minutes.",
+      "entry_fee": "See FilmFreeway",
+      "featured": false,
+      "tags": [
+        "screening-event",
+        "toronto"
+      ],
+      "location": "Toronto, Canada",
+      "event_date": "2026-11-08",
+      "created_at": "2026-09-17T11:10:32.718351+00:00",
+      "updated_at": "2026-10-15T11:11:18.790901+00:00",
+      "featured_until": null,
+      "featured_paid_at": null,
+      "organizer_email": "information@aitorontoshortsfest.com",
+      "organizer_contact_url": "https://aitorontoshortsfest.com/",
+      "outreach_sent_at": null,
+      "outreach_status": "draft"
+    },
+    {
       "id": "neuland-cinema-berlin-2026",
       "name": "Neuland Cinema by AI Filmmakers Berlin",
       "organizer": "AI Filmmakers Berlin",
@@ -6767,39 +6800,6 @@
       "featured_paid_at": null,
       "organizer_email": "connect@neulandpro.com",
       "organizer_contact_url": null,
-      "outreach_sent_at": null,
-      "outreach_status": "draft"
-    },
-    {
-      "id": "ai-toronto-shorts-2026",
-      "name": "AI Toronto Shorts",
-      "organizer": "Easy Life Studio (Festival Director Oskar Pilarski)",
-      "description": "A curated screening night of AI-made short films in Toronto with a jury and live-audience-voted awards across craft categories.",
-      "deadline": "2026-10-14",
-      "submission_open": "2026-07-22",
-      "prize": "Laurels and trophies across seven craft categories; no cash prize stated",
-      "prize_details": [],
-      "url": "https://filmfreeway.com/torontoaishorts",
-      "status": "closed",
-      "categories": [
-        "short-film"
-      ],
-      "ai_tools_allowed": null,
-      "eligibility": "AI must be a meaningful part of the production; one submission per filmmaker/team; films up to 30 minutes.",
-      "entry_fee": "See FilmFreeway",
-      "featured": false,
-      "tags": [
-        "screening-event",
-        "toronto"
-      ],
-      "location": "Toronto, Canada",
-      "event_date": "2026-11-08",
-      "created_at": "2026-09-17T11:10:32.718351+00:00",
-      "updated_at": "2026-10-15T11:11:18.790901+00:00",
-      "featured_until": null,
-      "featured_paid_at": null,
-      "organizer_email": "information@aitorontoshortsfest.com",
-      "organizer_contact_url": "https://aitorontoshortsfest.com/",
       "outreach_sent_at": null,
       "outreach_status": "draft"
     },
@@ -6980,47 +6980,6 @@
       "outreach_status": null
     },
     {
-      "id": "ai-cinema-festival-canada-ottawa-2026",
-      "name": "AI Cinema Festival Canada — Ottawa 2026",
-      "organizer": "AI Cinema Festival",
-      "description": "A bilingual Ottawa festival for hybrid human+AI and fully AI-generated cinema, screening November 13–15, 2026 with awards across five tracks.",
-      "deadline": "2026-10-18",
-      "submission_open": null,
-      "prize": "Grand Prix Canada + 4 named awards",
-      "prize_details": [
-        "Grand Prix Canada",
-        "Best Human + AI Direction",
-        "Best AI Cinematography",
-        "Responsible AI Cinema Award",
-        "Audience Signal Award"
-      ],
-      "url": "https://canadian.aicinemafestival.com/submissions.html",
-      "status": "closed",
-      "categories": [
-        "short-film",
-        "experimental"
-      ],
-      "ai_tools_allowed": null,
-      "eligibility": "Open worldwide; hybrid human+AI and fully AI-generated works welcome, including music videos, trailers, and experimental forms",
-      "entry_fee": null,
-      "featured": false,
-      "tags": [
-        "Canada",
-        "Ottawa",
-        "bilingual"
-      ],
-      "location": "Ottawa, Ontario, Canada",
-      "event_date": "2026-11-13",
-      "created_at": "2026-09-10T11:09:43.882137+00:00",
-      "updated_at": "2026-10-19T08:00:05.386702+00:00",
-      "featured_until": null,
-      "featured_paid_at": null,
-      "organizer_email": "canadian@aicinemafestival.com",
-      "organizer_contact_url": "https://canadian.aicinemafestival.com/submissions.html",
-      "outreach_sent_at": null,
-      "outreach_status": "draft"
-    },
-    {
       "id": "ia-en-corto-2026",
       "name": "IA en Corto — International AI Short Film Festival (2nd Edition)",
       "organizer": "IA en Corto",
@@ -7076,6 +7035,47 @@
       "organizer_contact_url": "https://iaencorto.com/contacto",
       "outreach_sent_at": null,
       "outreach_status": null
+    },
+    {
+      "id": "ai-cinema-festival-canada-ottawa-2026",
+      "name": "AI Cinema Festival Canada — Ottawa 2026",
+      "organizer": "AI Cinema Festival",
+      "description": "A bilingual Ottawa festival for hybrid human+AI and fully AI-generated cinema, screening November 13–15, 2026 with awards across five tracks.",
+      "deadline": "2026-10-18",
+      "submission_open": null,
+      "prize": "Grand Prix Canada + 4 named awards",
+      "prize_details": [
+        "Grand Prix Canada",
+        "Best Human + AI Direction",
+        "Best AI Cinematography",
+        "Responsible AI Cinema Award",
+        "Audience Signal Award"
+      ],
+      "url": "https://canadian.aicinemafestival.com/submissions.html",
+      "status": "closed",
+      "categories": [
+        "short-film",
+        "experimental"
+      ],
+      "ai_tools_allowed": null,
+      "eligibility": "Open worldwide; hybrid human+AI and fully AI-generated works welcome, including music videos, trailers, and experimental forms",
+      "entry_fee": null,
+      "featured": false,
+      "tags": [
+        "Canada",
+        "Ottawa",
+        "bilingual"
+      ],
+      "location": "Ottawa, Ontario, Canada",
+      "event_date": "2026-11-13",
+      "created_at": "2026-09-10T11:09:43.882137+00:00",
+      "updated_at": "2026-10-19T08:00:05.386702+00:00",
+      "featured_until": null,
+      "featured_paid_at": null,
+      "organizer_email": "canadian@aicinemafestival.com",
+      "organizer_contact_url": "https://canadian.aicinemafestival.com/submissions.html",
+      "outreach_sent_at": null,
+      "outreach_status": "draft"
     },
     {
       "id": "ai-filmfest-athens-2026",
@@ -7219,6 +7219,49 @@
       "outreach_status": null
     },
     {
+      "id": "vic-ai-awards-2026",
+      "name": "VIC AI Awards 2026",
+      "organizer": "VIC AI Boom",
+      "description": "Melbourne awards celebrating creative and technical AI talent across animation, art, campaigns, music videos, gaming and short films, held as part of VIC AI Boom 2026.",
+      "deadline": "2026-10-20",
+      "submission_open": "2026-08-20",
+      "prize": "Crystal trophy per category winner, plus Best in Australia, Best in the World and Rising Star special awards",
+      "prize_details": [
+        "Crystal trophy per category winner (trophies posted to winners who cannot attend)",
+        "8 categories: AI Animation, AI Art, AI Campaign/Commercial, AI Influencer, AI Music/Music Videos, AI Social Media Content, AI in Gaming, AI Short Films",
+        "Special awards: Best in Australia, Best in the World, Rising Star",
+        "Late deadline October 20, notification October 23, 2026",
+        "Winners announced October 30, 2026 at Quarterhouse, Docklands, Melbourne, as part of VIC AI Boom"
+      ],
+      "url": "https://filmfreeway.com/VICAIAwards",
+      "status": "closed",
+      "categories": [
+        "short-film",
+        "animation",
+        "commercial",
+        "music-video"
+      ],
+      "ai_tools_allowed": [],
+      "eligibility": "Worldwide. Content under 3 hours; must not have screened before January 2020.",
+      "entry_fee": "See FilmFreeway",
+      "featured": false,
+      "tags": [
+        "Australia",
+        "Melbourne",
+        "VIC-AI-Boom"
+      ],
+      "location": "Melbourne, Australia",
+      "event_date": "2026-10-30",
+      "created_at": "2026-09-30T11:11:50.88559+00:00",
+      "updated_at": "2026-10-21T08:00:05.488669+00:00",
+      "featured_until": null,
+      "featured_paid_at": null,
+      "organizer_email": "hello@vicaiboom.com",
+      "organizer_contact_url": null,
+      "outreach_sent_at": null,
+      "outreach_status": "draft"
+    },
+    {
       "id": "ai-film-awards-bali-2026",
       "name": "AI Film Awards Bali 2026",
       "organizer": "AI Film Awards (KM Universe)",
@@ -7262,87 +7305,6 @@
       "organizer_contact_url": null,
       "outreach_sent_at": null,
       "outreach_status": null
-    },
-    {
-      "id": "gento-toronto-ai-film-festival-2026",
-      "name": "GenTO: Toronto AI Film Festival",
-      "organizer": "GenTO",
-      "description": "A new Toronto festival celebrating AI-enhanced storytelling, with curated screenings, filmmaker Q&As, and awards for AI-assisted short films, showcase films, music videos, and commercials.",
-      "deadline": "2026-10-20",
-      "submission_open": "2026-05-04",
-      "prize": "Festival laurels and select partner prizes",
-      "prize_details": [
-        "Awards include Best AI Short Film, Best AI Showcase Film, Technical Achievement Award, Best Canadian Film, Best Emerging Filmmaker, Best AI Music Video, Best AI Commercial or Advertisement"
-      ],
-      "url": "https://filmfreeway.com/GenTOAIFilmFestival",
-      "status": "closed",
-      "categories": [
-        "short-film",
-        "music-video",
-        "advertising"
-      ],
-      "ai_tools_allowed": null,
-      "eligibility": "Open worldwide; films may be traditional, AI-assisted, or hybrid, 30 minutes or less for in-person screening.",
-      "entry_fee": "$20 (earlybird) to $40 (late deadline), with student/member discounts",
-      "featured": false,
-      "tags": [
-        "canada",
-        "toronto",
-        "university-of-toronto"
-      ],
-      "location": "Toronto, Ontario, Canada",
-      "event_date": "2026-12-05",
-      "created_at": "2026-09-11T11:08:55.713833+00:00",
-      "updated_at": "2026-10-21T08:00:05.488669+00:00",
-      "featured_until": null,
-      "featured_paid_at": null,
-      "organizer_email": "festival@gento.ca",
-      "organizer_contact_url": null,
-      "outreach_sent_at": null,
-      "outreach_status": "draft"
-    },
-    {
-      "id": "vic-ai-awards-2026",
-      "name": "VIC AI Awards 2026",
-      "organizer": "VIC AI Boom",
-      "description": "Melbourne awards celebrating creative and technical AI talent across animation, art, campaigns, music videos, gaming and short films, held as part of VIC AI Boom 2026.",
-      "deadline": "2026-10-20",
-      "submission_open": "2026-08-20",
-      "prize": "Crystal trophy per category winner, plus Best in Australia, Best in the World and Rising Star special awards",
-      "prize_details": [
-        "Crystal trophy per category winner (trophies posted to winners who cannot attend)",
-        "8 categories: AI Animation, AI Art, AI Campaign/Commercial, AI Influencer, AI Music/Music Videos, AI Social Media Content, AI in Gaming, AI Short Films",
-        "Special awards: Best in Australia, Best in the World, Rising Star",
-        "Late deadline October 20, notification October 23, 2026",
-        "Winners announced October 30, 2026 at Quarterhouse, Docklands, Melbourne, as part of VIC AI Boom"
-      ],
-      "url": "https://filmfreeway.com/VICAIAwards",
-      "status": "closed",
-      "categories": [
-        "short-film",
-        "animation",
-        "commercial",
-        "music-video"
-      ],
-      "ai_tools_allowed": [],
-      "eligibility": "Worldwide. Content under 3 hours; must not have screened before January 2020.",
-      "entry_fee": "See FilmFreeway",
-      "featured": false,
-      "tags": [
-        "Australia",
-        "Melbourne",
-        "VIC-AI-Boom"
-      ],
-      "location": "Melbourne, Australia",
-      "event_date": "2026-10-30",
-      "created_at": "2026-09-30T11:11:50.88559+00:00",
-      "updated_at": "2026-10-21T08:00:05.488669+00:00",
-      "featured_until": null,
-      "featured_paid_at": null,
-      "organizer_email": "hello@vicaiboom.com",
-      "organizer_contact_url": null,
-      "outreach_sent_at": null,
-      "outreach_status": "draft"
     },
     {
       "id": "african-ai-film-festival-2026",
@@ -7402,50 +7364,42 @@
       "outreach_status": "draft"
     },
     {
-      "id": "atlanta-ai-ad-fest-2026",
-      "name": "Atlanta AI Ad Fest — AIAF 2026",
-      "organizer": "Atlanta AI Ad Fest (AIAF)",
-      "description": "Inaugural Atlanta AI Ad Fest for AI-made advertising. Three divisions: Youth (Grades 6 to 12), University (currently enrolled college and university students) and Open. Choose one of four official Brand Exclusive Tracks, make your spot, publish it, then submit. $10 registration fee (includes 5,000 Bloomway credits), no separate submission fee. Entry deadline October 25, 2026; finalists announced November 10; awards night November 22 in Atlanta. $2,500 guaranteed cash prizes, $500 for each division Grand Prix and $1,000 for Best of Festival. Judged 40% idea, 30% craft, 20% brand, 10% impact. Verified on atlantaaiadfest.com Sep 19, 2026.",
-      "deadline": "2026-10-25",
-      "submission_open": "2026-09-15",
-      "prize": "$2,500 cash + Awards Night screening",
+      "id": "gento-toronto-ai-film-festival-2026",
+      "name": "GenTO: Toronto AI Film Festival",
+      "organizer": "GenTO",
+      "description": "A new Toronto festival celebrating AI-enhanced storytelling, with curated screenings, filmmaker Q&As, and awards for AI-assisted short films, showcase films, music videos, and commercials.",
+      "deadline": "2026-10-20",
+      "submission_open": "2026-05-04",
+      "prize": "Festival laurels and select partner prizes",
       "prize_details": [
-        "Cash prizes totaling $2,500",
-        "Free entry",
-        "Finalist screening at AIAF Awards Night on November 21, 2026",
-        "Commissioned Works Program spotlight"
+        "Awards include Best AI Short Film, Best AI Showcase Film, Technical Achievement Award, Best Canadian Film, Best Emerging Filmmaker, Best AI Music Video, Best AI Commercial or Advertisement"
       ],
-      "url": "https://atlantaaiadfest.com",
-      "status": "open",
+      "url": "https://filmfreeway.com/GenTOAIFilmFestival",
+      "status": "closed",
       "categories": [
-        "Advertisement",
-        "Commercial",
-        "Brand Film"
+        "short-film",
+        "music-video",
+        "advertising"
       ],
-      "ai_tools_allowed": [
-        "Any AI tool"
-      ],
-      "eligibility": "Three divisions: Youth (Grades 6–12 or equivalent), University (currently enrolled college and university students) and Open (independent creators, professionals, agencies). $500 cash for each division Grand Prix.",
-      "entry_fee": "$10 registration fee (includes 5,000 Bloomway credits); no separate submission fee",
+      "ai_tools_allowed": null,
+      "eligibility": "Open worldwide; films may be traditional, AI-assisted, or hybrid, 30 minutes or less for in-person screening.",
+      "entry_fee": "$20 (earlybird) to $40 (late deadline), with student/member discounts",
       "featured": false,
       "tags": [
-        "advertising",
-        "brand",
-        "inaugural",
-        "university",
-        "youth",
-        "usa"
+        "canada",
+        "toronto",
+        "university-of-toronto"
       ],
-      "location": "Atlanta, Georgia, USA",
-      "event_date": "2026-11-22",
-      "created_at": "2026-08-27T01:08:25.600037+00:00",
-      "updated_at": "2026-09-19T12:16:12.417125+00:00",
+      "location": "Toronto, Ontario, Canada",
+      "event_date": "2026-12-05",
+      "created_at": "2026-09-11T11:08:55.713833+00:00",
+      "updated_at": "2026-10-21T08:00:05.488669+00:00",
       "featured_until": null,
       "featured_paid_at": null,
-      "organizer_email": "press@atlantaaiadfest.com",
+      "organizer_email": "festival@gento.ca",
       "organizer_contact_url": null,
       "outreach_sent_at": null,
-      "outreach_status": null
+      "outreach_status": "draft"
     },
     {
       "id": "all-is-prompt-ai-film-festival-2026",
@@ -7493,6 +7447,52 @@
       "organizer_contact_url": null,
       "outreach_sent_at": null,
       "outreach_status": "draft"
+    },
+    {
+      "id": "atlanta-ai-ad-fest-2026",
+      "name": "Atlanta AI Ad Fest — AIAF 2026",
+      "organizer": "Atlanta AI Ad Fest (AIAF)",
+      "description": "Inaugural Atlanta AI Ad Fest for AI-made advertising. Three divisions: Youth (Grades 6 to 12), University (currently enrolled college and university students) and Open. Choose one of four official Brand Exclusive Tracks, make your spot, publish it, then submit. $10 registration fee (includes 5,000 Bloomway credits), no separate submission fee. Entry deadline October 25, 2026; finalists announced November 10; awards night November 22 in Atlanta. $2,500 guaranteed cash prizes, $500 for each division Grand Prix and $1,000 for Best of Festival. Judged 40% idea, 30% craft, 20% brand, 10% impact. Verified on atlantaaiadfest.com Sep 19, 2026.",
+      "deadline": "2026-10-25",
+      "submission_open": "2026-09-15",
+      "prize": "$2,500 cash + Awards Night screening",
+      "prize_details": [
+        "Cash prizes totaling $2,500",
+        "Free entry",
+        "Finalist screening at AIAF Awards Night on November 21, 2026",
+        "Commissioned Works Program spotlight"
+      ],
+      "url": "https://atlantaaiadfest.com",
+      "status": "open",
+      "categories": [
+        "Advertisement",
+        "Commercial",
+        "Brand Film"
+      ],
+      "ai_tools_allowed": [
+        "Any AI tool"
+      ],
+      "eligibility": "Three divisions: Youth (Grades 6–12 or equivalent), University (currently enrolled college and university students) and Open (independent creators, professionals, agencies). $500 cash for each division Grand Prix.",
+      "entry_fee": "$10 registration fee (includes 5,000 Bloomway credits); no separate submission fee",
+      "featured": false,
+      "tags": [
+        "advertising",
+        "brand",
+        "inaugural",
+        "university",
+        "youth",
+        "usa"
+      ],
+      "location": "Atlanta, Georgia, USA",
+      "event_date": "2026-11-22",
+      "created_at": "2026-08-27T01:08:25.600037+00:00",
+      "updated_at": "2026-09-19T12:16:12.417125+00:00",
+      "featured_until": null,
+      "featured_paid_at": null,
+      "organizer_email": "press@atlantaaiadfest.com",
+      "organizer_contact_url": null,
+      "outreach_sent_at": null,
+      "outreach_status": null
     },
     {
       "id": "opencv-ai-competition-2026",
@@ -7819,58 +7819,51 @@
       "outreach_status": "draft"
     },
     {
-      "id": "turkiye-intl-ai-film-festival-2026",
-      "name": "Türkiye International AI Film Festival (T-AIFF) 2026 — 3rd Edition",
-      "organizer": "Türkiye International AI Film Festival",
-      "description": "2,000+ submissions from over 100 countries and still growing — T-AIFF's 3rd edition judges AI films across the whole production stack, with awards for Best AI Director, Cinematographer, Editing, Sound Design, Music, VFX, Animation and Documentary. All submission-fee revenue is redistributed back to filmmakers as prize money. Deadline Nov 1, screenings at Istanbul's historic Yeşilçam Cinema Dec 7–9.",
+      "id": "ai-creativity-awards-2026",
+      "name": "AI Creativity Awards 2026",
+      "organizer": "AI Creativity Awards",
+      "description": "The launch edition of a major new international AI awards programme — 8 categories including Motion & Film. £25 early entry through September 1, £35 standard through November 1. Judged on creative ambition, originality, execution, and quality of AI disclosure. Results announced December 1, 2026 — get in on the inaugural class.",
       "deadline": "2026-11-01",
-      "submission_open": "2026-06-25",
-      "prize": "Award statuettes across 10+ categories; submission-fee revenue redistributed as filmmaker awards",
+      "submission_open": "2026-06-01",
+      "prize": "Inaugural class laurels + public results feature",
       "prize_details": [
-        "Award statuettes for winning works across categories",
-        "Best AI Film, Best AI Director, Actor, Cinematographer",
-        "Best Editing, Sound Design, Music, Visual Effects",
-        "Best AI Animation and Best AI Documentary",
-        "Submission-fee revenue redistributed as awards to international-category directors",
-        "Screenings at Yeşilçam Cinema, Istanbul — Dec 7–9, 2026"
+        "Digital laurels for winners and shortlist",
+        "Public results feature on the awards site",
+        "Digital certificate for winners",
+        "8 category winners across all creative disciplines",
+        "Judged by an international panel"
       ],
-      "url": "https://filmfreeway.com/T-AIFF",
+      "url": "https://aicreativityawards.com/",
       "status": "open",
       "categories": [
-        "Short Film",
-        "Animation",
-        "Documentary",
-        "Music Video",
-        "Experimental"
+        "motion-film",
+        "image",
+        "design",
+        "music",
+        "writing",
+        "interactive",
+        "fashion",
+        "responsible-ai"
       ],
       "ai_tools_allowed": [
-        "Runway",
-        "Sora",
-        "Kling",
-        "Veo",
-        "Midjourney",
-        "Luma",
-        "Pika",
-        "Any AI tool"
+        "Any AI tool with disclosure"
       ],
-      "eligibility": "Open internationally. Films completed after January 1, 2025. Applications accepted online via FilmFreeway only.",
-      "entry_fee": "Paid entry via FilmFreeway",
+      "eligibility": "Open globally to individual creators, studios, agencies, and students",
+      "entry_fee": "£25 early / £35 standard / £15 student",
       "featured": false,
       "tags": [
-        "turkey",
-        "istanbul",
-        "yesilcam",
-        "third-edition",
-        "europe",
-        "middle-east"
+        "awards",
+        "multi-category",
+        "launch-edition",
+        "affordable-entry"
       ],
-      "location": "Istanbul, Türkiye",
-      "event_date": "2026-12-07",
-      "created_at": "2026-09-07T20:53:48.54262+00:00",
-      "updated_at": "2026-09-08T14:29:24.260755+00:00",
+      "location": "Global (online)",
+      "event_date": "2026-12-01",
+      "created_at": "2026-07-21T14:30:54.244557+00:00",
+      "updated_at": "2026-07-21T14:30:54.244557+00:00",
       "featured_until": null,
       "featured_paid_at": null,
-      "organizer_email": "aitffest@gmail.com",
+      "organizer_email": null,
       "organizer_contact_url": null,
       "outreach_sent_at": null,
       "outreach_status": null
@@ -7977,51 +7970,58 @@
       "outreach_status": null
     },
     {
-      "id": "ai-creativity-awards-2026",
-      "name": "AI Creativity Awards 2026",
-      "organizer": "AI Creativity Awards",
-      "description": "The launch edition of a major new international AI awards programme — 8 categories including Motion & Film. £25 early entry through September 1, £35 standard through November 1. Judged on creative ambition, originality, execution, and quality of AI disclosure. Results announced December 1, 2026 — get in on the inaugural class.",
+      "id": "turkiye-intl-ai-film-festival-2026",
+      "name": "Türkiye International AI Film Festival (T-AIFF) 2026 — 3rd Edition",
+      "organizer": "Türkiye International AI Film Festival",
+      "description": "2,000+ submissions from over 100 countries and still growing — T-AIFF's 3rd edition judges AI films across the whole production stack, with awards for Best AI Director, Cinematographer, Editing, Sound Design, Music, VFX, Animation and Documentary. All submission-fee revenue is redistributed back to filmmakers as prize money. Deadline Nov 1, screenings at Istanbul's historic Yeşilçam Cinema Dec 7–9.",
       "deadline": "2026-11-01",
-      "submission_open": "2026-06-01",
-      "prize": "Inaugural class laurels + public results feature",
+      "submission_open": "2026-06-25",
+      "prize": "Award statuettes across 10+ categories; submission-fee revenue redistributed as filmmaker awards",
       "prize_details": [
-        "Digital laurels for winners and shortlist",
-        "Public results feature on the awards site",
-        "Digital certificate for winners",
-        "8 category winners across all creative disciplines",
-        "Judged by an international panel"
+        "Award statuettes for winning works across categories",
+        "Best AI Film, Best AI Director, Actor, Cinematographer",
+        "Best Editing, Sound Design, Music, Visual Effects",
+        "Best AI Animation and Best AI Documentary",
+        "Submission-fee revenue redistributed as awards to international-category directors",
+        "Screenings at Yeşilçam Cinema, Istanbul — Dec 7–9, 2026"
       ],
-      "url": "https://aicreativityawards.com/",
+      "url": "https://filmfreeway.com/T-AIFF",
       "status": "open",
       "categories": [
-        "motion-film",
-        "image",
-        "design",
-        "music",
-        "writing",
-        "interactive",
-        "fashion",
-        "responsible-ai"
+        "Short Film",
+        "Animation",
+        "Documentary",
+        "Music Video",
+        "Experimental"
       ],
       "ai_tools_allowed": [
-        "Any AI tool with disclosure"
+        "Runway",
+        "Sora",
+        "Kling",
+        "Veo",
+        "Midjourney",
+        "Luma",
+        "Pika",
+        "Any AI tool"
       ],
-      "eligibility": "Open globally to individual creators, studios, agencies, and students",
-      "entry_fee": "£25 early / £35 standard / £15 student",
+      "eligibility": "Open internationally. Films completed after January 1, 2025. Applications accepted online via FilmFreeway only.",
+      "entry_fee": "Paid entry via FilmFreeway",
       "featured": false,
       "tags": [
-        "awards",
-        "multi-category",
-        "launch-edition",
-        "affordable-entry"
+        "turkey",
+        "istanbul",
+        "yesilcam",
+        "third-edition",
+        "europe",
+        "middle-east"
       ],
-      "location": "Global (online)",
-      "event_date": "2026-12-01",
-      "created_at": "2026-07-21T14:30:54.244557+00:00",
-      "updated_at": "2026-07-21T14:30:54.244557+00:00",
+      "location": "Istanbul, Türkiye",
+      "event_date": "2026-12-07",
+      "created_at": "2026-09-07T20:53:48.54262+00:00",
+      "updated_at": "2026-09-08T14:29:24.260755+00:00",
       "featured_until": null,
       "featured_paid_at": null,
-      "organizer_email": null,
+      "organizer_email": "aitffest@gmail.com",
       "organizer_contact_url": null,
       "outreach_sent_at": null,
       "outreach_status": null
@@ -9132,42 +9132,37 @@
       "outreach_status": null
     },
     {
-      "id": "artiver-ai-art-awards-2026",
-      "name": "Artiver AI Art Awards 2026",
-      "organizer": "Artiver (New York)",
-      "description": "Winners get a Times Square billboard showcase and a New York physical exhibition — one of the only AI programs with high-visibility public exhibition prizes. Four fields open: Film & Video, Image & Visual Art, Spatial & Architecture, and Interactive Media. Cash prizes and monetization opportunities on the Artiver platform.",
+      "id": "ai-film-awards-las-vegas-2026",
+      "name": "AI Film Awards Las Vegas",
+      "organizer": "AI Film Awards",
+      "description": "The AI Film Awards franchise expands to Las Vegas — designed to elevate and celebrate cinematic work created with AI in one of the world's most iconic entertainment destinations. Submissions via FilmFreeway. Positions your AI film in a Vegas-branded awards circuit that already runs in Bali and Cannes.",
       "deadline": "2026-12-31",
       "submission_open": null,
-      "prize": "Times Square billboard + NY physical exhibition",
+      "prize": "AI Film Awards Las Vegas laurels + recognition",
       "prize_details": [
-        "Times Square billboard showcase for winners",
-        "New York physical exhibition",
-        "Cash prizes",
-        "Featured across Artiver's exhibition and media channels",
-        "Monetization opportunities via Artiver platform"
+        "Official AI Film Awards Las Vegas laurels",
+        "Recognition across the AI Film Awards network (also runs in Bali, Cannes)",
+        "Visibility in the global AI film community"
       ],
-      "url": "https://filmfreeway.com/ArtiverAIArtAwards",
+      "url": "https://filmfreeway.com/AI_Film_Awards_LasVegas",
       "status": "open",
       "categories": [
-        "film",
-        "video",
-        "image",
-        "spatial",
-        "interactive"
+        "short-film",
+        "feature-film"
       ],
       "ai_tools_allowed": [
         "Any AI tool"
       ],
-      "eligibility": "Open globally to digital artists and AI creators",
+      "eligibility": "Open globally to AI-assisted films",
       "entry_fee": "See FilmFreeway",
       "featured": false,
       "tags": [
-        "new-york",
-        "times-square",
-        "exhibition",
-        "multi-category"
+        "las-vegas",
+        "filmfreeway",
+        "usa",
+        "awards-franchise"
       ],
-      "location": "New York, USA",
+      "location": "Las Vegas, USA",
       "event_date": null,
       "created_at": "2026-07-21T14:31:32.411637+00:00",
       "updated_at": "2026-07-21T14:31:32.411637+00:00",
@@ -9353,40 +9348,90 @@
       "outreach_status": null
     },
     {
-      "id": "ai-film-awards-las-vegas-2026",
-      "name": "AI Film Awards Las Vegas",
-      "organizer": "AI Film Awards",
-      "description": "The AI Film Awards franchise expands to Las Vegas — designed to elevate and celebrate cinematic work created with AI in one of the world's most iconic entertainment destinations. Submissions via FilmFreeway. Positions your AI film in a Vegas-branded awards circuit that already runs in Bali and Cannes.",
+      "id": "artiver-ai-art-awards-2026",
+      "name": "Artiver AI Art Awards 2026",
+      "organizer": "Artiver (New York)",
+      "description": "Winners get a Times Square billboard showcase and a New York physical exhibition — one of the only AI programs with high-visibility public exhibition prizes. Four fields open: Film & Video, Image & Visual Art, Spatial & Architecture, and Interactive Media. Cash prizes and monetization opportunities on the Artiver platform.",
       "deadline": "2026-12-31",
       "submission_open": null,
-      "prize": "AI Film Awards Las Vegas laurels + recognition",
+      "prize": "Times Square billboard + NY physical exhibition",
       "prize_details": [
-        "Official AI Film Awards Las Vegas laurels",
-        "Recognition across the AI Film Awards network (also runs in Bali, Cannes)",
-        "Visibility in the global AI film community"
+        "Times Square billboard showcase for winners",
+        "New York physical exhibition",
+        "Cash prizes",
+        "Featured across Artiver's exhibition and media channels",
+        "Monetization opportunities via Artiver platform"
       ],
-      "url": "https://filmfreeway.com/AI_Film_Awards_LasVegas",
+      "url": "https://filmfreeway.com/ArtiverAIArtAwards",
       "status": "open",
       "categories": [
-        "short-film",
-        "feature-film"
+        "film",
+        "video",
+        "image",
+        "spatial",
+        "interactive"
       ],
       "ai_tools_allowed": [
         "Any AI tool"
       ],
-      "eligibility": "Open globally to AI-assisted films",
+      "eligibility": "Open globally to digital artists and AI creators",
       "entry_fee": "See FilmFreeway",
       "featured": false,
       "tags": [
-        "las-vegas",
-        "filmfreeway",
-        "usa",
-        "awards-franchise"
+        "new-york",
+        "times-square",
+        "exhibition",
+        "multi-category"
       ],
-      "location": "Las Vegas, USA",
+      "location": "New York, USA",
       "event_date": null,
       "created_at": "2026-07-21T14:31:32.411637+00:00",
       "updated_at": "2026-07-21T14:31:32.411637+00:00",
+      "featured_until": null,
+      "featured_paid_at": null,
+      "organizer_email": null,
+      "organizer_contact_url": null,
+      "outreach_sent_at": null,
+      "outreach_status": null
+    },
+    {
+      "id": "global-ai-music-video-awards-2027",
+      "name": "Global AI Music Video Awards (GAIMVA) 2027",
+      "organizer": "GAIMVA / Festhome",
+      "description": "The first international awards festival dedicated exclusively to AI-generated and AI-assisted music videos. Deadline January 1, 2027. Welcomes fully AI-generated, hybrid, experimental, narrative, performance-based, animated, vertical, student-made, and human+AI collaboration works — the widest AI music video category set anywhere.",
+      "deadline": "2027-01-01",
+      "submission_open": null,
+      "prize": "$1,000 prize pool",
+      "prize_details": [
+        "$1,000 total prize pool",
+        "International recognition",
+        "Global stage for AI music video creators",
+        "Categories for vertical, narrative, animated, and experimental music videos"
+      ],
+      "url": "https://filmmakers.festhome.com/en/festival/global-ai-music-video-awards",
+      "status": "open",
+      "categories": [
+        "music-video",
+        "experimental",
+        "vertical",
+        "animated"
+      ],
+      "ai_tools_allowed": [
+        "Any AI tool"
+      ],
+      "eligibility": "Open globally to artists, musicians, directors, filmmakers, editors, students, and creative teams",
+      "entry_fee": "$20 early (Jul 10) / $30 standard (Sep 1) / $40 late (Jan 1, 2027) per category on Festhome; Best AI Music Video requires entering 2+ categories",
+      "featured": false,
+      "tags": [
+        "music-video",
+        "ai-only",
+        "festhome",
+        "international"
+      ],
+      "location": "Global (online)",
+      "event_date": "2027-04-24",
+      "created_at": "2026-07-21T14:30:54.244557+00:00",
+      "updated_at": "2026-10-21T12:09:52.745122+00:00",
       "featured_until": null,
       "featured_paid_at": null,
       "organizer_email": null,
@@ -9442,55 +9487,10 @@
       "outreach_status": "draft"
     },
     {
-      "id": "global-ai-music-video-awards-2027",
-      "name": "Global AI Music Video Awards (GAIMVA) 2027",
-      "organizer": "GAIMVA / Festhome",
-      "description": "The first international awards festival dedicated exclusively to AI-generated and AI-assisted music videos. Deadline January 1, 2027. Welcomes fully AI-generated, hybrid, experimental, narrative, performance-based, animated, vertical, student-made, and human+AI collaboration works — the widest AI music video category set anywhere.",
-      "deadline": "2027-01-01",
-      "submission_open": null,
-      "prize": "$1,000 prize pool",
-      "prize_details": [
-        "$1,000 total prize pool",
-        "International recognition",
-        "Global stage for AI music video creators",
-        "Categories for vertical, narrative, animated, and experimental music videos"
-      ],
-      "url": "https://filmmakers.festhome.com/en/festival/global-ai-music-video-awards",
-      "status": "open",
-      "categories": [
-        "music-video",
-        "experimental",
-        "vertical",
-        "animated"
-      ],
-      "ai_tools_allowed": [
-        "Any AI tool"
-      ],
-      "eligibility": "Open globally to artists, musicians, directors, filmmakers, editors, students, and creative teams",
-      "entry_fee": "See Festhome",
-      "featured": false,
-      "tags": [
-        "music-video",
-        "ai-only",
-        "festhome",
-        "international"
-      ],
-      "location": "Global (online)",
-      "event_date": "2027-04-24",
-      "created_at": "2026-07-21T14:30:54.244557+00:00",
-      "updated_at": "2026-09-30T12:10:23.52842+00:00",
-      "featured_until": null,
-      "featured_paid_at": null,
-      "organizer_email": null,
-      "organizer_contact_url": null,
-      "outreach_sent_at": null,
-      "outreach_status": null
-    },
-    {
       "id": "chroma-awards-season-2-2026",
       "name": "Chroma Awards — Season 2",
       "organizer": "Chroma Awards (incubated by ElevenLabs)",
-      "description": "Season 2 of the ElevenLabs-incubated AI film and media competition (founded 2023 as Project Odyssey). The official site says Season 2 launches in mid-October 2026 with six divisions: Film, Advertising, Music Video, Song, Game and Behind-the-Scenes, across 51 categories. Deadline, prize pool and entry fee had not been published as of October 7, 2026. Season 1 drew 6,500+ entries and paid over $175,000 in cash plus $1M+ in tool credits.",
+      "description": "Season 2 of the ElevenLabs-incubated AI film and media competition (founded 2023 as Project Odyssey). Submissions opened October 19, 2026 and close January 7, 2027 at 11:45 PM PT. Five divisions (Film, Advertising, Music Video, Games, Behind-the-Scenes) plus Student Awards; $450,000+ in cash and travel perks. Projects made after February 1, 2026 are eligible, unlimited entries, one category per project. Winners announced February 11, 2027; gala April 2027.",
       "deadline": "2027-01-07",
       "submission_open": "2026-10-19",
       "prize": "$450,000+ in cash and travel perks",
@@ -9519,7 +9519,7 @@
       "location": null,
       "event_date": null,
       "created_at": "2026-05-26T08:15:27.453599+00:00",
-      "updated_at": "2026-10-19T08:00:05.533054+00:00",
+      "updated_at": "2026-10-21T12:09:52.9264+00:00",
       "featured_until": null,
       "featured_paid_at": null,
       "organizer_email": null,
