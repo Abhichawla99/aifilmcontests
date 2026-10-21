@@ -36,6 +36,114 @@ describe the old dark theme; the reasoning still applies, the colours do not.)*
 
 ---
 
+## 2026-10-21 — The contest page's deadline alert, ruled instead of boxed
+
+**Changed** — the `Don't miss this deadline` block in
+`src/app/contests/[id]/page.tsx`. 17 lines added, 7 removed, 12 of the additions
+being the comment that explains the colour. No CSS file touched, no copy, no
+data, no URL, no form behaviour.
+
+**Was** — a 14px-radius panel filled `#F3F0F9` behind an `#E1DAF0` hairline,
+its sentence set in `#4C3F72`.
+
+Those three values are not a CTA palette. They are the **Feature** tint out of
+`src/lib/theme.ts` — the row that reads
+`feature: { label: 'Feature', emoji: '📽️', bg: '#F3F0F9', border: '#E1DAF0', text: '#4C3F72' }`.
+On this site purple means feature film, and it means it everywhere: in the card
+tint, in the category chip, in the header band at the top of this very page.
+
+So on a short-film contest the page opened with a blue band and closed with a
+purple one. On a documentary, sand at the top and purple at the bottom. The
+colour was telling the reader something, and what it was telling them was
+wrong on seven categories out of eight. Korea AI Cinema Festival — the page
+the before shot was taken on — is tinted `#E7F1F8` short-film blue at the top
+and was carrying the feature purple 1,000px below it.
+
+And the panel was the only block on the page that had neither reason to be one.
+Counted at 1440px, the page carried five filled rounded blocks: the 984x176
+header band (the contest's own category tint), the 320x652 white Apply rail
+(it holds the controls), three 317x361 related cards (each one is a link you
+press) — and this.
+
+**Looked at** — three editorial sites, with one question: when a site that
+publishes for a living asks you to join its mailing list mid-page, what does it
+put around the ask?
+
+Dense Discovery, which *is* a newsletter, answers most flatly. On issue #364
+there is exactly one filled, rounded element on the page and it is the
+`Subscribe Now` anchor itself: 114x47, 8.5px radius, `rgb(49,49,49)`. The pitch
+around it — heading, sentence, the issue count — sits on the page ground with
+no container at all. The fill is on the thing you press and on nothing else.
+It's Nice That's homepage returns zero filled-or-bordered rounded blocks over
+200x60, MUBI's Notebook index zero over 240x70 that differ from the body
+ground. Adapted, not copied: our form needs a field, a button and a consent
+line, which is more than a single anchor — but the conclusion holds, and our
+own house grammar had already answered it. Every other block on this page is a
+hairline and a label on paper.
+
+**Now** — the band the rest of the page is built from. A 1px `#ECE9E2` rule,
+26px of air, `Don't miss this deadline` at the same 18px Space Grotesk 700 ink
+it had before, and the sentence underneath in `#3E3A33` — the body ink the
+Principles name, the same one WHO CAN ENTER and AI TOOLS ALLOWED use further up
+the page. No fill, no radius, no border. A `<section>` rather than a `<div>`,
+since it is one. The grid stays `auto-fit minmax(260px, 1fr)`, so it is still
+text-then-form at desktop and stacked on a phone, now aligned to the rule
+rather than centred against each other.
+
+Losing the panel cost nothing and returned the padding it was eating:
+
+| width | block height | email field |
+|---|---|---|
+| 1440 | 139 → 108px | 343 → 368px |
+| 390  | 303 → 282px | 308 → 350px |
+| 375  | 303 → 282px | 293 → 335px |
+
+The field number is the one that matters. `EmailSubscribe`'s own comment, from
+the run that made it wrap, says a 21-character address sets at 176px and that
+you cannot read back what you typed in less. The panel's 20px of padding on
+each side was taken straight off the field on exactly the width where that is
+tightest; the phone field is now 42px wider than it was.
+
+**Noted for a later run, not done today** —
+
+- **The homepage does the same thing.** `src/app/page.tsx` lines 523–540 wrap
+  the "Know before the deadline." section in the same `#F3F0F9` / `#E1DAF0`
+  pair and set its `ALWAYS CURRENT` label in `#4C3F72`. Same borrowed tint,
+  same argument, different page — but that block is the homepage's second
+  subscribe pitch and owns a bigger piece of the page, so it is its own run.
+- The contest page's new rule spans the full 984px content width while the four
+  `Section` rules above it — PRIZE DETAILS, WHO CAN ENTER, AI TOOLS ALLOWED,
+  TAGGED — all measure 616px, stopping where the Apply rail begins. It reads as
+  the page widening once the rail ends, which is what happens, but it does mean
+  the page now carries hairlines at two measures. Worth a look on a run that
+  owns the contest page's grid.
+- Carried: the browse toolbar's "Research agent running daily · fresh contests
+  added 24/7" pill still wraps to two ragged lines and still carries a
+  `backdropFilter` blur. `src/app/cinematic-ads/page.tsx` is still the only
+  other page using `backdropFilter`.
+- Process: `.env.cron` still has no `NEXT_PUBLIC_SUPABASE_ANON_KEY`. It no
+  longer empties the local grid — the 10-19 snapshot fallback serves 247 rows
+  from `src/data/contests-snapshot.json` — but the homepage hero therefore
+  renders its amber "live data unavailable" state on every local build, and
+  Supabase was in fact unreachable from this machine today as well.
+
+**Verified** — `npm run build` exited 0. Measured on `next start` at 1440px,
+390px and 375px, before and after, with the numbers above; no horizontal
+overflow at any of the three. Checked the three shapes the block has: hidden on
+a closed contest (`wsxa-hailuo-2026`, 0 occurrences), present on a documentary
+(`visionaria-rome-2026`, and no `#F3F0F9` anywhere on that page any more), and
+present on a feature contest (`all-is-prompt-ai-film-festival-2026`, where the
+one remaining `#F3F0F9` is the Feature category chip in the header band — the
+tint doing its actual job). Live after deploy (126ca92); the page returns 200.
+
+**Before / after** — `reports/design/2026-10-21-before.png` and
+`2026-10-21-after.png` are the same contest page at the same 1000px scroll,
+Korea AI Cinema Festival. `2026-10-21-before-390.png` and
+`2026-10-21-after-390.png` are the same pair at 390px and 1950px of scroll, and
+`2026-10-21-after-375.png` is the live page at 375px.
+
+---
+
 ## 2026-10-20 — The contest page's AI tools, as a rule and its examples
 
 **Changed** — the `AI tools allowed` section of `src/app/contests/[id]/page.tsx`,
