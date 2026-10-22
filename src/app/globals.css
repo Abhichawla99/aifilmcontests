@@ -592,6 +592,17 @@ img, svg, video, canvas { max-width: 100%; }
   padding-top: 9px;
 }
 .bb-chips { display: flex; flex-wrap: wrap; align-items: center; gap: 4px; }
+/* Divider between the chips that replace each other (status) and the one that
+   stacks on top of them (free entry). A hairline, not a box or a second colour:
+   Criterion's shop bar makes the same distinction with a `+` against a `⌄`.
+   Stretched to the chips' height so it reads as a rule between two groups. */
+.bb-sep {
+  align-self: stretch;
+  width: 1px;
+  min-height: 20px;
+  background: #E3DED3;
+  margin: 0 7px;
+}
 
 @media (max-width: 640px) {
   /* Label above its chips: at 390px a label column eats a third of the width
@@ -600,6 +611,17 @@ img, svg, video, canvas { max-width: 100%; }
   .bb-row-label { padding-top: 2px; }
   /* Thumb-sized chips on a phone. */
   .bb-chips .tab { min-height: 36px; display: inline-flex; align-items: center; }
+  /* At 390px the Show row wraps and the free-entry chip lands alone on line two
+     looking like a widow. The same divider turns on its side: a full-width rule
+     that forces the break deliberately and says why it is there. */
+  .bb-sep {
+    flex-basis: 100%;
+    width: auto;
+    height: 1px;
+    min-height: 0;
+    align-self: auto;
+    margin: 7px 0 2px;
+  }
 }
 
 /* ── Homepage header ────────────────────────────────────────────────────────

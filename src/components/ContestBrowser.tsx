@@ -150,6 +150,18 @@ export default function ContestBrowser({ contests }: { contests: Contest[] }) {
   const openCount = useMemo(() => contests.filter(c => c.status === 'open').length, [contests])
   const upcomingCount = useMemo(() => contests.filter(c => c.status === 'upcoming').length, [contests])
   const closed = useMemo(() => contests.filter(c => c.status === 'closed'), [contests])
+  // Free entry stacks on top of whichever status is selected, so its count is the
+  // free contests inside the current status set, not inside the whole directory.
+  // Switch from All active to Coming soon and the number moves with it, which is
+  // the honest answer to "what will pressing this leave me with".
+  const freeCount = useMemo(
+    () => contests.filter(c =>
+      c.status !== 'closed' &&
+      (status === 'all' || c.status === status) &&
+      c.entryFee === 'Free'
+    ).length,
+    [contests, status]
+  )
 
   const filtered = useMemo(() => {
     const needle = q.trim().toLowerCase()
@@ -285,12 +297,19 @@ export default function ContestBrowser({ contests }: { contests: Contest[] }) {
                 {label}
               </button>
             ))}
+            {/* The three chips above are one choice: press one and it replaces the
+                last. This one adds to whatever is already selected. Identically
+                set, the row never said so — and it was also the only chip of the
+                four carrying no count. A hairline now separates the two kinds,
+                vertical where the row fits on a line and horizontal where it
+                wraps (.bb-sep), and the count completes the row's pattern. */}
+            <span className="bb-sep" aria-hidden="true" />
             <button
               onClick={() => setFreeOnly(v => !v)}
               aria-pressed={freeOnly}
               className={`tab ${freeOnly ? 'on' : ''}`}
             >
-              Free entry
+              Free entry ({freeCount})
             </button>
           </div>
         </div>
