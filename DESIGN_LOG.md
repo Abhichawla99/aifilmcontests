@@ -36,6 +36,79 @@ describe the old dark theme; the reasoning still applies, the colours do not.)*
 
 ---
 
+## 2026-10-22 — The Free entry filter, told apart from the three it was sitting with
+
+**Changed** — the Show row of `src/components/ContestBrowser.tsx` (one `freeCount`
+memo, one separator span, one label), plus a new `.bb-sep` rule beside `.bb-chips`
+in `globals.css` and its phone override. 42 lines added, 1 removed, 18 of the
+additions being comments. No data, no copy on any other control, no URL, no
+filter behaviour.
+
+**Was** — four chips in a row, identically set:
+
+`All active (81)`  `Open (77)`  `Coming soon (4)`  `Free entry`
+
+They are not four of the same thing. The first three are one choice: press
+`Open` and it replaces `All active`. The fourth is a toggle that stacks on top
+of whichever of the three is already on — press `Coming soon` then `Free entry`
+and you are looking at contests that are both. Set the same way, in the same
+box, with the same indigo fill when active, the row had no way of saying which
+was which. Two chips lit up and nothing explained why pressing one had
+replaced a selection and pressing the other had not.
+
+The second fault was simpler and is the one you see first. Three of the four
+carried a count and the last one didn't, so the row's own pattern broke on its
+final item. A reader scanning left to right got 81, 77, 4, and then nothing —
+and a missing number does not read as "we didn't print it", it reads as
+ambiguous between zero and unknown. The directory has 17 free-entry contests
+open. The row was the only place on the page where that fact belonged and the
+one place it wasn't.
+
+At 390px the row wraps, and because `Free entry` was last it landed alone on
+line two: a widow, with no rule or label to say the break was deliberate.
+
+**Looked at** — Criterion's Shop All Films, Letterboxd's film browse, Mubi's
+film database.
+
+Criterion sets its two controls as `FILTER +` and `SORT ⌄`, with `1899 RESULTS`
+immediately to their left. The plus and the caret are doing the whole job: a
+plus adds a constraint to what is already there, a caret swaps one value for
+another. Letterboxd and Mubi reach the same end by shape and position —
+narrowing filters are carets in a left-hand run, sort is pushed to the far
+right, and the exclusive tabs are underlined rather than filled. None of the
+three leans on colour to tell an additive control from an exclusive one, which
+is exactly what our row was asking indigo to do on its own.
+
+We have no `+` and I am not adding an icon set for one control. The site
+already owns the device that does this job: a hairline.
+
+**Now** —
+
+- A 1px `#E3DED3` rule (`.bb-sep`) sits between `Coming soon` and `Free entry`,
+  stretched to the chips' height, so the row reads as *pick one of these three*,
+  then *and optionally this*.
+- At ≤640px the same rule turns on its side: full width, `flex-basis: 100%`, so
+  it forces the line break instead of suffering one. `Free entry` now owns line
+  two on purpose, under a rule that explains it.
+- The chip reads `Free entry (17)`, completing the row's pattern. The count is
+  the free contests *inside the current status set*, not inside the whole
+  directory, because that is the honest answer to what pressing it will leave
+  you with. Select `Coming soon (4)` and it becomes `Free entry (2)`; pressing
+  it returns exactly 2.
+
+Checked at 1440px and 390px, across All active, Open and Coming soon, with the
+toggle both off and on. No horizontal overflow at either width. The focus ring
+and `aria-pressed` on all four buttons are untouched; the separator is an
+`aria-hidden` span, so the `role="group"` reads the same four controls it did
+before.
+
+**Before/after** — `reports/design/2026-10-22-before.png` and
+`2026-10-22-after.png` are the homepage toolbar at 1440px;
+`2026-10-22-before-phone.png` and `2026-10-22-after-phone.png` the same row at
+390px, where the wrap is.
+
+---
+
 ## 2026-10-21 — The contest page's deadline alert, ruled instead of boxed
 
 **Changed** — the `Don't miss this deadline` block in
