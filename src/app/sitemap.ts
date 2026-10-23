@@ -57,6 +57,9 @@ const RECORDED_DATES = {
   toolsIndex:    new Date('2026-10-17T07:00:00-06:00'), // src/app/tools/page.tsx
   guideIndex:    new Date('2026-10-18T07:00:00-06:00'), // src/app/guide/page.tsx
   vsPages:       new Date('2026-10-04T07:12:15-06:00'), // src/app/vs/[slug]/page.tsx
+  vsIndex:       new Date('2026-10-23T07:00:00-06:00'), // src/app/vs/page.tsx
+  prizeIndex:    new Date('2026-10-23T07:00:00-06:00'), // src/app/prize/page.tsx
+  locationIndex: new Date('2026-10-23T07:00:00-06:00'), // src/app/location/page.tsx
 }
 
 // Static pages -- homepage, the cinematic-ads landing page, and the creators
@@ -92,6 +95,24 @@ const STATIC_PAGES: MetadataRoute.Sitemap = [
     lastModified: RECORDED_DATES.guideIndex,
     changeFrequency: 'weekly',
     priority: 0.75,
+  },
+  {
+    url: `${BASE}/vs`,
+    lastModified: RECORDED_DATES.vsIndex,
+    changeFrequency: 'weekly',
+    priority: 0.7,
+  },
+  {
+    url: `${BASE}/prize`,
+    lastModified: RECORDED_DATES.prizeIndex,
+    changeFrequency: 'weekly',
+    priority: 0.7,
+  },
+  {
+    url: `${BASE}/location`,
+    lastModified: RECORDED_DATES.locationIndex,
+    changeFrequency: 'weekly',
+    priority: 0.7,
   },
 ]
 
