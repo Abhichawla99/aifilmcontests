@@ -1444,6 +1444,86 @@ img, svg, video, canvas { max-width: 100%; }
    copy of the old flush-left stack (answers 14px in #6F6A61, and #7A7469 on
    /guide — the pale value this block was written to replace). One
    `FaqList` in ArticleLayout renders all four. */
+/* ── 2026-10-23 — the homepage's subscribe band, ruled instead of boxed.
+   Was a 16px-radius #F3F0F9 panel behind an #E1DAF0 hairline, caption in
+   #4C3F72: the Feature category tint from theme.ts, on a block that has
+   nothing to do with feature films. Same borrowed palette the contest page's
+   deadline block shed on 2026-10-21, and the last one on the site.
+
+   Three columns that meet, instead of two pushed apart by space-between with
+   ~290px of nothing between them at 1440px. The drawing was absolutely
+   positioned into the old panel's corner, where its 116px box overlapped the
+   consent sentence by 98px; it is a grid column now and cannot reach the text.
+   Caption takes .feat-cap's #7A7469, body takes the Principles' #3E3A33 (it
+   was #6F6A61, the pale value the FAQ below was rewritten off on 2026-09-29). */
+.hcta {
+  border-top: 1px solid #ECE9E2;
+  padding-top: 30px;
+  display: grid;
+  /* say it · fill it in · the filmmaker */
+  grid-template-columns: minmax(0, 1fr) minmax(280px, 360px) 116px;
+  gap: clamp(24px, 3.4vw, 48px);
+  align-items: start;
+}
+.hcta-say { max-width: 460px; }
+.hcta-cap {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #7A7469;
+  margin-bottom: 14px;
+}
+.hcta-h {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: clamp(22px, 3.5vw, 34px);
+  font-weight: 700;
+  color: #1B1916;
+  letter-spacing: -0.03em;
+  line-height: 1.15;
+  margin: 0 0 12px;
+}
+.hcta-p {
+  font-size: 14px;
+  color: #3E3A33;
+  line-height: 1.8;
+  margin: 0;
+}
+.hcta-draw {
+  width: 116px;
+  height: 126px;
+  opacity: 0.9;
+  align-self: end;
+  pointer-events: none;
+}
+
+/* Below the drawing's own column width plus a form that can still be typed in,
+   she steps out rather than squeezing the other two. Same 1024px line the old
+   `hidden lg:block` drew. */
+@media (max-width: 1023px) {
+  .hcta { grid-template-columns: minmax(0, 1fr) minmax(280px, 360px); }
+  .hcta-draw { display: none; }
+}
+
+/* One column at 840px, not at the width where the form would finally be
+   squeezed. The form is capped at 360px, so below roughly 840 the 1fr text
+   column is the narrower of the two — at 768 it sets at 342px against the
+   form's 360 — and the thing we say reads as subordinate to the thing you fill
+   in. Stacking while the sentence is still the wider column keeps that order.
+   The field then has the whole 350px of a 390px page, against the 292px the
+   panel's padding used to leave it. */
+@media (max-width: 840px) {
+  .hcta { grid-template-columns: 1fr; gap: 26px; padding-top: 26px; }
+  /* Stacked, both items would otherwise run the full content width: at 840
+     that is a 100-character line of 14px body and a 692px email field, neither
+     of which is a measure anyone set on purpose. 480px holds the sentence to
+     about 62 characters and keeps the field under it the same width, so the
+     two read as one left-aligned column. Below 520px neither cap bites and the
+     block is simply the page width. */
+  .hcta-say, .hcta-form { max-width: 480px; }
+}
+
 .hfaq { border-top: 1px solid #E3DED3; max-width: 940px; }
 .hfaq-row {
   display: grid;

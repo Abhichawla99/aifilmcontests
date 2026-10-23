@@ -517,46 +517,45 @@ export default async function Home() {
           </aside>
         </section>
 
-        {/* ── Bottom CTA ── */}
-        <section className="max-w-6xl mx-auto px-5 pb-24">
-          <div style={{
-            border: '1px solid #E1DAF0',
-            borderRadius: 16,
-            padding: 'clamp(28px, 4vw, 44px)',
-            display: 'flex',
-            flexWrap: 'wrap',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-            gap: 32,
-            background: '#F3F0F9',
-            position: 'relative',
-          }}>
-            {/* the filmmaker, watching for the next one */}
-            <div aria-hidden style={{ position: 'absolute', right: 26, bottom: 0, width: 116, height: 126, opacity: 0.9, pointerEvents: 'none' }} className="hidden lg:block">
-              <FilmmakerDoodle />
-            </div>
+        {/* ── Bottom CTA ──
+             The last borrowed tint on the site. This block was a 16px-radius
+             panel filled #F3F0F9 behind an #E1DAF0 hairline with its caption in
+             #4C3F72 — the Feature row out of src/lib/theme.ts, where purple
+             means feature film and means it in every card tint and category
+             chip above. The page's main subscribe pitch was wearing one
+             category's colour. The contest page's deadline block lost the same
+             three values on 2026-10-21; this is the other half of that run.
+             Now it is what the FAQ below it and the figures above it already
+             are: a rule, air, and type on paper.
 
-            <div style={{ maxWidth: 460, position: 'relative' }}>
-              <div style={{ fontSize: 11, color: '#4C3F72', fontFamily: 'Space Grotesk, sans-serif', fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: 14 }}>
-                Always current
-              </div>
-              <h2 style={{
-                fontFamily: 'Space Grotesk, sans-serif',
-                fontSize: 'clamp(22px, 3.5vw, 34px)',
-                fontWeight: 700,
-                color: '#1B1916',
-                marginBottom: 12,
-                letterSpacing: '-0.03em',
-                lineHeight: 1.15,
-              }}>
-                Know before the deadline.
-              </h2>
-              <p style={{ fontSize: 14, color: '#6F6A61', lineHeight: 1.8 }}>
+             The panel was also costing the thing it contained. Its padding is
+             clamp(28px, 4vw, 44px) on each side, taken off the email field at
+             exactly the width where the field is tightest — 292px at 390px,
+             against EmailSubscribe's own note that a 21-character address sets
+             at 176px. Without it the field gets the whole 350px column.
+
+             And the flex row left roughly 290px of dead air between a 460px
+             text column and a 360px form at 1440px, with the drawing absolutely
+             positioned into the corner behind them — where its box overlapped
+             the consent sentence by 98px, legible only because the filmmaker's
+             ink happens to sit low and right inside it. Three grid columns that
+             meet: what we say, the thing you fill in, and the filmmaker, who
+             now has her own column and cannot collide with anything. ── */}
+        <section className="max-w-6xl mx-auto px-5 pb-24">
+          <div className="hcta">
+            <div className="hcta-say">
+              <div className="hcta-cap">Always current</div>
+              <h2 className="hcta-h">Know before the deadline.</h2>
+              <p className="hcta-p">
                 An AI agent searches the web daily, visits each contest URL, and verifies every deadline against the live page — so you never act on stale information.
               </p>
             </div>
-            <div style={{ minWidth: 280, flex: '1 1 280px', maxWidth: 360, position: 'relative' }}>
+            <div className="hcta-form">
               <EmailSubscribe compact />
+            </div>
+            {/* the filmmaker, watching for the next one */}
+            <div aria-hidden className="hcta-draw">
+              <FilmmakerDoodle />
             </div>
           </div>
         </section>
