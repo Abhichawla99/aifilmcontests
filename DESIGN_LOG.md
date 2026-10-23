@@ -36,6 +36,123 @@ describe the old dark theme; the reasoning still applies, the colours do not.)*
 
 ---
 
+## 2026-10-23 — The homepage's subscribe band, ruled instead of boxed
+
+**Changed** — the Bottom CTA section of `src/app/page.tsx`, now five class
+names instead of four inline style objects, plus a new `.hcta` block beside
+`.hfaq` in `globals.css`. 114 lines added, 35 removed, 63 of the additions
+being comments. No copy — the caption, the headline and the sentence are
+unchanged to the character. No data, no URL, no form behaviour, no change to
+`EmailSubscribe` itself.
+
+**Was** — a 1112x249 block at 1440px: 16px radius, filled `#F3F0F9` behind an
+`#E1DAF0` hairline, `ALWAYS CURRENT` set in `#4C3F72`.
+
+This is the entry the 10-21 run said it was leaving for later, and the argument
+is the same one, so it can be short. Those three values are the **Feature** row
+out of `src/lib/theme.ts` —
+`feature: { label: 'Feature', emoji: '📽️', bg: '#F3F0F9', border: '#E1DAF0', text: '#4C3F72' }`.
+Purple means feature film on this site and means it a few hundred pixels above
+this block, in the card tints and category chips of the grid the visitor has
+just scrolled through. The page's main subscribe pitch was wearing one
+category's colour for no reason connected to it. After today, `#F3F0F9`,
+`#E1DAF0` and `#4C3F72` appear nowhere in `src/` outside `theme.ts` and four
+code comments explaining why.
+
+Two faults the contest page did not have, both from the same panel:
+
+**The padding came off the field.** The panel's `clamp(28px, 4vw, 44px)` is
+charged twice, once per side, and it is charged hardest where there is least to
+give. At 390px it took 56px off a 350px block, leaving the email input at
+292px. `EmailSubscribe`'s own comment, from the run that made it wrap, records
+that a 21-character address sets at 176px and that you cannot read back what
+you typed in less.
+
+| width | block height | email field |
+|---|---|---|
+| 1440 | 249 → 190px | 360 → 360px |
+| 390  | 394 → 332px | 292 → 350px |
+| 375  | 394 → 357px | 277 → 335px |
+
+**The row did not add up.** `display: flex` with `justify-content:
+space-between` held a 460px text column and a 360px form inside 1112px, so
+roughly 290px of the band was nothing at all — and the filmmaker was
+`position: absolute; right: 26px; bottom: 0` **behind** them, in the corner the
+panel gave her. Measured on the live page, her 116px box ran from x=1133 to
+x=1249 and the first line of the consent sentence ran to x=1231: a 98px
+overlap. It was legible, but only because her ink happens to sit low and right
+inside her own viewBox. That is luck holding, not layout.
+
+**Looked at** — MUBI's Notebook, It's Nice That's homepage, Criterion's Shop
+All Films. One question: when a site that publishes for a living asks for your
+email at the foot of a long page, what is around the ask?
+
+Nothing, in all three, and none of them owns a rounded corner. Criterion's
+browse page carries **zero** filled-or-bordered rounded blocks over 300x80 — its
+newsletter ask is a 456px column inside the footer band, and the input has no
+fill and no box, just a 2px `#4A4A4A` rule under it. It's Nice That has 16
+filled blocks over 400x100 and every one of them is `border-radius: 0`; the ask
+sits in a flat `#2B2B2B` band at the full 1060px measure. MUBI is the one that
+fills something, and the fill is `#F6F6F6` — a neutral two per cent off its own
+ground, the same grey it gives article thumbnails, not a hue that means anything
+elsewhere on the site. Adapted, not copied: we are not going to lose the
+button's indigo, and our form needs a field, a button and a consent line. But
+the conclusion holds twice over. The ask gets no container, and if something is
+tinted, the tint is not borrowed from a vocabulary that is already speaking.
+
+**Now** — a 1px `#ECE9E2` rule, 30px of air, and three grid columns that meet:
+`minmax(0, 1fr) minmax(280px, 360px) 116px`, gap `clamp(24px, 3.4vw, 48px)`.
+What we say, the thing you fill in, the filmmaker. She has her own column and
+a 48px gap to the consent line now, and cannot reach it at any width. Caption
+in `.feat-cap`'s `#7A7469`, body in the Principles' `#3E3A33` — it was
+`#6F6A61`, the pale value the FAQ directly below it was rewritten off on
+2026-09-29, so those two blocks now speak in the same ink.
+
+It stacks at **840px**, not at the width where something finally breaks. The
+form is capped at 360px, so below roughly 840 the `1fr` text column is the
+narrower of the two — at 768 it sets at 342px against the form's 360 — and the
+sentence starts reading as subordinate to the field. Stacking while it is still
+the wider column keeps that order. Stacked, both are capped at 480px, or the
+sentence would run a 100-character line and the field 692px at 840. Below
+520px neither cap bites and the block is simply the page width.
+
+**Noted for a later run, not done today** —
+
+- The rule spans the full 1112px content width; the `.hfaq` list immediately
+  below it is `max-width: 940px` and its own rule stops there. Two hairlines at
+  two measures, 172px apart, with 56px of air between them. Neither is wrong on
+  its own and this run was not the place to pick, but the foot of the homepage
+  now has a visible decision in it.
+- The filmmaker is `align-self: end`, so she hangs off the bottom of a row
+  whose height is set by the text column. At 1024px that column is 438px and
+  her baseline lands 4px below the consent line's; at 1440px it is level.
+  Fine either way, but it is incidental rather than chosen.
+- Carried from 10-21: the browse toolbar's "Research agent running daily" pill
+  still wraps to two ragged lines and still carries a `backdropFilter` blur.
+- Process: `.env.cron` still has no `NEXT_PUBLIC_SUPABASE_ANON_KEY`, so local
+  builds render the homepage hero's amber "live data unavailable" state off the
+  10-19 snapshot. Unlike every run since 10-17, the service-role workaround was
+  not available this time — the sandbox refused the env swap as credential
+  leakage — so all local measurement was done against the snapshot build, and
+  the live check after deploy is doing the work that swap used to.
+
+**Verified** — `npm run build` exited 0. Measured on `next start` at 1440,
+1024, 841, 840, 768, 520, 390 and 375px: no horizontal overflow at any of them,
+the paragraph sets in 3 lines (4 at 375) with its longest line never over
+478px, the field never under 335px, and the drawing present at 841 and above,
+`display: none` below. Confirmed `#F3F0F9` renders nowhere on the homepage any
+more and that the three Feature values survive in `src/` only in `theme.ts` and
+in comments. The build-regenerated `src/data/contests-snapshot.json` was
+reverted before committing, so the commit is the two source files and nothing
+else.
+
+**Before / after** — `reports/design/2026-10-23-before.png` and
+`2026-10-23-after.png` are the live homepage at 1440px and 3800px of scroll.
+`2026-10-23-before-390.png` and `2026-10-23-after-390.png` are the same pair at
+390px, and `2026-10-23-after-375.png` is the live page at 375px.
+
+---
+
 ## 2026-10-22 — The Free entry filter, told apart from the three it was sitting with
 
 **Changed** — the Show row of `src/components/ContestBrowser.tsx` (one `freeCount`
