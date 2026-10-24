@@ -28,24 +28,26 @@ const TOOLS = [
   { name: 'ElevenLabs',    desc: 'Hyper-realistic AI voice and sound design — critical for brand narrative and VO.' },
 ]
 
+// Four reasons in the order the argument runs: speed, what the speed is worth,
+// what you do with it, what it costs. Each one used to carry an emoji above the
+// title. Neither 🛫 nor 🧾 is in src/lib/theme.ts, which is the whole of this
+// site's emoji vocabulary, and the Principles rule them out twice over: never an
+// emoji outside that file, and never one standing in for a UI icon. At the 24px
+// they rendered at, the receipt was a grey smudge you could not read anyway.
 const WHY = [
   {
-    icon: '🛫',
     title: 'Speed to market',
     body: 'What once took weeks of production can go from brief to final film in days. AI removes friction at every stage — from concept to delivery.',
   },
   {
-    icon: '🎞️',
     title: 'Cinematic quality',
     body: 'Modern AI video models produce footage that rivals traditional production — with full control over lighting, mood, and motion.',
   },
   {
-    icon: '🎠',
     title: 'Infinite iteration',
     body: "Brands can A/B test 10 versions of a spot instead of one, tuning creative in real time based on what's actually resonating.",
   },
   {
-    icon: '🧾',
     title: 'Cost efficiency',
     body: 'AI-assisted production slashes the cost of high-end commercial content by 60–80%, opening cinematic storytelling to more brands.',
   },
@@ -205,29 +207,31 @@ export default async function CinematicAdsPage() {
               </p>
             </div>
 
-            <div style={{
-              display: 'grid',
-              gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))',
-              gap: 16,
-            }}>
+            {/* A ruled definition list, not a four-up grid of identical boxes.
+                src/app/creators/page.tsx holds an array under this same name,
+                of this same shape — a short title, one sentence — and was moved
+                onto .cr-why for exactly this reason; that rule's own comment in
+                globals.css says "rather than a three-up grid of identical
+                boxes". This page was the one that still had the grid.
+
+                The boxes were also drawn at a weight nobody can see: a
+                rgba(27,25,22,0.06) border around a 0.02 fill, plus a blur(8px)
+                of paper against paper — the "component that failed to load"
+                look the 2026-09-21 run stripped off this page's callout and the
+                09-30 run off its footer. And the grid had arithmetic a list
+                does not. Three 240px tracks and two 16px gaps need 752px of
+                the 984px measure; a fourth would need 1008px, which a 1024px
+                container never offers. So it was three across and never four
+                at every width at or above 792px, and "Cost efficiency" sat
+                alone on a second row with two thirds of it empty.
+
+                Reuses .cr-why verbatim — no new CSS, no new idea, and the two
+                pages now set the same kind of content the same way. */}
+            <div className="cr-why">
               {WHY.map(item => (
-                <div key={item.title} style={{
-                  border: '1px solid rgba(27,25,22,0.06)',
-                  borderRadius: 14,
-                  padding: '24px',
-                  background: 'rgba(27,25,22,0.02)',
-                  backdropFilter: 'blur(8px)',
-                  transition: 'border-color 0.2s',
-                }}>
-                  <div style={{ fontSize: 24, marginBottom: 14 }}>{item.icon}</div>
-                  <h3 style={{
-                    fontFamily: 'Space Grotesk, sans-serif',
-                    fontSize: 15, fontWeight: 700,
-                    color: '#26231E', marginBottom: 8, letterSpacing: '-0.01em',
-                  }}>
-                    {item.title}
-                  </h3>
-                  <p style={{ fontSize: 13, color: '#8B867C', lineHeight: 1.7 }}>{item.body}</p>
+                <div key={item.title} className="cr-why-row">
+                  <div className="cr-why-t">{item.title}</div>
+                  <p className="cr-why-b">{item.body}</p>
                 </div>
               ))}
             </div>
