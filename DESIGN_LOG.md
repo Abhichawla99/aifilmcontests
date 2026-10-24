@@ -36,6 +36,126 @@ describe the old dark theme; the reasoning still applies, the colours do not.)*
 
 ---
 
+## 2026-10-24 — /cinematic-ads' case for cinematic AI, as a ruled list
+
+**Changed** — the `Why AI advertising` section of `src/app/cinematic-ads/page.tsx`
+and the `icon` field of the `WHY` array above it. 30 lines added, 26 removed;
+4 of the additions are markup and the other 26 are the comment explaining it.
+No CSS file touched, no new class, no data, no URL. Every word of the four
+titles and bodies is unchanged to the character.
+
+**Was** — a four-up grid, `repeat(auto-fit, minmax(240px, 1fr))` at a 16px gap,
+each item a 14px-radius box: a `rgba(27,25,22,0.06)` border around a
+`rgba(27,25,22,0.02)` fill with `backdropFilter: blur(8px)`, holding a 24px
+emoji, a 15px bold title and body at `#8B867C`.
+
+This is the pattern the taste rules name outright — *three-column feature grids
+with an icon, a bold title and two lines of filler* — and the site had already
+decided against it. `src/app/creators/page.tsx` holds an array under **the same
+name**, `WHY`, of the same shape, a short title and one sentence. It was moved
+onto `.cr-why` on an earlier run, and the comment sitting above that rule in
+`globals.css` reads *"as a ruled definition list rather than a three-up grid of
+identical boxes — a label, one sentence, a hairline between."* The argument was
+made, written down, and shipped. `/cinematic-ads` was simply the page nobody had
+come back to, which is what it has been since 09-08: it is the last of the dark
+theme's furniture.
+
+Three faults, each one already argued elsewhere on this site:
+
+**The boxes were drawn at a weight nobody can see.** A 6%-black border around a
+2% fill, which is a sixteenth and a fiftieth of an opaque line, plus a `blur(8px)`
+of paper against paper. That is the exact description the 2026-09-21 run wrote
+when it took the ghost box off this page's own Ruminatex callout, and the 09-30
+run repeated it taking the blur off this page's footer: *what a component that
+failed to load looks like*. Three `backdropFilter` uses on the page before, two
+after — the header and the Ruminatex panel, both bigger jobs than one run.
+
+**The grid had arithmetic a list does not.** Three 240px tracks and two 16px gaps
+need 752px of the 984px measure; a fourth track would need 1008px, which a
+1024px container never offers. So it was three across and never four at every
+width at or above 792px, and the fourth reason — `Cost efficiency` — sat alone
+on a second row with two thirds of it empty. Below 792px it fell to two columns
+and the row closed up, so the fault was invisible on a phone and unavoidable on
+a desktop. It is the same widow the 10-22 run fixed on the browse toolbar's
+chips, in a block four times the size.
+
+**Two of the four emoji are not ours.** 🛫 and 🧾 appear nowhere in
+`src/lib/theme.ts`, which is the whole of this site's emoji vocabulary and is
+meant to be: eight category marks chosen because no other AI product uses them.
+The Principles rule these out twice over — never one outside that file, and
+never one standing in for a UI icon, which is all four of these were doing. At
+the 24px they rendered at, the receipt was a grey smudge you could not read; it
+is legible in the before shot only if you already know what it is supposed to be.
+
+**Looked at** — Are.na's About page, It's Nice That's index, Mubi's about page.
+
+Are.na sets *How it works* as five items — **Capture, Arrange, Search, Connect,
+Network** — each a one-word title over one sentence, in a plain vertical column
+on the right of the fold. No icon, no box, no rule; the only mark anywhere is a
+small dot on the item currently being shown. The observation worth keeping is
+not the styling, it is that **five is as easy as four there**. A list has no
+arithmetic. Nothing is left over, nothing has to divide, and a sixth reason
+would cost one line rather than forcing a decision about the row. Our four
+reasons were being asked to fit a shape that could only hold three.
+
+**Now** — four rows of `.cr-why`, reused verbatim: the title in a 215px column,
+the sentence in the 459px one beside it, a hairline between. Measured on
+`next start` at 1440px, the list is **301px tall in four rows of exactly 75px**,
+against a grid that ran to a ragged two. Title ink `#1B1916`, body `#6F6A61` —
+whatever `/creators` uses, because reusing a pattern means taking its ink too;
+picking a different value here would have given the site two definition lists
+that look nearly but not quite the same, which is worse than one that is pale.
+Below 620px `.cr-why-row`'s existing override drops it to a single column, so
+the title sits above its sentence and the rules do the separating.
+
+**Noted for a later run, not done today** —
+
+- `/cinematic-ads` still has two `backdropFilter` blurs: the sticky header
+  (`blur(16px)` over `rgba(251,250,248,0.85)`, with a glow `boxShadow` on its
+  `AI` mark) and the Ruminatex panel (`blur(16px)` over a 135° purple gradient,
+  with a gradient hairline across its top and a radial purple blob bottom-right).
+  The panel is a purple-to-blue gradient card, which the taste rules name. Both
+  are their own runs. Carried from 09-21, 09-30 and 10-21, now with the list
+  done and the count at two.
+- The page draws **its own header** instead of the site's, so it is the one page
+  where the wordmark, the nav and the mark are a near-copy rather than the
+  shared component. `InnerNav.tsx` was the most recent optimizer item, so it was
+  off limits today; it is the obvious next move on this page.
+- The `orb2` animation on the fixed decorative div at the top of the page
+  **has no `@keyframes` anywhere in `src/`** — the dark-theme removal took the
+  keyframes and left the reference. It is therefore a static 700×700
+  `rgba(99,102,241,0.1)` radial, an indigo that is in no palette on this site,
+  pinned top-right directly over `BackgroundFX`'s own warm wash at `85% -5%`.
+  Two overlapping washes in one corner, one of them a leftover.
+- **For Abhi, not a design call:** this section states that AI-assisted
+  production cuts high-end commercial costs "by 60–80%", and the Ruminatex block
+  says its work looks like it "cost 10× more to make". Neither figure has a
+  source on the page. COMMON rule 5 is about facts robots write; these predate
+  the robots and are a claim about Abhi's own business, so they are left exactly
+  as they were — but they are now the least supported thing in a block that is
+  otherwise just four plain sentences.
+
+**Verified** — `npm run build` exited 0. Checked on `next start` at 1440, 768,
+390 and 375px: `✓ no horizontal overflow` at every one. Confirmed the list
+renders four `.cr-why-row`s with the measured geometry above, that the page's
+`backdropFilter` count is 2 where it was 3, and that no emoji remains in the
+section. Live after deploy (816fb7b).
+
+**Before / after** — `reports/design/2026-10-24-before-block.png` and
+`2026-10-24-after.png` are the changed block itself at 1440px, the first on the
+pre-deploy build at 1100px of scroll (where the widow is: `Cost efficiency`
+alone on its row, two thirds of the row empty) and the second live at 760px,
+where the list now starts higher because it is 301px instead of the grid's two
+ragged rows. `2026-10-24-before.png` is the live page's top at 1440px before the
+change, for the record, and `2026-10-24-before-390.png` is the same at 390px.
+`2026-10-24-after-390.png` is the live list at 390px and 850px of scroll; there
+is no matching before shot of the block on a phone, because at 390px the grid
+was a single stacked column with no widow — the fault this run fixed does not
+exist at that width, and the change there is the loss of the four ghost boxes
+and the emoji, not the layout.
+
+---
+
 ## 2026-10-23 — The homepage's subscribe band, ruled instead of boxed
 
 **Changed** — the Bottom CTA section of `src/app/page.tsx`, now five class
