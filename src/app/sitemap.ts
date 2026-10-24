@@ -55,6 +55,7 @@ const RECORDED_DATES = {
   cinematicAds:  new Date('2026-09-30T12:24:59-06:00'), // src/app/cinematic-ads/page.tsx
   creatorsIndex: new Date('2026-10-04T07:12:15-06:00'), // src/app/creators/page.tsx
   toolsIndex:    new Date('2026-10-17T07:00:00-06:00'), // src/app/tools/page.tsx
+  categoriesIndex: new Date('2026-10-24T07:09:51-06:00'), // src/app/categories/page.tsx
   guideIndex:    new Date('2026-10-18T07:00:00-06:00'), // src/app/guide/page.tsx
   vsPages:       new Date('2026-10-04T07:12:15-06:00'), // src/app/vs/[slug]/page.tsx
   vsIndex:       new Date('2026-10-23T07:00:00-06:00'), // src/app/vs/page.tsx
@@ -87,6 +88,12 @@ const STATIC_PAGES: MetadataRoute.Sitemap = [
   {
     url: `${BASE}/tools`,
     lastModified: RECORDED_DATES.toolsIndex,
+    changeFrequency: 'weekly',
+    priority: 0.75,
+  },
+  {
+    url: `${BASE}/categories`,
+    lastModified: RECORDED_DATES.categoriesIndex,
     changeFrequency: 'weekly',
     priority: 0.75,
   },

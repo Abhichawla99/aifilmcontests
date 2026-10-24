@@ -64,6 +64,7 @@ export default function SiteFooter({
             <Link href={featureHref} className="link-muted">{featureLabel}</Link>
             <Link href="/creators" className="link-muted">Featured Creators</Link>
             <Link href="/tools" className="link-muted">Tools</Link>
+            <Link href="/categories" className="link-muted">Categories</Link>
             <Link href="/vs" className="link-muted">Compare Tools</Link>
             <Link href="/prize" className="link-muted">By Prize</Link>
             <Link href="/location" className="link-muted">By Location</Link>

@@ -10,7 +10,7 @@ const LINKS: [label: string, href: string, owns: string | null][] = [
   ['Browse Contests', '/', null],
   ['Closing Soon', '/contests/closing-soon', '/contests/closing-soon'],
   ['Tools', '/tools', '/tools'],
-  ['Categories', '/categories/short-film', '/categories'],
+  ['Categories', '/categories', '/categories'],
   ['Cinematic Ads', '/cinematic-ads', '/cinematic-ads'],
   ['Creators', '/creators', '/creators'],
 ]
