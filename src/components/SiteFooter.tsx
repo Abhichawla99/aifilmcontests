@@ -69,6 +69,7 @@ export default function SiteFooter({
             <Link href="/prize" className="link-muted">By Prize</Link>
             <Link href="/location" className="link-muted">By Location</Link>
             <Link href="/guide" className="link-muted">Guides</Link>
+            <Link href="/topics" className="link-muted">Topics</Link>
             <Link href="/cinematic-ads" className="link-muted">Cinematic AI Ads</Link>
           </div>
         </nav>

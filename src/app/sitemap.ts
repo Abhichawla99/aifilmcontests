@@ -61,6 +61,7 @@ const RECORDED_DATES = {
   vsIndex:       new Date('2026-10-23T07:00:00-06:00'), // src/app/vs/page.tsx
   prizeIndex:    new Date('2026-10-23T07:00:00-06:00'), // src/app/prize/page.tsx
   locationIndex: new Date('2026-10-23T07:00:00-06:00'), // src/app/location/page.tsx
+  topicsIndex:   new Date('2026-10-25T07:15:15-06:00'), // src/app/topics/page.tsx
 }
 
 // Static pages -- homepage, the cinematic-ads landing page, and the creators
@@ -118,6 +119,12 @@ const STATIC_PAGES: MetadataRoute.Sitemap = [
   {
     url: `${BASE}/location`,
     lastModified: RECORDED_DATES.locationIndex,
+    changeFrequency: 'weekly',
+    priority: 0.7,
+  },
+  {
+    url: `${BASE}/topics`,
+    lastModified: RECORDED_DATES.topicsIndex,
     changeFrequency: 'weekly',
     priority: 0.7,
   },
