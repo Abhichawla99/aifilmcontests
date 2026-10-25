@@ -241,72 +241,76 @@ export default async function CinematicAdsPage() {
         {/* ── Ruminatex feature section ── */}
         <section style={{ padding: 'clamp(40px, 6vw, 80px) 0' }}>
           <div className="max-w-5xl mx-auto px-5">
-            <div style={{
-              border: '1px solid rgba(99,102,241,0.18)',
-              borderRadius: 20,
-              padding: 'clamp(32px, 5vw, 56px)',
-              background: 'linear-gradient(135deg, rgba(79,70,229,0.08) 0%, rgba(109,40,217,0.05) 60%, #FFFFFF 100%)',
-              backdropFilter: 'blur(16px)',
-              WebkitBackdropFilter: 'blur(16px)',
-              position: 'relative',
-              overflow: 'hidden',
-            }}>
-              {/* Gradient highlight */}
-              <div style={{
-                position: 'absolute', top: 0, left: 0, right: 0, height: 1,
-                background: 'linear-gradient(90deg, transparent 0%, rgba(99,102,241,0.5) 50%, transparent 100%)',
-                pointerEvents: 'none',
-              }} />
-              <div style={{
-                position: 'absolute', bottom: -100, right: -100, width: 300, height: 300, borderRadius: '50%',
-                background: 'radial-gradient(circle, rgba(139,92,246,0.1) 0%, transparent 70%)',
-                pointerEvents: 'none',
-              }} />
+            {/* A hairline and the page's own section grammar, not a gradient
+                card. What stood here was the last of the dark theme's
+                furniture on this page: a 20px-radius box on a 135° indigo →
+                violet → white gradient, behind blur(16px), with a gradient
+                hairline faded across its top and a 300px radial violet blob
+                bleeding out of the bottom-right corner. The taste rules name
+                the purple-to-blue gradient card outright, and it was carried
+                as a job for a later run on 2026-09-21, 09-30, 10-21 and 10-24.
 
-              <div style={{ maxWidth: 600, position: 'relative' }}>
-                <div style={{
-                  display: 'inline-flex', alignItems: 'center', gap: 7, marginBottom: 20,
-                  border: '1px solid rgba(99,102,241,0.2)',
-                  borderRadius: 100, padding: '4px 12px',
-                  background: 'rgba(99,102,241,0.08)',
-                }}>
-                  <span style={{ fontSize: 10, color: '#4338CA', fontFamily: 'Space Grotesk, sans-serif', fontWeight: 600, letterSpacing: '0.08em', textTransform: 'uppercase' }}>
-                    Featured Studio
-                  </span>
-                </div>
+                Three things it cost, beyond the gradient itself:
 
-                <h2 style={{
-                  fontFamily: 'Space Grotesk, sans-serif',
-                  fontSize: 'clamp(26px, 4vw, 40px)',
-                  fontWeight: 700, letterSpacing: '-0.03em', lineHeight: 1.1,
-                  color: '#1B1916', marginBottom: 16,
-                }}>
-                  Ruminatex
-                </h2>
+                The block did not line up with the page. Every other section
+                here — Why it matters, The stack, Compete — starts its caption
+                at the container's left edge. The card's clamp(32px, 5vw, 56px)
+                of padding pushed this one 56px in at 1440px, so the studio
+                credit was the only block on the page whose first word sat off
+                the page's own left margin.
 
-                <p style={{ fontSize: 15, color: '#7A7469', lineHeight: 1.8, marginBottom: 12 }}>
-                  A cinematic AI advertising agency built for brands that want to move at the speed of culture.
-                  Ruminatex combines generative AI tools with a director&apos;s eye to produce brand films,
-                  campaign visuals, and commercial content that looks and feels like it cost 10× more to make.
-                </p>
-                <p style={{ fontSize: 14, color: '#8B867C', lineHeight: 1.8, marginBottom: 28 }}>
-                  If your brand wants to compete in the growing space of AI-native visual content —
-                  from social campaigns to long-form brand narratives — Ruminatex is where to start.
-                </p>
+                It invented a second caption style for itself. The page labels
+                a section with 11px Space Grotesk 700 in #4f46e5 at 0.1em,
+                uppercase, no container — three times. This one put 10px at
+                600 and 0.08em in #4338CA inside a 100px-radius pill, so the
+                only labelled thing wearing a chip was the one the page is
+                being paid to feature.
 
-                <a
-                  href="https://ruminatex.com"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="btn"
-                  style={{ display: 'inline-flex' }}
-                >
-                  Visit Ruminatex
-                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
-                  </svg>
-                </a>
+                Both paragraphs were set in caption ink: #7A7469 and #8B867C,
+                the greys this site uses for a byline or a count, not for the
+                body of an argument. The Principles put body at #3E3A33, and
+                the 10-23 run moved the homepage's subscribe sentence off the
+                pale value for exactly this reason.
+
+                Same words, same order, same URL. The button is untouched —
+                it is flat indigo .btn, a real control, and it is now the only
+                filled shape in the block. */}
+            <div style={{ borderTop: '1px solid #E3DED3', paddingTop: 'clamp(26px, 3.4vw, 40px)' }}>
+              <div style={{ fontSize: 11, color: '#4f46e5', fontFamily: 'Space Grotesk, sans-serif', fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: 12 }}>
+                Featured studio
               </div>
+
+              <h2 style={{
+                fontFamily: 'Space Grotesk, sans-serif',
+                fontSize: 'clamp(24px, 3.5vw, 38px)',
+                fontWeight: 700, letterSpacing: '-0.03em', lineHeight: 1.1,
+                color: '#1B1916', marginBottom: 14,
+              }}>
+                Ruminatex
+              </h2>
+
+              <p style={{ fontSize: 15, color: '#3E3A33', lineHeight: 1.75, maxWidth: 600, marginBottom: 12 }}>
+                A cinematic AI advertising agency built for brands that want to move at the speed of culture.
+                Ruminatex combines generative AI tools with a director&apos;s eye to produce brand films,
+                campaign visuals, and commercial content that looks and feels like it cost 10× more to make.
+              </p>
+              <p style={{ fontSize: 14, color: '#6F6A61', lineHeight: 1.75, maxWidth: 600, marginBottom: 26 }}>
+                If your brand wants to compete in the growing space of AI-native visual content —
+                from social campaigns to long-form brand narratives — Ruminatex is where to start.
+              </p>
+
+              <a
+                href="https://ruminatex.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="btn"
+                style={{ display: 'inline-flex' }}
+              >
+                Visit Ruminatex
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                </svg>
+              </a>
             </div>
           </div>
         </section>
