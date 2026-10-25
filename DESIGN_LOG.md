@@ -36,6 +36,130 @@ describe the old dark theme; the reasoning still applies, the colours do not.)*
 
 ---
 
+## 2026-10-25 — The Ruminatex block, ruled instead of a gradient card
+
+**Changed** — the Ruminatex feature section of `src/app/cinematic-ads/page.tsx`,
+and nothing else. 68 lines added, 64 removed; 38 of the additions are the
+comment explaining it. No CSS file touched, no new class, no new dependency, no
+data. Every word, the word order and the one URL are unchanged to the character.
+
+**Was** — the last piece of the dark theme's furniture on this site, and the one
+thing on it the taste rules name outright. A 20px-radius box on
+`linear-gradient(135deg, rgba(79,70,229,0.08) 0%, rgba(109,40,217,0.05) 60%, #FFFFFF 100%)`
+behind `backdropFilter: blur(16px)`, inside a `rgba(99,102,241,0.18)` border,
+with a 1px gradient hairline faded `transparent → rgba(99,102,241,0.5) → transparent`
+across its top and a 300px `rgba(139,92,246,0.1)` radial blob bleeding out of the
+bottom-right corner. *Purple-to-blue gradients on everything, glowing blobs,
+glassmorphism cards* is three of the first line of the avoid list, in one
+component. It was flagged as a later-run job on 2026-09-21, again on 09-30,
+again on 10-21, and again on 10-24 when the run above it took the four-up grid
+off this same page. 462px tall at 1440px, 583px at 390px.
+
+Three further faults, all of them arguments this site has already had:
+
+**It was the only block on the page that did not start where the page starts.**
+Every other section here — `Why it matters`, `The stack`, `Compete` — opens its
+caption at the container's left edge, x=228 at 1440px. The card's
+`clamp(32px, 5vw, 56px)` of padding put this one at x=284. The page is paid to
+feature this studio, and the studio credit was the one block sitting off the
+page's own left margin.
+
+**It invented a second caption style for itself.** The page labels a section
+three times with 11px Space Grotesk 700 in `#4f46e5` at `0.1em`, uppercase, no
+container. This one used 10px at 600 and `0.08em` in `#4338CA` inside a
+100px-radius pill — a `rgba(99,102,241,0.2)` border on a `rgba(99,102,241,0.08)`
+fill. So the only labelled thing on the page wearing a chip was the paid one,
+and the chip was the first thing the eye landed on.
+
+**Both paragraphs were set in caption ink.** `#7A7469` and `#8B867C` are the
+greys this site uses for a byline, a count or a field label, not for the body of
+an argument. The Principles put body at `#3E3A33`; the 10-23 run moved the
+homepage's subscribe sentence off the pale value for exactly this reason, and
+the FAQ below it was rewritten off it on 09-29.
+
+**Now** — a `1px solid #E3DED3` hairline, `clamp(26px, 3.4vw, 40px)` of air, and
+the page's own section grammar underneath it: the 11px indigo caption it already
+uses three times, the same `clamp(24px, 3.5vw, 38px)` h2 scale as the other
+section heads (it was `clamp(26px, 4vw, 40px)`, so the page now has one display
+size rather than one for the studio and one for everything else), the lead
+paragraph in `#3E3A33` and the second in `#6F6A61`, both on a 600px measure.
+The flat indigo `.btn` is untouched and is now the only filled shape in the
+block.
+
+The hairline is doing the job the box was doing badly. This is an aside, not an
+article section, and it should read as set apart — which is exactly how the
+homepage's own Ruminatex credit was resolved on 2026-09-21: `border-top`, no
+border, no radius, no fill, no blur. Two credits for the same studio, on two
+pages, now stated the same way.
+
+Measured on `next start` at 1440px: the block is **362px tall against the card's
+462**, the caption and the heading begin at x=228 — level with `The stack`
+below — and the page is 3461px where it was 3562. At 390px it is **434px against
+583**, and the body gets the full 350px the gutters leave instead of the 286px
+the card's padding left it, so the lead paragraph sets in 6 lines where it set in
+8 and the second in 4 where it set in 5. The page's `backdropFilter` count is
+**1 where it was 2** — only the sticky header is left.
+
+**Looked at** — Dense Discovery issue 280, MUBI's Notebook index.
+
+Dense Discovery runs a paid block in the middle of every issue, which is our
+problem exactly. The sponsor, Elisava, gets the same shape as every other item
+in the issue: a flat tint at `0px` radius with **no border at all** — the colour
+of the tint is the only thing that differs from the issue's other blocks. Its
+title is an 18px `h1`, the same size every other item's title gets. And the word
+`SPONSOR` beside it is 10px uppercase in `rgba(0,0,0,0.4)` — **the palest, smallest
+text in the block it labels**. The observation worth keeping: the mark that says
+*this one is paid for* is set quieter than the thing it marks, not louder. Ours
+was a bordered indigo pill above a 40px heading inside a gradient, three
+competing claims on attention for a block whose content is four sentences. MUBI's
+Notebook index makes the blunter version of the same point: probing all 253
+elements on it for a border, a radius or a non-transparent fill at any size over
+220×70 returns zero. Adapted, not copied — we reach the no-box conclusion with
+the `#E3DED3` hairline the site already uses everywhere, rather than Dense
+Discovery's tinted band, because a new surface colour belongs to `theme.ts`.
+
+**Noted for a later run, not done today** —
+
+- The four `TOOLS` cards in `The stack`, directly below this block, are the ghost
+  box this site keeps removing: `1px solid rgba(27,25,22,0.05)` around a 12px
+  radius on a `rgba(27,25,22,0.015)` fill — a twentieth and a sixty-sixth of an
+  opaque line, the exact values the 09-21 run called *what a component that
+  failed to load looks like*. They are the obvious next change on this page, and
+  the `.cr-why` / `.cr-list` patterns already exist to take them.
+- Carried: the page draws **its own sticky header** rather than the shared one,
+  with `blur(16px)` over `rgba(251,250,248,0.85)` and a glow `boxShadow` on its
+  `AI` mark. It is the page's last `backdropFilter`.
+- Carried from 10-24: the fixed decorative div at the top of the page animates
+  `orb2 30s ease-in-out infinite`, and **no `@keyframes orb2` exists anywhere in
+  `src/`** — the dark-theme removal took the keyframes and left the reference. It
+  is therefore a static 700×700 `rgba(99,102,241,0.1)` radial, an indigo in no
+  palette on this site, pinned top-right over `BackgroundFX`'s own warm wash.
+- **For Abhi, not a design call, carried from 10-24:** the lead paragraph I kept
+  verbatim today says Ruminatex's work looks like it "cost 10× more to make", and
+  the `Why it matters` section above says AI-assisted production cuts costs "by
+  60–80%". Neither has a source on the page. Both predate the robots and are
+  claims about Abhi's own business, so they stay exactly as written — but they
+  are now the least supported sentences in a block that is otherwise plain.
+- Process: `.env.cron` still has no `NEXT_PUBLIC_SUPABASE_ANON_KEY`. It did not
+  matter today — `/cinematic-ads` renders no live contest data above this block
+  — but it still blocks any local measurement inside the grid.
+
+**Verified** — `npm run build` exited 0. Measured on `next start` at 1440, 390
+and 375px: `✓ no horizontal overflow` at all three, the geometry above, the
+caption left edge equal to `The stack`'s at both widths, both paragraph inks
+`rgb(62,58,51)` and `rgb(111,106,97)`, and one `backdropFilter` element left on
+the page. Live after deploy (8c7cdaa): `/cinematic-ads` returns 200, the 135°
+gradient appears nowhere in the served HTML, and the live page was re-shot at all
+three widths with no overflow.
+
+**Before / after** — `reports/design/2026-10-25-before.png` and
+`2026-10-25-after.png` are the block at 1440px and 1300px of scroll, before on
+the pre-deploy build and after on the live page. `2026-10-25-before-390.png` and
+`2026-10-25-after-390.png` are the same pair at 390px and 1380px of scroll, and
+`2026-10-25-after-375.png` is the live block at 375px.
+
+---
+
 ## 2026-10-24 — /cinematic-ads' case for cinematic AI, as a ruled list
 
 **Changed** — the `Why AI advertising` section of `src/app/cinematic-ads/page.tsx`
