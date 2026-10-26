@@ -261,19 +261,81 @@ img, svg, video, canvas { max-width: 100%; }
   .hero-stat:nth-child(n+3) { border-top: 1px solid rgba(27,25,22,0.08); }
 }
 
-/* ── Presented by badge ─────────────────────────────────────────────────────── */
-.presented-by-badge {
+/* ── Hero meta line ─────────────────────────────────────────────────────────
+   The status claim and the presenter credit, set as one line of type above the
+   headline. Both were 100px-radius capsules with their own border and fill:
+   the green one is the same sticker the browse masthead lost on 2026-09-18,
+   which had been sitting unchanged 60 lines above it on the same page, and the
+   white one put a container around the single credit on this page that is paid
+   for. The divider is the hairline the figures row directly beneath already
+   uses between its facts, so the hero carries one rule colour instead of two
+   boxes. The dot keeps the house open-green and its pulse — it is a status,
+   not a sentence. */
+.hero-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 0;
+  margin-bottom: 28px;
+}
+.hero-meta-status {
+  /* a block, so the hanging indent below still applies once .hero-meta stops
+     being a flex container at phone width */
+  display: block;
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  line-height: 1.5;
+  color: #15803D;
+  /* the dot hangs into the margin so a wrapped second line lines up with the
+     text rather than with the dot */
+  padding-left: 12px;
+  text-indent: -12px;
+}
+.hero-meta-status.is-stale { color: #B45309; }
+.hero-meta-status.is-down { color: #6F6A61; }
+.hero-meta-status .dot {
+  display: inline-block;
+  vertical-align: middle;
+  margin-right: 7px;
+  margin-bottom: 2px;
+}
+.hero-meta-credit {
   display: inline-flex;
   align-items: center;
-  gap: 7px;
+  gap: 6px;
   text-decoration: none;
-  border: 1px solid #E0DCD2;
-  border-radius: 100px;
-  padding: 5px 14px;
-  background: #FFFFFF;
-  transition: border-color 0.2s, background 0.2s;
+  color: #4338CA;
+  margin-left: 18px;
+  padding: 3px 0 3px 18px;
+  border-left: 1px solid rgba(27,25,22,0.08);
 }
-.presented-by-badge:hover { border-color: #C9C4B8; background: #F7F5F1; }
+.hero-meta-credit-label {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 12px;
+  font-weight: 500;
+  color: #8B867C;
+}
+.hero-meta-credit-name {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+/* the glyph says the link leaves the site, so it keeps the link's own ink
+   rather than the pale blue it wore inside the pill */
+.hero-meta-credit svg { opacity: 0.55; }
+.hero-meta-credit:hover .hero-meta-credit-name { text-decoration: underline; text-underline-offset: 3px; }
+.hero-meta-credit:hover svg { opacity: 1; }
+.hero-meta-credit:focus-visible { outline: 2px solid #4F46E5; outline-offset: 4px; border-radius: 2px; }
+
+@media (max-width: 560px) {
+  /* The two facts do not share 350px. The credit takes its own line, and the
+     vertical divider goes with the row it was dividing. */
+  .hero-meta { display: block; }
+  .hero-meta-credit { margin-left: 0; padding: 0; border-left: none; margin-top: 7px; }
+}
 
 /* ── Contest page: prose left, spec rail right ─────────────────────────────── */
 .contest-rail { position: sticky; top: 24px; }

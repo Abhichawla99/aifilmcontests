@@ -232,41 +232,32 @@ export default async function Home() {
 
               {/* ── LEFT COLUMN ── */}
               <div>
-                {/* Live badge + Presented by — same row */}
-                <div style={{ display: 'flex', alignItems: 'center', gap: 14, flexWrap: 'wrap', marginBottom: 28 }}>
-                  <div style={{
-                    display: 'inline-flex', alignItems: 'center', gap: 8,
-                    border: noListings ? '1px solid #E3DED3' : staleAsOf ? '1px solid rgba(217,119,6,0.25)' : '1px solid rgba(34,197,94,0.2)',
-                    borderRadius: 100, padding: '5px 14px',
-                    background: noListings ? '#FFFFFF' : staleAsOf ? 'rgba(217,119,6,0.06)' : 'rgba(34,197,94,0.05)',
-                  }}>
+                {/* Status claim + presenter credit, as one meta line of type above
+                    the headline. Both were 100px-radius capsules with their own
+                    border and fill until 2026-10-26; see DESIGN_LOG.md. */}
+                <div className="hero-meta">
+                  <span className={`hero-meta-status${noListings ? ' is-down' : staleAsOf ? ' is-stale' : ''}`}>
                     <span
                       className={noListings ? 'dot dot-closed' : staleAsOf ? 'dot dot-upcoming' : 'dot dot-open live'}
                       style={{ width: 5, height: 5 }}
                     />
-                    <span style={{ fontSize: 12, color: noListings ? '#6F6A61' : staleAsOf ? '#B45309' : '#15803D', fontFamily: 'Space Grotesk, sans-serif', fontWeight: 500, letterSpacing: '0.02em' }}>
-                      {noListings
-                        ? 'Listings unavailable · reload to retry'
-                        : staleAsOf
-                          ? `Listings as of ${staleAsOf} · live data unavailable`
-                          : `${open.length} contests open · updated daily`}
-                    </span>
-                  </div>
+                    {noListings
+                      ? 'Listings unavailable · reload to retry'
+                      : staleAsOf
+                        ? `Listings as of ${staleAsOf} · live data unavailable`
+                        : `${open.length} contests open · updated daily`}
+                  </span>
 
                   {/* Presented by Ruminatex */}
                   <a
                     href="https://ruminatex.com"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="presented-by-badge"
+                    className="hero-meta-credit"
                   >
-                    <span style={{ fontSize: 11, color: '#8B867C', fontFamily: 'Space Grotesk, sans-serif', fontWeight: 500 }}>
-                      Presented by
-                    </span>
-                    <span style={{ fontSize: 12, color: '#4338CA', fontFamily: 'Space Grotesk, sans-serif', fontWeight: 700, letterSpacing: '-0.01em' }}>
-                      Ruminatex
-                    </span>
-                    <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="rgba(165,180,252,0.5)" strokeWidth="2.5">
+                    <span className="hero-meta-credit-label">Presented by</span>
+                    <span className="hero-meta-credit-name">Ruminatex</span>
+                    <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" aria-hidden="true">
                       <path strokeLinecap="round" strokeLinejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
                     </svg>
                   </a>
