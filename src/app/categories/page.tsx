@@ -3,8 +3,7 @@ import Link from 'next/link'
 import InnerLayout from '@/components/InnerLayout'
 import EmailSubscribe from '@/components/EmailSubscribe'
 import { getAllContests } from '@/lib/contests-db'
-import { Contest } from '@/data/contests'
-import { CATEGORIES } from '@/lib/content/categories'
+import { CATEGORIES, contestHasCategorySlug } from '@/lib/content/categories'
 
 const BASE = 'https://aifilmcontests.com'
 
@@ -43,7 +42,7 @@ export default async function CategoriesIndexPage() {
   const openCount = all.filter(c => c.status === 'open').length
 
   const rows = Object.entries(CATEGORIES).map(([slug, cat]) => {
-    const matching = all.filter(c => c.categories?.includes(slug as Contest['categories'][0]))
+    const matching = all.filter(c => contestHasCategorySlug(c.categories, slug))
     return { slug, cat, openCount: matching.filter(c => c.status === 'open').length }
   })
 

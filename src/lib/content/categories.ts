@@ -1,3 +1,51 @@
+/** Rows store freeform category text (title case, synonyms, genre tags, award
+    names). The eight keys above are the only slugs the category pages and the
+    browse filters group by. Map the clear, unambiguous synonyms here so a row
+    isn't invisible on its own category page just because it says "Advertisement"
+    instead of "advertising" — but leave anything genuinely ambiguous (a genre
+    like "drama", a format like "AR/VR/XR") unmapped rather than guessing. */
+const CATEGORY_SLUG_ALIASES: Record<string, string> = {
+  animated: 'animation',
+  'animation film': 'animation',
+  'ai animation film': 'animation',
+  advertisement: 'advertising',
+  advertisements: 'advertising',
+  ads: 'advertising',
+  'live action short': 'short-film',
+  short: 'short-film',
+  shorts: 'short-film',
+  'ai shorts': 'short-film',
+  'feature film': 'feature',
+  'feature-film': 'feature',
+  'long film': 'feature',
+  'ai long film': 'feature',
+  commercials: 'commercial',
+  'brand film': 'commercial',
+  music: 'music-video',
+  'ai music': 'music-video',
+  song: 'music-video',
+  'experimental film': 'experimental',
+}
+
+/** Normalize one row's category string to a canonical slug, or null if it
+    doesn't clearly match any of the eight. Case/whitespace-insensitive, and
+    strips a leading "AI " since that's a prefix on the format, not a different
+    category ("AI Short Film" / "ai music video" both still match). */
+export function normalizeCategorySlug(raw: string): string | null {
+  const key = raw.toLowerCase().trim().replace(/^ai[\s-]+/, '')
+  if (!key) return null
+  const hyphenated = key.replace(/\s+/g, '-')
+  if (CATEGORIES[hyphenated]) return hyphenated
+  if (CATEGORY_SLUG_ALIASES[key]) return CATEGORY_SLUG_ALIASES[key]
+  if (CATEGORY_SLUG_ALIASES[hyphenated]) return CATEGORY_SLUG_ALIASES[hyphenated]
+  return null
+}
+
+/** Does this contest belong on the given category slug's page? */
+export function contestHasCategorySlug(categories: string[] | undefined, slug: string): boolean {
+  return (categories ?? []).some(c => normalizeCategorySlug(c) === slug)
+}
+
 export const CATEGORIES: Record<string, { label: string; description: string; keywords: string }> = {
   'short-film': {
     label: 'AI Short Film',

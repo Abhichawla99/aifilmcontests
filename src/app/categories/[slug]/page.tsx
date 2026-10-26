@@ -6,8 +6,7 @@ import SiteFooter from '@/components/SiteFooter'
 import { Metadata } from 'next'
 import Link from 'next/link'
 import { getAllContests } from '@/lib/contests-db'
-import { Contest } from '@/data/contests'
-import { CATEGORIES } from '@/lib/content/categories'
+import { CATEGORIES, contestHasCategorySlug } from '@/lib/content/categories'
 
 export const revalidate = 900
 
@@ -44,7 +43,7 @@ export default async function CategoryPage({ params }: { params: Promise<{ slug:
   if (!cat) notFound()
 
   const all = await getAllContests()
-  const contests = all.filter(c => c.categories?.includes(slug as Contest['categories'][0]))
+  const contests = all.filter(c => contestHasCategorySlug(c.categories, slug))
   const open = contests.filter(c => c.status === 'open')
   const upcoming = contests.filter(c => c.status === 'upcoming')
   const closed = contests.filter(c => c.status === 'closed')

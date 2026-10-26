@@ -7,6 +7,7 @@ import { GUIDES as GUIDE_CONTENT } from '@/lib/content/guides'
 import { CRAFT_GUIDES, CRAFT_GUIDE_ORDER } from '@/data/craft-guides'
 import { TOPICS as TOPIC_CONTENT } from '@/lib/content/topics'
 import { PRIZE_PAGES as PRIZE_CONTENT } from '@/lib/content/prize-pages'
+import { contestHasCategorySlug } from '@/lib/content/categories'
 import {
   CLOSING_SOON_WINDOW_DAYS,
   isFree,
@@ -338,7 +339,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   // Category hub pages -- newest updatedAt among contests actually tagged
   // with this category.
   const categoryUrls: MetadataRoute.Sitemap = CATEGORIES.map(slug => {
-    const matching = contests.filter(c => c.categories?.includes(slug))
+    const matching = contests.filter(c => contestHasCategorySlug(c.categories, slug))
     return {
       url:             `${BASE}/categories/${slug}`,
       lastModified:    latestOf([newestUpdatedAt(matching)], now),
