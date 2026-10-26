@@ -36,6 +36,125 @@ describe the old dark theme; the reasoning still applies, the colours do not.)*
 
 ---
 
+## 2026-10-26 — The hero's status and presenter credit, as one meta line instead of two pills
+
+**Changed** — the badge row above the homepage headline in `src/app/page.tsx`,
+and the `.presented-by-badge` block in `globals.css` replaced by a `.hero-meta`
+block. 86 lines added, 33 removed across the two files; 20 of the additions are
+comments. No new class elsewhere, no new dependency, no data, no copy. Every
+word, the one URL and its `rel` are unchanged to the character.
+
+**Was** — the first thing on the site, and two capsules.
+
+**The green one is the sticker the browse masthead already lost.** On
+2026-09-18 the claim above the contest grid — "Research agent running daily" on
+`rgba(34,197,94,0.04)`, inside a `rgba(34,197,94,0.2)` border — was rebuilt as
+one ruled line, and the entry for it says the claim should be "type, not a
+container". The hero's version of the same claim, `${open.length} contests open
+· updated daily` on `rgba(34,197,94,0.05)` inside `rgba(34,197,94,0.2)` at
+`border-radius: 100px`, survived that run untouched and has sat about sixty
+lines above it in the same file for thirty-eight days. Two statements of *this
+list is current*, on one page, one of them in the house's settled grammar and
+one still wearing the shape that grammar replaced.
+
+**The white one boxed the paid credit.** `Presented by Ruminatex` had a
+`#E0DCD2` border, a `#FFFFFF` fill and the same 100px radius. That is the exact
+fault the run before this one took off `/cinematic-ads`: *the only labelled
+thing on the page wearing a chip was the paid one, and the chip was the first
+thing the eye landed on*. On the homepage it was worse, because the chip was
+the first thing on the page at all — above the headline, above the figures,
+above everything. The homepage's other Ruminatex credit was resolved as a
+ruled aside on 2026-09-21 and the `/cinematic-ads` one on 2026-10-25; this was
+the third statement of the same credit and the only one still in a box.
+
+**Nothing in the hero's left column started where the column starts.** The
+capsules' `14px` of horizontal padding put the dot at x=178 at 1440px while the
+headline, the lead paragraph and the four figures below all began at x=164.
+
+**They did not fit a phone.** 242px + 184px against 350px of gutter, so at
+390px the row became two stacked pills 79px tall, pushing the headline to
+y=298.
+
+**Now** — the two facts on one line of type, divided by
+`1px solid rgba(27,25,22,0.08)` — the same hairline the figures row directly
+beneath already uses between its own facts, so the hero carries one rule colour
+rather than two containers. No fill, no border, no radius anywhere in the row.
+The status keeps `#15803D` at 12px Space Grotesk 600 and the dot keeps its
+`.live` pulse, following the 09-18 argument that a pulse is the one thing here
+that is genuinely a status rather than a sentence; the `is-stale` and `is-down`
+variants keep `#B45309` and `#6F6A61` exactly. `Presented by` goes to the
+`#8B867C` label grey at 12px, up from 11px, so it reads as the first half of a
+sentence rather than as fine print attached to a logo. The external-link glyph
+takes the link's own `#4338CA` at `opacity: 0.55` instead of the
+`rgba(165,180,252,0.5)` it wore inside the pill — it has a job, which is to say
+the link leaves the site, and it could not do it at that value. Losing the
+capsule lost the only affordance saying the credit was clickable, so it gains a
+hover underline at a 3px offset and a `:focus-visible` indigo ring, neither of
+which it had before.
+
+Measured on `next start` and confirmed on the live page at the same two widths:
+the row is **26px tall at 1440px against 32**, and **47px at 390px against 79**,
+where it no longer stacks two pills but sets the status on one line and the
+credit under it with the divider removed. The dot now begins at **x=164 at
+1440px and x=20 at 390px**, level with the headline, the lead and the figures
+row for the first time. The headline rises **32px up the phone screen**, from
+y=298 to y=266. The homepage is down to **one 100px-radius pill**, the
+spotlight's `FEATURED CONTEST` chip.
+
+One fix the first build needed: `padding-left: 12px; text-indent: -12px` is the
+hanging indent `.bmast-agent` uses so a wrapped second line aligns under the
+text and not under the dot. `text-indent` applies to block containers only, and
+the status is a `<span>` — blockified as a flex item at desktop, but inline
+again below 560px where `.hero-meta` becomes `display: block`, so the first
+phone build rendered the whole line indented 12px off the margin. `display:
+block` on the status fixes it at both widths.
+
+**Looked at** — Criterion's *Current* index and Are.na's Explore; Metrograph's
+homepage alongside.
+
+Criterion runs the strongest editorial claim on its page, the word `FEATURED`,
+as 13px uppercase gold with 1px tracking sitting on nothing — no fill, no
+border, no radius, no icon — and sets it *smaller* than the 18px section name
+below it and far smaller than the 30px headline it labels. Probing all 1,620
+elements on that page for a radius over 20px returns zero, for a filled block
+between 150px and 900px wide returns zero, and for a 1px rule wider than 300px
+returns zero: the hierarchy is carried entirely by size, weight, colour and
+space. Metrograph's homepage gives the same answer across 1,402 elements, and
+Are.na's Explore sets its breadcrumb "Are.na / Explore" at one size, 19.2px,
+telling the two apart by colour alone. The observation worth keeping, and the
+one this run adapted: **a claim set in a container is a claim that does not
+trust its own words.** Ours reaches it with the hairline the figures row below
+already owns rather than Criterion's bare space, because a divider is what this
+site uses to put two facts on one line and a new treatment would be a drift.
+
+**Noted for a later run, not done today** —
+- The spotlight's `FEATURED CONTEST` chip in `FeaturedSpotlight.tsx` is now the
+  last 100px pill on the homepage, and by Criterion's argument it is the exact
+  case: a paid-placement mark set louder than the 30px contest title under it.
+- The hero's lead paragraph is `#7A7469`, the caption grey. The Principles put
+  body at `#3E3A33`, and the 2026-10-23 and 2026-10-25 runs moved two other
+  paragraphs off pale values for that reason. This is the most-read paragraph on
+  the site and is still on the wrong ink.
+- **Data, for the research robot:** `opencv-ai-competition-2026` shows
+  "Verified September 8, 2026" on its contest page — 48 days old, on a listing
+  whose deadline closes today.
+
+**Verified** — `npm run build` exited 0. Checked on `next start` at 1440px,
+390px and 375px with `✓ no horizontal overflow` at all three, with the
+`is-stale` and `is-down` variants forced in the DOM to confirm both inks and
+that the longest stale string (`Listings as of October 24, 2026 · live data
+unavailable`, 326px) still sets on one line. `/submit`, `/feature`,
+`/unsubscribe`, `/topics` and a contest page all returned 200 after the
+stylesheet section was replaced. Then live at the same three widths after
+deploy (f7c9b2a), where every measurement matches the local build exactly and
+the homepage returns 200.
+
+**Before / after** — `reports/design/2026-10-26-before.png`,
+`reports/design/2026-10-26-before-390.png`, `reports/design/2026-10-26-after.png`,
+`reports/design/2026-10-26-after-390.png`, `reports/design/2026-10-26-after-375.png`.
+
+---
+
 ## 2026-10-25 — The Ruminatex block, ruled instead of a gradient card
 
 **Changed** — the Ruminatex feature section of `src/app/cinematic-ads/page.tsx`,
