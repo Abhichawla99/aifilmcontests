@@ -228,6 +228,7 @@ const TOPICS = [
   'ai-film-festivals-in-turkey-2026',
   'ai-film-festival-winners-2026',
   'akool-ai-film-challenge-2026',
+  'ai-film-festivals-in-new-york',
 ] as const
 
 // Comparison pages. VS_PAGES content lives inline in vs/[slug]/page.tsx as
