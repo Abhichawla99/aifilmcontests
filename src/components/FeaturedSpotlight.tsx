@@ -36,23 +36,17 @@ export default function FeaturedSpotlight({ contest }: { contest: Contest }) {
       flexDirection: 'column',
       gap: 20,
     }}>
-      {/* Label */}
-      <div style={{
-        display: 'inline-flex', alignItems: 'center', gap: 7,
-        background: 'rgba(99,102,241,0.1)',
-        border: '1px solid rgba(99,102,241,0.2)',
-        borderRadius: 100, padding: '4px 12px', width: 'fit-content',
-      }}>
-        <svg width="8" height="8" viewBox="0 0 8 8" fill="none">
-          <path d="M4 0L5.09 2.91L8 4L5.09 5.09L4 8L2.91 5.09L0 4L2.91 2.91L4 0Z" fill="#4338CA" />
-        </svg>
-        <span style={{ fontSize: 10, fontFamily: 'Space Grotesk, sans-serif', fontWeight: 600, color: '#4338CA', letterSpacing: '0.08em', textTransform: 'uppercase' }}>
-          Featured Contest
-        </span>
-      </div>
-
-      {/* Contest name */}
+      {/* Masthead, then the contest name.
+          The label was an indigo capsule with a four-point star glyph — the
+          only chip on a card whose own grammar is a caption over a hairline
+          (see .spot-label and the prize and deadline rows below), and the one
+          shape the paid slot wore that nothing else on the page did. That is
+          the fault taken off the Ruminatex credit on 2026-10-25 and off the
+          hero's two pills on 2026-10-26. Mubi and Criterion both label their
+          lead item with this same word and set it as type over a rule. The
+          claim and the indigo stay; the container goes. */}
       <div>
+        <div className="spot-masthead">Featured contest</div>
         <h3 style={{
           fontFamily: 'Space Grotesk, sans-serif',
           fontSize: 'clamp(18px, 2.5vw, 24px)',
