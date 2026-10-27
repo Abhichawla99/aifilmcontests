@@ -36,6 +36,71 @@ describe the old dark theme; the reasoning still applies, the colours do not.)*
 
 ---
 
+## 2026-10-27 — The featured contest's label, as type over a rule instead of a capsule
+
+**Changed** — the label block at the top of `src/components/FeaturedSpotlight.tsx`,
+replaced by a `.spot-masthead` line defined next to `.spot-label` in `globals.css`.
+26 lines added, 16 removed across the two files; 15 of the additions are comments.
+No new class elsewhere, no new dependency, no data, no copy. The words, the indigo,
+the contest link and both CTAs are unchanged to the character.
+
+**Was** — an indigo capsule: `rgba(99,102,241,0.1)` fill, a
+`1px solid rgba(99,102,241,0.2)` border, `border-radius: 100px`, `4px 12px` of
+padding, holding an 8×8 four-point star SVG filled `#4338CA` and the words
+*Featured Contest* at 10px.
+
+**It was the only chip on a card made entirely of ruled captions.** Thirty lines
+below it, the same component sets *Prize pool* and *Deadline* as `.spot-label`
+captions — Space Grotesk, 10.5px, 600, uppercase, 0.08em — over figures inside a
+hairline-ruled block. Three labels on one card, two of them in the house grammar
+and one in a container that grammar replaced everywhere else.
+
+**And it was the paid slot wearing the loudest shape left above the fold.** The
+entry for 2026-10-25 took a gradient card off the Ruminatex block because *the
+only labelled thing on the page wearing a chip was the paid one*. The entry for
+2026-10-26 took the same fault off the hero's two pills, one of which was that
+same Ruminatex credit. Both runs left this one standing about three hundred
+pixels to the right of what they fixed — and this is the slot someone actually
+pays for, so it is the one where a shape that reads as an ad badge costs the
+most.
+
+**The star was a forbidden glyph drawn in SVG.** The taste rules in `design.md`
+name ✨ among the everyone-uses-them emoji. A four-point star path at 8px, in the
+accent, in the corner of the paid card, is that emoji with the font dependency
+removed.
+
+**Now** — `Featured contest` set as one line of type: same family, weight, size
+and case as `.spot-label`, in `#4338CA`, tracked slightly wider at `0.12em`
+because nothing sits directly under it to be read against and it is the first
+line of the card. Under it, a `1px solid #D9D4C9` rule running the card's full
+width — the exact hairline that opens the prize-and-deadline block below, so the
+card is now ruled in one colour from masthead to deadline and reads top to bottom
+as a single programme entry rather than a badge followed by a card.
+
+The label keeps the accent rather than dropping to `#7A7469` with the other two:
+this one names the card, where those name a field inside it, and that difference
+is what the colour is carrying. Removing the flex child and moving the spacing
+onto the masthead itself (`13px` padding, `15px` margin) left the contest name at
+the same y it was at before, so nothing below moved.
+
+**Inspiration** — Mubi's *Now Showing* labels its hero's credit as
+`DIRECTED BY JACK BEGERT / UNITED STATES 2026` in small letterspaced caps with no
+container at all, and labels the strips below it `FEATURED` and `NEW ON MUBI` the
+same way. Criterion's *Current* puts the word FEATURED above its lead headline in
+the same register. Two of the best-set film sites on the web label their lead item
+with our exact word and neither puts a shape around it. Adapted, not copied: ours
+sits over the hairline the card already uses, and keeps the indigo the house
+reserves for its accent.
+
+**Checked** — `npm run build` exit 0. No horizontal overflow at 1440px, 900px or
+390px. The spotlight is hidden below 860px by a pre-existing rule in `globals.css`,
+so phones are unaffected by this change either way.
+
+**Before/after** — `reports/design/2026-10-27-before.png`,
+`reports/design/2026-10-27-after.png`.
+
+---
+
 ## 2026-10-26 — The hero's status and presenter credit, as one meta line instead of two pills
 
 **Changed** — the badge row above the homepage headline in `src/app/page.tsx`,
