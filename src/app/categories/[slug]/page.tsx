@@ -94,7 +94,7 @@ export default async function CategoryPage({ params }: { params: Promise<{ slug:
           <p style={{ fontSize: 12, color: '#A8A296', marginBottom: 24 }}>
             <Link href="/" className="link-muted">AI Film Contests</Link>
             <span style={{ margin: '0 6px' }}>›</span>
-            <Link href="/" className="link-muted">Categories</Link>
+            <Link href="/categories" className="link-muted">Categories</Link>
             <span style={{ margin: '0 6px' }}>›</span>
             <span style={{ color: '#8B867C' }}>{cat.label}</span>
           </p>

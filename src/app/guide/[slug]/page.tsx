@@ -113,7 +113,7 @@ export default async function GuidePage({ params }: { params: Promise<{ slug: st
         <p style={{ fontSize: 12, color: '#A8A296', marginBottom: 28 }}>
           <Link href="/" className="link-muted">AI Film Contests</Link>
           <span style={{ margin: '0 6px' }}>›</span>
-          <span className="link-muted" style={{ cursor: 'default' }}>Guides</span>
+          <Link href="/guide" className="link-muted">Guides</Link>
           <span style={{ margin: '0 6px' }}>›</span>
           <span style={{ color: '#8B867C' }}>{guide.title}</span>
         </p>

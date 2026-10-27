@@ -90,7 +90,7 @@ export default async function VSPage({ params }: { params: Promise<{ slug: strin
         <p style={{ fontSize: 12, color: '#A8A296', marginBottom: 28 }}>
           <Link href="/" className="link-muted">AI Film Contests</Link>
           <span style={{ margin: '0 6px' }}>›</span>
-          <span className="link-muted" style={{ cursor: 'default' }}>Compare</span>
+          <Link href="/vs" className="link-muted">Compare</Link>
           <span style={{ margin: '0 6px' }}>›</span>
           <span style={{ color: '#8B867C' }}>{page.title}</span>
         </p>

@@ -80,7 +80,7 @@ export default async function LocationPage({ params }: { params: Promise<{ slug:
         <p style={{ fontSize: 12, color: '#A8A296', marginBottom: 28 }}>
           <Link href="/" className="link-muted">AI Film Contests</Link>
           <span style={{ margin: '0 6px' }}>›</span>
-          <span className="link-muted" style={{ cursor: 'default' }}>By Location</span>
+          <Link href="/location" className="link-muted">By Location</Link>
           <span style={{ margin: '0 6px' }}>›</span>
           <span style={{ color: '#8B867C' }}>{loc.label}</span>
         </p>
