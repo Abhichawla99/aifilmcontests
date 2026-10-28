@@ -395,26 +395,25 @@ export default async function ContestPage({ params }: { params: Promise<{ id: st
                 {contest.eventDate && <SpecRow label="Festival date" value={fmt(contest.eventDate)} />}
                 {contest.location && <SpecRow label="Location" value={contest.location} />}
 
+                {/* Categories, as the rail's own spec row.
+                     They were up to five chips — 11px caps, a 5px radius, a hairline
+                     border, each category's own emoji and each category's own ink —
+                     stacked directly under three SpecRows that are plain ruled text.
+                     Two faults, the same two the 10-19 run took off the card.
+                     A border on this rail is a promise: the only other bordered thing
+                     in it is Apply on official site. These were spans, not links.
+                     And the emoji restated the header band, which is already drawing
+                     categories[0] at 34px two hundred pixels above. On a phone the
+                     rail sets BEFORE the description, so five boxes in five inks over
+                     three wrapped lines were spending ~200px of the first screen on
+                     filing data, between Location and the verification note.
+                     Now one SpecRow like the three above it, which stacks on its own
+                     (56 chars at five categories, past the 28-char threshold) and sets
+                     the run at full measure under the caption. Title case, not the
+                     card's lowercase: in here it is a value among "Berlin, Germany"
+                     and "February 15, 2027", not furniture under a blurb. */}
                 {cats.length > 0 && (
-                  <div style={{ borderTop: '1px solid #ECE9E2', padding: '14px 20px' }}>
-                    <div style={{
-                      fontSize: 10, color: '#8B867C', textTransform: 'uppercase',
-                      letterSpacing: '0.1em', fontFamily: 'Space Grotesk, sans-serif',
-                      fontWeight: 600, marginBottom: 9,
-                    }}>Categories</div>
-                    <div className="flex flex-wrap gap-1.5">
-                      {cats.map(c => (
-                        <span key={c.label} style={{
-                          fontSize: 11, color: c.text, background: c.bg,
-                          border: `1px solid ${c.border}`, borderRadius: 5, padding: '2px 7px',
-                          fontFamily: 'Space Grotesk, sans-serif', fontWeight: 500,
-                          letterSpacing: '0.04em', textTransform: 'uppercase',
-                        }}>
-                          {c.emoji}&nbsp;{c.label}
-                        </span>
-                      ))}
-                    </div>
-                  </div>
+                  <SpecRow label="Categories" value={cats.map(c => c.label).join(', ')} />
                 )}
 
                 <div style={{ borderTop: '1px solid #ECE9E2', padding: '12px 20px', background: '#FBFAF8' }}>
