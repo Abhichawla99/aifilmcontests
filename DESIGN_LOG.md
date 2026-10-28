@@ -36,6 +36,96 @@ describe the old dark theme; the reasoning still applies, the colours do not.)*
 
 ---
 
+## 2026-10-28 — The contest rail's categories, as a spec row instead of five chips
+
+**Changed** — the categories block near the foot of the rail in
+`src/app/contests/[id]/page.tsx`. 20 lines added, 21 removed; 17 of the
+additions are the comment. No new class, no CSS touched, no new dependency.
+No category data, tint, emoji definition, caption word or link target changed.
+
+**Was** — up to five chips at the bottom of the rail: 11px caps, a 5px radius,
+a 1px border, `2px 7px` of padding, each on its own pastel fill in its own
+category ink — `#31536B` on `#E7F1F8` for short film, `#4C3F72` on `#F3F0F9`
+for feature, `#3B5E41` on `#EDF4EE` for experimental — and each carrying its
+category emoji. Above them, four hairline-ruled `SpecRow`s: Entry fee,
+Submissions open, Festival date, Location.
+
+**This is the last copy of the fault the 10-19 run took off the card**, and the
+arguments are the same two, in the same order.
+
+A border in this rail is a promise. The only other bordered object inside it is
+`Apply on official site`, filled indigo, the one thing on the page you are meant
+to press. These were `<span>`s. Five of them, none pressable, in the rail that
+holds the page's only control.
+
+And chip one restated the header band. The band 200px above is drawn from
+`categories[0]` and sets that category's emoji at 34px against that category's
+tint; the chip row is the deduped list, which opens with `categories[0]`. Berlin
+printed 🎞️ in the band and `🎞️ SHORT FILM` as its first chip.
+
+What is new here, and worse than on the card: **on a phone the rail sets before
+the description.** The `<aside>` stacks first at 390px, so the chips were not
+somewhere down the page — they were between `LOCATION` and the verification
+note, three wrapped lines of boxes, spent on filing data before the reader has
+met the contest at all. Measured off the two 390px captures, that block ran
+about 135px tall; it is about 81px now.
+
+**Looked at** — Criterion's film page and Mubi's film database. Criterion's left
+rail is the exact object this rail is: a caption, `FILM INFO`, and under it seven
+facts of seven different kinds set as one stack of plain text — `Romania` /
+`2007` / `113 minutes` / `Color` / `2.35:1` / `Romanian` / `Spine #958`. One ink,
+one size; the position in the stack says which fact is which, nothing else has to.
+The only bordered objects anywhere on that screen are `ADD TO CART`, `ADD TO
+WISHLIST` and the Blu-ray/DVD selector — the things you press. Mubi's database is
+the same rule from the other side: the genre, country and year filters are boxed
+because they are controls, and every film's own data is unboxed text. The thing
+to take is not their layout but the split: in a spec rail, the facts are text
+under a caption and the controls keep the boxes.
+
+**Now** — one `SpecRow`, the same component as the four rows above it, so the
+rail reads top to bottom in a single grammar and ends on the same `#ECE9E2`
+hairline it has used four times already.
+
+Two behaviours fall out of reusing the component rather than restyling the block:
+
+- **Five categories stack.** `Short Film, Feature, Experimental, Animation,
+  Documentary` is 56 characters, past `SPEC_VALUE_IS_A_SENTENCE` (28), so it
+  drops under its caption and sets left-aligned at the rail's full measure —
+  the same shape a long entry fee already takes two rows up.
+- **One category sits inline.** `CATEGORIES  Short Film`, right-aligned, which
+  is `LOCATION  Berlin, Germany` exactly.
+
+Title case, not the card's lowercase. The 10-19 run lowercased the card's run
+because there it is furniture under a blurb, in the organizer's ink. In here it
+is a value in the value ink (`#26231E`, Space Grotesk 500) sitting between
+`Berlin, Germany` and a date — one register per object, and this object's
+register is sentence case.
+
+The emoji goes. The header band is now the only place a category is announced
+in colour, which is what the band is for.
+
+**Left alone** — the band, the tint, the `AI tools allowed` chips in the body
+(they name a constraint an entrant has to check, not a shelf), the `Tagged` run
+the 10-05 run already converted, and `FeaturedSpotlight`, which the 10-19 entry
+flagged as the other place categories are set their own way. That component was
+changed yesterday, so it was out of bounds today; it is still worth a look.
+
+**Verified** — `npm run build` exits 0. Checked on a local `next start` at
+1440px, 390px and 375px, then live at both widths once the deploy landed, on a
+five-category contest (`berlin-ai-film-festival-2026`) and a one-category one
+(`aiffa-africa-2026`). `✓ no horizontal overflow` clean at all three widths. The
+phone's first screen gives back about 54px, and the rail loses its last box.
+The snapshot the build regenerates was reverted before the commit, since it is
+data.
+
+**Before / after** — `reports/design/2026-10-28-before.png` (1440) and
+`-before-390.png`; `2026-10-28-after.png` and `-after-390.png`. The 1440 pair and the
+after-390 are off the live site; the before-390 is off the local pre-change
+`next start`, scrolled to where the rail sets on a phone, because the live
+deploy had already landed by the time that offset was known.
+
+---
+
 ## 2026-10-27 — The featured contest's label, as type over a rule instead of a capsule
 
 **Changed** — the label block at the top of `src/components/FeaturedSpotlight.tsx`,
