@@ -104,6 +104,13 @@ export default async function ContestPage({ params }: { params: Promise<{ id: st
   const isUrgent   = isOpen && dl <= 7
   const isFeatured = !!contest.featuredUntil && new Date(contest.featuredUntil).getTime() > Date.now()
 
+  // The notes that sit after the status in the header band. Same two
+  // conditions as before, in the same order; only the shape changed.
+  const bandNotes: { label: string; color: string }[] = [
+    ...(contest.entryFee === 'Free' && !isClosed ? [{ label: 'Free entry', color: '#15803D' }] : []),
+    ...(isFeatured ? [{ label: 'Featured', color: '#4338CA' }] : []),
+  ]
+
   // Category identity: the same tint and emoji the card used, so the page and the
   // card that led here are visibly the same object. Freeform strings are normalized
   // and deduplicated (the research robot has written 140+ distinct values).
@@ -236,31 +243,30 @@ export default async function ContestPage({ params }: { params: Promise<{ id: st
             <div style={{ display: 'flex', alignItems: 'flex-start', gap: 18 }}>
               <span aria-hidden style={{ fontSize: 40, lineHeight: 1, flexShrink: 0 }}>{tint.emoji}</span>
               <div style={{ minWidth: 0 }}>
-                <div className="flex items-center gap-2 mb-3 flex-wrap">
-                  <span className={`dot ${isOpen ? 'dot-open' : isClosed ? 'dot-closed' : 'dot-upcoming'} ${isOpen && !isUrgent ? 'live' : ''}`} />
-                  <span style={{
-                    fontFamily: 'Space Grotesk, sans-serif', fontSize: 13, fontWeight: 600,
+                {/* The status, and the notes on it, as one meta line. Both
+                    notes used to be bordered capsules sitting beside `Open
+                    now`, which was already plain type in the same family,
+                    size and weight — two grammars for three facts, 8px
+                    apart. The capsules are gone; the words, the inks and the
+                    conditions that show them are unchanged. See .band-meta. */}
+                <p className="band-meta">
+                  <span className="band-meta-status" style={{
                     color: isOpen ? '#15803D' : isClosed ? '#8B867C' : '#B45309',
                   }}>
+                    <span className={`dot ${isOpen ? 'dot-open' : isClosed ? 'dot-closed' : 'dot-upcoming'} ${isOpen && !isUrgent ? 'live' : ''}`} />
                     {isOpen ? 'Open now' : isClosed ? 'Closed' : 'Coming soon'}
                   </span>
-                  {contest.entryFee === 'Free' && !isClosed && (
-                    <span style={{
-                      fontSize: 11, color: '#15803D', border: '1px solid rgba(22,163,74,0.35)',
-                      borderRadius: 4, padding: '1px 6px', background: 'rgba(255,255,255,0.6)',
-                      fontFamily: 'Space Grotesk, sans-serif', fontWeight: 700,
-                      letterSpacing: '0.06em', textTransform: 'uppercase',
-                    }}>Free entry</span>
+                  {bandNotes.length > 0 && (
+                    <span className="band-meta-notes">
+                      {bandNotes.map((note, i) => (
+                        <span key={note.label}>
+                          {i > 0 && <span className="band-meta-sep" aria-hidden>·</span>}
+                          <span style={{ color: note.color }}>{note.label}</span>
+                        </span>
+                      ))}
+                    </span>
                   )}
-                  {isFeatured && (
-                    <span style={{
-                      fontSize: 11, color: '#4F46E5', border: '1px solid rgba(79,70,229,0.35)',
-                      borderRadius: 4, padding: '1px 6px', background: 'rgba(255,255,255,0.6)',
-                      fontFamily: 'Space Grotesk, sans-serif', fontWeight: 700,
-                      letterSpacing: '0.06em', textTransform: 'uppercase',
-                    }}>Featured</span>
-                  )}
-                </div>
+                </p>
                 <h1 style={{
                   fontFamily: 'Space Grotesk, sans-serif',
                   fontSize: 'clamp(24px, 4vw, 40px)', fontWeight: 700,

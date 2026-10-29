@@ -337,6 +337,55 @@ img, svg, video, canvas { max-width: 100%; }
   .hero-meta-credit { margin-left: 0; padding: 0; border-left: none; margin-top: 7px; }
 }
 
+/* ── Contest page: the header band's status line ────────────────────────────
+   Open now / Free entry / Featured, set as one meta line.
+
+   The same grammar the homepage hero got on 2026-10-26: the status carries a
+   hanging dot and its own ink, a hairline divides it from the notes about it,
+   and the notes are joined to each other by the site's middot. Nothing in the
+   row is a container, because nothing in the row is pressable — the only
+   bordered object on a contest page is `Apply on official site`.
+
+   The notes step down to 12px against the status's 13px, so the row reads as
+   one headline fact with annotations rather than three equal shouts, and so
+   the three-note case still fits the band's ~246px inner width at 390px. */
+.band-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 4px 0;
+  margin-bottom: 12px;
+}
+.band-meta-status {
+  /* a block, so the hanging indent still applies to a wrapped second line */
+  display: block;
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1.5;
+  padding-left: 12px;
+  text-indent: -12px;
+}
+.band-meta-status .dot {
+  display: inline-block;
+  vertical-align: middle;
+  margin-right: 7px;
+  margin-bottom: 2px;
+}
+.band-meta-notes {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 1.5;
+  margin-left: 14px;
+  padding-left: 14px;
+  border-left: 1px solid rgba(27, 25, 22, 0.14);
+}
+.band-meta-sep {
+  margin: 0 7px;
+  color: #A8A296;
+}
+
 /* ── Contest page: prose left, spec rail right ─────────────────────────────── */
 .contest-rail { position: sticky; top: 24px; }
 @media (max-width: 900px) {
