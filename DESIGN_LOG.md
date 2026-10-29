@@ -36,6 +36,80 @@ describe the old dark theme; the reasoning still applies, the colours do not.)*
 
 ---
 
+## 2026-10-29 — The contest header band's status line, as type instead of two capsules
+
+**Changed** — the status row at the top of the header band in
+`src/app/contests/[id]/page.tsx`, and a new `.band-meta` block in
+`globals.css`. 75 lines added, 20 removed across the two files; 24 of the
+additions are comments. No new dependency, no data, no copy. Every word, both
+conditions that decide whether a note appears, and the status inks are
+unchanged to the character.
+
+**Was** — `Open now` set as plain type (Space Grotesk, 13px, 600, `#15803D`)
+with a hanging status dot, and immediately beside it, 8px away, two bordered
+capsules at 11px: `FREE ENTRY` in `#15803D` on a `1px solid rgba(22,163,74,0.35)`
+border with a 4px radius and a `rgba(255,255,255,0.6)` fill, and `FEATURED` the
+same shape in `#4F46E5`. Both uppercase, tracked `0.06em`, both `<span>`s.
+
+**Three facts about this contest, in two grammars, on one line.** The row is one
+thought — what state this contest is in, what it costs, whether it is a paid
+slot — and it was set as a sentence followed by two stickers. Nothing in the row
+is pressable; the only bordered object on a contest page that a reader is meant
+to press is `Apply on official site`, filled indigo in the rail. This is the same
+fault the 2026-10-26 run took off the homepage hero's two pills and the
+2026-10-27 run took off the spotlight's `Featured contest` capsule. Those two
+runs fixed the homepage. This is the identical object on the page type a visitor
+actually lands on from search — 243 of them.
+
+**And caps-and-tracking is this site's label idiom, not its value idiom.** The
+comment eight lines below, written for the organizer credit on 2026-10-17, says
+it outright: SUBMISSION DEADLINE, ENTRY FEE, PRIZE are labels; a line that names
+a value is not set that way. `Free entry` and `Featured` are values. They were
+wearing the labels' clothes.
+
+**Now** — one `.band-meta` line. The status keeps its hanging dot, its 13px and
+its ink (green open, amber coming soon, grey closed). A `1px solid
+rgba(27,25,22,0.14)` hairline divides it from the notes about it — the exact
+divider `.hero-meta-credit` uses on the homepage — and the notes are joined to
+each other by the site's own middot in `#A8A296`. The notes step down to 12px
+against the status's 13px, so the row reads as one headline fact with
+annotations rather than three equal shouts. `Free entry` keeps `#15803D`,
+because green is already what the rail's `ENTRY FEE  Free` is set in.
+`Featured` moves from `#4F46E5` to `#4338CA`, the ink the 2026-10-27 run chose
+for the spotlight masthead, so the two places the site names a paid slot now
+agree.
+
+No contest currently holds a live `featuredUntil`, so the three-note row renders
+on zero pages today — but it will the moment someone pays, and that is the row
+where a shape reading as an ad badge costs the most. I measured it rather than
+assuming: with the note forced on locally, `Open now │ Free entry · Featured`
+fits one line inside the band's ~246px inner width at 390px, with room left.
+That build was thrown away and the forced note reverted before committing.
+
+**Looked at** — Metrograph's *Now Playing in Theater*. A film gets its title in
+red, then `DIRECTOR: WONG KAR-WAI`, then `2004 / 129MIN / DCP` — year, runtime
+and format, three facts of three different kinds, slash-separated, one ink, one
+size, no containers. The only bordered object in the whole listing is the
+showtime, `Thu Oct 29 / 4:15pm`, which is the ticket link. Mubi's film page is
+the same rule from the other side: `A MUBI RELEASE / DIRECTED BY JANE SCHOENBRUN
+/ UNITED STATES 2026` stacked as three plain caps lines, with `WATCH NOW` the
+only filled object on screen. Two of the best-set film sites on the web put the
+qualifier facts in plain type and spend their one box on the one control.
+Adapted, not copied: ours uses the hairline and middot the site already has
+rather than Metrograph's slash.
+
+**Checked** — `npm run build` exit 0 (three clean runs). No horizontal overflow
+at 1440px or 390px on `/contests/runway-hundred-fund` (open + free) or
+`/contests/pixlight-2026`. The band is about 6px shorter on a phone, so the
+contest name sits a little higher; nothing else moved. The regenerated
+`contests-snapshot.json` the build writes was reverted before committing — this
+run changed no data.
+
+**Before/after** — `reports/design/2026-10-29-before.png`,
+`reports/design/2026-10-29-after.png`.
+
+---
+
 ## 2026-10-28 — The contest rail's categories, as a spec row instead of five chips
 
 **Changed** — the categories block near the foot of the rail in
