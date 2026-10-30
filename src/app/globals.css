@@ -1801,3 +1801,55 @@ img, svg, video, canvas { max-width: 100%; }
   max-width: 56ch;
   margin-top: 10px;
 }
+
+/* ── Free creator pack ─────────────────────────────────────────────────────────
+   The top strip (PackBanner), the /starter-pack page, the homepage section and
+   the contest-rail note. Indigo on paper, like the rest of the site's calls to
+   action; the strip is the only full-width color band, so it reads as an offer
+   and not as part of the nav. */
+.pack-banner { position: relative; background: #1B1916; color: #F4F2EE; z-index: 60; }
+.pack-banner-link {
+  display: flex; align-items: center; justify-content: center; gap: 10px; flex-wrap: wrap;
+  max-width: 1152px; margin: 0 auto; padding: 9px 48px 9px 20px;
+  font-size: 13px; line-height: 1.4; color: inherit; text-decoration: none; text-align: center;
+}
+.pack-banner-tag {
+  font-family: 'Space Grotesk', sans-serif; font-size: 10.5px; font-weight: 700; letter-spacing: 0.1em;
+  text-transform: uppercase; background: #4F46E5; color: #fff; border-radius: 4px; padding: 2px 7px;
+}
+.pack-banner-text { color: #D9D5CC; }
+.pack-banner-cta { font-family: 'Space Grotesk', sans-serif; font-weight: 600; color: #fff; white-space: nowrap; }
+.pack-banner-link:hover .pack-banner-cta { text-decoration: underline; text-underline-offset: 3px; }
+.pack-banner-link:focus-visible { outline: 2px solid #A5B4FC; outline-offset: -3px; }
+.pack-banner-close {
+  position: absolute; right: 8px; top: 50%; transform: translateY(-50%);
+  width: 32px; height: 32px; border: 0; background: transparent; color: #A8A296;
+  font-size: 20px; line-height: 1; cursor: pointer; border-radius: 6px;
+}
+.pack-banner-close:hover { color: #fff; background: rgba(255,255,255,0.08); }
+.pack-banner-short { display: none; }
+@media (max-width: 640px) {
+  .pack-banner-link { font-size: 12.5px; gap: 6px 8px; padding: 8px 44px 8px 16px; flex-wrap: nowrap; justify-content: flex-start; text-align: left; }
+  .pack-banner-long { display: none; }
+  .pack-banner-short { display: inline; min-width: 0; }
+}
+
+.inav-link-pack { color: #4338CA; font-weight: 600; }
+.inav-link-pack:hover { color: #312E81; }
+
+.pack-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; margin-bottom: 20px; }
+.pack-item { background: #FFFFFF; border: 1px solid #E3DED3; border-radius: 16px; padding: 24px 24px 22px; min-width: 0; }
+.pack-item-lead { border-color: #C7D2FE; box-shadow: inset 0 3px 0 #4F46E5; }
+@media (max-width: 860px) { .pack-grid { grid-template-columns: minmax(0, 1fr); } }
+
+.pack-claim {
+  display: flex; flex-wrap: wrap; gap: 24px 48px; align-items: flex-start; justify-content: space-between;
+  background: #F4F2EE; border: 1px solid #E3DED3; border-radius: 16px; padding: clamp(22px, 4vw, 32px);
+}
+
+.home-pack { padding: clamp(40px, 6vw, 72px) 0; border-top: 1px solid #E3DED3; background: rgba(251,250,248,0.92); }
+.home-pack-head { display: flex; flex-wrap: wrap; gap: 16px 32px; align-items: flex-end; justify-content: space-between; margin-bottom: 24px; }
+
+.rail-pack { margin-top: 14px; padding-top: 12px; border-top: 1px solid #ECE9E2; font-size: 12.5px; line-height: 1.55; color: #6F6A61; }
+.rail-pack a { color: #4338CA; font-weight: 600; text-decoration: none; }
+.rail-pack a:hover { text-decoration: underline; text-underline-offset: 3px; }

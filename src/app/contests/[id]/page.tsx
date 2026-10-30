@@ -9,6 +9,7 @@ import EmailSubscribe from '@/components/EmailSubscribe'
 import DeadlineReminder from '@/components/DeadlineReminder'
 import SiteFooter from '@/components/SiteFooter'
 import PrizeValue from '@/components/PrizeValue'
+import { OVERS_OFF_PERCENT, PACK_PATH } from '@/lib/creator-pack'
 
 export const revalidate = 900
 
@@ -395,6 +396,12 @@ export default async function ContestPage({ params }: { params: Promise<{ id: st
                     </a>
                   )}
                   {isOpen && <DeadlineReminder contestName={contest.name} />}
+                  {isOpen && (
+                    <p className="rail-pack">
+                      Making your entry? <Link href={PACK_PATH}>Get the free creator pack</Link>: Overs at {OVERS_OFF_PERCENT}% off,
+                      a step-by-step film guide and a free community.
+                    </p>
+                  )}
                 </div>
 
                 <SpecRow label="Entry fee" value={contest.entryFee || 'See official site'} highlight={isFree(contest.entryFee)} />

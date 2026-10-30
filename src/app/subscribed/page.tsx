@@ -3,6 +3,7 @@ import Link from 'next/link'
 import InnerLayout from '@/components/InnerLayout'
 import ContestCard from '@/components/ContestCard'
 import { getAllContests } from '@/lib/contests-db'
+import { COMMUNITY, GUIDE, OVERS, OVERS_OFF_PERCENT, oversHref } from '@/lib/creator-pack'
 
 export const revalidate = 900
 
@@ -61,6 +62,33 @@ export default async function SubscribedPage() {
             </p>
           </div>
         </div>
+
+        {/* The creator pack, delivered here as well as in the welcome email:
+            signing up is how it's claimed, so it shouldn't wait on the inbox. */}
+        <section style={{ marginBottom: 48 }}>
+          <h2 style={sectionLabel}>Your free creator pack</h2>
+          <div className="pack-grid" style={{ marginBottom: 0 }}>
+            <div className="pack-item pack-item-lead">
+              <p style={{ fontFamily: 'Space Grotesk, sans-serif', fontSize: 18, fontWeight: 700, color: '#1B1916', margin: '0 0 6px' }}>
+                Overs Pro, {OVERS_OFF_PERCENT}% off
+              </p>
+              <p style={{ fontSize: 14, lineHeight: 1.65, color: '#4A463E', margin: '0 0 12px' }}>
+                ${OVERS.monthlyUsd} a month for your first {OVERS.months} months instead of ${OVERS.fullUsd}. Stills from a few words, clips from any still.
+              </p>
+              <a href={oversHref('subscribed')} target="_blank" rel="noopener" style={{ fontFamily: 'Space Grotesk, sans-serif', fontSize: 14, fontWeight: 600, color: '#4338CA', textDecoration: 'none' }}>Claim it on Overs →</a>
+            </div>
+            <div className="pack-item">
+              <p style={{ fontFamily: 'Space Grotesk, sans-serif', fontSize: 18, fontWeight: 700, color: '#1B1916', margin: '0 0 6px' }}>{GUIDE.title}</p>
+              <p style={{ fontSize: 14, lineHeight: 1.65, color: '#4A463E', margin: '0 0 12px' }}>Every step from the rules to the export.</p>
+              <Link href={GUIDE.path} style={{ fontFamily: 'Space Grotesk, sans-serif', fontSize: 14, fontWeight: 600, color: '#4338CA', textDecoration: 'none' }}>Read the guide →</Link>
+            </div>
+            <div className="pack-item">
+              <p style={{ fontFamily: 'Space Grotesk, sans-serif', fontSize: 18, fontWeight: 700, color: '#1B1916', margin: '0 0 6px' }}>{COMMUNITY.name}</p>
+              <p style={{ fontSize: 14, lineHeight: 1.65, color: '#4A463E', margin: '0 0 12px' }}>Abhi&apos;s free community on Skool for AI creative workflows.</p>
+              <a href={COMMUNITY.url} target="_blank" rel="noopener" style={{ fontFamily: 'Space Grotesk, sans-serif', fontSize: 14, fontWeight: 600, color: '#4338CA', textDecoration: 'none' }}>Join free →</a>
+            </div>
+          </div>
+        </section>
 
         {next5.length > 0 && (
           <section style={{ marginBottom: 40 }}>

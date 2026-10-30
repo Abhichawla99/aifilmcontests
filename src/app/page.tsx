@@ -10,6 +10,9 @@ import FeaturedSpotlight from '@/components/FeaturedSpotlight'
 import LogoMark from '@/components/LogoMark'
 import NavRow from '@/components/NavRow'
 import SiteFooter from '@/components/SiteFooter'
+import CreatorPackSection from '@/components/CreatorPackSection'
+import Link from 'next/link'
+import { PACK_PATH } from '@/lib/creator-pack'
 
 export const revalidate = 900
 
@@ -171,8 +174,8 @@ export default async function Home() {
             </div>
 
             <NavRow aria-label="Site">
-              {([['Browse', '#contests'], ['Subscribe', '#subscribe'], ['Submit a Contest', '/submit']] as [string, string][]).map(([label, href]) => (
-                <a key={label} href={href} className="inav-link">{label}</a>
+              {([['Browse', '#contests'], ['Free Pack', '/starter-pack'], ['Subscribe', '#subscribe'], ['Submit a Contest', '/submit']] as [string, string][]).map(([label, href]) => (
+                <a key={label} href={href} className={href === '/starter-pack' ? 'inav-link inav-link-pack' : 'inav-link'}>{label}</a>
               ))}
             </NavRow>
 
@@ -339,7 +342,7 @@ export default async function Home() {
                     background: '#FFFFFF',
                   }}>
                     <div style={{ fontSize: 10, color: '#4f46e5', fontFamily: 'Space Grotesk, sans-serif', fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: 8 }}>
-                      Free alerts
+                      Free alerts + creator pack
                     </div>
                     <h2 style={{ fontFamily: 'Space Grotesk, sans-serif', fontSize: 17, fontWeight: 700, color: '#1B1916', marginBottom: 5, letterSpacing: '-0.02em' }}>
                       Never miss a deadline
@@ -348,6 +351,7 @@ export default async function Home() {
                       New contests within a day of opening, a last call before deadlines close, and
                       what&apos;s closing each week — a few emails a month, never daily.
                       {!noListings && ` ${open.length} contests are open right now.`}
+                      {' '}Signing up also sends you the <Link href={PACK_PATH} style={{ color: '#4338CA', fontWeight: 600 }}>free creator pack</Link>.
                     </p>
 
                     {/* Soonest-closing contests, named — a signup here should see
@@ -452,6 +456,9 @@ export default async function Home() {
             ))}
           </div>
         </section>
+
+        {/* ── Free creator pack ── */}
+        <CreatorPackSection />
 
         {/* ── Browse ── */}
         <section id="contests" className="max-w-6xl mx-auto px-5 py-14">

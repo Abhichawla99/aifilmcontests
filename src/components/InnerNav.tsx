@@ -13,6 +13,7 @@ const LINKS: [label: string, href: string, owns: string | null][] = [
   ['Categories', '/categories', '/categories'],
   ['Cinematic Ads', '/cinematic-ads', '/cinematic-ads'],
   ['Creators', '/creators', '/creators'],
+  ['Free Pack', '/starter-pack', '/starter-pack'],
 ]
 
 export default function InnerNav() {
@@ -23,7 +24,7 @@ export default function InnerNav() {
       {LINKS.map(([label, href, owns]) => {
         const current = owns !== null && (pathname === owns || pathname.startsWith(owns + '/'))
         return (
-          <Link key={href} href={href} className="inav-link" aria-current={current ? 'page' : undefined}>
+          <Link key={href} href={href} className={href === '/starter-pack' ? 'inav-link inav-link-pack' : 'inav-link'} aria-current={current ? 'page' : undefined}>
             {label}
           </Link>
         )

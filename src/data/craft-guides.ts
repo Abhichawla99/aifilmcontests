@@ -22,6 +22,7 @@ export interface CraftGuide {
 }
 
 export const CRAFT_GUIDE_ORDER: string[] = [
+  "make-an-ai-film-for-a-contest",
   "look-bible-for-ai-films",
   "mood-board-for-ai-film-without-copying",
   "ai-commercial-storyboard-and-shot-list",
@@ -35,6 +36,84 @@ export const CRAFT_GUIDE_ORDER: string[] = [
 ]
 
 export const CRAFT_GUIDES: Record<string, CraftGuide> = {
+  "make-an-ai-film-for-a-contest": {
+    "title": "How to Make an AI Film for a Contest: From the Rules to the Export",
+    "description": "A step-by-step way to make an AI short for a film contest: read the rules first, write a shot list, fix the look, make stills, turn them into clips, add sound, and check the entry before you submit.",
+    "keywords": "how to make an AI film, AI film contest entry, AI short film workflow, image to video for AI film, AI film festival submission checklist, make an AI short film step by step",
+    "datePublished": "2026-10-30",
+    "intro": "Most AI film entries that fail don't fail on craft. They fail because the film was made before anyone read the rules, or because twelve good clips never became one film. This guide walks through one way of working that avoids both: read the rules, write a shot list, fix the look, make stills, turn the stills into clips, add sound, then check the entry against the rules again before you submit.\n\nIt works with any tools. The last section shows how to do the same steps in Overs, which is part of the free creator pack on this site.",
+    "sections": [
+      {
+        "h": "1. Read the rules before you have an idea",
+        "body": "Contest rules decide more of the film than people expect: which tools you may use, how long it runs, when it had to be made, what music is allowed and where it has to be posted. A few real examples from contests open right now:\n\n- The [1 Billion Followers Summit AI Film Award](/contests/1-billion-ai-film-award-2027) wants an original 5 to 7 minute film, at least 70% generated with Seedance.\n- The [AKOOL AI Film Challenge](/contests/akool-ai-film-challenge-2026) allows other tools, but AKOOL has to be meaningfully used, its logo has to appear at the top of the video, and the film has to be posted publicly with set hashtags.\n- [Chroma Awards Season 2](/contests/chroma-awards-season-2-2026) takes any AI tool, but only projects made after February 1, 2026, and each project goes in one category.\n- The [Curious Refuge x Epidemic Sound holiday competition](/contests/curious-refuge-holiday-2026) takes any AI tool, with music from Epidemic Sound.\n- The [NEXTALE Award](/contests/nextale-award-2026) is for a complete AI series of 20 or more episodes, not a single short.\n\nEvery contest page on this site lists the tools it allows. Before you start, write the answers down:\n\n```\nTools required or banned:\nRuntime (min / max):\nMade after (date):\nMusic and sound rules:\nAspect ratio and resolution:\nWhere it must be posted, and any tags or logos:\nEntry fee and deadline (with time zone):\nOne category per film, or several?\n```"
+      },
+      {
+        "h": "2. Write one line, then a shot list",
+        "body": "Write the film in one sentence: who, what they want, what goes wrong. If you can't, the film isn't ready to shoot.\n\nThen break it into shots. For a 60 to 90 second film that is usually somewhere between 8 and 15 shots. For each shot, write what we see, what moves, and roughly how long it lasts. Writing the movement now matters, because each clip will carry one movement well and two badly.\n\n```\nShot 4 (5s): Close on her hands turning the old key. The key stops halfway. Camera holds.\nShot 5 (4s): Wide. The door swings open on its own into darkness. Slow push in.\n```\n\nThe [storyboard and shot list guide](/guide/ai-commercial-storyboard-and-shot-list) goes deeper on numbering, coverage and timing."
+      },
+      {
+        "h": "3. Fix the look before the first shot",
+        "body": "AI shots stop cutting together when each one is prompted fresh. Decide the look once, in words: palette, light (source, direction, softness), lens and framing, grain, and aspect ratio. Paste the same description into every shot.\n\nIf the film has a person or a creature in it, decide what they look like the same way and keep the same reference pictures for every shot they appear in. The [look bible guide](/guide/look-bible-for-ai-films) and the [consistent characters guide](/guide/consistent-characters-in-ai-film) both have templates you can copy."
+      },
+      {
+        "h": "4. Make stills first, and choose them",
+        "body": "Make a few stills for each shot before you make any video. Stills are cheaper and faster than clips, and they let you choose composition, light and performance before you pay for motion.\n\nPick the still that already looks like the middle of the moment: the hand halfway through turning the key, the coat caught in the wind. That still becomes the first frame of the clip, and a still that is already in motion gives the clip somewhere to go. The [first frame guide](/guide/first-frame-for-image-to-video) covers what makes a good starting frame."
+      },
+      {
+        "h": "5. Turn each still into a clip, one movement per shot",
+        "body": "Start each clip on its chosen still and describe one movement: what moves, which way, how fast, and where it settles. \"The door swings open and stops against the wall; the camera pushes in slowly and stops at the threshold\" works better than a list of five things happening at once.\n\nMake two or three takes of each shot and keep the best. If a clip keeps going wrong, change the still, not the prompt: most broken clips come from a first frame that doesn't fit the movement.\n\nKeep clips short. A few seconds each, cut together, reads as a film. One long clip usually drifts."
+      },
+      {
+        "h": "6. Sound does half the work",
+        "body": "Picture alone rarely carries a contest film. Plan three layers: the room (wind, traffic, a hum), the action (footsteps, the key, a door), and music or voice. Some video models generate sound with the clip; check that it fits before you keep it.\n\nMusic is where entries get disqualified. Use music you made, music you licensed, or music the contest supplies, and read the music rule from step 1 again. Some contests require a specific library, the way the Curious Refuge holiday competition uses Epidemic Sound."
+      },
+      {
+        "h": "7. Edit, export, and check the entry against the rules",
+        "body": "Cut on movement: end a clip as something moves and start the next one moving. Trim every clip to the moment it works, even if that is two seconds. Add titles and credits if the contest asks for them, and note every AI tool you used, because many contests ask for a list.\n\nThen go back to the rules you wrote down in step 1 and check each line against the finished file:\n\n```\n[ ] Runtime inside the limit, credits included\n[ ] Only allowed tools used, and required ones used enough\n[ ] Made after the cutoff date\n[ ] Music cleared or from the required library\n[ ] Right aspect ratio and resolution\n[ ] Logo, tags or public post done if required\n[ ] Submitted before the deadline in the contest's time zone\n```"
+      },
+      {
+        "h": "Doing it in Overs",
+        "body": "Overs is a studio for exactly the stills-then-clips way of working above. In Overs you type a shot and get stills. Click a still to put it on the bar, switch to Clip, describe the movement, and the clip opens exactly on that frame. Put several pictures on the bar and the clip works from all of them instead. An art direction keeps every shot in the same look, which covers step 3.\n\nIt runs on your own OpenRouter key, so you choose the image and video models your key has, and you pay them at their price with no markup from Overs. If a contest requires a specific model rather than a specific app, as the 1 Billion Followers award does with Seedance, check that its rules accept the model used through another app before you rely on it.\n\nPeople who join the AI Film Contests list get Overs Pro for $3 a month for their first 3 months, along with this guide and the Creatives Club community. That's the [free creator pack](/starter-pack)."
+      }
+    ],
+    "faqs": [
+      {
+        "q": "How long should an AI film for a contest be?",
+        "a": "As long as the rules allow and the idea needs, which is usually shorter than people think. Limits vary a lot: AKOOL's Coming Never category asks for a 30 to 90 second trailer, while the 1 Billion Followers award asks for 5 to 7 minutes. Check the runtime rule before you write the shot list."
+      },
+      {
+        "q": "Can I use any AI tool?",
+        "a": "For most contests, yes. Some require their own tool or a specific model: AKOOL's challenge requires AKOOL, and the 1 Billion Followers award requires at least 70% Seedance. Each contest page on this site lists the tools it allows."
+      },
+      {
+        "q": "Should I make video straight from text?",
+        "a": "You can, but making stills first and turning the chosen still into a clip gives you control over composition, light and character before you pay for motion, and it makes shots far easier to cut together."
+      },
+      {
+        "q": "What does it cost to make an entry?",
+        "a": "Many contests are free to enter. The cost is mostly the generation itself, which depends on the models you use and how many takes you make. With Overs, the subscription is $3 a month for the first 3 months through the creator pack, and the models are billed by OpenRouter on your own key."
+      }
+    ],
+    "related": [
+      {
+        "href": "/contests/chroma-awards-season-2-2026",
+        "label": "Chroma Awards Season 2: $450,000+, any AI tool, free, closes Jan 7, 2027"
+      },
+      {
+        "href": "/contests/curious-refuge-holiday-2026",
+        "label": "Curious Refuge x Epidemic Sound holiday competition: $7,500+, free, closes Dec 6, 2026"
+      },
+      {
+        "href": "/contests/akool-ai-film-challenge-2026",
+        "label": "AKOOL AI Film Challenge: $500,000 in creator rewards, AKOOL required, closes Dec 20, 2026"
+      },
+      {
+        "href": "/starter-pack",
+        "label": "The free creator pack: Overs at 92% off, this guide and Creatives Club"
+      }
+    ],
+    "relatedTitle": "Where to enter it"
+  },
   "look-bible-for-ai-films": {
     "title": "How to Build a Look Bible for an AI Film or Commercial",
     "description": "A look bible fixes palette, light, lens, grain and format in words a model follows, so every AI shot cuts together. What goes in it, with a real kept prompt.",

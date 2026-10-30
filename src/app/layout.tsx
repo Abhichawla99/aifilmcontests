@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import './globals.css'
 import { Analytics } from '@vercel/analytics/next'
 import ClickTracker from '@/components/ClickTracker'
+import PackBanner from '@/components/PackBanner'
 
 export const metadata: Metadata = {
   title: 'AI Film Contests — Every Creative AI Film Competition, One Place',
@@ -68,6 +69,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         />
       </head>
       <body className="antialiased">
+        <PackBanner />
         {children}
         <Analytics />
         <ClickTracker />

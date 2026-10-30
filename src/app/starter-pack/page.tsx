@@ -1,0 +1,115 @@
+import type { Metadata } from 'next'
+import Link from 'next/link'
+import InnerLayout from '@/components/InnerLayout'
+import EmailSubscribe from '@/components/EmailSubscribe'
+import { COMMUNITY, GUIDE, OVERS, OVERS_OFF_PERCENT, oversHref } from '@/lib/creator-pack'
+
+/* The free creator pack. Claiming it is subscribing: the welcome email
+   delivers all three pieces, and /subscribed shows them again straight away.
+   The three pieces are Abhi's (Overs, the guide, Creatives Club) and the page
+   says so, in the small print and in the email. */
+
+export const metadata: Metadata = {
+  title: 'Free Creator Pack for AI Filmmakers | AI Film Contests',
+  description: `Free for AI filmmakers: Overs Pro at ${OVERS_OFF_PERCENT}% off ($${OVERS.monthlyUsd} a month for ${OVERS.months} months), a step-by-step guide to making an AI film for a contest, and the Creatives Club community.`,
+  alternates: { canonical: 'https://aifilmcontests.com/starter-pack' },
+  openGraph: {
+    title: 'Free Creator Pack for AI Filmmakers',
+    description: `Overs at ${OVERS_OFF_PERCENT}% off, a contest film guide and a free community. Claim it with your email.`,
+    url: 'https://aifilmcontests.com/starter-pack',
+    siteName: 'AI Film Contests',
+  },
+}
+
+const label: React.CSSProperties = {
+  fontFamily: 'Space Grotesk, sans-serif', fontSize: 11, fontWeight: 700,
+  letterSpacing: '0.1em', textTransform: 'uppercase', color: '#4F46E5', marginBottom: 10,
+}
+const title: React.CSSProperties = {
+  fontFamily: 'Space Grotesk, sans-serif', fontSize: 22, fontWeight: 700,
+  letterSpacing: '-0.02em', color: '#1B1916', margin: '0 0 8px',
+}
+const body: React.CSSProperties = { fontSize: 15, lineHeight: 1.7, color: '#4A463E', margin: '0 0 14px' }
+const more: React.CSSProperties = { fontFamily: 'Space Grotesk, sans-serif', fontSize: 14, fontWeight: 600, color: '#4338CA', textDecoration: 'none' }
+
+export default function StarterPackPage() {
+  return (
+    <InnerLayout>
+      <div className="max-w-5xl mx-auto px-5" style={{ padding: 'clamp(40px, 6vw, 72px) 20px clamp(48px, 7vw, 88px)' }}>
+
+        <div style={{ maxWidth: 680, marginBottom: 'clamp(32px, 5vw, 52px)' }}>
+          <div style={label}>Free for AI filmmakers</div>
+          <h1 style={{
+            fontFamily: 'Space Grotesk, sans-serif', fontSize: 'clamp(36px, 5.5vw, 60px)', fontWeight: 700,
+            lineHeight: 1.02, letterSpacing: '-0.04em', color: '#1B1916', margin: '0 0 18px',
+          }}>
+            The creator pack.<br /><span className="g">Claim it free.</span>
+          </h1>
+          <p style={{ fontSize: 'clamp(15px, 1.8vw, 18px)', lineHeight: 1.7, color: '#6F6A61', margin: 0 }}>
+            Everything you need to go from a contest you like to a finished entry: the tool to make it
+            for {OVERS_OFF_PERCENT}% less, a guide that walks through every step, and a community to ask when you get stuck.
+          </p>
+        </div>
+
+        <div className="pack-grid">
+          <section className="pack-item pack-item-lead">
+            <div style={label}>{OVERS_OFF_PERCENT}% off</div>
+            <h2 style={title}>Overs Pro for ${OVERS.monthlyUsd} a month</h2>
+            <p style={body}>
+              ${OVERS.monthlyUsd} a month for your first {OVERS.months} months instead of ${OVERS.fullUsd}. Type a shot
+              and Overs makes the stills. Pick one and it becomes a clip that opens exactly on that frame. Put several
+              pictures on the bar and the clip works from all of them.
+            </p>
+            <p style={{ ...body, fontSize: 13.5, color: '#6F6A61' }}>
+              It runs on your own OpenRouter key, so you pay the video models at their price, with no markup.
+              Cancel any time from your account page.
+            </p>
+            <a href={oversHref('pack-page')} target="_blank" rel="noopener" style={more}>See Overs →</a>
+          </section>
+
+          <section className="pack-item">
+            <div style={label}>Guide</div>
+            <h2 style={title}>{GUIDE.title}</h2>
+            <p style={body}>
+              From reading the rules to exporting the file: a shot list, a look that holds across shots, stills first,
+              clips from stills, sound, and the checks that get entries thrown out.
+            </p>
+            <Link href={GUIDE.path} style={more}>Read the guide →</Link>
+          </section>
+
+          <section className="pack-item">
+            <div style={label}>Community</div>
+            <h2 style={title}>{COMMUNITY.name}</h2>
+            <p style={body}>
+              Abhi&apos;s free community on Skool for people learning AI creative workflows. Ask questions, see how
+              others build their shots, and share what you make.
+            </p>
+            <a href={COMMUNITY.url} target="_blank" rel="noopener" style={more}>Join free →</a>
+          </section>
+        </div>
+
+        <div id="claim" className="pack-claim">
+          <div style={{ maxWidth: 440 }}>
+            <h2 style={{ ...title, fontSize: 26 }}>Claim the pack</h2>
+            <p style={{ ...body, marginBottom: 6 }}>
+              Enter your email and all three land in your inbox straight away.
+            </p>
+            <p style={{ ...body, fontSize: 13.5, color: '#6F6A61' }}>
+              You also get contest alerts: new contests a day or two after they open, a last call before
+              deadlines, and what&apos;s closing each week. A few emails a month, never daily.
+            </p>
+          </div>
+          <div style={{ maxWidth: 420, width: '100%' }}>
+            <EmailSubscribe />
+          </div>
+        </div>
+
+        <p style={{ fontSize: 12.5, lineHeight: 1.7, color: '#8B867C', maxWidth: 640, marginTop: 28 }}>
+          Overs and Creatives Club are run by Abhi, who also runs AI Film Contests. The Overs price is for the first
+          700 people who claim it, then ${OVERS.fullUsd} a month after the first {OVERS.months} months unless you cancel.
+          Check each contest&apos;s rules before you start: most accept any AI tool, and a few require their own.
+        </p>
+      </div>
+    </InnerLayout>
+  )
+}

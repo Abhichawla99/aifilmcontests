@@ -1,6 +1,7 @@
 import { Resend } from 'resend'
 import { supabaseAdmin } from './supabase'
 import { isMissingRelation, withDbRetry, type DbRetryOptions } from './db-health'
+import { COMMUNITY, GUIDE, OVERS_OFF_PERCENT } from './creator-pack'
 
 const FROM_EMAIL = process.env.FROM_EMAIL || 'contests@updates.aifilmcontests.com'
 const REPLY_TO   = process.env.REPLY_TO_EMAIL || 'hello@aifilmcontests.com'
@@ -224,6 +225,28 @@ function oversFeature(kind: EmailKind, heading: string) {
     </p>
     <a href="${oversLink(kind)}" style="display:inline-block;background:#4f46e5;color:#fff;text-decoration:none;padding:11px 22px;border-radius:8px;font-size:14px;font-weight:600;">Get Overs for $3 →</a>
   </div>`
+}
+
+/** The other two pieces of the creator pack, under the Overs offer in the welcome. */
+function packExtras() {
+  const row = (title: string, text: string, href: string, cta: string) => `
+    <div style="border-top:1px solid rgba(255,255,255,0.07);padding:14px 0;">
+      <div style="font-size:15px;font-weight:700;color:#fff;margin-bottom:4px;">${title}</div>
+      <div style="color:#a1a1aa;font-size:14px;line-height:1.6;margin-bottom:6px;">${text}</div>
+      <a href="${href}" style="color:#818cf8;font-size:13px;font-weight:600;text-decoration:none;">${cta} →</a>
+    </div>`
+  return `
+  <div style="margin:0 0 28px 0;">
+    ${row(escapeHtml(GUIDE.title), 'Every step from reading the rules to exporting the file: shot list, look, stills, clips, sound, and the checks that get entries thrown out.', `${SITE_URL}${GUIDE.path}`, 'Read the guide')}
+    ${row(COMMUNITY.name, 'My free community on Skool for people learning AI creative workflows. Ask questions and see how others build their shots.', COMMUNITY.url, 'Join free')}
+  </div>`
+}
+
+function packExtrasText() {
+  return `${GUIDE.title}: ${SITE_URL}${GUIDE.path}
+${COMMUNITY.name}, my free community: ${COMMUNITY.url}
+
+`
 }
 
 function oversFeatureText(kind: EmailKind, heading: string) {
@@ -504,7 +527,9 @@ export function buildWelcomeEmail(name: string | null | undefined, picks: Contes
 
   ${picks.length ? sectionTitle(picks.length === 1 ? 'Start with this one' : `Start with these ${picks.length}`) + picks.map(contestCard).join('') : ''}
 
-  ${oversFeature('welcome', 'Make your entry for $3 a month')}
+  ${sectionTitle('Your free creator pack')}
+  ${oversFeature('welcome', `Overs Pro, ${OVERS_OFF_PERCENT}% off: $3 a month`)}
+  ${packExtras()}
 
   <div style="border:1px solid rgba(255,255,255,0.07);border-radius:10px;padding:20px 22px;margin-bottom:24px;">
     <div style="font-size:12px;font-weight:600;color:#52525b;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:14px;">What you'll get from us</div>
@@ -531,7 +556,9 @@ export function buildWelcomeEmail(name: string | null | undefined, picks: Contes
     text: unsub =>
       `${firstName ? `Hey ${firstName},` : 'Hey,'}\n\nYou're on the list. We track every AI film competition and check them daily.\n\n` +
       (picks.length ? `START WITH THESE (free, any AI tool, at least two weeks left)\n\n${textList(picks)}\n\n` : '') +
-      oversFeatureText('welcome', 'Make your entry for $3 a month') +
+      `YOUR FREE CREATOR PACK\n\n` +
+      oversFeatureText('welcome', `Overs Pro, ${OVERS_OFF_PERCENT}% off: $3 a month`) +
+      packExtrasText() +
       `What you'll get from us:\n- New contests, a day or two after they open\n- A last call before a deadline closes\n- What's closing this week, once a week\n- A few emails a month, never daily spam\n\n` +
       `One favour: reply "got it" so the alerts land in your Primary inbox.\n\nEvery open contest: ${SITE_URL}\n\nUnsubscribe: ${unsub}`,
   }
