@@ -87,43 +87,60 @@ function unsubscribeUrl(token?: string | null) {
     : `${SITE_URL}/unsubscribe`
 }
 
-// ─── Shared styles ────────────────────────────────────────────────────────────
+// ─── Shared styles: the festival ticket look ──────────────────────────────────
+//
+// Every email is a night at a film festival: the contests are tickets (the stub
+// carries the deadline), the welcome is an all-access pass, the Overs offer is a
+// voucher. Night ground, cream tickets, one coral and one gold. Built from tables
+// so the stubs line up in Gmail and Outlook as well as Apple Mail.
 
-// The site's own colours (globals.css, the paper theme), so an email looks like
-// it came from the page they signed up on.
-const C = {
-  paper: '#FBFAF8',
-  card: '#FFFFFF',
-  ink: '#1B1916',
-  body: '#4A463E',
-  muted: '#6F6A61',
-  faint: '#8B867C',
-  line: '#E8E4DC',
-  indigo: '#4F46E5',
-  indigoDeep: '#4338CA',
-  indigoWash: '#EEF0FE',
-  red: '#DC2626',
+const T = {
+  night: '#17142E',   // the ground
+  night2: '#221E42',  // panels on the ground
+  line: '#38335F',
+  cream: '#FFF7E8',   // tickets
+  creamLine: '#E2D5BA',
+  ink: '#1E1A3A',     // text on cream
+  inkSoft: '#5E5674',
+  coral: '#F25C3B',
+  coralDeep: '#C9452B',
+  gold: '#F2B544',
+  goldDeep: '#E09A2C',
+  mist: '#BDB7DC',    // body text on night
+  dim: '#8984AD',
 }
-const FONT = `-apple-system,BlinkMacSystemFont,'Segoe UI','Helvetica Neue',sans-serif`
+const FONT = `-apple-system,BlinkMacSystemFont,'Segoe UI','Helvetica Neue',Arial,sans-serif`
 const DISPLAY = `'Space Grotesk',${FONT}`
+const SERIF = `Georgia,'Times New Roman',serif`
 
-const emailBase = `background-color:${C.paper};color:${C.ink};font-family:${FONT};margin:0;padding:0;`
-const wrap = `max-width:580px;margin:0 auto;padding:32px 20px 40px;`
-const wordmark = `<span style="font-family:${DISPLAY};font-size:15px;font-weight:700;letter-spacing:-0.01em;color:${C.ink};">AI Film <span style="color:${C.indigo};">Contests</span></span>`
-const card = `background:${C.card};border:1px solid ${C.line};border-radius:12px;`
-const button = (href: string, label: string) =>
-  `<a href="${href}" style="display:inline-block;background:${C.indigo};color:#ffffff;text-decoration:none;padding:13px 26px;border-radius:8px;font-size:14px;font-weight:600;">${label}</a>`
+const emailBase = `background-color:${T.night};color:${T.cream};font-family:${FONT};margin:0;padding:0;`
+const wrap = `max-width:600px;margin:0 auto;padding:28px 16px 40px;`
+const wordmark = `<span style="font-family:${DISPLAY};font-size:15px;font-weight:700;letter-spacing:-0.01em;color:${T.cream};">AI Film <span style="color:${T.coral};">Contests</span></span>`
+/** Small spaced capitals, the type on a ticket. */
+const caps = (color: string, size = 10) =>
+  `font-size:${size}px;font-weight:800;letter-spacing:0.16em;text-transform:uppercase;color:${color};`
+const button = (href: string, label: string, bg = T.coral, fg = '#ffffff') =>
+  `<a href="${href}" style="display:inline-block;background:${bg};color:${fg};text-decoration:none;padding:14px 26px;border-radius:6px;${caps(fg, 12)}">${label}</a>`
 
-function hr() {
-  return `<hr style="border:none;border-top:1px solid ${C.line};margin:32px 0;">`
+/** A rubber stamp: GREENLIT, FINAL CALL, JUST ANNOUNCED. Clients that ignore
+    the rotation show it straight, which still reads. */
+function stamp(text: string, color: string) {
+  return `<span style="display:inline-block;border:2px solid ${color};color:${color};${caps(color, 11)}padding:4px 9px;border-radius:4px;transform:rotate(-5deg);">${text}</span>`
 }
 
 function footer(unsubscribeLink: string) {
+  const link = (href: string, label: string) => `<a href="${href}" style="color:${T.mist};text-decoration:none;">${label}</a>`
   return `
-    <div style="color:${C.faint};font-size:12px;text-align:center;line-height:1.8;">
-      <a href="${SITE_URL}" style="color:${C.faint};text-decoration:none;">aifilmcontests.com</a>
-      &nbsp;·&nbsp;
-      <a href="${unsubscribeLink}" style="color:${C.faint};text-decoration:underline;">Unsubscribe</a>
+    <div style="margin-top:36px;border-top:2px dashed ${T.line};padding-top:24px;text-align:center;">
+      ${wordmark}
+      <div style="color:${T.mist};font-size:13px;margin:6px 0 12px;">Every AI film contest, checked every day.</div>
+      <div style="font-size:12px;line-height:1.8;">
+        ${link(SITE_URL, 'Open contests')} &nbsp;·&nbsp; ${link(`${SITE_URL}${GUIDE.path}`, 'The guide')} &nbsp;·&nbsp; ${link(COMMUNITY.url, COMMUNITY.name)}
+      </div>
+      <div style="color:${T.dim};font-size:11px;line-height:1.7;margin-top:12px;">
+        You're getting this because you signed up at aifilmcontests.com.
+        <a href="${unsubscribeLink}" style="color:${T.dim};text-decoration:underline;">Unsubscribe</a>
+      </div>
     </div>
   `
 }
@@ -137,58 +154,81 @@ function fmtDate(d: string) {
   return new Date(d).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric', timeZone: 'UTC' })
 }
 
-function contestCard(c: ContestEmailItem) {
-  const badge = c.isNew
-    ? `<span style="background:${C.indigo};color:#ffffff;font-size:11px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;padding:2px 8px;border-radius:4px;margin-left:8px;">New</span>`
-    : c.daysLeft != null
-    ? `<span style="color:${C.red};font-size:12px;font-weight:700;margin-left:8px;">${c.daysLeft}d left</span>`
-    : ''
+/** The stub's date, in three pieces: NOV / 20 / 2026. */
+function stubDate(d: string) {
+  const t = new Date(d)
+  return {
+    month: t.toLocaleDateString('en-US', { month: 'short', timeZone: 'UTC' }).toUpperCase(),
+    day: t.toLocaleDateString('en-US', { day: 'numeric', timeZone: 'UTC' }),
+    year: t.toLocaleDateString('en-US', { year: 'numeric', timeZone: 'UTC' }),
+  }
+}
 
+function trimTo(s: string, n: number) {
+  return s.length <= n ? s : s.slice(0, s.lastIndexOf(' ', n - 1)).replace(/[,;:.\s]+$/, '') + '…'
+}
+
+/** One contest as a ticket: the details on the left, the deadline on a stub at
+    the right. Three days or fewer and the stub turns coral and says so. */
+function ticket(c: ContestEmailItem, admit = 'Admit one') {
+  const urgent = c.daysLeft != null && c.daysLeft <= 3
+  const d = stubDate(c.deadline)
+  const tag = c.isNew ? ` &nbsp;<span style="background:${T.coral};color:#ffffff;padding:2px 6px;border-radius:3px;">New</span>` : ''
+  const stubBg = urgent ? T.coral : T.cream
+  const stubInk = urgent ? '#ffffff' : T.ink
+  const stubTop = urgent ? (c.daysLeft === 0 ? 'Last day' : `${c.daysLeft}d left`) : 'Closes'
   return `
-    <div style="${card}padding:20px 22px;margin-bottom:12px;">
-      <div style="margin-bottom:4px;">
-        <span style="color:${C.faint};font-size:12px;letter-spacing:0.04em;text-transform:uppercase;">${escapeHtml(c.organizer)}</span>
-        ${badge}
-      </div>
-      <div style="font-family:${DISPLAY};font-size:18px;font-weight:700;letter-spacing:-0.01em;margin-bottom:6px;color:${C.ink};">${escapeHtml(c.name)}</div>
-      <div style="color:${C.body};font-size:14px;line-height:1.6;margin-bottom:14px;">${escapeHtml(c.description)}</div>
-      <div>
-        <span style="color:${C.indigo};font-weight:700;font-size:15px;">${escapeHtml(c.prize)}</span>
-        <span style="color:${C.muted};font-size:13px;margin-left:12px;">Due ${fmtDate(c.deadline)}</span>
-        &nbsp;&nbsp;
-        <a href="${c.url}" style="color:${C.indigoDeep};font-size:13px;font-weight:600;text-decoration:none;">Apply →</a>
-      </div>
-    </div>`
+    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="border-collapse:separate;margin:0 0 12px 0;">
+      <tr>
+        <td style="background:${T.cream};border-radius:10px 0 0 10px;padding:16px 16px 16px 18px;vertical-align:top;">
+          <div style="${caps('#8A7F6A')}margin-bottom:8px;">${escapeHtml(admit)}${tag}</div>
+          <div style="font-family:${DISPLAY};font-size:19px;font-weight:800;line-height:1.15;letter-spacing:-0.01em;color:${T.ink};margin-bottom:3px;">${escapeHtml(c.name)}</div>
+          <div style="font-size:12px;color:${T.inkSoft};margin-bottom:10px;">${escapeHtml(c.organizer)}</div>
+          <div style="font-size:14px;font-weight:700;line-height:1.4;color:${T.coralDeep};margin-bottom:8px;">${escapeHtml(c.prize)}</div>
+          <div style="font-size:13px;line-height:1.55;color:${T.inkSoft};margin-bottom:12px;">${escapeHtml(trimTo(c.description, 190))}</div>
+          <a href="${c.url}" style="${caps(T.ink, 11)}text-decoration:none;border-bottom:2px solid ${T.coral};padding-bottom:1px;">Get in →</a>
+        </td>
+        <td width="88" style="width:88px;background:${stubBg};border-left:2px dashed ${urgent ? '#ffffff' : T.creamLine};border-radius:0 10px 10px 0;text-align:center;vertical-align:middle;padding:14px 4px;color:${stubInk};">
+          <div style="${caps(stubInk, 9)}margin-bottom:6px;">${stubTop}</div>
+          <div style="font-family:${DISPLAY};font-size:14px;font-weight:800;letter-spacing:0.06em;color:${stubInk};">${d.month}</div>
+          <div style="font-family:${DISPLAY};font-size:36px;font-weight:800;line-height:1;color:${stubInk};">${d.day}</div>
+          <div style="font-size:10px;color:${stubInk};margin-top:4px;">${d.year}</div>
+        </td>
+      </tr>
+    </table>`
 }
 
 function sectionTitle(title: string, sub?: string) {
   return `
-    <h2 style="font-size:12px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:${C.indigo};margin:32px 0 12px 0;">${title}</h2>
-    ${sub ? `<p style="color:${C.muted};font-size:13px;margin:-6px 0 14px 0;">${sub}</p>` : ''}`
+    <h2 style="${caps(T.gold, 12)}margin:36px 0 ${sub ? 6 : 14}px 0;">${title}</h2>
+    ${sub ? `<p style="color:${T.mist};font-size:13px;line-height:1.5;margin:0 0 14px 0;">${sub}</p>` : ''}`
 }
 
-/** A big headline for the top of an email, in the site's display face. */
-function headline(text: string, sub?: string) {
+/** The top of a contest email: a stamp, a big headline, one line under it. */
+function marquee(stampHtml: string, title: string, sub: string) {
   return `
-  <h1 style="font-family:${DISPLAY};font-size:26px;font-weight:700;letter-spacing:-0.025em;line-height:1.15;color:${C.ink};margin:0 0 8px 0;">${text}</h1>
-  ${sub ? `<p style="color:${C.muted};font-size:14px;line-height:1.6;margin:0 0 8px 0;">${sub}</p>` : ''}`
+  <div style="margin:4px 0 12px 0;">${stampHtml}</div>
+  <h1 style="font-family:${DISPLAY};font-size:30px;font-weight:800;letter-spacing:-0.03em;line-height:1.08;color:${T.cream};margin:0 0 8px 0;">${title}</h1>
+  <p style="color:${T.mist};font-size:14px;line-height:1.6;margin:0 0 4px 0;">${sub}</p>`
 }
 
 function shell(body: string, unsub: string, topRight = '', preheader = '') {
   return `<!DOCTYPE html>
 <html lang="en">
 <head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="dark"><meta name="supported-color-schemes" content="dark">
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet"></head>
 <body style="${emailBase}">
 ${preheader ? `<div style="display:none;max-height:0;overflow:hidden;opacity:0;">${escapeHtml(preheader)}</div>` : ''}
+<div style="background-color:${T.night};">
 <div style="${wrap}">
-  <div style="margin-bottom:24px;display:flex;align-items:center;justify-content:space-between;">
-    ${wordmark}
-    ${topRight}
-  </div>
+  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:22px;"><tr>
+    <td style="vertical-align:middle;">${wordmark}</td>
+    <td style="vertical-align:middle;text-align:right;${caps(T.dim)}">${topRight}</td>
+  </tr></table>
   ${body}
-  ${hr()}
   ${footer(unsub)}
+</div>
 </div>
 </body>
 </html>`
@@ -223,8 +263,6 @@ function oversLink(kind: EmailKind) {
 
 const OVERS_LINE = 'Overs turns a few words into stills and any still into a clip, on your own OpenRouter key. For people on this list it\'s $3 a month for the first 3 months.'
 
-/** "$39 $3 a month": the regular price struck through next to the list price. */
-const priceDrop = `<span style="color:${C.faint};text-decoration:line-through;">$${OVERS.fullUsd}</span> <strong style="color:${C.ink};">$${OVERS.monthlyUsd} a month</strong>`
 /** What the three months save: $108. */
 const OVERS_SAVING = (OVERS.fullUsd - OVERS.monthlyUsd) * OVERS.months
 
@@ -233,54 +271,67 @@ const OVERS_SAVING = (OVERS.fullUsd - OVERS.monthlyUsd) * OVERS.months
 function oversBlock(kind: EmailKind) {
   if (!oversEnabled()) return ''
   return `
-  <div style="${card}padding:18px 20px;margin-top:28px;">
-    <div style="font-family:${DISPLAY};font-size:16px;font-weight:700;color:${C.ink};margin-bottom:6px;">Picked one? Here's how to make it.</div>
-    <div style="color:${C.body};font-size:14px;line-height:1.6;">
-      <a href="${SITE_URL}${GUIDE.path}" style="color:${C.indigoDeep};font-weight:600;text-decoration:none;">The contest film guide</a> takes you from the rules to the export.
-      Overs makes the stills and clips: ${priceDrop} for your first ${OVERS.months} months, on your own OpenRouter key.
+  <div style="background:${T.night2};border:2px dashed ${T.gold};border-radius:12px;padding:18px 20px;margin-top:28px;">
+    <div style="${caps(T.gold)}margin-bottom:8px;">Picked one? Here's your kit</div>
+    <div style="color:${T.mist};font-size:14px;line-height:1.6;">
+      <a href="${SITE_URL}${GUIDE.path}" style="color:${T.cream};font-weight:700;text-decoration:none;border-bottom:1px solid ${T.gold};">The contest film guide</a> takes you from the rules to the export.
+      Overs makes the stills and clips: <span style="color:${T.dim};text-decoration:line-through;">$${OVERS.fullUsd}</span> <strong style="color:${T.cream};">$${OVERS.monthlyUsd} a month</strong> for your first ${OVERS.months} months.
     </div>
-    <div style="margin-top:10px;"><a href="${oversLink(kind)}" style="color:${C.indigoDeep};font-size:13px;font-weight:600;text-decoration:none;">Get Overs for $${OVERS.monthlyUsd} →</a>
-    <span style="color:${C.faint};font-size:12px;margin-left:8px;">Made by Abhi, who runs AI Film Contests.</span></div>
+    <div style="margin-top:12px;"><a href="${oversLink(kind)}" style="${caps(T.coral, 11)}text-decoration:none;">Redeem Overs for $${OVERS.monthlyUsd} →</a>
+    <span style="color:${T.dim};font-size:12px;margin-left:8px;">Made by Abhi, who runs AI Film Contests.</span></div>
   </div>`
 }
 
 function oversText(kind: EmailKind) {
   if (!oversEnabled()) return ''
-  return `PICKED ONE? HERE'S HOW TO MAKE IT.\nThe contest film guide: ${SITE_URL}${GUIDE.path}\n${OVERS_LINE}\nGet Overs for $3: ${oversLink(kind)}\n(Made by Abhi, who runs AI Film Contests.)\n\n`
+  return `PICKED ONE? HERE'S YOUR KIT\nThe contest film guide: ${SITE_URL}${GUIDE.path}\n${OVERS_LINE}\nGet Overs for $3: ${oversLink(kind)}\n(Made by Abhi, who runs AI Film Contests.)\n\n`
 }
 
-/** The larger version for the welcome and spotlight emails. */
+/** The Overs offer as a voucher for the welcome and spotlight: the offer on the
+    left, what it's worth on the stub. */
 function oversFeature(kind: EmailKind, heading: string) {
   if (!oversEnabled()) return ''
   return `
-  <div style="background:${C.indigoWash};border:1px solid #D9DCFB;border-radius:12px;padding:22px;margin:0 0 12px 0;">
-    <div style="font-size:11px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:${C.indigo};margin-bottom:8px;">${OVERS_OFF_PERCENT}% off · $${OVERS_SAVING} off your first ${OVERS.months} months</div>
-    <div style="font-family:${DISPLAY};font-size:20px;font-weight:700;letter-spacing:-0.02em;color:${C.ink};margin-bottom:8px;">${heading}</div>
-    <p style="color:${C.body};font-size:15px;line-height:1.6;margin:0 0 10px 0;">
-      I built Overs so you can make the stills and clips for an entry without another big subscription.
-      Type a shot and it makes the stills. Pick one and it becomes a clip that opens exactly on that frame.
-    </p>
-    <p style="color:${C.body};font-size:15px;line-height:1.6;margin:0 0 6px 0;">${priceDrop} for your first ${OVERS.months} months, then $${OVERS.fullUsd}. Cancel any time.</p>
-    <p style="color:${C.muted};font-size:13px;line-height:1.6;margin:0 0 16px 0;">
-      It runs on your own OpenRouter key, so each clip costs what the video model charges, with no markup.
-    </p>
-    ${button(oversLink(kind), `Get Overs for $${OVERS.monthlyUsd} →`)}
-  </div>`
+  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="border-collapse:separate;margin:0 0 12px 0;">
+    <tr>
+      <td style="background:${T.gold};border-radius:12px 0 0 12px;padding:20px 18px 22px 20px;vertical-align:top;color:${T.ink};">
+        <div style="${caps(T.ink)}opacity:0.75;margin-bottom:8px;">Voucher · comes with your pass</div>
+        <div style="font-family:${DISPLAY};font-size:24px;font-weight:800;letter-spacing:-0.02em;line-height:1.1;color:${T.ink};margin-bottom:10px;">${heading}</div>
+        <p style="color:${T.ink};font-size:14px;line-height:1.6;margin:0 0 12px 0;">
+          I built Overs so you can make the stills and clips for an entry without another big subscription.
+          Type a shot and it makes the stills. Pick one and it becomes a clip that opens exactly on that frame.
+        </p>
+        <p style="color:${T.ink};font-size:14px;line-height:1.5;margin:0 0 4px 0;">
+          <span style="text-decoration:line-through;opacity:0.6;">$${OVERS.fullUsd}</span>
+          <strong style="font-family:${DISPLAY};font-size:26px;">$${OVERS.monthlyUsd}</strong> a month for your first ${OVERS.months} months, then $${OVERS.fullUsd}. Cancel any time.
+        </p>
+        <p style="color:${T.ink};opacity:0.75;font-size:12px;line-height:1.5;margin:0 0 16px 0;">
+          Runs on your own OpenRouter key, so each clip costs what the video model charges, with no markup.
+        </p>
+        ${button(oversLink(kind), `Redeem for $${OVERS.monthlyUsd} →`, T.ink, T.cream)}
+      </td>
+      <td width="88" style="width:88px;background:${T.goldDeep};border-left:2px dashed ${T.ink};border-radius:0 12px 12px 0;text-align:center;vertical-align:middle;padding:14px 4px;color:${T.ink};">
+        <div style="font-family:${DISPLAY};font-size:30px;font-weight:800;line-height:1;color:${T.ink};">${OVERS_OFF_PERCENT}%</div>
+        <div style="${caps(T.ink, 11)}margin:4px 0 12px;">Off</div>
+        <div style="${caps(T.ink, 9)}line-height:1.5;">$${OVERS_SAVING}<br>saved</div>
+      </td>
+    </tr>
+  </table>`
 }
 
-/** The other two pieces of the creator pack, under the Overs offer in the welcome. */
+/** The other two pieces of the creator pack, under the voucher in the welcome. */
 function packExtras() {
-  const row = (label: string, title: string, text: string, href: string, cta: string) => `
-    <div style="${card}padding:18px 20px;margin-bottom:12px;">
-      <div style="font-size:11px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:${C.indigo};margin-bottom:6px;">${label}</div>
-      <div style="font-family:${DISPLAY};font-size:17px;font-weight:700;color:${C.ink};margin-bottom:4px;">${title}</div>
-      <div style="color:${C.body};font-size:14px;line-height:1.6;margin-bottom:8px;">${text}</div>
-      <a href="${href}" style="color:${C.indigoDeep};font-size:13px;font-weight:600;text-decoration:none;">${cta} →</a>
+  const row = (label: string, color: string, title: string, text: string, href: string, cta: string) => `
+    <div style="background:${T.night2};border-radius:12px;padding:18px 20px;margin-bottom:12px;">
+      <div style="${caps(color)}margin-bottom:6px;">${label}</div>
+      <div style="font-family:${DISPLAY};font-size:18px;font-weight:700;color:${T.cream};margin-bottom:4px;">${title}</div>
+      <div style="color:${T.mist};font-size:14px;line-height:1.6;margin-bottom:10px;">${text}</div>
+      <a href="${href}" style="${caps(color, 11)}text-decoration:none;">${cta} →</a>
     </div>`
   return `
   <div style="margin:0 0 8px 0;">
-    ${row('Guide', escapeHtml(GUIDE.title), 'Every step from reading the rules to exporting the file: shot list, look, stills, clips, sound, and the checks that get entries thrown out.', `${SITE_URL}${GUIDE.path}`, 'Read the guide')}
-    ${row('Community', COMMUNITY.name, 'My free community on Skool for people learning AI creative workflows. Ask questions and see how others build their shots.', COMMUNITY.url, 'Join free')}
+    ${row('The workshop', T.coral, escapeHtml(GUIDE.title), 'Every step from reading the rules to exporting the file: shot list, look, stills, clips, sound, and the checks that get entries thrown out.', `${SITE_URL}${GUIDE.path}`, 'Read the guide')}
+    ${row("The filmmakers' lounge", T.gold, COMMUNITY.name, 'My free community on Skool for people learning AI creative workflows. Ask questions and see how others build their shots.', COMMUNITY.url, 'Join free')}
   </div>`
 }
 
@@ -543,10 +594,10 @@ export async function sendPlainEmail(opts: {
 // ─── Welcome email ────────────────────────────────────────────────────────────
 
 /** The welcome, built without sending: the signup route sends it, the preview renders it. */
-// The welcome is the signup's receipt, so it is built the way the best order
-// confirmations are: it looks like the site, shows where they are (signed up,
-// then pick, make, submit), puts what they got and what it's worth up top, says
-// what the next two weeks look like, and ends on a note from Abhi.
+// The welcome is the signup's receipt, built like the best order confirmations
+// and dressed as an all-access festival pass: their name on the pass, where they
+// are (signed up, then pick, make, submit), three tickets to start with, the
+// voucher and the rest of the pack, the program for two weeks, a note from Abhi.
 
 /** Where a new subscriber is: signed up, with three steps to a submitted entry. */
 const WELCOME_STEPS = ['Signed up', 'Pick a contest', 'Make it', 'Submit']
@@ -560,36 +611,62 @@ const WELCOME_PLAN: Array<[string, string, string]> = [
   ['Days 12–14', 'Edit, check, submit', 'Cut it together, run the export checklist in the guide and submit with a day to spare.'],
 ]
 
-function welcomeTracker() {
-  const cells = WELCOME_STEPS.map((s, i) => {
+/** The pass: their name on coral, what it includes and the four steps on cream. */
+function welcomePass(holder: string, issued: string) {
+  const includes = [
+    ['Overs Pro', `$${OVERS.monthlyUsd} a month`],
+    ['The guide', 'Rules to export'],
+    [COMMUNITY.name, 'Free to join'],
+  ].map(([k, v]) => `<td style="width:33%;vertical-align:top;padding-right:8px;">
+      <div style="font-family:${DISPLAY};font-size:14px;font-weight:800;color:${T.ink};">${k}</div>
+      <div style="font-size:12px;color:${T.inkSoft};">${v}</div></td>`).join('')
+  const steps = WELCOME_STEPS.map((s, i) => {
     const done = i === 0
-    const dot = done
-      ? `<div style="width:22px;height:22px;border-radius:11px;background:#ffffff;color:${C.indigo};font-size:13px;font-weight:700;line-height:22px;text-align:center;margin:0 auto 6px;">✓</div>`
-      : `<div style="width:18px;height:18px;border-radius:11px;border:2px solid rgba(255,255,255,0.55);margin:0 auto 6px;"></div>`
-    return `<td style="width:25%;text-align:center;vertical-align:top;color:${done ? '#ffffff' : 'rgba(255,255,255,0.75)'};font-size:11px;font-weight:${done ? 700 : 500};line-height:1.3;">${dot}${s}</td>`
+    const hole = done
+      ? `<div style="width:20px;height:20px;border-radius:10px;background:${T.coral};color:#ffffff;font-size:12px;font-weight:800;line-height:20px;text-align:center;margin:0 auto 6px;">✓</div>`
+      : `<div style="width:16px;height:16px;border-radius:10px;border:2px solid ${T.creamLine};background:${T.night};margin:0 auto 6px;"></div>`
+    return `<td style="width:25%;text-align:center;vertical-align:top;font-size:11px;line-height:1.3;font-weight:${done ? 800 : 600};color:${done ? T.ink : T.inkSoft};">${hole}${s}</td>`
   }).join('')
-  return `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin-top:22px;"><tr>${cells}</tr></table>`
+  return `
+  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="border-collapse:separate;">
+    <tr><td style="background:${T.coral};border-radius:16px 16px 0 0;padding:20px 22px 22px;color:#ffffff;">
+      <table role="presentation" width="100%" cellpadding="0" cellspacing="0"><tr>
+        <td style="${caps('#ffffff', 11)}vertical-align:top;">All access pass</td>
+        <td style="text-align:right;vertical-align:top;">${stamp('Greenlit', T.cream)}</td>
+      </tr></table>
+      <div style="font-family:${DISPLAY};font-size:44px;font-weight:800;letter-spacing:-0.035em;line-height:1;color:#ffffff;margin:14px 0 8px;">${holder}</div>
+      <div style="font-size:13px;color:#ffffff;opacity:0.9;">AI Film Contests · issued ${issued}</div>
+    </td></tr>
+    <tr><td style="background:${T.cream};border-top:2px dashed ${T.coralDeep};border-radius:0 0 16px 16px;padding:16px 22px 18px;">
+      <div style="${caps('#8A7F6A', 9)}margin-bottom:8px;">Includes</div>
+      <table role="presentation" width="100%" cellpadding="0" cellspacing="0"><tr>${includes}</tr></table>
+      <div style="border-top:1px solid ${T.creamLine};margin:14px 0 12px;"></div>
+      <table role="presentation" width="100%" cellpadding="0" cellspacing="0"><tr>${steps}</tr></table>
+    </td></tr>
+  </table>`
 }
 
-function welcomePlan() {
+/** The two weeks as a festival program. */
+function welcomeProgram() {
   return WELCOME_PLAN.map(([when, title, text], i) => `
-    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:${i === WELCOME_PLAN.length - 1 ? 0 : 16}px;"><tr>
-      <td style="width:34px;vertical-align:top;">
-        <div style="width:26px;height:26px;border-radius:13px;background:${C.indigo};color:#ffffff;font-size:12px;font-weight:700;line-height:26px;text-align:center;">${i + 1}</div>
-      </td>
-      <td style="vertical-align:top;">
-        <div style="font-size:11px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:${C.indigo};margin:3px 0 2px;">${when}</div>
-        <div style="font-family:${DISPLAY};font-size:16px;font-weight:700;color:${C.ink};margin-bottom:3px;">${title}</div>
-        <div style="color:${C.body};font-size:14px;line-height:1.6;">${text}</div>
-      </td>
-    </tr></table>`).join('')
+    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="${i ? `border-top:1px dashed ${T.line};` : ''}">
+      <tr>
+        <td width="92" style="width:92px;vertical-align:top;padding:14px 10px 14px 0;${caps(T.coral, 11)}line-height:1.4;">${when}</td>
+        <td style="vertical-align:top;padding:14px 0;">
+          <div style="font-family:${DISPLAY};font-size:16px;font-weight:700;color:${T.cream};margin-bottom:4px;">${title}</div>
+          <div style="color:${T.mist};font-size:14px;line-height:1.6;">${text}</div>
+        </td>
+      </tr>
+    </table>`).join('')
 }
 
 export function buildWelcomeEmail(
   name: string | null | undefined,
   picks: ContestEmailItem[] = [],
-  /** How many contests are open right now, for the line under the hero. 0 leaves it out. */
+  /** How many contests are open right now, for the line under the pass. 0 leaves it out. */
   openCount = 0,
+  /** When the pass was issued; tests pass a fixed date. */
+  now = new Date(),
 ): {
   subject: string
   html: (unsub: string) => string
@@ -597,57 +674,53 @@ export function buildWelcomeEmail(
   contestIds: string[]
 } {
   const firstName = name?.split(' ')[0] ?? null
-  const hello = firstName ? `You're in, ${escapeHtml(firstName)}.` : "You're in."
   const subject = picks.length
     ? `You're in. ${picks.length === 1 ? 'One contest' : `${picks.length} contests`} to enter first`
     : "You're on the list: AI Film Contests"
   const packHeading = `Overs Pro for $${OVERS.monthlyUsd} a month`
-  const preheader = `Your free creator pack: Overs at ${OVERS_OFF_PERCENT}% off, the contest film guide and Creatives Club.`
+  const preheader = `Your all-access pass: Overs at ${OVERS_OFF_PERCENT}% off, the contest film guide and Creatives Club.`
+  const issued = now.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric', timeZone: 'UTC' })
   return {
     subject,
     // So the first bundle does not repeat the picks as new.
     contestIds: picks.map(c => c.id).filter((x): x is string => !!x).map(id => `new:${id}`),
     html: unsub => shell(`
-  <div style="background:${C.indigo};background-image:linear-gradient(135deg,${C.indigo} 0%,${C.indigoDeep} 100%);border-radius:16px;padding:30px 24px 24px;color:#ffffff;">
-    <div style="font-size:11px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:rgba(255,255,255,0.7);margin-bottom:10px;">Welcome to AI Film Contests</div>
-    <h1 style="font-family:${DISPLAY};font-size:32px;font-weight:700;letter-spacing:-0.03em;line-height:1.05;color:#ffffff;margin:0 0 10px 0;">${hello}</h1>
-    <p style="font-size:15px;line-height:1.6;color:rgba(255,255,255,0.88);margin:0;">
-      ${picks.length ? 'Below: the contests to start with, your free creator pack, and a two-week plan to get an entry in.' : 'Below: your free creator pack and a two-week plan to get an entry in.'}
-    </p>
-    ${welcomeTracker()}
-  </div>
-  ${openCount ? `<p style="text-align:center;color:${C.muted};font-size:12px;margin:12px 0 0 0;">${openCount} contests open right now · checked every day against the organizers' own pages</p>` : ''}
+  ${welcomePass(firstName ? escapeHtml(firstName) : 'Filmmaker', issued)}
+  <p style="color:${T.mist};font-size:15px;line-height:1.65;margin:20px 0 0 0;">
+    You're in. ${picks.length ? 'Below are your first tickets, the kit that comes with your pass, and a two-week program to get an entry in.' : 'Below is the kit that comes with your pass and a two-week program to get an entry in.'}
+    ${openCount ? `<span style="color:${T.dim};">${openCount} contests are open right now, checked every day.</span>` : ''}
+  </p>
 
-  ${picks.length ? sectionTitle(picks.length === 1 ? 'Start with this one' : `Start with these ${picks.length}`, 'Free to enter, any AI tool allowed, and at least two weeks to make something.') + picks.map(contestCard).join('') : ''}
+  ${picks.length ? sectionTitle(picks.length === 1 ? 'Your first ticket' : `Your first ${picks.length} tickets`, 'Free to enter, any AI tool allowed, and at least two weeks to make something.') + picks.map(c => ticket(c, 'Admit one · free entry')).join('') : ''}
 
-  ${sectionTitle('Your free creator pack', 'Yours because you signed up. Nothing else to do.')}
+  ${sectionTitle('Comes with your pass')}
   ${oversFeature('welcome', packHeading)}
   ${packExtras()}
 
-  ${sectionTitle('Your first entry in two weeks')}
-  <div style="${card}padding:22px 20px;">
-    ${welcomePlan()}
-    <div style="border-top:1px solid ${C.line};margin-top:20px;padding-top:16px;">
-      <a href="${SITE_URL}${GUIDE.path}" style="color:${C.indigoDeep};font-size:14px;font-weight:600;text-decoration:none;">Every step in detail, in the guide →</a>
+  ${sectionTitle('The program', 'Your first entry in two weeks.')}
+  <div style="background:${T.night2};border-radius:12px;padding:4px 20px 18px;">
+    ${welcomeProgram()}
+    <div style="border-top:1px dashed ${T.line};padding-top:14px;">
+      <a href="${SITE_URL}${GUIDE.path}" style="${caps(T.gold, 11)}text-decoration:none;">Every step in detail, in the guide →</a>
     </div>
   </div>
 
   ${sectionTitle('A note from Abhi')}
-  <div style="${card}padding:22px 22px 20px;">
-    <p style="color:${C.body};font-size:15px;line-height:1.7;margin:0 0 12px 0;">Hey${firstName ? ` ${escapeHtml(firstName)}` : ''},</p>
-    <p style="color:${C.body};font-size:15px;line-height:1.7;margin:0 0 12px 0;">
+  <div style="background:${T.cream};border-radius:12px;padding:22px 22px 18px;color:${T.ink};">
+    <p style="color:${T.ink};font-size:15px;line-height:1.7;margin:0 0 12px 0;">Hey${firstName ? ` ${escapeHtml(firstName)}` : ''},</p>
+    <p style="color:${T.ink};font-size:15px;line-height:1.7;margin:0 0 12px 0;">
       I'm Abhi. I run AI Film Contests, and the list gets checked every day so you don't spend a weekend on a contest that has already closed.
     </p>
-    <p style="color:${C.body};font-size:15px;line-height:1.7;margin:0 0 12px 0;">
+    <p style="color:${T.ink};font-size:15px;line-height:1.7;margin:0 0 10px 0;">
       I also built Overs and run Creatives Club, which is why they're in your pack. When you make something for one of these contests,
-      post it in <a href="${COMMUNITY.url}" style="color:${C.indigoDeep};font-weight:600;text-decoration:none;">the club</a> or reply here with the link. I want to see it.
+      post it in <a href="${COMMUNITY.url}" style="color:${T.coralDeep};font-weight:700;text-decoration:none;">the club</a> or reply here with the link. I want to see it.
     </p>
-    <p style="color:${C.ink};font-size:15px;line-height:1.7;margin:0;">Abhi</p>
+    <p style="font-family:${SERIF};font-style:italic;font-size:24px;color:${T.ink};margin:0;">Abhi</p>
   </div>
 
-  <div style="${card}padding:18px 20px;margin-top:12px;">
-    <p style="color:${C.ink};font-size:14px;font-weight:600;margin:0 0 4px 0;line-height:1.5;">One favour: reply to this email, even just "got it".</p>
-    <p style="color:${C.muted};font-size:13px;line-height:1.6;margin:0;">
+  <div style="border:1px solid ${T.line};border-radius:12px;padding:16px 20px;margin-top:12px;">
+    <p style="color:${T.cream};font-size:14px;font-weight:700;margin:0 0 4px 0;line-height:1.5;">One favour: reply to this email, even just "got it".</p>
+    <p style="color:${T.mist};font-size:13px;line-height:1.6;margin:0;">
       It tells Gmail and Outlook you want these, so contest alerts land in Primary instead of Promotions.
       You'll hear from us when a contest opens, before a deadline closes, and once a week with what's closing. Never daily.
     </p>
@@ -655,15 +728,15 @@ export function buildWelcomeEmail(
 
   <div style="text-align:center;margin-top:28px;">
     ${button(SITE_URL, 'See every open contest →')}
-  </div>`, unsub, '', preheader),
+  </div>`, unsub, 'Your pass', preheader),
     text: unsub =>
-      `${firstName ? `You're in, ${firstName}.` : "You're in."}\n\n` +
-      (openCount ? `${openCount} contests are open right now, checked every day against the organizers' own pages.\n\n` : '') +
-      (picks.length ? `START WITH THESE (free, any AI tool, at least two weeks left)\n\n${textList(picks)}\n\n` : '') +
-      `YOUR FREE CREATOR PACK\n\n` +
+      `${firstName ? `You're in, ${firstName}.` : "You're in."} Here's your all-access pass.\n\n` +
+      (openCount ? `${openCount} contests are open right now, checked every day.\n\n` : '') +
+      (picks.length ? `YOUR FIRST TICKETS (free, any AI tool, at least two weeks left)\n\n${textList(picks)}\n\n` : '') +
+      `COMES WITH YOUR PASS\n\n` +
       oversFeatureText('welcome', packHeading) +
       packExtrasText() +
-      `YOUR FIRST ENTRY IN TWO WEEKS\n\n` +
+      `THE PROGRAM: YOUR FIRST ENTRY IN TWO WEEKS\n\n` +
       WELCOME_PLAN.map(([when, title, text]) => `${when}: ${title}\n${text}`).join('\n\n') +
       `\n\nEvery step in detail: ${SITE_URL}${GUIDE.path}\n\n` +
       `A NOTE FROM ABHI\n\nI'm Abhi. I run AI Film Contests, and the list gets checked every day so you don't spend a weekend on a contest that has already closed.\n\n` +
@@ -713,18 +786,19 @@ export async function sendDailyPulse(
       : soon.length === 1 ? `🚨 ${soon[0].daysLeft}d left to enter: ${soon[0].name}` : `🚨 ${soon.length} contests close in 3 days`
 
   const body = `
-  <h1 style="font-family:${DISPLAY};font-size:26px;font-weight:700;letter-spacing:-0.025em;line-height:1.15;color:${C.ink};margin:0 0 8px 0;">${
-    news.length ? (news.length === 1 ? 'A new contest just opened' : `${news.length} new contests just opened`) : 'Last call'
-  }</h1>
-  <p style="color:${C.muted};font-size:14px;margin:0 0 8px 0;">Verified against live sources today.</p>
-  ${news.length ? sectionTitle('New') + news.map(contestCard).join('') : ''}
-  ${soon.length ? sectionTitle('Closing in 3 days', 'Submit now or miss the deadline entirely.') + soon.map(contestCard).join('') : ''}
+  ${marquee(
+    news.length ? stamp('Just announced', T.gold) : stamp('Final call', T.coral),
+    news.length ? (news.length === 1 ? 'A new contest just opened' : `${news.length} new contests just opened`) : 'Last call',
+    'Checked against live sources today.',
+  )}
+  ${news.length ? sectionTitle('Now showing') + news.map(c => ticket(c)).join('') : ''}
+  ${soon.length ? sectionTitle('Closing in 3 days', 'Submit now or miss it.') + soon.map(c => ticket(c)).join('') : ''}
   <div style="text-align:center;margin-top:24px;">
-    <a href="${SITE_URL}" style="display:inline-block;background:${C.indigo};color:#ffffff;text-decoration:none;padding:12px 26px;border-radius:8px;font-size:14px;font-weight:600;">View all open contests →</a>
+    ${button(SITE_URL, 'See every open contest →')}
   </div>
   ${oversBlock('pulse')}`
 
-  const badge = `<span style="background:${news.length ? C.indigo : C.red};color:#ffffff;font-size:11px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;padding:3px 10px;border-radius:4px;">${news.length ? `${news.length} New` : 'Closing Soon'}</span>`
+  const badge = news.length ? `${news.length} new` : 'Final call'
 
   return sendToRecipients({
     kind: 'pulse',
@@ -767,18 +841,19 @@ export function buildBundleEmail(b: Bundle): {
     ? (news.length === 1 ? 'A new contest just opened' : `${news.length} new contests just opened`)
     : soon.length ? 'Last call' : 'Closing this week'
   const body = `
-  <h1 style="font-family:${DISPLAY};font-size:26px;font-weight:700;letter-spacing:-0.025em;line-height:1.15;color:${C.ink};margin:0 0 8px 0;">${h1}</h1>
-  <p style="color:${C.muted};font-size:14px;margin:0 0 8px 0;">Everything since your last email, verified against live sources.</p>
-  ${news.length ? sectionTitle('New') + news.map(contestCard).join('') : ''}
-  ${soon.length ? sectionTitle('Closing in 3 days', 'Submit now or miss the deadline entirely.') + soon.map(contestCard).join('') : ''}
-  ${week.length ? sectionTitle('Closing this week') + week.map(contestCard).join('') : ''}
+  ${marquee(
+    news.length ? stamp('Just announced', T.gold) : soon.length ? stamp('Final call', T.coral) : stamp('This week', T.mist),
+    h1,
+    'Everything since your last email, checked against live sources.',
+  )}
+  ${news.length ? sectionTitle('Now showing') + news.map(c => ticket(c)).join('') : ''}
+  ${soon.length ? sectionTitle('Closing in 3 days', 'Submit now or miss it.') + soon.map(c => ticket(c)).join('') : ''}
+  ${week.length ? sectionTitle('Closing this week') + week.map(c => ticket(c)).join('') : ''}
   <div style="text-align:center;margin-top:24px;">
-    <a href="${SITE_URL}" style="display:inline-block;background:${C.indigo};color:#ffffff;text-decoration:none;padding:12px 26px;border-radius:8px;font-size:14px;font-weight:600;">View all open contests →</a>
+    ${button(SITE_URL, 'See every open contest →')}
   </div>
   ${oversBlock('new_contest')}`
-  const badge = news.length
-    ? `<span style="background:${C.indigo};color:#ffffff;font-size:11px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;padding:3px 10px;border-radius:4px;">${news.length} New</span>`
-    : soon.length ? `<span style="background:${C.red};color:#ffffff;font-size:11px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;padding:3px 10px;border-radius:4px;">Closing Soon</span>` : ''
+  const badge = news.length ? `${news.length} new` : soon.length ? 'Final call' : ''
 
   return {
     subject,
@@ -818,13 +893,12 @@ export async function sendWeeklyDigest(
     : `${sorted.length} AI film contest${sorted.length !== 1 ? 's' : ''} open right now`
 
   const body = `
-  <h1 style="font-family:${DISPLAY};font-size:26px;font-weight:700;letter-spacing:-0.025em;line-height:1.15;color:${C.ink};margin:0 0 8px 0;">Your week in AI film contests</h1>
-  <p style="color:${C.muted};font-size:14px;margin:0 0 8px 0;">${sorted.length} open · all verified against live sources.</p>
-  ${closing.length ? sectionTitle('Closing this week', "Don't miss your window to submit.") + closing.map(contestCard).join('') : ''}
-  ${fresh.length ? sectionTitle('New this week') + fresh.map(contestCard).join('') : ''}
-  ${rest.length ? sectionTitle('Also open', 'Sorted by deadline.') + rest.map(contestCard).join('') : ''}
+  ${marquee(stamp("This week's program", T.gold), 'Your week in AI film contests', `${sorted.length} open, all checked against live sources.`)}
+  ${closing.length ? sectionTitle('Closing this week', 'Last chance to get in.') + closing.map(c => ticket(c)).join('') : ''}
+  ${fresh.length ? sectionTitle('New this week') + fresh.map(c => ticket(c)).join('') : ''}
+  ${rest.length ? sectionTitle('Also open', 'Sorted by deadline.') + rest.map(c => ticket(c)).join('') : ''}
   <div style="text-align:center;margin-top:24px;">
-    <a href="${SITE_URL}" style="display:inline-block;background:${C.indigo};color:#ffffff;text-decoration:none;padding:12px 26px;border-radius:8px;font-size:14px;font-weight:600;">View all ${sorted.length} contests →</a>
+    ${button(SITE_URL, `See all ${sorted.length} contests →`)}
   </div>
   ${oversBlock('weekly_digest')}`
 
@@ -833,7 +907,7 @@ export async function sendWeeklyDigest(
     subject,
     recipients: subscribers,
     contestIds: [...closing, ...fresh].map(c => c.id).filter((x): x is string => !!x),
-    html: (_r, unsub) => shell(body, unsub, `<span style="color:${C.faint};font-size:12px;">Weekly digest</span>`),
+    html: (_r, unsub) => shell(body, unsub, 'Weekly program'),
     text: (_r, unsub) =>
       (closing.length ? `CLOSING THIS WEEK\n\n${textList(closing)}\n\n` : '') +
       (fresh.length ? `NEW THIS WEEK\n\n${textList(fresh)}\n\n` : '') +
@@ -855,6 +929,36 @@ export interface SpotlightContest extends ContestEmailItem {
   aiToolsAllowed?: string[] | null
 }
 
+/** The spotlight's one contest as a headliner ticket: a coral band across the
+    top, the full description and facts, the deadline on the stub. */
+function spotlightTicket(c: SpotlightContest, facts: string[], details: string[]) {
+  const d = stubDate(c.deadline)
+  return `
+  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="border-collapse:separate;">
+    <tr><td colspan="2" style="background:${T.coral};border-radius:14px 14px 0 0;padding:14px 20px;">
+      <table role="presentation" width="100%" cellpadding="0" cellspacing="0"><tr>
+        <td style="${caps('#ffffff', 11)}">Headliner · ${escapeHtml(c.organizer)}</td>
+        <td style="text-align:right;">${stamp('Now open', T.cream)}</td>
+      </tr></table>
+    </td></tr>
+    <tr>
+      <td style="background:${T.cream};border-radius:0 0 0 14px;padding:20px 16px 20px 20px;vertical-align:top;">
+        <div style="font-family:${DISPLAY};font-size:28px;font-weight:800;letter-spacing:-0.03em;line-height:1.05;color:${T.ink};margin-bottom:10px;">${escapeHtml(c.name)}</div>
+        <div style="font-family:${DISPLAY};font-size:20px;font-weight:800;line-height:1.25;color:${T.coralDeep};margin-bottom:14px;">${escapeHtml(c.prize)}</div>
+        <p style="color:${T.inkSoft};font-size:14px;line-height:1.65;margin:0 0 14px 0;">${escapeHtml(c.description)}</p>
+        <div style="border-top:1px solid ${T.creamLine};padding-top:12px;color:${T.ink};font-size:14px;font-weight:700;line-height:1.9;">${facts.map(escapeHtml).join('<br>')}</div>
+        ${details.length ? `<div style="color:${T.inkSoft};font-size:13px;line-height:1.7;margin-top:8px;">${details.map(escapeHtml).join('<br>')}</div>` : ''}
+      </td>
+      <td width="88" style="width:88px;background:${T.cream};border-left:2px dashed ${T.creamLine};border-radius:0 0 14px 0;text-align:center;vertical-align:middle;padding:14px 4px;color:${T.ink};">
+        <div style="${caps(T.ink, 9)}margin-bottom:6px;">Closes</div>
+        <div style="font-family:${DISPLAY};font-size:14px;font-weight:800;letter-spacing:0.06em;color:${T.ink};">${d.month}</div>
+        <div style="font-family:${DISPLAY};font-size:36px;font-weight:800;line-height:1;color:${T.ink};">${d.day}</div>
+        <div style="font-size:10px;color:${T.ink};margin-top:4px;">${d.year}</div>
+      </td>
+    </tr>
+  </table>`
+}
+
 export function buildSpotlightEmail(c: SpotlightContest): {
   subject: string
   html: (unsub: string) => string
@@ -872,28 +976,21 @@ export function buildSpotlightEmail(c: SpotlightContest): {
   const subject = `${c.name} is open: ${c.prize}`
 
   const body = `
-  <div style="color:${C.faint};font-size:12px;letter-spacing:0.04em;text-transform:uppercase;margin-bottom:6px;">${escapeHtml(c.organizer)}</div>
-  <h1 style="font-family:${DISPLAY};font-size:28px;font-weight:700;letter-spacing:-0.03em;line-height:1.1;color:${C.ink};margin:0 0 8px 0;">${escapeHtml(c.name)} is open</h1>
-  <div style="color:${C.indigo};font-size:20px;font-weight:700;margin-bottom:16px;">${escapeHtml(c.prize)}</div>
-  <p style="color:${C.body};font-size:15px;line-height:1.65;margin:0 0 18px 0;">${escapeHtml(c.description)}</p>
-
-  <div style="${card}padding:18px 22px;margin-bottom:12px;">
-    <div style="color:${C.ink};font-size:14px;font-weight:600;line-height:1.9;">${facts.map(escapeHtml).join('<br>')}</div>
-    ${details.length ? `<div style="color:${C.body};font-size:13px;line-height:1.7;margin-top:10px;">${details.map(escapeHtml).join('<br>')}</div>` : ''}
-  </div>
-  <div style="margin:18px 0 28px 0;">
+  ${spotlightTicket(c, facts, details)}
+  <div style="text-align:center;margin:20px 0 8px 0;">
     ${button(c.url, 'Read the rules and enter →')}
   </div>
 
+  ${sectionTitle('Make your entry')}
   ${oversFeature('custom', 'Make your entry for $3 a month')}
 
-  <p style="color:${C.muted};font-size:13px;line-height:1.6;margin:0;">
-    More open contests, with the tools each one allows: <a href="${SITE_URL}" style="color:${C.indigoDeep};text-decoration:none;">aifilmcontests.com</a>
+  <p style="color:${T.mist};font-size:13px;line-height:1.6;margin:16px 0 0 0;">
+    More open contests, with the tools each one allows: <a href="${SITE_URL}" style="color:${T.gold};text-decoration:none;">aifilmcontests.com</a>
   </p>`
 
   return {
     subject,
-    html: unsub => shell(body, unsub, `<span style="color:${C.faint};font-size:12px;">Spotlight</span>`),
+    html: unsub => shell(body, unsub, 'Headliner'),
     text: unsub =>
       `${c.name} is open: ${c.prize}\n${c.organizer}\n\n${c.description}\n\n${facts.join('\n')}\n` +
       (details.length ? `\n${details.join('\n')}\n` : '') +
@@ -922,11 +1019,11 @@ export async function sendDeadlineReminders(subscribers: Array<string | Recipien
     ? `⏰ ${sorted[0].daysLeft} days left: ${sorted[0].name}`
     : `⏰ ${sorted.length} contests closing this week`
   const body = `
-  <h1 style="font-family:${DISPLAY};font-size:26px;font-weight:700;letter-spacing:-0.025em;line-height:1.15;color:${C.ink};margin:0 0 8px 0;">${sorted.length === 1 ? 'This contest closes soon' : `${sorted.length} contests closing this week`}</h1>
-  <p style="color:${C.muted};font-size:14px;margin:0 0 24px 0;">Don't miss your window to submit.</p>
-  ${sorted.map(contestCard).join('')}
+  ${marquee(stamp('Final week', T.coral), sorted.length === 1 ? 'This contest closes soon' : `${sorted.length} contests closing this week`, 'Last chance to get in.')}
+  <div style="height:16px;"></div>
+  ${sorted.map(c => ticket(c)).join('')}
   <div style="text-align:center;margin-top:24px;">
-    <a href="${SITE_URL}" style="color:${C.indigoDeep};font-size:13px;font-weight:600;text-decoration:none;">See all deadlines →</a>
+    ${button(SITE_URL, 'See all deadlines →')}
   </div>`
   return sendToRecipients({
     kind: 'reminder_7day',
