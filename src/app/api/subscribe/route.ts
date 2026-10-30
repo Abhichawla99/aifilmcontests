@@ -29,10 +29,9 @@ export async function POST(request: NextRequest) {
     // Wait for it: Vercel freezes the function once the response goes out, which
     // was cutting welcome emails off mid-send. A failed email still doesn't fail signup.
     // The contests to start with. A failed read sends the welcome without them.
-    const picks = await getContestsByStatus('open')
-      .then(open => starterPicks(open))
+    const open = await getContestsByStatus('open')
       .catch(err => { console.error('[Email] starter picks failed:', err); return [] })
-    const welcome = await sendWelcomeEmail(email, name || null, result.token, picks)
+    const welcome = await sendWelcomeEmail(email, name || null, result.token, starterPicks(open), open.length)
       .catch(err => ({ success: false, error: err }))
     if (!welcome.success) console.error('[Email] Welcome send failed:', welcome.error)
 
