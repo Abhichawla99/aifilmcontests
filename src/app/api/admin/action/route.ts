@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { supabaseAdmin } from '@/lib/supabase'
-import { sendWeeklyDigest, sendDeadlineReminders } from '@/lib/email'
+import { sendWeeklyDigest, sendDeadlineReminders, buildSpotlightEmail, sendToRecipients } from '@/lib/email'
 import { runResearch } from '@/lib/research'
 import { Resend } from 'resend'
 
@@ -131,6 +131,48 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: `Resend failed: ${JSON.stringify(result.error)}` }, { status: 500 })
     }
     return NextResponse.json({ ok: true, sent: subs.length, contests: urgent.length })
+  }
+
+  // ── Spotlight one contest to the whole list (with the Overs offer) ─────────
+  // payload: { contestId, test?: email }. With test, only that address gets it.
+  if (action === 'send-spotlight') {
+    if (!process.env.RESEND_API_KEY) {
+      return NextResponse.json({ error: 'RESEND_API_KEY is not set in environment variables' }, { status: 500 })
+    }
+    const { contestId, test } = payload ?? {}
+    if (!contestId) return NextResponse.json({ error: 'contestId required' }, { status: 400 })
+    const { data: c } = await supabaseAdmin
+      .from('contests')
+      .select('id,name,organizer,prize,prize_details,deadline,url,description,entry_fee,ai_tools_allowed,status')
+      .eq('id', contestId)
+      .maybeSingle()
+    if (!c) return NextResponse.json({ error: `No contest ${contestId}` }, { status: 404 })
+    if (c.status !== 'open') return NextResponse.json({ error: `${c.name} is ${c.status}, not open` }, { status: 400 })
+
+    const email = buildSpotlightEmail({
+      id: c.id, name: c.name, organizer: c.organizer, prize: c.prize, deadline: c.deadline, url: c.url,
+      description: c.description, prizeDetails: c.prize_details, entryFee: c.entry_fee, aiToolsAllowed: c.ai_tools_allowed,
+    })
+    let recipients: { email: string; token?: string | null; name?: string | null }[]
+    if (test) {
+      recipients = [{ email: String(test) }]
+    } else {
+      const { data: subs } = await supabaseAdmin.from('subscribers').select('email,name,unsubscribe_token').eq('confirmed', true)
+      if (!subs?.length) return NextResponse.json({ error: 'No confirmed subscribers' }, { status: 400 })
+      recipients = subs.map(s => ({ email: s.email, name: s.name, token: s.unsubscribe_token }))
+    }
+    const result = await sendToRecipients({
+      kind: 'custom',
+      subject: test ? `[Test] ${email.subject}` : email.subject,
+      recipients,
+      contestIds: email.contestIds,
+      html: (_r, unsub) => email.html(unsub),
+      text: (_r, unsub) => email.text(unsub),
+    })
+    if (!result.success) {
+      return NextResponse.json({ error: `Send failed: ${JSON.stringify(result.error)}`, sent: result.sent }, { status: 500 })
+    }
+    return NextResponse.json({ ok: true, sent: result.sent, failed: result.failed, test: !!test })
   }
 
   // ── Send custom email ──────────────────────────────────────────────────────

@@ -1,7 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { track } from '@vercel/analytics/server'
 import { addSubscriber } from '@/lib/subscribers'
-import { sendWelcomeEmail } from '@/lib/email'
+import { sendWelcomeEmail, starterPicks } from '@/lib/email'
+import { getContestsByStatus } from '@/lib/contests-db'
 
 export async function POST(request: NextRequest) {
   try {
@@ -27,7 +28,11 @@ export async function POST(request: NextRequest) {
 
     // Wait for it: Vercel freezes the function once the response goes out, which
     // was cutting welcome emails off mid-send. A failed email still doesn't fail signup.
-    const welcome = await sendWelcomeEmail(email, name || null, result.token)
+    // The contests to start with. A failed read sends the welcome without them.
+    const picks = await getContestsByStatus('open')
+      .then(open => starterPicks(open))
+      .catch(err => { console.error('[Email] starter picks failed:', err); return [] })
+    const welcome = await sendWelcomeEmail(email, name || null, result.token, picks)
       .catch(err => ({ success: false, error: err }))
     if (!welcome.success) console.error('[Email] Welcome send failed:', welcome.error)
 

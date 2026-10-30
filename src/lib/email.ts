@@ -111,7 +111,8 @@ function escapeHtml(s: string) {
 }
 
 function fmtDate(d: string) {
-  return new Date(d).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
+  // Deadlines are dates (2026-11-20), which parse as UTC midnight; read them in UTC or they show a day early.
+  return new Date(d).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric', timeZone: 'UTC' })
 }
 
 function contestCard(c: ContestEmailItem) {
@@ -168,6 +169,113 @@ function textList(items: ContestEmailItem[]) {
     `${c.isNew ? '[NEW] ' : c.daysLeft != null ? `[${c.daysLeft}d left] ` : ''}${c.name} — ${c.organizer}\n` +
     `  Prize: ${c.prize} · Due ${fmtDate(c.deadline)}\n  ${c.url}`
   ).join('\n\n')
+}
+
+// ─── Overs: the freebie for people making an entry ────────────────────────────
+//
+// Overs (overs.studio) is Abhi's other product: stills from a few words and
+// clips from any still, on the person's own OpenRouter key. People on this
+// list get Pro for $3 a month for their first three months, then $39 (the
+// founding offer; its page for filmmakers is /filmmakers). Every contest email
+// carries one short block under the contests; the welcome and spotlight
+// emails carry a larger one. OVERS_PROMO=0 takes it out of all of them.
+
+const OVERS_URL = 'https://www.overs.studio/filmmakers'
+
+export function oversEnabled(): boolean {
+  return process.env.OVERS_PROMO !== '0'
+}
+
+function oversLink(kind: EmailKind) {
+  return `${OVERS_URL}?utm_source=aifilmcontests&utm_medium=email&utm_campaign=${kind}`
+}
+
+const OVERS_LINE = 'Overs turns a few words into stills and any still into a clip, on your own OpenRouter key. For people on this list it\'s $3 a month for the first 3 months.'
+
+/** The short block under the contests in bundles, pulses and digests. */
+function oversBlock(kind: EmailKind) {
+  if (!oversEnabled()) return ''
+  return `
+  <div style="border:1px solid rgba(255,255,255,0.07);border-radius:10px;padding:16px 20px;margin-top:28px;">
+    <div style="color:#d4d4d8;font-size:14px;line-height:1.6;"><strong style="color:#fff;">Making your entry?</strong> ${OVERS_LINE}</div>
+    <div style="margin-top:8px;"><a href="${oversLink(kind)}" style="color:#818cf8;font-size:13px;font-weight:600;text-decoration:none;">Try Overs for $3 →</a>
+    <span style="color:#52525b;font-size:12px;margin-left:8px;">Made by Abhi, who runs AI Film Contests.</span></div>
+  </div>`
+}
+
+function oversText(kind: EmailKind) {
+  if (!oversEnabled()) return ''
+  return `MAKING YOUR ENTRY?\n${OVERS_LINE}\nTry Overs for $3: ${oversLink(kind)}\n(Made by Abhi, who runs AI Film Contests.)\n\n`
+}
+
+/** The larger version for the welcome and spotlight emails. */
+function oversFeature(kind: EmailKind, heading: string) {
+  if (!oversEnabled()) return ''
+  return `
+  <div style="border:1px solid rgba(79,70,229,0.3);border-radius:10px;padding:22px 22px 20px;margin:28px 0;background:rgba(79,70,229,0.07);">
+    <div style="font-size:17px;font-weight:700;color:#fff;margin-bottom:8px;">${heading}</div>
+    <p style="color:#d4d4d8;font-size:15px;line-height:1.6;margin:0 0 10px 0;">
+      I built Overs so you can make the stills and clips for an entry without another big subscription.
+      Type a shot and it makes the stills. Pick one and it becomes a clip that opens exactly on that frame.
+    </p>
+    <p style="color:#a1a1aa;font-size:14px;line-height:1.6;margin:0 0 16px 0;">
+      For people on this list, Overs Pro is <strong style="color:#e4e4e7;">$3 a month for your first 3 months</strong>, then $39. Cancel any time.
+      It runs on your own OpenRouter key, so each clip costs what the video model charges, with no markup.
+    </p>
+    <a href="${oversLink(kind)}" style="display:inline-block;background:#4f46e5;color:#fff;text-decoration:none;padding:11px 22px;border-radius:8px;font-size:14px;font-weight:600;">Get Overs for $3 →</a>
+  </div>`
+}
+
+function oversFeatureText(kind: EmailKind, heading: string) {
+  if (!oversEnabled()) return ''
+  return `${heading.toUpperCase()}\nI built Overs so you can make the stills and clips for an entry without another big subscription. Type a shot and it makes the stills. Pick one and it becomes a clip that opens exactly on that frame.\n` +
+    `For people on this list, Overs Pro is $3 a month for your first 3 months, then $39. Cancel any time. It runs on your own OpenRouter key, so each clip costs what the video model charges, with no markup.\n` +
+    `Get Overs for $3: ${oversLink(kind)}\n\n`
+}
+
+// ─── Starter picks: the three contests a new subscriber sees first ────────────
+
+export interface PickableContest extends ContestEmailItem {
+  status?: string
+  entryFee?: string | null
+  aiToolsAllowed?: string[] | null
+}
+
+/**
+ * "Free" or "No entry fee", and no price anywhere in it. "See FilmFreeway" is
+ * not free, and neither is "No fee published", which only means we don't know.
+ */
+export function isFreeEntry(fee: string | null | undefined): boolean {
+  const f = fee ?? ''
+  if (/[$€£₹]|\d/.test(f) || /publish|stated|listed|see /i.test(f)) return false
+  return /\bfree\b|\bno (entry )?fee\b/i.test(f)
+}
+
+const PICK_MIN_DAYS = 14
+
+/**
+ * Open, free, any AI tool, and at least two weeks to make something: the
+ * contests a new subscriber can actually enter. Soonest deadline first, three
+ * at most. A contest that requires its own tool (AKOOL, Runway's fund) is left
+ * out, because a newcomer would have to sign up for that tool to enter, and so
+ * is one whose organizer we could not name.
+ */
+export function starterPicks(contests: PickableContest[], now = Date.now(), count = 3): ContestEmailItem[] {
+  return contests
+    .filter(c => !c.status || c.status === 'open')
+    .filter(c => c.organizer && !/^unknown$/i.test(c.organizer.trim()))
+    // The same contest listed twice (same organizer, same deadline) counts once.
+    .filter((c, i, all) => all.findIndex(o => o.organizer === c.organizer && o.deadline === c.deadline) === i)
+    .filter(c => isFreeEntry(c.entryFee))
+    .filter(c => (c.aiToolsAllowed ?? []).some(t => /\b(any|all)\b/i.test(t)) && !(c.aiToolsAllowed ?? []).some(t => /must/i.test(t)))
+    .map(c => ({ c, days: Math.ceil((new Date(c.deadline).getTime() - now) / 86_400_000) }))
+    .filter(({ days }) => days >= PICK_MIN_DAYS)
+    .sort((a, b) => a.days - b.days)
+    .slice(0, count)
+    .map(({ c }) => ({
+      id: c.id, name: c.name, organizer: c.organizer, prize: c.prize, deadline: c.deadline, url: c.url,
+      description: c.description.length > 180 ? c.description.slice(0, 177).replace(/\s+\S*$/, '') + '…' : c.description,
+    }))
 }
 
 // ─── Core sender: one email PER RECIPIENT via Resend batch ────────────────────
@@ -369,57 +477,83 @@ export async function sendPlainEmail(opts: {
 
 // ─── Welcome email ────────────────────────────────────────────────────────────
 
-export async function sendWelcomeEmail(
-  email: string,
-  name?: string | null,
-  token?: string | null,
-) {
+/** The welcome, built without sending: the signup route sends it, the preview renders it. */
+export function buildWelcomeEmail(name: string | null | undefined, picks: ContestEmailItem[] = []): {
+  subject: string
+  html: (unsub: string) => string
+  text: (unsub: string) => string
+  contestIds: string[]
+} {
   const firstName = name?.split(' ')[0] ?? null
   const greeting = firstName ? `Hey ${escapeHtml(firstName)},` : 'Hey,'
-
-  const result = await sendToRecipients({
-    kind: 'welcome',
-    subject: "You're on the list — AI Film Contests",
-    recipients: [{ email, token, name }],
-    // The signup form waits on this; a welcome record isn't used for dedup.
-    recordAttempts: 1,
-    html: (_r, unsub) => shell(`
+  const subject = picks.length
+    ? `You're in. ${picks.length === 1 ? 'One contest' : `${picks.length} contests`} to enter first`
+    : "You're on the list: AI Film Contests"
+  return {
+    subject,
+    // So the first bundle does not repeat the picks as new.
+    contestIds: picks.map(c => c.id).filter((x): x is string => !!x).map(id => `new:${id}`),
+    html: unsub => shell(`
   <h1 style="font-size:26px;font-weight:700;margin:0 0 6px 0;line-height:1.25;">${greeting}</h1>
-  <h2 style="font-size:26px;font-weight:400;margin:0 0 20px 0;line-height:1.25;color:#a1a1aa;">You're officially on the list.</h2>
+  <h2 style="font-size:26px;font-weight:400;margin:0 0 20px 0;line-height:1.25;color:#a1a1aa;">You're on the list.</h2>
 
-  <p style="color:#a1a1aa;font-size:15px;line-height:1.65;margin-bottom:28px;">
-    We track every AI film competition and verify them daily against live sources.
-    You'll hear from us only when something matters.
+  <p style="color:#a1a1aa;font-size:15px;line-height:1.65;margin-bottom:8px;">
+    We track every AI film competition and check them daily against live sources.
+    ${picks.length ? 'Here are the ones to start with: free to enter, any AI tool allowed, and at least two weeks to make something.' : ''}
   </p>
 
+  ${picks.length ? sectionTitle(picks.length === 1 ? 'Start with this one' : `Start with these ${picks.length}`) + picks.map(contestCard).join('') : ''}
+
+  ${oversFeature('welcome', 'Make your entry for $3 a month')}
+
   <div style="border:1px solid rgba(255,255,255,0.07);border-radius:10px;padding:20px 22px;margin-bottom:24px;">
-    <div style="font-size:12px;font-weight:600;color:#52525b;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:14px;">What you'll receive</div>
+    <div style="font-size:12px;font-weight:600;color:#52525b;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:14px;">What you'll get from us</div>
     <div style="color:#d4d4d8;font-size:14px;line-height:2.2;">
-      ✦&nbsp;&nbsp;New contests, within a day or two of opening<br>
-      ✦&nbsp;&nbsp;A last call before a deadline closes<br>
-      ✦&nbsp;&nbsp;What's closing this week, once a week<br>
-      ✦&nbsp;&nbsp;Everything bundled: a few emails a month, never daily spam
+      New contests, a day or two after they open<br>
+      A last call before a deadline closes<br>
+      What's closing this week, once a week<br>
+      A few emails a month, never daily spam
     </div>
   </div>
 
-  <div style="border:1px solid rgba(79,70,229,0.3);border-radius:10px;padding:20px 22px;margin-bottom:28px;background:rgba(79,70,229,0.07);">
-    <div style="font-size:13px;font-weight:700;color:#818cf8;letter-spacing:0.02em;margin-bottom:8px;">⚡ One quick step — takes 5 seconds</div>
+  <div style="border:1px solid rgba(255,255,255,0.07);border-radius:10px;padding:20px 22px;margin-bottom:28px;">
     <p style="color:#d4d4d8;font-size:15px;font-weight:600;margin:0 0 8px 0;line-height:1.4;">
-      Reply to this email to make sure every alert lands in your inbox.
+      One favour: reply to this email, even just "got it".
     </p>
     <p style="color:#a1a1aa;font-size:14px;line-height:1.65;margin:0;">
-      Even a simple "got it" is enough. Replying tells Gmail and Outlook that you want our emails,
-      so future alerts skip Promotions and go straight to your <strong style="color:#e4e4e7;">Primary</strong> inbox.
+      It tells Gmail and Outlook you want these, so the alerts land in your <strong style="color:#e4e4e7;">Primary</strong> inbox instead of Promotions.
     </p>
   </div>
 
   <div style="text-align:center;">
-    <a href="${SITE_URL}" style="display:inline-block;background:#4f46e5;color:#fff;text-decoration:none;padding:13px 28px;border-radius:8px;font-size:14px;font-weight:600;letter-spacing:0.02em;">Browse Open Contests →</a>
+    <a href="${SITE_URL}" style="display:inline-block;background:#4f46e5;color:#fff;text-decoration:none;padding:13px 28px;border-radius:8px;font-size:14px;font-weight:600;letter-spacing:0.02em;">See every open contest →</a>
   </div>`, unsub),
-    text: (_r, unsub) =>
-      `${firstName ? `Hey ${firstName},` : 'Hey,'}\n\nYou're on the list. We track every AI film competition and verify them daily.\n\n` +
-      `What you'll receive:\n- New contests, within a day or two of opening\n- A last call before a deadline closes\n- What's closing this week, once a week\n- Everything bundled: a few emails a month, never daily spam\n\n` +
-      `Quick favour: reply "got it" to this email so future alerts land in your Primary inbox.\n\nBrowse open contests: ${SITE_URL}\n\nUnsubscribe: ${unsub}`,
+    text: unsub =>
+      `${firstName ? `Hey ${firstName},` : 'Hey,'}\n\nYou're on the list. We track every AI film competition and check them daily.\n\n` +
+      (picks.length ? `START WITH THESE (free, any AI tool, at least two weeks left)\n\n${textList(picks)}\n\n` : '') +
+      oversFeatureText('welcome', 'Make your entry for $3 a month') +
+      `What you'll get from us:\n- New contests, a day or two after they open\n- A last call before a deadline closes\n- What's closing this week, once a week\n- A few emails a month, never daily spam\n\n` +
+      `One favour: reply "got it" so the alerts land in your Primary inbox.\n\nEvery open contest: ${SITE_URL}\n\nUnsubscribe: ${unsub}`,
+  }
+}
+
+export async function sendWelcomeEmail(
+  email: string,
+  name?: string | null,
+  token?: string | null,
+  /** Contests to start with (starterPicks); none and the section is left out. */
+  picks: ContestEmailItem[] = [],
+) {
+  const w = buildWelcomeEmail(name, picks)
+  const result = await sendToRecipients({
+    kind: 'welcome',
+    subject: w.subject,
+    recipients: [{ email, token, name }],
+    contestIds: w.contestIds,
+    // The signup form waits on this; a welcome record isn't used for dedup.
+    recordAttempts: 1,
+    html: (_r, unsub) => w.html(unsub),
+    text: (_r, unsub) => w.text(unsub),
   })
   return { success: result.success, error: result.error }
 }
@@ -450,7 +584,8 @@ export async function sendDailyPulse(
   ${soon.length ? sectionTitle('Closing in 3 days', 'Submit now or miss the deadline entirely.') + soon.map(contestCard).join('') : ''}
   <div style="text-align:center;margin-top:24px;">
     <a href="${SITE_URL}" style="display:inline-block;background:#4f46e5;color:#fff;text-decoration:none;padding:12px 26px;border-radius:8px;font-size:14px;font-weight:600;">View all open contests →</a>
-  </div>`
+  </div>
+  ${oversBlock('pulse')}`
 
   const badge = `<span style="background:${news.length ? '#4f46e5' : '#dc2626'};color:#fff;font-size:11px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;padding:3px 10px;border-radius:4px;">${news.length ? `${news.length} New` : 'Closing Soon'}</span>`
 
@@ -463,6 +598,7 @@ export async function sendDailyPulse(
     text: (_r, unsub) =>
       (news.length ? `NEW TODAY\n\n${textList(news)}\n\n` : '') +
       (soon.length ? `CLOSING IN 3 DAYS\n\n${textList(soon)}\n\n` : '') +
+      oversText('pulse') +
       `All open contests: ${SITE_URL}\nUnsubscribe: ${unsub}`,
   })
 }
@@ -501,7 +637,8 @@ export function buildBundleEmail(b: Bundle): {
   ${week.length ? sectionTitle('Closing this week') + week.map(contestCard).join('') : ''}
   <div style="text-align:center;margin-top:24px;">
     <a href="${SITE_URL}" style="display:inline-block;background:#4f46e5;color:#fff;text-decoration:none;padding:12px 26px;border-radius:8px;font-size:14px;font-weight:600;">View all open contests →</a>
-  </div>`
+  </div>
+  ${oversBlock('new_contest')}`
   const badge = news.length
     ? `<span style="background:#4f46e5;color:#fff;font-size:11px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;padding:3px 10px;border-radius:4px;">${news.length} New</span>`
     : soon.length ? `<span style="background:#dc2626;color:#fff;font-size:11px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;padding:3px 10px;border-radius:4px;">Closing Soon</span>` : ''
@@ -513,6 +650,7 @@ export function buildBundleEmail(b: Bundle): {
       (news.length ? `NEW\n\n${textList(news)}\n\n` : '') +
       (soon.length ? `CLOSING IN 3 DAYS\n\n${textList(soon)}\n\n` : '') +
       (week.length ? `CLOSING THIS WEEK\n\n${textList(week)}\n\n` : '') +
+      oversText('new_contest') +
       `All open contests: ${SITE_URL}\nUnsubscribe: ${unsub}`,
     contestIds: [
       ...news.map(c => `new:${c.id}`),
@@ -550,7 +688,8 @@ export async function sendWeeklyDigest(
   ${rest.length ? sectionTitle('Also open', 'Sorted by deadline.') + rest.map(contestCard).join('') : ''}
   <div style="text-align:center;margin-top:24px;">
     <a href="${SITE_URL}" style="display:inline-block;background:#4f46e5;color:#fff;text-decoration:none;padding:12px 26px;border-radius:8px;font-size:14px;font-weight:600;">View all ${sorted.length} contests →</a>
-  </div>`
+  </div>
+  ${oversBlock('weekly_digest')}`
 
   return sendToRecipients({
     kind: 'weekly_digest',
@@ -562,8 +701,70 @@ export async function sendWeeklyDigest(
       (closing.length ? `CLOSING THIS WEEK\n\n${textList(closing)}\n\n` : '') +
       (fresh.length ? `NEW THIS WEEK\n\n${textList(fresh)}\n\n` : '') +
       (rest.length ? `ALSO OPEN\n\n${textList(rest)}\n\n` : '') +
+      oversText('weekly_digest') +
       `All open contests: ${SITE_URL}\nUnsubscribe: ${unsub}`,
   })
+}
+
+// ─── Spotlight: one festival worth entering, plus the Overs offer ─────────────
+//
+// A one-off to the whole list about a single contest, sent from the admin panel
+// (action send-spotlight). Everything it says comes from the contest's row, so
+// the facts are the ones the directory already checked.
+
+export interface SpotlightContest extends ContestEmailItem {
+  prizeDetails?: string[] | null
+  entryFee?: string | null
+  aiToolsAllowed?: string[] | null
+}
+
+export function buildSpotlightEmail(c: SpotlightContest): {
+  subject: string
+  html: (unsub: string) => string
+  text: (unsub: string) => string
+  contestIds: string[]
+} {
+  const free = isFreeEntry(c.entryFee)
+  const anyTool = (c.aiToolsAllowed ?? []).some(t => /\b(any|all)\b/i.test(t))
+  const facts = [
+    `Closes ${fmtDate(c.deadline)}`,
+    free ? 'Free to enter' : c.entryFee ? `Entry: ${c.entryFee}` : null,
+    anyTool ? 'Any AI tool allowed' : c.aiToolsAllowed?.length ? `Tools: ${c.aiToolsAllowed.join(', ')}` : null,
+  ].filter((x): x is string => !!x)
+  const details = (c.prizeDetails ?? []).filter(d => !/^submissions open/i.test(d))
+  const subject = `${c.name} is open: ${c.prize}`
+
+  const body = `
+  <div style="color:#71717a;font-size:12px;letter-spacing:0.04em;text-transform:uppercase;margin-bottom:6px;">${escapeHtml(c.organizer)}</div>
+  <h1 style="font-size:26px;font-weight:700;margin:0 0 8px 0;line-height:1.25;">${escapeHtml(c.name)} is open</h1>
+  <div style="color:#818cf8;font-size:20px;font-weight:700;margin-bottom:16px;">${escapeHtml(c.prize)}</div>
+  <p style="color:#a1a1aa;font-size:15px;line-height:1.65;margin:0 0 18px 0;">${escapeHtml(c.description)}</p>
+
+  <div style="border:1px solid rgba(255,255,255,0.07);border-radius:10px;padding:18px 22px;margin-bottom:12px;">
+    <div style="color:#fff;font-size:14px;font-weight:600;line-height:1.9;">${facts.map(escapeHtml).join('<br>')}</div>
+    ${details.length ? `<div style="color:#a1a1aa;font-size:13px;line-height:1.7;margin-top:10px;">${details.map(escapeHtml).join('<br>')}</div>` : ''}
+  </div>
+  <div style="margin:18px 0 0 0;">
+    <a href="${c.url}" style="display:inline-block;background:#fff;color:#09090f;text-decoration:none;padding:12px 24px;border-radius:8px;font-size:14px;font-weight:700;">Read the rules and enter →</a>
+  </div>
+
+  ${oversFeature('custom', 'Make your entry for $3 a month')}
+
+  <p style="color:#71717a;font-size:13px;line-height:1.6;margin:0;">
+    More open contests, with the tools each one allows: <a href="${SITE_URL}" style="color:#818cf8;text-decoration:none;">aifilmcontests.com</a>
+  </p>`
+
+  return {
+    subject,
+    html: unsub => shell(body, unsub, `<span style="color:#52525b;font-size:12px;">Spotlight</span>`),
+    text: unsub =>
+      `${c.name} is open: ${c.prize}\n${c.organizer}\n\n${c.description}\n\n${facts.join('\n')}\n` +
+      (details.length ? `\n${details.join('\n')}\n` : '') +
+      `\nRead the rules and enter: ${c.url}\n\n` +
+      oversFeatureText('custom', 'Make your entry for $3 a month') +
+      `More open contests: ${SITE_URL}\nUnsubscribe: ${unsub}`,
+    contestIds: c.id ? [`new:${c.id}`] : [],
+  }
 }
 
 // ─── Compatibility wrappers (admin panel + older callers) ─────────────────────
