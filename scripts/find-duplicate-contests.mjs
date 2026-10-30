@@ -205,6 +205,16 @@ function completenessScore(row) {
   return score
 }
 
+// The weekly review merges a duplicate by closing the extra row and
+// prepending this marker to its description (see weekly-review.md). Once a
+// row carries it, it's already been decided — it must never count as an
+// active side of a duplicate match again, or the same resolved group prints
+// forever and buries whatever is actually new.
+const RESOLVED_DUPLICATE_MARKER = 'Duplicate listing — see '
+function isResolvedDuplicate(row) {
+  return String(row.description || '').startsWith(RESOLVED_DUPLICATE_MARKER)
+}
+
 const { data: rows, error } = await supabase
   .from('contests')
   .select('*')
@@ -230,6 +240,7 @@ if (checkFlagIdx !== -1) {
   const candidate = { id: '<new>', name, url: candidateUrl, deadline, organizer: '', event_date: null }
   const matches = []
   for (const row of rows) {
+    if (isResolvedDuplicate(row)) continue // already-closed stub; match its keeper instead
     const signal = duplicateSignal(candidate, row)
     if (signal) matches.push({ row, signal })
   }
@@ -280,12 +291,37 @@ if (finalGroups.length === 0) {
   process.exit(0)
 }
 
-console.log(`Found ${finalGroups.length} likely duplicate group(s):\n`)
-
+// A group is already resolved once at most one of its rows is still active
+// (not carrying the marker) — the weekly review has already closed every
+// other row in it, so there is nothing left to merge. Only groups with two
+// or more active rows are still unresolved and worth the weekly review's
+// attention; split them apart so a long-resolved group never buries a new one.
+const resolvedGroups = []
+const unresolvedGroups = []
 for (const idSet of finalGroups) {
-  const ids = [...idSet]
-  const rowsInGroup = ids.map(id => rowById.get(id)).filter(Boolean)
-  rowsInGroup.sort((a, b) => completenessScore(b) - completenessScore(a))
+  const rowsInGroup = [...idSet].map(id => rowById.get(id)).filter(Boolean)
+  const activeRows = rowsInGroup.filter(r => !isResolvedDuplicate(r))
+  if (activeRows.length <= 1) resolvedGroups.push(rowsInGroup)
+  else unresolvedGroups.push(activeRows)
+}
+
+if (resolvedGroups.length > 0) {
+  console.log(`${resolvedGroups.length} group(s) already merged by the weekly review — no action needed:\n`)
+  for (const rowsInGroup of resolvedGroups) {
+    console.log(`  resolved: ${rowsInGroup.map(r => r.id).join(', ')} — "${rowsInGroup[0].name}"`)
+  }
+  console.log('')
+}
+
+if (unresolvedGroups.length === 0) {
+  console.log('No unresolved duplicates found.')
+  process.exit(0)
+}
+
+console.log(`Found ${unresolvedGroups.length} unresolved likely duplicate group(s):\n`)
+
+for (const activeRows of unresolvedGroups) {
+  const rowsInGroup = [...activeRows].sort((a, b) => completenessScore(b) - completenessScore(a))
   const keep = rowsInGroup[0]
   const extras = rowsInGroup.slice(1)
   console.log(`DUPLICATE: keep ${keep.id} — extras ${extras.map(r => r.id).join(', ')}`)
