@@ -3,6 +3,7 @@ import { Metadata } from 'next'
 import Link from 'next/link'
 import { getContestById, getAllContests } from '@/lib/contests-db'
 import { normalizeCategory, closedStyle } from '@/lib/theme'
+import { isFree } from '@/lib/contest-filters'
 import ContestCard from '@/components/ContestCard'
 import EmailSubscribe from '@/components/EmailSubscribe'
 import DeadlineReminder from '@/components/DeadlineReminder'
@@ -107,7 +108,7 @@ export default async function ContestPage({ params }: { params: Promise<{ id: st
   // The notes that sit after the status in the header band. Same two
   // conditions as before, in the same order; only the shape changed.
   const bandNotes: { label: string; color: string }[] = [
-    ...(contest.entryFee === 'Free' && !isClosed ? [{ label: 'Free entry', color: '#15803D' }] : []),
+    ...(isFree(contest.entryFee) && !isClosed ? [{ label: 'Free entry', color: '#15803D' }] : []),
     ...(isFeatured ? [{ label: 'Featured', color: '#4338CA' }] : []),
   ]
 
@@ -173,7 +174,7 @@ export default async function ContestPage({ params }: { params: Promise<{ id: st
     }),
     offers: {
       '@type': 'Offer',
-      price: contest.entryFee === 'Free' ? '0' : contest.entryFee,
+      price: isFree(contest.entryFee) ? '0' : contest.entryFee,
       priceCurrency: 'USD',
       availability: isClosed ? 'https://schema.org/SoldOut' : 'https://schema.org/InStock',
       validThrough: contest.deadline,
@@ -396,7 +397,7 @@ export default async function ContestPage({ params }: { params: Promise<{ id: st
                   {isOpen && <DeadlineReminder contestName={contest.name} />}
                 </div>
 
-                <SpecRow label="Entry fee" value={contest.entryFee || 'See official site'} highlight={contest.entryFee === 'Free'} />
+                <SpecRow label="Entry fee" value={contest.entryFee || 'See official site'} highlight={isFree(contest.entryFee)} />
                 {contest.submissionOpen && <SpecRow label="Submissions open" value={fmt(contest.submissionOpen)} />}
                 {contest.eventDate && <SpecRow label="Festival date" value={fmt(contest.eventDate)} />}
                 {contest.location && <SpecRow label="Location" value={contest.location} />}

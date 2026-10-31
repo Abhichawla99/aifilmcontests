@@ -1,5 +1,6 @@
 import { getAllContests, getSnapshotStatus } from '@/lib/contests-db'
 import { Contest } from '@/data/contests'
+import { isFree } from '@/lib/contest-filters'
 import ContestBrowser from '@/components/ContestBrowser'
 import { ClapperDrawing, CalendarDrawing, EnvelopeDrawing, FilmmakerDoodle } from '@/components/Illustrations'
 import EmailSubscribe from '@/components/EmailSubscribe'
@@ -111,7 +112,7 @@ export default async function Home() {
         ...(c.location ? { location: { '@type': 'Place', name: c.location } } : {}),
         offers: {
           '@type': 'Offer',
-          price: c.entryFee === 'Free' ? '0' : c.entryFee,
+          price: isFree(c.entryFee) ? '0' : c.entryFee,
           priceCurrency: 'USD',
           availability: 'https://schema.org/InStock',
           validThrough: c.deadline,

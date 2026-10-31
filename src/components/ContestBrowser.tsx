@@ -5,6 +5,7 @@ import { Contest } from '@/data/contests'
 import ContestCard from './ContestCard'
 import { normalizeCategory, categoryStyles } from '@/lib/theme'
 import { daysUntilDeadline, formatDeadlineShort } from '@/lib/deadline'
+import { isFree } from '@/lib/contest-filters'
 
 type StatusFilter = 'all' | 'open' | 'upcoming'
 type SortKey = 'deadline' | 'prize' | 'newest'
@@ -91,7 +92,7 @@ function Row({ c }: { c: Contest }) {
           display: 'block', fontSize: 11.5, color: '#8B867C', marginTop: 1,
           overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap',
         }}>
-          {c.organizer}{c.entryFee === 'Free' ? ' · Free entry' : ''}
+          {c.organizer}{isFree(c.entryFee) ? ' · Free entry' : ''}
         </span>
       </span>
       <span className="browse-row-prize" style={{
@@ -158,7 +159,7 @@ export default function ContestBrowser({ contests }: { contests: Contest[] }) {
     () => contests.filter(c =>
       c.status !== 'closed' &&
       (status === 'all' || c.status === status) &&
-      c.entryFee === 'Free'
+      isFree(c.entryFee)
     ).length,
     [contests, status]
   )
@@ -168,7 +169,7 @@ export default function ContestBrowser({ contests }: { contests: Contest[] }) {
     const out = contests.filter(c => {
       if (c.status === 'closed') return false
       if (status !== 'all' && c.status !== status) return false
-      if (freeOnly && c.entryFee !== 'Free') return false
+      if (freeOnly && !isFree(c.entryFee)) return false
       // Categories in the database are freeform (the research robot has written 140+
       // distinct strings), so match on the normalized label, not the raw value.
       if (category !== 'all' && !(c.categories ?? []).some(x => normalizeCategory(x).label === categoryStyles[category].label)) return false

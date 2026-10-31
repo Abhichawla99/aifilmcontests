@@ -5,6 +5,7 @@ import Link from 'next/link'
 import { Contest } from '@/data/contests'
 import { categoryStyle, closedStyle, normalizeCategory } from '@/lib/theme'
 import { daysUntilDeadline, formatDeadline, timeLeftPhrase } from '@/lib/deadline'
+import { isFree } from '@/lib/contest-filters'
 
 /* The deadline is a calendar day, not an instant — see src/lib/deadline.ts for
    why that distinction was printing yesterday's date on every card west of
@@ -150,7 +151,7 @@ export default function ContestCard({ contest }: { contest: Contest }) {
               }}>
                 {isOpen ? 'Open' : isClosed ? 'Closed' : 'Coming Soon'}
               </span>
-              {contest.entryFee === 'Free' && !isClosed && (
+              {isFree(contest.entryFee) && !isClosed && (
                 <span style={{
                   fontSize: 9, color: '#15803D',
                   border: '1px solid rgba(22,163,74,0.35)',
