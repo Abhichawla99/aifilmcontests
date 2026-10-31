@@ -36,6 +36,62 @@ describe the old dark theme; the reasoning still applies, the colours do not.)*
 
 ---
 
+## 2026-10-31 — /topics stops printing a zero where it has nothing to count
+
+**Changed** — the roster rows in `src/app/topics/page.tsx` and two
+`.cr-row-nocount` lines in `globals.css`. 29 added, 5 removed in the page (13 of
+the additions are the comment), 6 added in the stylesheet. No new dependency, no
+data, no copy. The label `Cites`, the value `{n} contest{s}`, the singular
+condition, the sort and all eight `cr-*` classes are unchanged to the character,
+and the 44 rows that carry a count render exactly as they did yesterday.
+
+**Was** — all 72 rows carried the shared `.cr-since` pair: `CITES` at 9.5px in
+`#A39D91`, and under it the value at 12px, 700 weight, tabular, in `#3E3A33`.
+28 of those rows cite no contest, so 28 of them read `CITES / 0 contests` — in
+the same ink and the same weight as the row that cites nine.
+
+**Two rows in five spent the only right-hand column on the page saying nothing
+loudly.** The column has one job: tell a reader which of these 72 topic pages
+open onto live listings. A zero is the absence of that fact, not a smaller
+amount of it, and setting it like a value destroyed the column's only signal —
+the eye could not tell a backed page from an unbacked one without reading each
+figure. This is the same fault as the 2026-10-11 run's "when the data does not
+arrive, the page says so instead of printing zeros", one level down: there the
+template printed a zero for a failed fetch, here it printed one for a fact that
+does not exist. It is also the one place in the house `cr-list` idiom where it
+could happen. Checked all eight indexes that use it: tools (24, 23, 20, …),
+prize (46, 7, 38, 2), location (68 ×5), categories (61, 24, 17, …), vs (2, 2, 2,
+2, 6), guide (dates) and creators (dates) carry a real value on every single
+row. /topics was alone.
+
+**And at 390px the empty column was charging rent.** `.cr-since` holds
+`min-width: 72px`, plus the row's 14px gap: 86px of a 390px screen, reserved on
+every row. On a row with a count that buys the count. On the other 28 it bought
+a blank, and paid for it by wrapping `AI Commercial Production: Making Ads with
+Generative AI` onto three lines and `AI Documentary Filmmaking: Real Stories,
+Synthetic Images` onto three where two now do.
+
+**Now** — the pair renders only when `cited > 0`, and a row without one takes
+`.cr-row-nocount`, which drops the middle track: `1fr 18px` at desktop, `1fr`
+under 620px where the arrow is already hidden. The arrow keeps its own 18px
+track, so the right edge is unmoved — measured in the page, `.cr-go` ends at
+925px on a counted row and 925px on an uncounted one, down a 72-row list. The
+column now reads as an annotation that some entries carry, the way a programme
+notes a strand only on the films in it.
+
+**Seen** — the Criterion Collection's list view carries the noun once, in the
+column header (Spine #, Title, Director, Country, Year), and every cell below
+holds a real value; no cell is ever filled with a placeholder to keep the grid
+looking even. MUBI's card credits work the same way — `A MUBI RELEASE` sits
+above the director and year only on the films it is true of, and no card
+announces that it is not one. Absence is allowed to mean absence.
+
+**Before / after** — `reports/design/2026-10-31-before.png`,
+`reports/design/2026-10-31-before-390.png`, `reports/design/2026-10-31-after.png`,
+`reports/design/2026-10-31-after-390.png`.
+
+---
+
 ## 2026-10-29 — The contest header band's status line, as type instead of two capsules
 
 **Changed** — the status row at the top of the header band in
