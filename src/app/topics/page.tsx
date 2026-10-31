@@ -96,16 +96,35 @@ export default async function TopicsIndexPage() {
         <section style={{ marginBottom: 44 }}>
           <h2 style={sectionLabel}>{rows.length} Topics</h2>
           <div className="cr-list">
+            {/* 28 of these 72 rows cite no contest, and every one of them used to
+                print `Cites  0 contests` in the same 700-weight ink as the row that
+                cites nine. The column exists to say which topic pages open onto live
+                listings; a zero is the absence of that fact, not a smaller amount of
+                it, so printing it in value ink spent two rows in five saying nothing
+                loudly. A count now appears only where there is one, the way the rest
+                of the site treats a fact it does not have. Nothing is hidden: the
+                number was always derivable by opening the page, and the 44 rows that
+                do carry one are unchanged to the character.
+                The row also drops its middle track when the count is gone, which
+                matters most at 390px — there the column reserves 72px plus a 14px
+                gap out of 390 and was squeezing four-line titles on rows that had
+                nothing to show for it. */}
             {rows.map(({ slug, topic, cited }) => (
-              <Link key={slug} href={`/topics/${slug}`} className="cr-row">
+              <Link
+                key={slug}
+                href={`/topics/${slug}`}
+                className={cited > 0 ? 'cr-row' : 'cr-row cr-row-nocount'}
+              >
                 <div>
                   <div className="cr-name">{topic.title}</div>
                   <p className="cr-one">{topic.description}</p>
                 </div>
-                <div className="cr-since">
-                  <span className="cr-since-label">Cites</span>
-                  <span className="cr-since-date">{cited} contest{cited === 1 ? '' : 's'}</span>
-                </div>
+                {cited > 0 && (
+                  <div className="cr-since">
+                    <span className="cr-since-label">Cites</span>
+                    <span className="cr-since-date">{cited} contest{cited === 1 ? '' : 's'}</span>
+                  </div>
+                )}
                 <span className="cr-go" aria-hidden="true">&rarr;</span>
               </Link>
             ))}

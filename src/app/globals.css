@@ -1455,6 +1455,11 @@ img, svg, video, canvas { max-width: 100%; }
 }
 .cr-row:hover { background: rgba(27,25,22,0.035); }
 .cr-row:focus-visible { outline: 2px solid #4F46E5; outline-offset: -2px; }
+/* A row whose count column has nothing in it gives the track back to the title
+   rather than holding 84px of paper open. /topics is the only index of the eight
+   where the figure can be absent; the arrow stays in its own 18px track, so the
+   right edge still lines up down the whole list. */
+.cr-row-nocount { grid-template-columns: 1fr 18px; }
 /* Studio or filmmaker was an indigo pill. It is a taxonomy, not the accent:
    set as a caption over the name, the way a programme labels a strand. */
 .cr-kind {
@@ -1549,6 +1554,7 @@ img, svg, video, canvas { max-width: 100%; }
 
 @media (max-width: 620px) {
   .cr-row { grid-template-columns: 1fr auto; gap: 14px; padding-right: 2px; }
+  .cr-row-nocount { grid-template-columns: 1fr; }
   .cr-go { display: none; }
   .cr-since { min-width: 72px; }
   .cr-why-row { grid-template-columns: 1fr; gap: 5px; }
