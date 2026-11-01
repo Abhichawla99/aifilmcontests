@@ -6,9 +6,11 @@ import Link from 'next/link'
 import { Suspense } from 'react'
 import InnerLayout from '@/components/InnerLayout'
 
-// What actually stops, in the words the homepage form already uses.
+// What actually stops, matching the real send cadence in src/lib/email.ts
+// (new-contest alerts, a last-call before a deadline, a weekly closing digest)
+// rather than the flat "7 days before" reminder this page used to claim.
 const WHAT_STOPS =
-  'the alerts when new contests open and the reminder that goes out seven days before a deadline closes'
+  'new-contest alerts, the last-call reminder before a deadline closes, and the once-a-week digest of what is closing soon'
 
 function UnsubscribeContent() {
   const params = useSearchParams()
