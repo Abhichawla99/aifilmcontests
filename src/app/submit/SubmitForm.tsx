@@ -41,16 +41,24 @@ export default function SubmitForm() {
     } catch { setStatus('error'); setMessage('Network error. Please try again.') }
   }
 
+  // The success state is now the same object as the error state 70 lines below:
+  // a 2px rule, a small-caps label, body text. It was the one filled, bordered,
+  // 12px-radius box on the page — the shape the 2026-09-22 run took off the
+  // subscribe form's success state — so it reuses that run's .sok-* classes
+  // rather than growing a second grammar for the same outcome. Same words, same
+  // order, split at the sentence break that was already there, and role="status"
+  // so a success is announced the way the failure already is.
   if (status === 'done') {
     return (
-      <div style={{ border: '1px solid rgba(99,102,241,0.25)', borderRadius: 12, padding: '22px 24px', background: 'rgba(79,70,229,0.06)' }}>
-        <p style={{ fontFamily: 'Space Grotesk, sans-serif', fontSize: 17, fontWeight: 700, color: '#1B1916', margin: '0 0 8px' }}>Got it. Thank you.</p>
-        <p style={{ fontSize: 14, color: '#6F6A61', lineHeight: 1.65, margin: 0 }}>
-          We check every contest against its official page before it goes live, usually within a day.
-          If anything is unclear we will reply to the email you gave.
-        </p>
-        <p style={{ fontSize: 14, color: '#6F6A61', lineHeight: 1.65, margin: '10px 0 0' }}>
-          Running it yourself? Once it is live you can <a href="/feature" style={{ color: '#4338CA' }}>feature it</a> to reach every subscriber.
+      <div className="sok sbok" role="status">
+        <p className="sok-head">Got it. Thank you.</p>
+        <div className="sok-step">
+          <p className="sok-step-label">What happens next</p>
+          <p className="sok-step-do">We check every contest against its official page before it goes live, usually within a day.</p>
+          <p className="sok-step-why">If anything is unclear we will reply to the email you gave.</p>
+        </div>
+        <p className="sbok-more">
+          Running it yourself? Once it is live you can <a href="/feature">feature it</a> to reach every subscriber.
         </p>
       </div>
     )

@@ -1132,6 +1132,28 @@ img, svg, video, canvas { max-width: 100%; }
 }
 .sok-again:hover { color: #3E3A33; }
 
+/* ── /submit's success state joins this one (2026-11-01) ──────────────────
+   The other form on the site that can succeed had kept the shape this block
+   replaced: a 12px-radius box, filled rgba(79,70,229,0.06) behind a
+   rgba(99,102,241,0.25) border. Measured on the success page it was the only
+   filled container, the only fully bordered container and the only radius over
+   4px at any size over 150x50 — one object, three ways, on a page whose two
+   notes directly beneath it (CONTACT, FEATURED LISTINGS) are captioned rules.
+   It now reuses .sok-head / .sok-step / .sok-step-label / .sok-step-do /
+   .sok-step-why unchanged. Two things differ: it has no .sok-sub, so the head
+   carries the 14px the sub used to supply, and it ends on a note that links
+   out, which the subscribe success does not have. ── */
+.sbok .sok-head { margin-bottom: 14px; }
+.sbok-more {
+  font-size: 12.5px;
+  line-height: 1.65;
+  color: #6F6A61;
+  margin: 14px 0 0;
+}
+.sbok-more a { color: #4338CA; }
+.sbok-more a:hover { color: #3730A3; }
+.sbok-more a:focus-visible { outline: 2px solid #4F46E5; outline-offset: 3px; border-radius: 2px; }
+
 /* ── The deadline block's second action (2026-09-23) ─────────────────────────
    Was a 🔔-led run of 12.5px text with padding: 0 — an emoji standing in for a
    UI icon, and a 16px-tall tap target, sitting ABOVE the primary Apply button.
