@@ -155,7 +155,13 @@ success state is untouched — the two new rules are `.sbok .sok-head` and
 **Before / after** — `reports/design/2026-11-01-before.png`,
 `reports/design/2026-11-01-before-390.png`, `reports/design/2026-11-01-after.png`,
 `reports/design/2026-11-01-after-390.png`,
-`reports/design/2026-11-01-after-375.png`.
+`reports/design/2026-11-01-after-375.png`. Live after deploy, idle form, since
+the success state needs a real submission and robots do not create rows:
+`reports/design/2026-11-01-after-live.png`,
+`reports/design/2026-11-01-after-live-390.png`. Verified on the deployed site
+rather than only locally: `/submit` returns 200, the served stylesheet contains
+`.sbok` and `.sbok-more`, and the page's own client chunk contains `sok sbok`
+and `What happens next`.
 
 ---
 
