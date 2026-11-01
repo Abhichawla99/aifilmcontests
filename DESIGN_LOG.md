@@ -36,6 +36,129 @@ describe the old dark theme; the reasoning still applies, the colours do not.)*
 
 ---
 
+## 2026-11-01 — /submit's success state, ruled instead of a tinted panel
+
+**Changed** — the `status === 'done'` branch of `src/app/submit/SubmitForm.tsx`,
+and a short `.sbok` block in `globals.css`. 16 lines added and 8 removed in the
+component, 7 of the additions being the comment; 22 added in the stylesheet, 11
+of those the comment. The stylesheet gains two new classes and five short rules
+in all, two of which are a hover and a focus state; everything else reuses
+classes that already existed. No new dependency, no data. Every word, the word
+order, the `/feature` link and its `#4338CA` are unchanged to the character.
+
+**Was** — a 12px-radius box, filled `rgba(79,70,229,0.06)` behind a
+`1px solid rgba(99,102,241,0.25)` border, 22px/24px padding. Inside it: a 17px
+Space Grotesk 700 heading, then two 14px `#6F6A61` paragraphs at one size.
+
+**It was the only box left on the page, and I measured that rather than
+guessing it.** Running the 2026-09-22 census on `/submit` in its success
+state — every element over 150×50, counting fills, four-sided borders and radii
+over 4px — returns exactly one of each, and all three are this one object:
+640×162 at 1440px, 350×231 at 390px. Nothing else on the page is filled,
+bordered or rounded. Beneath it, the page's own two notes, `CONTACT` and
+`FEATURED LISTINGS`, are captioned rules in body ink — the grammar the 2026-10-14
+run gave that aside. The success block sat about 40px above them in a different
+language.
+
+**And one form was answering its two outcomes two ways.** The `status ===
+'error'` branch 70 lines below in the same file has been a `2px solid #C2410C`
+rule, a 12px indent and a small-caps `NOT SENT` label since the error states were
+settled. The success branch was a tinted card. Same form, same moment, same
+reader, two grammars — and the louder, friendlier shape was spent on the outcome
+that needs no emphasis, while the failure got the restrained one.
+
+**And the two grey paragraphs were set as equals.** "We check every contest
+against its official page before it goes live, usually within a day" is the fact
+the visitor just paid two minutes of form-filling for. "If anything is unclear we
+will reply to the email you gave" is its footnote. Both were 14px `#6F6A61`. At
+390px that was six lines of one grey, inside 24px of padding that cost the text
+48px of a 350px block.
+
+**And nothing announced it.** The error branch carries `role="alert"`; the
+success branch carried no role, so the one state a screen reader most needs told
+after submitting a form arrived silently. This is the identical omission the
+2026-09-22 run fixed on the subscribe form; `/submit` was the other half of it
+and was missed.
+
+**Now** — the same object as the subscribe form's success state, reusing its
+classes rather than growing a second grammar for the same outcome:
+`.sok-head` for "Got it. Thank you.", then a `.sok-step` — `2px solid #4F46E5`,
+12px indent, no fill, no radius, no border — holding a `WHAT HAPPENS NEXT` label
+at 10.5px Space Grotesk 700 tracked 0.08em in indigo, the verification fact at
+13.5px in `#26231E`, and the reply note at 12.5px in `#6F6A61`. The `/feature`
+line sits outside the rule as `.sbok-more`, 12.5px grey, because it is an offer
+rather than part of what happens next. `role="status"` on the container.
+
+The label is new as a label, not as a claim: it names the block the way
+`CONTACT` and `FEATURED LISTINGS` name the two blocks directly below it and
+`NOT SENT` names the failure in the same component. The site's two form
+successes are now literally the same CSS.
+
+Same words, same word order. No copy, data or ordering changed.
+
+**Seen** — I re-ran the container census of 2026-09-22 on three film sites,
+fresh pages and fresh counts. Metrograph's homepage: 1,350 elements, **0** filled,
+**0** fully bordered, **0** radii over 4px at any size over 150×50. The Criterion
+Collection's complete shop list, the densest listings page I could find on a film
+site: **24,059** elements and the same three zeros. MUBI's *Now Showing*: 141
+elements, three zeros. Three of the best-set film sites on the web draw a
+container over 150×50 **zero** times between them, across 25,550 elements. Our
+success page drew one, and drew it three ways at once. Adapted rather than
+copied: those sites reach zero with whitespace and type size alone, which a
+notice announcing a result cannot quite do, so this takes the conclusion — no
+container — and marks the result with the 2px rule our own house grammar had
+already answered this exact question with twice.
+
+**Noted for a later run, not done today** —
+- **The featuring offer is now made three times inside one scroll.** The hero
+  paragraph says "Organizers can also feature a listing once it is live", the
+  success block says "Running it yourself? Once it is live you can feature it to
+  reach every subscriber", and `FEATURED LISTINGS` about 40px below says it a
+  third time with the actual detail ("pinned on the homepage, a Featured badge,
+  and a slot in the next email to every subscriber"). The middle one is the
+  weakest of the three and is the obvious cut, but deleting a sentence is a copy
+  change, so it is a call for Abhi.
+- **The page keeps selling after the submission.** `page.tsx` renders the hero
+  pitch and the form's framing above `SubmitForm`, and they stay put when the
+  form succeeds, so the "Give us the official page and we will verify it" pitch
+  is still addressed to someone who just did that. Same shape as the note the
+  2026-09-22 run left about the subscribe card; fixing it means lifting `status`
+  out of the component into the page.
+- **The success state offers no way back into the site.** A visitor who has just
+  given us a contest is given one link, to the paid tier. Any other link is new
+  copy.
+- `.input` is still an 8px-radius, fully bordered, `#FFFFFF`-filled box, eleven
+  times on this page. That is correct for a text field — it is the only place on
+  the site where a container is the control — but the radius is 8px while the
+  buttons are 10px and `.sok` is now 0. Worth a run that owns `.input`.
+- Process: `.env.cron` still has no `NEXT_PUBLIC_SUPABASE_ANON_KEY`, so a local
+  build renders an empty grid and the homepage hero shows its amber "live data
+  unavailable" state. It did not matter today — `/submit` reads no contests —
+  but it is the fifth run in a row where it is noted.
+
+**Checked** — `npm run build` exit 0, four clean runs. The success state cannot
+be reached by clicking without actually submitting the form, which would write a
+row, so both the before and the after shots were taken on `next start` with the
+component's initial `status` temporarily set to `'done'`; that shim was reverted
+before the committed build and the committed diff is `globals.css` and
+`SubmitForm.tsx` only. The `contests-snapshot.json` the build regenerates was
+reverted too — this run changed no data. Measured: the block is 640×145 against
+640×162 at 1440px, 350×186 against 350×231 at 390px, and 335×207 at 375px — more
+hierarchy in 17px less height at desktop and 45px less on a phone. The page-wide
+census now returns 0 filled, 0 bordered and 0 radii over 4px at all three widths,
+the same three zeros as Metrograph, Criterion and MUBI. `role="status"` confirmed
+present in the rendered DOM. No horizontal overflow at 1440px, 390px or 375px,
+checked in the success state and with the idle form. The homepage's own `.sok`
+success state is untouched — the two new rules are `.sbok .sok-head` and
+`.sbok-more`, and no existing selector changed.
+
+**Before / after** — `reports/design/2026-11-01-before.png`,
+`reports/design/2026-11-01-before-390.png`, `reports/design/2026-11-01-after.png`,
+`reports/design/2026-11-01-after-390.png`,
+`reports/design/2026-11-01-after-375.png`.
+
+---
+
 ## 2026-10-31 — /topics stops printing a zero where it has nothing to count
 
 **Changed** — the roster rows in `src/app/topics/page.tsx` and two
