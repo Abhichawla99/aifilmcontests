@@ -6,6 +6,7 @@ import { Contest } from '@/data/contests'
 import { categoryStyle, closedStyle, normalizeCategory } from '@/lib/theme'
 import { daysUntilDeadline, formatDeadline, timeLeftPhrase } from '@/lib/deadline'
 import { isFree } from '@/lib/contest-filters'
+import { CardPrize } from '@/components/PrizeValue'
 
 /* The deadline is a calendar day, not an instant — see src/lib/deadline.ts for
    why that distinction was printing yesterday's date on every card west of
@@ -260,7 +261,7 @@ export default function ContestCard({ contest }: { contest: Contest }) {
              Most prizes are sentences, not figures — 56 of 89 open ones run past 45
              characters — so they were wrapping four and five times inside the ~170px
              left of the row. The caption line carries the two 10px meta items instead,
-             and the value gets the whole width underneath. Same two lines as before. */}
+             and the value gets the whole width underneath. */}
         <div>
           <div className="flex items-baseline justify-between gap-3">
             <span style={{
@@ -280,15 +281,11 @@ export default function ContestCard({ contest }: { contest: Contest }) {
               </span>
             )}
           </div>
-          <div style={{
-            fontSize: 14, fontWeight: 700,
-            fontFamily: 'Space Grotesk, sans-serif',
-            fontVariantNumeric: 'tabular-nums',
-            color: tint.text, lineHeight: 1.35,
-            marginTop: 4,
-          }}>
-            {contest.prize}
-          </div>
+          {/* The value, set as what it actually is — see CardPrize. A figure
+               keeps the tinted display face it has always had; a sentence is
+               set to be read instead of shouted, which is 50 of the 61 open
+               rows. Same component, same money rule, as the contest page. */}
+          <CardPrize text={contest.prize} color={tint.text} />
         </div>
 
       </div>
