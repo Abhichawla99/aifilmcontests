@@ -243,6 +243,7 @@ const TOPICS = [
   'ai-sci-fi-film-contests-2026',
   'experimental-ai-film-contests-2026',
   'gossip-goblin-showrunner-competition-2026',
+  'how-much-ai-does-a-film-need-for-ai-film-festivals',
 ] as const
 
 // Comparison pages. VS_PAGES content lives inline in vs/[slug]/page.tsx as
