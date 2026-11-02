@@ -36,6 +36,77 @@ describe the old dark theme; the reasoning still applies, the colours do not.)*
 
 ---
 
+## 2026-11-02 — A card's prize, set as what the value actually is
+
+**Changed** — the Row 5 value in `src/components/ContestCard.tsx`, and
+`src/components/PrizeValue.tsx`, which gains a `CardPrize` sibling and exports
+the money rule it already had. 57 lines added and 13 removed across the two
+files, 24 of the additions being the comments. No new dependency, no data, no
+copy, no stylesheet. The `PRIZE` caption, the `Verified <date>` item beside it,
+the hairline above them and `PrizeValue` itself are untouched to the character,
+so every contest page renders exactly as it did yesterday.
+
+**Was** — every prize on every card printed at 14px Space Grotesk 700,
+`-0.01em`, tabular, in the category tint: the face the card otherwise keeps for
+`13 days left`. That is the right setting for `$1,000,000 Grand Prize`. It is
+the wrong one for `4 cash awards across Best Film, Best Image, Best Sound and
+Best AI Music Video (amounts to be announced by category sponsors) + national
+TV premiere`, which arrived as four lines of shouted sentence case, tinted,
+directly under a blurb set at 13px in quiet `#57524A`.
+
+**This is the 2026-10-09 fault, one surface over, and the card is the worse
+place to have it.** Counted against the live rows this morning: of the 61 open
+contests, all 61 carry prize text. 11 are a figure the display face earns —
+`€10,000 Grand Prix`, `$7,500+ in cash prizes`, `$20,000 total`. 41 name no
+money amount at all (`Official Selection and biannual YouTube screening`,
+`NeoCinema AI Statuette`, `TBA`) and 9 more bury one inside a sentence. Median
+length 53 characters, p90 110, longest 162. So 50 cards in 61 set a bold tinted
+sentence at the foot of the card — and unlike the contest page, which shows one
+of them at a time, the homepage grid shows nine at once. The effect was a wall
+of tinted bold paragraphs in which `$1,000,000 Grand Prize` did not stand out at
+all, while the contest name two rows above it, 15px at weight 600 in plain ink,
+had less mass than the award description below.
+
+**Looked at** — Mubi's film database, Criterion's Shop All Films in list view,
+Metrograph's calendar, Are.na's explore grid. All four agree, and the agreement
+is the observation: **a listing promotes exactly one thing, the title, and
+leaves every fact under it level — the numbers included.** Metrograph sets
+`Alan J. Pakula / 1974 / 102min / DCP` as one unweighted run, so the year gets
+no more weight than the format. Are.na gives `6 blocks` the same size and grey
+as the timestamp beside it. Criterion's 1,899 rows put the spine number in its
+own column at the size of everything around it; nothing is promoted to display
+size merely because it fills a field. Our card had it backwards — it was
+promoting the field whose value is usually not a number.
+
+**Now** — the setting follows the value, by the same rule and the same regex
+the contest page has used since 10-09, which is why the money logic moved out
+of `PrizeValue`'s closure rather than being written twice. A short string built
+around a figure keeps today's setting to the character: same 14px, same 700,
+same tint, same tabular figures, same 4px top margin — those 11 cards do not
+move by a pixel. Everything else is set to be read: 13.5px at weight 500 in
+full ink `#1B1916`, line-height 1.55, in the body face, one notch above the
+13px blurb above it so the row still answers its own `PRIZE` caption without
+shouting. Where that sentence contains money the figures inside it are still
+picked out in the tint and the figure face, so NEXTALE's `$3,000 total ($2,000
+grand prize + $100 x 10 early-entry bonuses)` keeps all three amounts scannable
+without the card promoting one of them. The string is always printed whole:
+nothing extracted, reordered, clamped or dropped.
+
+Rendered all 61 live prize strings through the new tiering before pushing:
+11 figure tier, 9 sentence-with-figures, 41 plain sentence, correct every time.
+`$2,750 in cash awards + HASFA laurels` is the closest call at 40 characters
+and correctly lands in the sentence tier with its figure picked out — the
+32-character threshold is `PrizeValue`'s own and was not retuned for the card.
+`npm run build` exit 0. Local production build checked at 1440px and 390px,
+`✓ no horizontal overflow` at both; live page re-checked at both after deploy.
+Side effect worth noting: `Official Selection and biannual YouTube screening`
+went from two lines to one, so several cards in the grid got shorter.
+
+Before/after: `reports/design/2026-11-02-before.png` and `-after.png` (the
+homepage grid, 1440px), `-before-390.png` / `-after-390.png`.
+
+---
+
 ## 2026-11-01 — /submit's success state, ruled instead of a tinted panel
 
 **Changed** — the `status === 'done'` branch of `src/app/submit/SubmitForm.tsx`,
