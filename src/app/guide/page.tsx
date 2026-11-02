@@ -44,7 +44,7 @@ function fmt(d: string) {
   return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
 }
 
-type Row = { slug: string; title: string; description: string; date: string | null }
+type Row = { slug: string; title: string; description: string; date: string | null; closedDate?: string | null }
 
 function GuideSection({ heading, rows }: { heading: string; rows: Row[] }) {
   if (rows.length === 0) return null
@@ -59,7 +59,12 @@ function GuideSection({ heading, rows }: { heading: string; rows: Row[] }) {
               <p className="cr-one">{row.description}</p>
             </div>
             <div className="cr-since">
-              {row.date && (
+              {row.closedDate ? (
+                <>
+                  <span className="cr-since-label">Closed</span>
+                  <span className="cr-since-date">{row.closedDate}</span>
+                </>
+              ) : row.date && (
                 <>
                   <span className="cr-since-label">Updated</span>
                   <span className="cr-since-date">{row.date}</span>
@@ -83,10 +88,22 @@ export default async function GuideIndexPage() {
   // everything else -- general how-to-enter/win pieces and per-festival
   // submission guides. Split on that instead of hardcoding two lists so a
   // new guide of either shape shows up here without touching this file.
+  // A guide's own cited contests say whether it's still live, the same
+  // lookup sitemap.ts already does for lastModified -- see the 2026-11-01
+  // OPTIMIZER_BACKLOG.md finding. Only flag a guide "Closed" when every
+  // contest it cites has actually closed, so one still citing an open or
+  // upcoming contest keeps its normal "Updated" date.
   const deadlineGuides: Row[] = []
   const howToGuides: Row[] = []
   for (const [slug, guide] of Object.entries(GUIDES)) {
-    const row: Row = { slug, title: guide.title, description: guide.description, date: guide.datePublished ? fmt(guide.datePublished) : null }
+    const cited = guide.featuredContestIds?.length
+      ? all.filter(c => guide.featuredContestIds!.includes(c.id))
+      : []
+    const allCitedClosed = cited.length > 0 && cited.every(c => c.status === 'closed')
+    const closedDate = allCitedClosed
+      ? fmt(cited.reduce((latest, c) => (!latest || c.deadline > latest) ? c.deadline : latest, ''))
+      : null
+    const row: Row = { slug, title: guide.title, description: guide.description, date: guide.datePublished ? fmt(guide.datePublished) : null, closedDate }
     if (/deadlines-|closing/.test(slug)) deadlineGuides.push(row)
     else howToGuides.push(row)
   }

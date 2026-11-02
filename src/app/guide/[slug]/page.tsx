@@ -51,6 +51,21 @@ export default async function GuidePage({ params }: { params: Promise<{ slug: st
   const all = await getAllContests()
   const openContests = all.filter(c => c.status === 'open').slice(0, 4)
 
+  // Several guides are written around specific deadlines (a monthly
+  // round-up, a single festival's how-to-enter piece) that have since
+  // passed, and the page itself never said so -- see the 2026-11-01
+  // OPTIMIZER_BACKLOG.md finding. Only flag it when every contest the guide
+  // cites has actually closed, same lookup sitemap.ts already does for
+  // lastModified (src/app/sitemap.ts ~line 396), so a guide still citing an
+  // open or upcoming contest is left alone.
+  const citedContests = guide.featuredContestIds?.length
+    ? all.filter(c => guide.featuredContestIds!.includes(c.id))
+    : []
+  const allCitedClosed = citedContests.length > 0 && citedContests.every(c => c.status === 'closed')
+  const closedDate = allCitedClosed
+    ? citedContests.reduce((latest, c) => (!latest || c.deadline > latest) ? c.deadline : latest, '')
+    : null
+
   const articleLd = {
     '@context': 'https://schema.org',
     '@type': 'Article',
@@ -125,7 +140,13 @@ export default async function GuidePage({ params }: { params: Promise<{ slug: st
           standfirst={guideLead.lead}
           updated={guide.datePublished ? new Date(guide.datePublished).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' }) : undefined}
           minutes={readingMinutes(guide.sections.map(x => x.body).join(' '))}
-        />
+        >
+          {closedDate && (
+            <p style={{ marginTop: 14, fontSize: 13, color: '#8B867C', lineHeight: 1.5 }}>
+              Submissions closed {fmt(closedDate)}. <Link href="/" style={{ color: '#4338CA', fontWeight: 600, textDecoration: 'none' }}>Browse open contests →</Link>
+            </p>
+          )}
+        </ArticleHeader>
 
         <ArticleGrid headings={guide.sections.map(x => x.h)}>
           {guideLead.rest && <P>{guideLead.rest}</P>}
