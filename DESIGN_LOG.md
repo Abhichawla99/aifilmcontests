@@ -36,6 +36,86 @@ describe the old dark theme; the reasoning still applies, the colours do not.)*
 
 ---
 
+## 2026-11-03 — A hub index's count column, headed once instead of captioned per row
+
+**Changed** — the count column on the five hub indexes that print a constant
+caption: `/tools`, `/categories`, `/prize`, `/location` and `/vs`. Six files,
+91 lines added and 20 removed, 30 of the additions being the comment block in
+`globals.css`. Five lines of markup per page plus one new CSS block
+(`.cr-head`, `.cr-head-count`, `.cr-count`) and three lines in the existing
+`@media (max-width: 620px)`. No new dependency, no data, no copy, no route.
+`.cr-since` and `.cr-since-label` are untouched, so `/guide`, `/creators` and
+`/topics` render exactly as they did yesterday.
+
+**Was** — every row on those five pages carried its own caption above its own
+figure: `OPEN NOW` over `26`, then `OPEN NOW` over `24`, fourteen times down
+`/tools`, eight down `/categories`, five down `/vs`. The caption never varies
+on any of the five. After the first reading it carries nothing, and it cost
+two things. It took a line of height in every row, so a 14-row list spent
+roughly 14 extra lines saying the same two words. And it pushed the figure
+into second position inside its own column, at `.cr-since-date`'s 12px/700,
+under a 9.5px label — while `.cr-name` beside it ran at 17px/600. The one
+number on the row, the number the whole page exists to report, was the
+smallest type in its own column.
+
+On a phone it was worse. `.cr-since` held `min-width: 72px` because the
+caption needed it, and the two-line label-over-figure stack sat at the top
+right of a row whose blurb then wrapped under it — `Film contests that use or
+require Runway` / `ML`, `…requiring Kling` / `AI`, `…Hailuo AI` / `(MiniMax)`.
+A 390px row was giving 72px to a two-digit number.
+
+**Looked at** — Criterion's Shop All Films in list view, Metrograph's
+calendar, siteinspire's Explore Websites. Criterion names each column exactly
+once — `Spine # / Title / Director / Country / Year`, small caps over one
+heavier rule — and then 1,899 rows carry values only; the spine number `1` is
+set at the size of `France` and `1937` beside it, with no caption attached.
+Metrograph and siteinspire go further and print no field labels at all
+(`Edward Yang / 2000 / 173min / DCP`; `Blond  6 days ago`). **The observation
+is that none of the three repeats a field name down a column** — a listing
+names a column at its head, or not at all, and the value alone is then free to
+sit level with everything else on the row. Ours was doing the opposite:
+labelling every cell and shrinking the value to make room.
+
+**Now** — the caption sits once, in a `.cr-head` above the list, right-aligned
+over the column it names. The head is its own grid but declares the same
+tracks as `.cr-row` (`1fr auto 18px`), the same `18px` gap and the same
+padding, including the 18px hover-arrow track the head leaves empty — so the
+two columns resolve to the same width and line up down the page. Measured at
+390px after the change: head and figure both 60px wide, both ending at x=368.
+
+The figure is alone on the row now, at 15px/600 Space Grotesk, tabular,
+`#3E3A33`, with `padding-top: 2px` settling it onto `.cr-name`'s baseline.
+Fifteen against the name's seventeen is deliberate and is the 2026-11-02 rule
+again: level with the name, not promoted to display size and not demoted under
+a caption. Each row keeps `<span className="sr-only">Open now: </span>` so a
+screen reader still hears the field name on every row; only the eye stops
+re-reading it.
+
+On a phone the column narrows from 72px to 60px. The caption measures 55.47px
+at 10px there (measured in a 390px emulated viewport, not estimated), so 60px
+clears it with room and hands 12px back to the blurb, which goes from 260px to
+272px of measure.
+
+**Left alone, and why** — the three indexes that share `.cr-list` but not this
+problem. `/guide`'s label varies per row (`Closed` or `Updated`, the signal the
+2026-11-02 optimizer item added) and is the point of the row. `/creators`
+prints a date, which without its label could be any date on the page.
+`/topics`' value is a phrase carrying its own unit (`3 contests`), and it has
+the `.cr-row-nocount` variant for rows with nothing to count. A column head
+only works when every row below it answers the same question; those three
+don't.
+
+**Checked** — `npm run build` exit 0. All five pages 200 at both widths with
+`✓ no horizontal overflow` (1440px and 390px); `/guide`, `/creators` and
+`/topics` confirmed still rendering `.cr-since-label` and no `.cr-count`.
+
+**Before/after** — `reports/design/2026-11-03-before.png` (desktop) and
+`2026-11-03-before-390.png`; `2026-11-03-after.png` and
+`2026-11-03-after-390.png`, both from the live site after deploy. All four are
+`/tools`, the longest of the five lists.
+
+---
+
 ## 2026-11-02 — A card's prize, set as what the value actually is
 
 **Changed** — the Row 5 value in `src/components/ContestCard.tsx`, and
