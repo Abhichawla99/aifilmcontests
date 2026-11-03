@@ -1555,6 +1555,62 @@ img, svg, video, canvas { max-width: 100%; }
 .cr-row:hover .cr-go,
 .cr-row:focus-visible .cr-go { opacity: 1; transform: none; }
 
+/* ── A hub index's count column, headed once instead of captioned per row
+   (2026-11-03) ───────────────────────────────────────────────────────────
+   /tools, /categories, /prize, /location and /vs each printed the column's
+   caption again on every row -- "OPEN NOW" fourteen times down /tools, over
+   figures that were the only thing changing. A caption that never varies
+   carries nothing after its first reading, and it cost two things: a line of
+   row height, and the figure itself, which sat below its own label at 12px
+   while the name beside it ran at 17px.
+
+   Criterion's Shop All Films list view names each column exactly once --
+   Spine # / Title / Director / Country / Year, small caps over one heavier
+   rule -- and then 1,899 rows carry values only, the spine number set at the
+   size of the country beside it. So the caption moves up into a head sitting
+   on the same grid as the rows (same 1fr/auto/18px tracks, same gap, same
+   padding, so the two columns line up), and the figure is left alone on the
+   row, level with the name rather than stacked under a label. The
+   screen-reader label stays on every row in an .sr-only span.
+
+   /guide, /creators and /topics keep their per-row label: on /guide it varies
+   ("Closed" or "Updated") and is the point of the row, on /creators it names
+   a date that could otherwise be any date, and /topics' value is a phrase
+   that already carries its own unit. */
+.cr-head {
+  display: grid;
+  grid-template-columns: 1fr auto 18px;
+  align-items: baseline;
+  gap: 18px;
+  padding: 0 8px 13px 2px;
+}
+.cr-head-count {
+  min-width: 84px;
+  text-align: right;
+  white-space: nowrap;
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  color: #A39D91;
+}
+/* Level with .cr-name: same family and line-height, 2px of padding to settle
+   the two onto one baseline, tabular so the column scans straight down. */
+.cr-count {
+  min-width: 84px;
+  padding-top: 2px;
+  text-align: right;
+  white-space: nowrap;
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 15px;
+  font-weight: 600;
+  line-height: 1.25;
+  letter-spacing: -0.01em;
+  font-variant-numeric: tabular-nums;
+  color: #3E3A33;
+}
+
 /* "Why be featured" as a ruled definition list rather than a three-up grid of
    identical boxes — a label, one sentence, a hairline between. */
 .cr-why { border-top: 1px solid #E3DED3; }
@@ -1576,6 +1632,11 @@ img, svg, video, canvas { max-width: 100%; }
 
 @media (max-width: 620px) {
   .cr-row { grid-template-columns: 1fr auto; gap: 14px; padding-right: 2px; }
+  .cr-head { grid-template-columns: 1fr auto; gap: 14px; padding-right: 2px; }
+  .cr-head-count { font-size: 10px; }
+  /* The caption sets this column's width on a phone (55.5px at 10px, measured);
+     60px clears it and hands the 12px back to the blurb beside it. */
+  .cr-head-count, .cr-count { min-width: 60px; }
   .cr-row-nocount { grid-template-columns: 1fr; }
   .cr-go { display: none; }
   .cr-since { min-width: 72px; }

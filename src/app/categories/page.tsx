@@ -95,7 +95,10 @@ export default async function CategoriesIndexPage() {
 
         {/* Roster */}
         <section style={{ marginBottom: 44 }}>
-          <h2 style={sectionLabel}>{rows.length} Categories</h2>
+          <div className="cr-head">
+            <h2 style={{ ...sectionLabel, marginBottom: 0 }}>{rows.length} Categories</h2>
+            <span className="cr-head-count">Open now</span>
+          </div>
           <div className="cr-list">
             {rows.map(({ slug, cat, openCount: catOpenCount }) => (
               <Link key={slug} href={`/categories/${slug}`} className="cr-row">
@@ -103,9 +106,8 @@ export default async function CategoriesIndexPage() {
                   <div className="cr-name">{cat.label}</div>
                   <p className="cr-one">{cat.description}</p>
                 </div>
-                <div className="cr-since">
-                  <span className="cr-since-label">Open now</span>
-                  <span className="cr-since-date">{catOpenCount}</span>
+                <div className="cr-count">
+                  <span className="sr-only">Open now: </span>{catOpenCount}
                 </div>
                 <span className="cr-go" aria-hidden="true">&rarr;</span>
               </Link>

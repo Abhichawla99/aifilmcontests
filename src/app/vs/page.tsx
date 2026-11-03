@@ -97,7 +97,10 @@ export default async function VSIndexPage() {
 
         {/* Roster */}
         <section style={{ marginBottom: 44 }}>
-          <h2 style={sectionLabel}>{rows.length} Comparisons</h2>
+          <div className="cr-head">
+            <h2 style={{ ...sectionLabel, marginBottom: 0 }}>{rows.length} Comparisons</h2>
+            <span className="cr-head-count">Compares</span>
+          </div>
           <div className="cr-list">
             {rows.map(({ slug, title, description, toolCount }) => (
               <Link key={slug} href={`/vs/${slug}`} className="cr-row">
@@ -105,9 +108,8 @@ export default async function VSIndexPage() {
                   <div className="cr-name">{title}</div>
                   <p className="cr-one">{description}</p>
                 </div>
-                <div className="cr-since">
-                  <span className="cr-since-label">Compares</span>
-                  <span className="cr-since-date">{toolCount}</span>
+                <div className="cr-count">
+                  <span className="sr-only">Compares: </span>{toolCount}
                 </div>
                 <span className="cr-go" aria-hidden="true">&rarr;</span>
               </Link>
