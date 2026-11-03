@@ -128,7 +128,7 @@ export async function buildDailyReport(): Promise<DailyReport> {
   const nd = (lastNotify.data[0]?.details ?? {}) as { waiting?: number; backlogDays?: number; dailyBudget?: number; sent?: number; unrecorded?: number }
   const peopleWaiting = Number(nd.waiting ?? 0)
   const backlogDays = Number(nd.backlogDays ?? 0)
-  const dailyBudget = Number(nd.dailyBudget ?? (process.env.EMAIL_DAILY_BUDGET ?? 80))
+  const dailyBudget = Number(nd.dailyBudget ?? (process.env.EMAIL_DAILY_BUDGET ?? 0))
 
   // Sends that went out but never made it into email_sends. Once someone adds
   // them (pulse rows from around the run time), this goes back to zero.
@@ -207,9 +207,9 @@ export async function buildDailyReport(): Promise<DailyReport> {
   if (!migrated) todos.push('Paste supabase/migrations/2026-09-07-autopilot.sql into Supabase → SQL Editor → Run. Takes 30 seconds. Unlocks tracking, sales, and robot reporting.')
   const outgrown = backlogDays >= 3
   if (unrecordedSends) todos.push(`${unrecordedSends} people got this morning's email but Supabase didn't save a record of it, so tomorrow's 8am run will email them again. Tell Claude: "add the UNRECORDED_SENDS rows from the Vercel notify log to email_sends".`)
-  if (quotaLogged) todos.push(`Resend refused to send yesterday. On the Free plan we send ${dailyBudget} a day and stop when Resend says stop, so this usually means other emails (welcome, report) used the rest, or the 3,000/month is gone. If it repeats, upgrade Resend to Pro ($20/mo) at resend.com → Settings → Billing → Transactional.`)
+  if (quotaLogged) todos.push(`Resend refused to send yesterday because it said we hit a limit. Whoever missed out goes first tomorrow. Check resend.com → Usage to see which limit. If it shows the Free plan, the RESEND_API_KEY in Vercel belongs to a Resend team that isn't on Pro.`)
   else if (emailsStuck) todos.push(`Emails look stuck: ${pending} contest update${pending === 1 ? '' : 's'} should have gone out but nothing has been sent for ${daysSinceEmail ?? '?'} days. Check the notify cron in Vercel logs.`)
-  if (outgrown) todos.push(`The list has outgrown the free email plan: ${peopleWaiting} people are waiting about ${backlogDays} days for their next email. Upgrade Resend to Pro ($20/mo, no daily cap) at resend.com → Settings → Billing → Transactional, then set EMAIL_DAILY_BUDGET=0 in Vercel.`)
+  if (outgrown) todos.push(`Our own daily cap is slowing emails down: ${peopleWaiting} people wait about ${backlogDays} days because the site sends at most ${dailyBudget} a day (EMAIL_DAILY_BUDGET in Vercel). Resend Pro has no daily limit, so delete EMAIL_DAILY_BUDGET or set it to 0 in Vercel → aifilmcontests → Settings → Environment Variables, then redeploy.`)
   if (!process.env.REPORT_TO_EMAIL) todos.push('Vercel → aifilmcontests → Settings → Environment Variables → add REPORT_TO_EMAIL = your email, then redeploy. This report then arrives by email every morning at 10am.')
   if (migrated && !engagementMeasurable) todos.push(`Resend → Domains → turn on Open + Click tracking. Then Resend → Webhooks → add ${SITE_URL}/api/webhooks/resend (all email events) and put its signing secret in Vercel as RESEND_WEBHOOK_SECRET.`)
   if (!stripeReady) todos.push(`Stripe → Payment Links → create "Featured listing, ${PRICE_LABEL}". Put the link URL in Vercel as STRIPE_PAYMENT_LINK. Stripe → Webhooks → add ${SITE_URL}/api/webhooks/stripe for checkout.session.completed and put its secret in Vercel as STRIPE_WEBHOOK_SECRET.`)
@@ -233,7 +233,8 @@ export async function buildDailyReport(): Promise<DailyReport> {
   } else if (daysSinceEmail != null && daysSinceEmail >= 8) {
     headline = `🟡 No email has gone out in ${daysSinceEmail} days. Either nothing new happened (fine) or the notify cron is stuck (check Vercel logs).`
   } else if (outgrown) {
-    headline = `🟡 Growing pains: ${peopleWaiting} people wait about ${backlogDays} days for their next email on the free plan. Everything still works, just slower. Upgrade when it bothers you (see to-do).`
+    const todoNo = todos.findIndex(t => t.startsWith('Our own daily cap')) + 1
+    headline = `🟡 ${peopleWaiting} people wait about ${backlogDays} days for their next email because the site caps itself at ${dailyBudget} a day. One Vercel setting removes the cap (see to-do #${todoNo}).`
   } else if (salesYesterday.length) {
     headline = `💰 ${plural(salesYesterday.length, 'featured listing')} sold yesterday (${money(salesYesterday.length * PRICE_CENTS)}). ${salesYesterday.map(s => s.name).join(', ')}.`
   } else {
@@ -272,7 +273,7 @@ export async function buildDailyReport(): Promise<DailyReport> {
   L.push(`• Last email went out: ${lastEmailAt ? `${lastEmailAt.toISOString().slice(0, 10)} (${daysSinceEmail} days ago)` : 'never / unknown'}.`)
   L.push(`• Waiting to go out: ${pendingNew.length} new-contest announcement${pendingNew.length === 1 ? '' : 's'}, ${pendingClosing.length} last-call ping${pendingClosing.length === 1 ? '' : 's'}.`)
   L.push(`• People waiting for their next email: ${peopleWaiting}${peopleWaiting ? ` (~${backlogDays} day${backlogDays === 1 ? '' : 's'} at ${dailyBudget} a day)` : ''}.`)
-  L.push(`• Rule: each person gets one bundled email only when there's news for them, never more than every 2 days. Free plan: up to ${dailyBudget} a day, longest-waiting first.`)
+  L.push(`• Rule: each person gets one bundled email only when there's news for them, never more than every 2 days. ${dailyBudget > 0 ? `Daily cap: ${dailyBudget} a day (EMAIL_DAILY_BUDGET), longest-waiting first.` : 'No daily cap.'}`)
   L.push('')
   L.push('CONTESTS')
   L.push(`• ${n(cTotal)} tracked · ${n(cOpen)} open · ${n(cUpcoming)} upcoming · ${n(cClosed)} closed.`)

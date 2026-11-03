@@ -5,15 +5,15 @@ import { isMissingRelation, logAgentRun, withDbRetry } from '@/lib/db-health'
 
 // Vercel Cron — the ONLY thing that emails subscribers. Runs once a day.
 //
-// Per-person bundling, built to live inside Resend's Free plan (100 emails/day,
-// 3,000/month) and to work unchanged on a paid plan:
+// Per-person bundling. We're on Resend Pro (no daily limit, 50,000/month);
+// EMAIL_DAILY_BUDGET can still throttle it, e.g. 80 to fit the Free plan's 100/day:
 //   • Each subscriber gets ONE email only when there is something new FOR THEM:
 //       - contests added since their last email (or since they joined)
 //       - contests closing within 3 days they haven't been warned about
 //       - once a week: what closes in 4–7 days
 //   • At most one email per person every ~2 days (EMAIL_MIN_GAP_HOURS).
 //   • Longest-waiting people go first. We stop at the daily budget
-//     (EMAIL_DAILY_BUDGET, default 80; set 0 for unlimited on a paid plan)
+//     (EMAIL_DAILY_BUDGET, default 0 = no cap)
 //     and the moment Resend refuses a batch. Whoever didn't get it today is
 //     first in line tomorrow, with anything new folded in. Nobody gets a
 //     duplicate: every send is logged per person in email_sends.
@@ -21,7 +21,7 @@ import { isMissingRelation, logAgentRun, withDbRetry } from '@/lib/db-health'
 
 export const maxDuration = 300
 
-const DAILY_BUDGET = Math.max(0, Number(process.env.EMAIL_DAILY_BUDGET ?? 80))
+const DAILY_BUDGET = Math.max(0, Number(process.env.EMAIL_DAILY_BUDGET ?? 0))
 const MIN_GAP_HOURS = Math.max(0, Number(process.env.EMAIL_MIN_GAP_HOURS ?? 40))
 const NEW_WINDOW_DAYS = 10
 const BATCH = DAILY_BUDGET > 0 ? 20 : 100
@@ -179,8 +179,8 @@ export async function GET(request: NextRequest) {
 
   if (result.quotaExceeded) {
     const why = result.sent > 0
-      ? `Resend stopped us mid-way: ${result.sent} people got today's email, ${stillWaiting} are first in line tomorrow. Free plan is 100/day.`
-      : `Resend refused to send (quota). ${stillWaiting} people are waiting. Free plan is 100/day, 3,000/month.`
+      ? `Resend stopped us mid-way: ${result.sent} people got today's email, ${stillWaiting} are first in line tomorrow. Check resend.com → Usage.`
+      : `Resend refused to send (quota). ${stillWaiting} people are waiting. Check resend.com → Usage.`
     await logAgentRun('notify', 'failed', why, details)
     return NextResponse.json({ ok: false, ...details, error: why }, { status: 500 })
   }
