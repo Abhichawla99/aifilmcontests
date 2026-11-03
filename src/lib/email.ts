@@ -87,33 +87,47 @@ function unsubscribeUrl(token?: string | null) {
     : `${SITE_URL}/unsubscribe`
 }
 
-// ─── Shared styles: the editorial look ────────────────────────────────────────
+// ─── Shared styles: the sketchbook look ───────────────────────────────────────
 //
-// Every email reads like a page from a film magazine: warm paper, a serif
-// masthead and headlines, hairline rules, and the contests as a numbered index
-// with the deadline on the right. One accent colour, kept for what's urgent and
-// for links. A photograph goes at the top of the welcome and spotlight once
-// Abhi has art-directed one (EMAIL_ART); until then they open on type alone.
+// Every email reads like a note on warm paper: a friendly serif for headlines,
+// Georgia for the words, black pill buttons and underlined links. Ink drawings
+// sit beside the sections once Abhi has made them (EMAIL_ART); until then the
+// sections are text alone. The signup emails open on a lime festival poster,
+// sent as an image (public/email) so it looks the same in Gmail.
 
 const T = {
-  paper: '#F4F0E8',   // the page
-  panel: '#EAE4D8',   // the Overs offer
-  ink: '#16140F',
-  inkSoft: '#57524A',
-  faint: '#8E887B',
-  rule: '#D6CEBE',
-  accent: '#B3361F',  // urgent, new, links
+  paper: '#F7F0D9',   // the page
+  panel: '#EFE5C6',   // set-apart blocks
+  ink: '#1C1A15',
+  inkSoft: '#55503F',
+  faint: '#8C8570',
+  rule: '#DCD1B0',
+  accent: '#5E6AA0',  // the poster's slate: urgent, new
 }
 const FONT = `-apple-system,BlinkMacSystemFont,'Segoe UI','Helvetica Neue',Arial,sans-serif`
-const DISPLAY = `'Instrument Serif',Georgia,'Times New Roman',serif`
+const DISPLAY = `'Young Serif',Georgia,'Times New Roman',serif`
+const SIGN = `'Newsreader',Georgia,'Times New Roman',serif`
 const SERIF = `Georgia,'Times New Roman',serif`
 
 /** Pictures for the emails. Abhi art-directs these; an unset one is left out. */
 type EmailArt = { src: string; alt: string; caption?: string }
-const EMAIL_ART: Record<'welcome' | 'spotlight' | 'overs', EmailArt | null> = {
+type ArtSlot = 'welcome' | 'spotlight' | 'overs' | 'packOvers' | 'packContest' | 'packGuide' | 'packClub'
+const EMAIL_ART: Record<ArtSlot, EmailArt | null> = {
   welcome: null,
   spotlight: null,
   overs: null,
+  // Ink drawings beside the creator pack's sections (prompts in the design page).
+  packOvers: null,
+  packContest: null,
+  packGuide: null,
+  packClub: null,
+}
+
+/** The lime poster that opens the signup emails, as an image so Gmail shows it. */
+type Poster = { src: string; alt: string; width: number; height: number }
+const POSTERS: Record<'pack' | 'confirm', Poster> = {
+  pack: { src: `${SITE_URL}/email/poster-pack.png`, alt: '$3 until Nov 30. Overs Pro for your first 3 months. 700 founding places.', width: 600, height: 478 },
+  confirm: { src: `${SITE_URL}/email/poster-confirm.png`, alt: 'One click and your creator pack is on its way.', width: 600, height: 400 },
 }
 
 const emailBase = `background-color:${T.paper};color:${T.ink};font-family:${FONT};margin:0;padding:0;`
@@ -122,9 +136,9 @@ const wrap = `max-width:600px;margin:0 auto;padding:28px 20px 44px;`
 const caps = (color: string, size = 10) =>
   `font-family:${FONT};font-size:${size}px;font-weight:600;letter-spacing:0.16em;text-transform:uppercase;color:${color};`
 const button = (href: string, label: string) =>
-  `<a href="${href}" style="display:inline-block;background:${T.ink};color:${T.paper};text-decoration:none;padding:15px 28px;${caps(T.paper, 11)}">${label}</a>`
-const textLink = (href: string, label: string, color = T.accent) =>
-  `<a href="${href}" style="${caps(color, 11)}text-decoration:none;">${label}</a>`
+  `<a href="${href}" style="display:inline-block;background:${T.ink};color:${T.paper};text-decoration:none;padding:14px 26px;border-radius:999px;font-family:${FONT};font-size:15px;font-weight:600;line-height:1.2;">${label}</a>`
+const textLink = (href: string, label: string, color = T.ink) =>
+  `<a href="${href}" style="font-family:${FONT};font-size:14px;font-weight:600;color:${color};text-decoration:underline;">${label}</a>`
 
 function footer(unsubscribeLink: string) {
   const link = (href: string, label: string) => `<a href="${href}" style="color:${T.inkSoft};text-decoration:underline;">${label}</a>`
@@ -175,7 +189,7 @@ function picture(art: EmailArt | null, margin = '0 0 28px 0') {
 function headline(kicker: string, title: string, dek?: string) {
   return `
   <div style="${caps(T.accent, 11)}margin:0 0 12px 0;">${kicker}</div>
-  <h1 style="font-family:${DISPLAY};font-weight:400;font-size:46px;line-height:1.02;letter-spacing:-0.01em;color:${T.ink};margin:0 0 14px 0;">${title}</h1>
+  <h1 style="font-family:${DISPLAY};font-weight:400;font-size:38px;line-height:1.1;color:${T.ink};margin:0 0 14px 0;">${title}</h1>
   ${dek ? `<p style="font-family:${SERIF};font-size:18px;line-height:1.55;color:${T.inkSoft};margin:0;">${dek}</p>` : ''}`
 }
 
@@ -196,16 +210,16 @@ function indexRow(c: ContestEmailItem, n: number, first = false, descLength = 17
   return `
   <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="${first ? '' : `border-top:1px solid ${T.rule};`}">
     <tr>
-      <td width="38" style="width:38px;vertical-align:top;padding:20px 0 20px 0;font-family:${DISPLAY};font-size:24px;line-height:1;color:${T.faint};">${String(n).padStart(2, '0')}</td>
+      <td width="38" style="width:38px;vertical-align:top;padding:20px 0 20px 0;font-family:${DISPLAY};font-size:19px;line-height:1.1;color:${T.faint};">${String(n).padStart(2, '0')}</td>
       <td style="vertical-align:top;padding:20px 12px 20px 0;">
-        <a href="${c.url}" style="font-family:${DISPLAY};font-size:25px;line-height:1.1;color:${T.ink};text-decoration:none;">${escapeHtml(c.name)}</a>
+        <a href="${c.url}" style="font-family:${DISPLAY};font-size:21px;line-height:1.2;color:${T.ink};text-decoration:none;">${escapeHtml(c.name)}</a>
         <div style="font-size:13px;line-height:1.5;color:${T.inkSoft};margin:6px 0 0 0;"><strong style="color:${T.ink};">${escapeHtml(trimTo(c.prize, 90))}</strong> · ${escapeHtml(c.organizer)}</div>
         ${descLength ? `<div style="font-size:14px;line-height:1.6;color:${T.inkSoft};margin:8px 0 10px 0;">${escapeHtml(trimTo(c.description, descLength))}</div>` : '<div style="height:10px;"></div>'}
         ${textLink(c.url, 'Enter →')}
       </td>
       <td width="76" style="width:76px;vertical-align:top;text-align:right;padding:22px 0 20px 0;">
         <div style="${caps(urgent ? T.accent : T.faint, 9)}margin-bottom:4px;">${when}</div>
-        <div style="font-family:${DISPLAY};font-size:22px;line-height:1;color:${urgent ? T.accent : T.ink};">${shortDate(c.deadline)}</div>
+        <div style="font-family:${DISPLAY};font-size:19px;line-height:1;color:${urgent ? T.accent : T.ink};">${shortDate(c.deadline)}</div>
       </td>
     </tr>
   </table>`
@@ -216,21 +230,22 @@ function index(items: ContestEmailItem[], start = 1, descLength = 170) {
   return items.map((c, i) => indexRow(c, start + i, i === 0, descLength)).join('')
 }
 
-function shell(body: string, unsub: string, section = '', preheader = '', now = new Date()) {
+function shell(body: string, unsub: string, section = '', preheader = '', now = new Date(), poster?: Poster) {
   const date = now.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric', timeZone: 'UTC' })
   return `<!DOCTYPE html>
 <html lang="en">
 <head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="color-scheme" content="light"><meta name="supported-color-schemes" content="light">
-<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet"></head>
+<link href="https://fonts.googleapis.com/css2?family=Young+Serif&family=Newsreader:ital,opsz@1,6..72&display=swap" rel="stylesheet"></head>
 <body style="${emailBase}">
 ${preheader ? `<div style="display:none;max-height:0;overflow:hidden;opacity:0;">${escapeHtml(preheader)}</div>` : ''}
 <div style="background-color:${T.paper};">
+${poster ? `<div style="max-width:600px;margin:0 auto;"><a href="${SITE_URL}"><img src="${poster.src}" alt="${escapeHtml(poster.alt)}" width="${poster.width}" height="${poster.height}" style="display:block;width:100%;max-width:600px;height:auto;border:0;background:#CDF04A;color:#5E6AA0;font-family:${FONT};font-size:22px;font-weight:800;"></a></div>` : ''}
 <div style="${wrap}">
-  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="border-bottom:1px solid ${T.ink};margin-bottom:28px;"><tr>
-    <td style="vertical-align:bottom;padding-bottom:10px;"><a href="${SITE_URL}" style="font-family:${DISPLAY};font-size:24px;line-height:1;color:${T.ink};text-decoration:none;">AI Film Contests</a></td>
+  ${poster ? '' : `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="border-bottom:1px solid ${T.ink};margin-bottom:28px;"><tr>
+    <td style="vertical-align:bottom;padding-bottom:10px;"><a href="${SITE_URL}" style="font-family:${DISPLAY};font-size:22px;line-height:1;color:${T.ink};text-decoration:none;">AI Film Contests</a></td>
     <td style="vertical-align:bottom;text-align:right;padding-bottom:12px;${caps(T.faint, 9)}">${section ? `${escapeHtml(section)} &nbsp;·&nbsp; ` : ''}${date}</td>
-  </tr></table>
+  </tr></table>`}
   ${body}
   ${footer(unsub)}
 </div>
@@ -610,12 +625,29 @@ function offerEnds(now: Date) {
 }
 
 /** A paragraph in the letter-style emails. */
-const para = (html: string, color = T.ink, size = 16, margin = '0 0 16px 0') =>
-  `<p style="font-family:${SERIF};font-size:${size}px;line-height:1.65;color:${color};margin:${margin};">${html}</p>`
-const signature = `<p style="font-family:${DISPLAY};font-style:italic;font-size:30px;line-height:1;color:${T.ink};margin:8px 0 0 0;">Abhi</p>`
+const para = (html: string, color = T.ink, size = 16, margin = '0 0 16px 0', align = 'left') =>
+  `<p style="font-family:${SERIF};font-size:${size}px;line-height:1.65;color:${color};margin:${margin};text-align:${align};">${html}</p>`
+const signature = `<p style="font-family:${SIGN};font-style:italic;font-size:30px;line-height:1;color:${T.ink};margin:10px 0 0 0;">Abhi</p>`
+
+/** "Ends November 30", "Ends today": the line under the Overs button. */
+const capFirst = (s: string) => s.charAt(0).toUpperCase() + s.slice(1)
+
+/** One section of the creator pack: its words, with Abhi's ink drawing beside
+    them once he has made it. `side` is where the drawing goes. */
+function packRow(art: EmailArt | null, side: 'left' | 'right', inner: string) {
+  if (!art) return `<div style="margin:34px 0;">${inner}</div>`
+  const pic = `<td width="36%" style="width:36%;vertical-align:middle;padding:${side === 'left' ? '0 22px 0 0' : '0 0 0 22px'};">
+      <img src="${art.src}" alt="${escapeHtml(art.alt)}" width="190" style="display:block;width:100%;max-width:190px;height:auto;border:0;"></td>`
+  const words = `<td style="vertical-align:middle;">${inner}</td>`
+  return `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin:34px 0;"><tr>${side === 'left' ? pic + words : words + pic}</tr></table>`
+}
+const packHead = (s: string) =>
+  `<div style="font-family:${DISPLAY};font-size:23px;line-height:1.2;color:${T.ink};margin:0 0 8px 0;">${s}</div>`
+const packText = (html: string, color = T.inkSoft, size = 15) =>
+  `<p style="font-family:${SERIF};font-size:${size}px;line-height:1.6;color:${color};margin:0 0 10px 0;">${html}</p>`
 
 /** The email a signup gets: confirm the address, get the pack. `reminder`
-    is the one nudge a day later. */
+    is the one nudge a day later. Opens on the "One click" poster. */
 export function buildConfirmEmail(name: string | null | undefined, token: string, reminder = false, now = new Date()): {
   subject: string
   html: (unsub: string) => string
@@ -636,12 +668,14 @@ export function buildConfirmEmail(name: string | null | undefined, token: string
   return {
     subject: reminder ? 'Your creator pack is still waiting' : 'Confirm your email to get your creator pack',
     html: unsub => shell(`
-  ${para(hey)}
-  ${para(lead)}
-  <div style="margin:26px 0 26px 0;">${button(url, 'Confirm and send my pack →')}</div>
-  ${deadline ? para(deadline, T.inkSoft, 15) : ''}
-  ${para(after, T.faint, 14)}
-  ${signature}`, unsub, reminder ? 'Reminder' : 'Confirm', open ? `One click. ${deadline}` : 'One click and your creator pack is on its way.', now),
+  <div style="text-align:center;padding-top:8px;">
+    ${para(hey, T.ink, 17, '0 0 10px 0', 'center')}
+    ${para(lead, T.ink, 17, '0 auto 26px auto', 'center')}
+    ${button(url, 'Confirm and send my pack →')}
+    ${deadline ? para(deadline, T.inkSoft, 15, '24px 0 6px 0', 'center') : '<div style="height:22px;"></div>'}
+    ${para(after, T.faint, 14, '0', 'center')}
+    ${signature}
+  </div>`, unsub, reminder ? 'Reminder' : 'Confirm', open ? `One click. ${deadline}` : 'One click and your creator pack is on its way.', now, POSTERS.confirm),
     text: unsub =>
       `${first ? `Hey ${first},` : 'Hey,'}\n\n${lead}\n\nConfirm and send my pack: ${url}\n\n` +
       (deadline ? `${deadline}\n\n` : '') + `${after}\n\nAbhi\n\nUnsubscribe: ${unsub}`,
@@ -651,8 +685,9 @@ export function buildConfirmEmail(name: string | null | undefined, token: string
 /**
  * The creator pack, sent the moment someone confirms. `existing` is for people
  * who were on the list before the pack existed. While the founding price is
- * open it leads with Overs and its deadline; after, the pack is the contest,
- * the guide and the club.
+ * open it opens on the "$3 until Nov 30" poster and leads with Overs; after,
+ * it opens on the plain masthead and the pack is the contest, the guide and
+ * the club.
  */
 export function buildPackEmail(
   name: string | null | undefined,
@@ -672,8 +707,8 @@ export function buildPackEmail(
     ? `Your creator pack: Overs for $${OVERS.monthlyUsd} until ${OFFER_ENDS_LABEL}`
     : 'Your creator pack is here'
   const opening = opts.existing
-    ? "You've been on the list a while, so you get the creator pack new subscribers now get. Here it is."
-    : "You're confirmed. Here's your creator pack."
+    ? "You've been on the list a while, so you get the creator pack new subscribers now get. Here's what's in it."
+    : "You're confirmed. Here's what's in your pack."
   const oversCopy = `Overs is the tool I built for making AI films. Type a shot and it makes the stills. Pick one and it becomes a clip that opens on that exact frame.`
   const priceCopy = `$${OVERS.monthlyUsd} a month for your first ${OVERS.months} months, then $${OVERS.fullUsd}. The price ${ends}, or sooner if the ${OVERS.places} founding places fill.`
   const fine = 'You bring your own OpenRouter key, so each clip costs what the video model charges. Cancel any time.'
@@ -681,50 +716,59 @@ export function buildPackEmail(
     ? `${featured.prize} · free to enter · closes ${fmtDate(featured.deadline)}`
     : ''
 
-  const oversHtml = open ? `
-  ${sectionHead(`Overs Pro for $${OVERS.monthlyUsd} a month`)}
-  <div style="padding-top:14px;">
-    ${para(oversCopy)}
-    ${para(`<strong>${priceCopy}</strong>`)}
-    ${para(fine, T.faint, 13, '0 0 22px 0')}
+  // Drawings alternate sides down the email, starting on the left.
+  const rows: Array<[EmailArt | null, string]> = []
+  if (open) rows.push([EMAIL_ART.packOvers, `
+    ${packHead(`Overs Pro, $${OVERS.monthlyUsd} a month`)}
+    ${packText(oversCopy)}
+    ${packText(`<strong>${priceCopy}</strong>`, T.ink)}
+    ${packText(fine, T.faint, 13)}
+    ${textLink(oversLink('pack'), `Claim Overs for $${OVERS.monthlyUsd} →`)}`])
+  if (featured) rows.push([EMAIL_ART.packContest, `
+    <div style="${caps(T.faint, 10)}margin-bottom:8px;">This week's contest</div>
+    <a href="${featured.url}" style="text-decoration:none;">${packHead(escapeHtml(featured.name))}</a>
+    ${packText(`<strong style="color:${T.ink};">${escapeHtml(trimTo(featured.prize, 90))}</strong> · Free to enter · Closes ${shortDate(featured.deadline)}`, T.inkSoft, 14)}
+    ${packText(escapeHtml(trimTo(featured.description, 200)))}
+    ${open ? packText('<em>Make your first still for it in Overs tonight.</em>', T.ink) : ''}
+    ${textLink(featured.url, 'Read the rules →')}`])
+  rows.push([EMAIL_ART.packGuide, `
+    ${packHead(escapeHtml(GUIDE.title))}
+    ${packText('Every step from the rules to the export, and the checks that get entries thrown out.')}
+    ${textLink(`${SITE_URL}${GUIDE.path}`, 'Read the guide →')}`])
+  rows.push([EMAIL_ART.packClub, `
+    ${packHead(COMMUNITY.name)}
+    ${packText('My free community for AI creative workflows. Post what you make and get feedback.')}
+    ${textLink(COMMUNITY.url, 'Join free →')}`])
+  const sections = rows.map(([art, inner], i) => packRow(art, i % 2 ? 'right' : 'left', inner)).join('')
+
+  const cta = open ? `
+  <div style="text-align:center;margin-top:26px;">
     ${button(oversLink('pack'), `Claim Overs for $${OVERS.monthlyUsd} →`)}
+    <div style="font-family:${FONT};font-size:12px;color:${T.faint};margin-top:12px;">${capFirst(ends)}, or when the ${OVERS.places} places fill</div>
   </div>` : ''
 
-  const featuredHtml = featured ? `
-  ${sectionHead("This week's contest", open ? 'Make your first still for it in Overs tonight.' : undefined)}
-  <div style="padding-top:16px;">
-    <a href="${featured.url}" style="font-family:${DISPLAY};font-size:30px;line-height:1.08;color:${T.ink};text-decoration:none;">${escapeHtml(featured.name)}</a>
-    <div style="font-size:13px;line-height:1.5;color:${T.inkSoft};margin:8px 0 10px 0;"><strong style="color:${T.ink};">${escapeHtml(trimTo(featured.prize, 90))}</strong> · free to enter · closes ${shortDate(featured.deadline)}</div>
-    <div style="font-size:14px;line-height:1.6;color:${T.inkSoft};margin:0 0 12px 0;">${escapeHtml(trimTo(featured.description, 200))}</div>
-    ${textLink(featured.url, 'Read the rules →')}
-  </div>` : ''
-
-  const resourcesHtml = `
-  ${sectionHead('Also yours')}
-  <div style="padding-top:12px;">
-    ${para(`<a href="${SITE_URL}${GUIDE.path}" style="color:${T.ink};">${escapeHtml(GUIDE.title)}</a>. Every step from the rules to the export, and the checks that get entries thrown out.`, T.inkSoft, 15, '0 0 12px 0')}
-    ${para(`<a href="${COMMUNITY.url}" style="color:${T.ink};">${COMMUNITY.name}</a>. My free community for AI creative workflows. Post what you make and get feedback.`, T.inkSoft, 15, '0')}
-  </div>`
+  const note = "I run AI Film Contests and check the list every day, so you don't spend a weekend on a contest that already closed. Reply and tell me which one you're entering."
 
   return {
     subject,
     contestIds: featured?.id ? [`new:${featured.id}`] : [],
     html: unsub => shell(`
-  ${para(first ? `Hey ${escapeHtml(first)},` : 'Hey,')}
-  ${para(opening, T.ink, 16, '0 0 4px 0')}
-  ${oversHtml}
-  ${featuredHtml}
-  ${resourcesHtml}
-  <div style="border-top:1px solid ${T.ink};margin-top:40px;padding-top:18px;">
-    ${para("I run AI Film Contests and the list gets checked every day, so you don't spend a weekend on a contest that has already closed. Reply and tell me which contest you're entering.", T.ink, 16, '0')}
+  <div style="padding-top:8px;">
+    ${para(`${first ? `Hey ${escapeHtml(first)}` : 'Hey'}, ${opening.charAt(0).toLowerCase()}${opening.slice(1)}`, T.ink, 17, '0 auto', 'center')}
+    ${cta}
+  </div>
+  <div style="border-top:1px solid ${T.ink};margin-top:32px;"></div>
+  ${sections}
+  <div style="border-top:1px solid ${T.ink};padding-top:26px;text-align:center;">
+    ${para(note, T.ink, 16, '0', 'center')}
     ${signature}
-  </div>`, unsub, 'Creator pack', open ? `Overs for $${OVERS.monthlyUsd} a month ${ends}. Plus this week's contest.` : "This week's contest, the guide and the club.", now),
+  </div>`, unsub, 'Creator pack', open ? `Overs for $${OVERS.monthlyUsd} a month ${ends}. Plus this week's contest.` : "This week's contest, the guide and the club.", now, open ? POSTERS.pack : undefined),
     text: unsub =>
       `${first ? `Hey ${first},` : 'Hey,'}\n\n${opening}\n\n` +
       (open ? `OVERS PRO FOR $${OVERS.monthlyUsd} A MONTH\n${oversCopy}\n${priceCopy}\n${fine}\nClaim it: ${oversLink('pack')}\n\n` : '') +
       (featured ? `THIS WEEK'S CONTEST\n${featured.name}\n${featuredLine}\n${featured.url}\n\n` : '') +
       `ALSO YOURS\n${GUIDE.title}: ${SITE_URL}${GUIDE.path}\n${COMMUNITY.name}, my free community: ${COMMUNITY.url}\n\n` +
-      `I run AI Film Contests and the list gets checked every day, so you don't spend a weekend on a contest that has already closed. Reply and tell me which contest you're entering.\n\nAbhi\n\nUnsubscribe: ${unsub}`,
+      `${note}\n\nAbhi\n\nUnsubscribe: ${unsub}`,
   }
 }
 
