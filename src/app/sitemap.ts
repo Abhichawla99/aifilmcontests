@@ -239,6 +239,7 @@ const TOPICS = [
   'ai-film-festivals-in-new-york',
   'ai-film-festivals-in-los-angeles',
   'ai-film-festivals-in-toronto',
+  'ai-film-festivals-in-montreal',
   'ai-feature-film-festivals-2026',
   'ai-sci-fi-film-contests-2026',
   'experimental-ai-film-contests-2026',
