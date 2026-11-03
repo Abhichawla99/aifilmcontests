@@ -116,11 +116,12 @@ const EMAIL_ART: Record<ArtSlot, EmailArt | null> = {
   welcome: null,
   spotlight: null,
   overs: null,
-  // Ink drawings beside the creator pack's sections (prompts in the design page).
-  packOvers: null,
-  packContest: null,
-  packGuide: null,
-  packClub: null,
+  // Abhi's ink drawings beside the creator pack's sections, cut onto T.paper
+  // (not transparent, so dark-mode inboxes show a paper card, not black on black).
+  packOvers: { src: `${SITE_URL}/email/ink-overs.png`, alt: 'Ink drawing: someone holding up a film frame as a strip of film unspools from it' },
+  packContest: { src: `${SITE_URL}/email/ink-contest.png`, alt: 'Ink drawing: someone leaping with a film reel trophy, one shoe flying off' },
+  packGuide: { src: `${SITE_URL}/email/ink-guide.png`, alt: 'Ink drawing: someone walking while reading a big book, pages drifting behind' },
+  packClub: { src: `${SITE_URL}/email/ink-club.png`, alt: 'Ink drawing: three friends laughing around one laptop' },
 }
 
 /** The lime poster that opens the signup emails, as an image so Gmail shows it. */
