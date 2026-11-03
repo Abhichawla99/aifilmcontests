@@ -82,12 +82,28 @@ export async function getSubscribers(): Promise<Subscriber[]> {
   }))
 }
 
+/** Where a signup stands after the form: new, or already here but never
+    confirmed (or unsubscribed and back), which both get a confirm link. */
+export type SignupState = 'new' | 'pending' | 'returning'
+
+/** A confirm email is sent at most once in this window, however often the form is sent. */
+const CONFIRM_RESEND_MINUTES = 10
+
+// The confirm columns arrive with supabase/migrations/2026-11-03-confirm.sql.
+// Until it has run, writes leave them out rather than breaking signup.
+const isMissingColumn = (msg: string) => /confirm|pack_sent|schema cache|column/i.test(msg)
+
+/**
+ * A new signup is pending until they click the link in the confirm email
+ * (buildConfirmEmail); nothing else is sent to them before that. sendConfirm
+ * says whether to send that email now.
+ */
 export async function addSubscriber(
   email: string,
   name: string | null = null,
   consentGivenAt: string = new Date().toISOString(),
   source: string | null = null,
-): Promise<{ success: boolean; message: string; token?: string }> {
+): Promise<{ success: boolean; message: string; token?: string; state?: SignupState; sendConfirm?: boolean }> {
   const cleanEmail = email.toLowerCase().trim()
   const domain = cleanEmail.split('@')[1]
 
@@ -104,40 +120,136 @@ export async function addSubscriber(
     }
   }
 
+  const now = new Date().toISOString()
+  const sent = { success: true, message: 'Check your inbox and click the link to get your creator pack.' }
   const base = {
     email: cleanEmail,
     name,
-    confirmed: true,
+    confirmed: false,
     consent_given_at: consentGivenAt,
+    confirm_sent_at: now,
   }
   // `source` = the page they signed up on (e.g. /topics/best-ai-film-festivals-for-pika-users).
-  // The column only exists after the 2026-09-07 migration, so retry without it.
-  let { data, error } = await supabaseAdmin
-    .from('subscribers')
-    .insert(source ? { ...base, source: source.slice(0, 200) } : base)
-    .select('unsubscribe_token')
-    .single()
-  if (error && source && /source|schema cache|column/i.test(error.message)) {
-    ;({ data, error } = await supabaseAdmin
-      .from('subscribers')
-      .insert(base)
-      .select('unsubscribe_token')
-      .single())
+  // Each retry drops a column an older database may not have yet.
+  const attempts: Array<Record<string, unknown>> = [
+    source ? { ...base, source: source.slice(0, 200) } : base,
+    base,
+    { email: cleanEmail, name, confirmed: false, consent_given_at: consentGivenAt },
+  ]
+  let data: { unsubscribe_token: string | null } | null = null
+  let error: { code?: string; message: string } | null = null
+  for (const row of attempts) {
+    ;({ data, error } = await supabaseAdmin.from('subscribers').insert(row).select('unsubscribe_token').single())
+    if (!error || !isMissingColumn(error.message)) break
   }
 
+  if (error?.code === '23505') return existingSignup(cleanEmail, name, now, sent)
   if (error) {
-    if (error.code === '23505') {
-      return { success: false, message: 'This email is already subscribed.' }
-    }
     console.error('[Supabase] Failed to add subscriber:', error.message)
     return { success: false, message: 'Something went wrong. Please try again.' }
   }
+  return { ...sent, token: data?.unsubscribe_token ?? undefined, state: 'new', sendConfirm: true }
+}
 
-  return {
-    success: true,
-    message: "You're subscribed. We'll alert you when new contests open.",
-    token: data?.unsubscribe_token ?? undefined,
+/** The email is already in the table. On the list: say so. Pending, or
+    unsubscribed and back: another confirm link, unless one just went out. */
+async function existingSignup(
+  email: string,
+  name: string | null,
+  now: string,
+  sent: { success: boolean; message: string },
+): Promise<{ success: boolean; message: string; token?: string; state?: SignupState; sendConfirm?: boolean }> {
+  const { data: row, error } = await supabaseAdmin
+    .from('subscribers')
+    .select('confirmed, confirmed_at, confirm_sent_at, unsubscribe_token')
+    .eq('email', email)
+    .maybeSingle()
+  if (error || !row) {
+    if (error) console.error('[Supabase] Failed to read existing subscriber:', error.message)
+    return { success: false, message: 'This email is already subscribed.' }
   }
+  if (row.confirmed) return { success: false, message: "You're already on the list." }
+
+  const state: SignupState = row.confirmed_at ? 'returning' : 'pending'
+  const last = row.confirm_sent_at ? new Date(row.confirm_sent_at).getTime() : 0
+  if (Date.now() - last < CONFIRM_RESEND_MINUTES * 60_000) {
+    return { ...sent, token: row.unsubscribe_token ?? undefined, state, sendConfirm: false }
+  }
+  const { error: upErr } = await supabaseAdmin
+    .from('subscribers')
+    .update(name ? { confirm_sent_at: now, name } : { confirm_sent_at: now })
+    .eq('email', email)
+  if (upErr) console.error('[Supabase] Failed to stamp confirm_sent_at:', upErr.message)
+  return { ...sent, token: row.unsubscribe_token ?? undefined, state, sendConfirm: true }
+}
+
+/**
+ * The click in the confirm email. Puts them on the list and says whether the
+ * creator pack still has to go out. A second click is fine: it changes nothing.
+ */
+export async function confirmByToken(token: string): Promise<
+  | { success: true; email: string; name: string | null; token: string; packSent: boolean }
+  | { success: false; message: string }
+> {
+  const { data: row, error } = await supabaseAdmin
+    .from('subscribers')
+    .select('email, name, confirmed, confirmed_at, pack_sent_at, unsubscribe_token')
+    .eq('unsubscribe_token', token)
+    .maybeSingle()
+  if (error || !row) {
+    if (error) console.error('[Supabase] confirm lookup failed:', error.message)
+    return { success: false, message: "That link doesn't match a signup. Sign up again and we'll send a new one." }
+  }
+  if (!row.confirmed) {
+    const { error: upErr } = await supabaseAdmin
+      .from('subscribers')
+      .update({ confirmed: true, confirmed_at: row.confirmed_at ?? new Date().toISOString() })
+      .eq('unsubscribe_token', token)
+    if (upErr) {
+      console.error('[Supabase] confirm failed:', upErr.message)
+      return { success: false, message: 'Something went wrong. Try the link again in a minute.' }
+    }
+  }
+  return { success: true, email: row.email, name: row.name ?? null, token, packSent: !!row.pack_sent_at }
+}
+
+/** The creator pack went out to these addresses. */
+export async function markPackSent(emails: string[]): Promise<void> {
+  if (!emails.length) return
+  const { error } = await supabaseAdmin
+    .from('subscribers')
+    .update({ pack_sent_at: new Date().toISOString() })
+    .in('email', emails)
+  if (error) console.error('[Supabase] markPackSent failed:', error.message)
+}
+
+/** Signups from one to seven days ago who never clicked and haven't had the
+    one reminder. Younger than a day is too soon; older than a week, let go. */
+export async function pendingForReminder(now = new Date()): Promise<Array<{ email: string; name: string | null; token: string }>> {
+  const { data, error } = await supabaseAdmin
+    .from('subscribers')
+    .select('email, name, unsubscribe_token')
+    .eq('confirmed', false)
+    .is('confirmed_at', null)
+    .is('confirm_reminded_at', null)
+    .lt('created_at', new Date(now.getTime() - 20 * 3_600_000).toISOString())
+    .gt('created_at', new Date(now.getTime() - 7 * 86_400_000).toISOString())
+  if (error) {
+    console.error('[Supabase] pending reminder read failed:', error.message)
+    return []
+  }
+  return (data ?? [])
+    .filter(r => r.unsubscribe_token)
+    .map(r => ({ email: r.email, name: r.name ?? null, token: r.unsubscribe_token as string }))
+}
+
+export async function markReminded(emails: string[]): Promise<void> {
+  if (!emails.length) return
+  const { error } = await supabaseAdmin
+    .from('subscribers')
+    .update({ confirm_reminded_at: new Date().toISOString() })
+    .in('email', emails)
+  if (error) console.error('[Supabase] markReminded failed:', error.message)
 }
 
 export async function unsubscribeByToken(

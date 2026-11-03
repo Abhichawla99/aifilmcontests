@@ -294,6 +294,8 @@ export default function AdminDashboard({ contests: initial, stats }: { contests:
     if (action === 'send-digest') return `Weekly digest sent to ${data.sent} subscribers`
     if (action === 'send-reminders') return `Reminders sent to ${data.sent} subscribers`
     if (action === 'send-custom') return `Custom email sent to ${data.sent} subscribers`
+    if (action === 'send-pack') return `${data.test ? 'Test pack' : 'Creator pack'} sent to ${data.sent} ${data.sent === 1 ? 'person' : 'people'}; this week's contest: ${data.featured ?? 'none qualified'}`
+    if (action === 'set-featured') return data.contestId ? `Pinned ${data.contestId} as this week's contest` : `Unpinned: this week's contest is picked automatically`
     if (action === 'update-status') return `Status updated`
     if (action === 'update-contest') return `Contest saved`
     if (action === 'delete-contest') return `Contest deleted`
@@ -375,6 +377,9 @@ export default function AdminDashboard({ contests: initial, stats }: { contests:
           <ActionBtn label={isLoading('research') ? '🔍 Researching…' : '🔍 Run Research'} onClick={() => runAction('research', undefined, 'Research')} disabled={!!loadingAction} color="indigo" />
           <ActionBtn label={isLoading('send-digest') ? 'Sending…' : '📰 Send Digest'} onClick={() => runAction('send-digest')} disabled={!!loadingAction} color="default" />
           <ActionBtn label={isLoading('send-reminders') ? 'Sending…' : '⏰ Send Reminders'} onClick={() => runAction('send-reminders')} disabled={!!loadingAction} color="default" />
+          <ActionBtn label={isLoading('send-pack') ? 'Sending…' : '🎁 Test Pack Email'} onClick={() => { const to = prompt('Send a test creator pack email to:'); if (to) runAction('send-pack', { test: to.trim() }, 'Test pack') }} disabled={!!loadingAction} color="default" />
+          <ActionBtn label={isLoading('send-pack') ? 'Sending…' : '🎁 Send Pack to List'} onClick={() => { if (confirm('Send the creator pack to every subscriber who has not had it yet?')) runAction('send-pack', { existing: true }, 'Send pack') }} disabled={!!loadingAction} color="default" />
+          <ActionBtn label="📌 Unpin Featured" onClick={() => runAction('set-featured', { contestId: null }, 'Unpin')} disabled={!!loadingAction} color="default" />
         </div>
 
         {/* Activity log */}
@@ -475,6 +480,10 @@ export default function AdminDashboard({ contests: initial, stats }: { contests:
                           <a href={`/contests/${c.id}`} target="_blank" style={{ fontSize: '12px', color: '#8B867C', textDecoration: 'none' }}>View</a>
                           <span style={{ color: '#E7E4DC' }}>·</span>
                           <a href={c.url} target="_blank" rel="noopener noreferrer" style={{ fontSize: '12px', color: '#8B867C', textDecoration: 'none' }}>Site</a>
+                          {c.status === 'open' && <>
+                            <span style={{ color: '#E7E4DC' }}>·</span>
+                            <button onClick={() => runAction('set-featured', { contestId: c.id }, 'Pin')} title="Make this the contest in the creator pack email" style={{ fontSize: '12px', color: '#8B867C', background: 'none', border: 'none', cursor: 'pointer', padding: 0 }}>Pin</button>
+                          </>}
                           <span style={{ color: '#E7E4DC' }}>·</span>
                           <button onClick={() => deleteContest(c.id, c.name)} style={{ fontSize: '12px', color: '#7f1d1d', background: 'none', border: 'none', cursor: 'pointer', padding: 0 }}>Delete</button>
                         </div>

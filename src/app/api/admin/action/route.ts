@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { supabaseAdmin } from '@/lib/supabase'
 import { sendWeeklyDigest, sendDeadlineReminders, buildSpotlightEmail, sendToRecipients } from '@/lib/email'
 import { runResearch } from '@/lib/research'
+import { deliverPack, setPinnedContest } from '@/lib/pack'
 import { Resend } from 'resend'
 
 export const maxDuration = 300 // allow research to take up to 5 min
@@ -173,6 +174,38 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: `Send failed: ${JSON.stringify(result.error)}`, sent: result.sent }, { status: 500 })
     }
     return NextResponse.json({ ok: true, sent: result.sent, failed: result.failed, test: !!test })
+  }
+
+  // ── Creator pack: pin this week's contest, test it, send it to the list ───
+  if (action === 'set-featured') {
+    const contestId = payload?.contestId ? String(payload.contestId) : null
+    const { error } = await setPinnedContest(contestId)
+    if (error) return NextResponse.json({ error }, { status: 500 })
+    return NextResponse.json({ ok: true, contestId })
+  }
+
+  // { test: 'me@example.com' } sends one copy there and marks nobody.
+  // { existing: true } sends to every confirmed subscriber who hasn't had it.
+  if (action === 'send-pack') {
+    if (!process.env.RESEND_API_KEY) {
+      return NextResponse.json({ error: 'RESEND_API_KEY is not set in environment variables' }, { status: 500 })
+    }
+    const { test, existing } = payload ?? {}
+    let recipients: { email: string; token?: string | null; name?: string | null }[]
+    if (test) {
+      recipients = [{ email: String(test) }]
+    } else {
+      const { data: subs, error } = await supabaseAdmin
+        .from('subscribers').select('email,name,unsubscribe_token').eq('confirmed', true).is('pack_sent_at', null)
+      if (error) return NextResponse.json({ error: `Couldn't read subscribers: ${error.message}` }, { status: 500 })
+      if (!subs?.length) return NextResponse.json({ error: 'Everyone confirmed has had the pack already' }, { status: 400 })
+      recipients = subs.map(s => ({ email: s.email, name: s.name, token: s.unsubscribe_token }))
+    }
+    const result = await deliverPack(recipients, { existing: test ? true : !!existing, test: !!test })
+    if (!result.success) {
+      return NextResponse.json({ error: `Send failed: ${JSON.stringify(result.error)}`, sent: result.sent }, { status: 500 })
+    }
+    return NextResponse.json({ ok: true, sent: result.sent, failed: result.failed, featured: result.featured, test: !!test })
   }
 
   // ── Send custom email ──────────────────────────────────────────────────────

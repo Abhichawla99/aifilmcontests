@@ -1,8 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { track } from '@vercel/analytics/server'
 import { addSubscriber } from '@/lib/subscribers'
-import { sendWelcomeEmail, starterPicks } from '@/lib/email'
-import { getContestsByStatus } from '@/lib/contests-db'
+import { sendConfirmEmail } from '@/lib/email'
 
 export async function POST(request: NextRequest) {
   try {
@@ -27,15 +26,15 @@ export async function POST(request: NextRequest) {
     }
 
     // Wait for it: Vercel freezes the function once the response goes out, which
-    // was cutting welcome emails off mid-send. A failed email still doesn't fail signup.
-    // The contests to start with. A failed read sends the welcome without them.
-    const open = await getContestsByStatus('open')
-      .catch(err => { console.error('[Email] starter picks failed:', err); return [] })
-    const welcome = await sendWelcomeEmail(email, name || null, result.token, starterPicks(open), open.length)
-      .catch(err => ({ success: false, error: err }))
-    if (!welcome.success) console.error('[Email] Welcome send failed:', welcome.error)
+    // was cutting emails off mid-send. A failed email still doesn't fail signup:
+    // they can send the form again and get another link.
+    if (result.sendConfirm && result.token) {
+      const sent = await sendConfirmEmail(email.toLowerCase().trim(), name || null, result.token)
+        .catch(err => ({ success: false, error: err as unknown }))
+      if (!sent.success) console.error('[Email] Confirm send failed:', sent.error)
+    }
 
-    await track('subscribe', { source: safeSource ?? 'unknown' }).catch(() => {})
+    await track('subscribe', { source: safeSource ?? 'unknown', state: result.state ?? 'new' }).catch(() => {})
     return NextResponse.json({ success: true, message: result.message })
   } catch (error) {
     console.error('Subscribe error:', error)

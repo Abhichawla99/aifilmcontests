@@ -2,10 +2,10 @@ import type { Metadata } from 'next'
 import Link from 'next/link'
 import InnerLayout from '@/components/InnerLayout'
 import EmailSubscribe from '@/components/EmailSubscribe'
-import { COMMUNITY, GUIDE, OVERS, OVERS_OFF_PERCENT, oversHref } from '@/lib/creator-pack'
+import { COMMUNITY, GUIDE, OFFER_ENDS_LABEL, OVERS, OVERS_OFF_PERCENT } from '@/lib/creator-pack'
 
-/* The free creator pack. Claiming it is subscribing: the welcome email
-   delivers all three pieces, and /subscribed shows them again straight away.
+/* The free creator pack. Claiming it is subscribing and clicking the confirm
+   link: the pack email delivers all three pieces, and /confirm shows them too.
    The three pieces are Abhi's (Overs, the guide, Creatives Club) and the page
    says so, in the small print and in the email. */
 
@@ -62,9 +62,9 @@ export default function StarterPackPage() {
             </p>
             <p style={{ ...body, fontSize: 13.5, color: '#6F6A61' }}>
               It runs on your own OpenRouter key, so you pay the video models at their price, with no markup.
-              Cancel any time from your account page.
+              Cancel any time from your account page. The ${OVERS.monthlyUsd} price ends {OFFER_ENDS_LABEL}.
             </p>
-            <a href={oversHref('pack-page')} target="_blank" rel="noopener" style={more}>See Overs →</a>
+            <a href="#claim" style={more}>Claim it with your email →</a>
           </section>
 
           <section className="pack-item">
@@ -92,7 +92,7 @@ export default function StarterPackPage() {
           <div style={{ maxWidth: 440 }}>
             <h2 style={{ ...title, fontSize: 26 }}>Claim the pack</h2>
             <p style={{ ...body, marginBottom: 6 }}>
-              Enter your email and all three land in your inbox straight away.
+              Enter your email, click the link we send, and all three land in your inbox.
             </p>
             <p style={{ ...body, fontSize: 13.5, color: '#6F6A61' }}>
               You also get contest alerts: new contests a day or two after they open, a last call before
@@ -106,7 +106,7 @@ export default function StarterPackPage() {
 
         <p style={{ fontSize: 12.5, lineHeight: 1.7, color: '#8B867C', maxWidth: 640, marginTop: 28 }}>
           Overs and Creatives Club are run by Abhi, who also runs AI Film Contests. The Overs price is for the first
-          700 people who claim it, then ${OVERS.fullUsd} a month after the first {OVERS.months} months unless you cancel.
+          {OVERS.places} people who claim it by {OFFER_ENDS_LABEL}, then ${OVERS.fullUsd} a month after the first {OVERS.months} months unless you cancel.
           Check each contest&apos;s rules before you start: most accept any AI tool, and a few require their own.
         </p>
       </div>

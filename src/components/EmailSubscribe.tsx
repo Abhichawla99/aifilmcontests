@@ -77,7 +77,7 @@ export default function EmailSubscribe({ compact = false, openCount }: { compact
       <div className="w-full">
         {typeof openCount === 'number' && (
           <p style={{ fontSize: 12, color: '#6F6A61', marginBottom: 10, lineHeight: 1.55 }}>
-            New contests within a day of opening, plus a last call before deadlines close —{' '}
+            New contests within a day of opening, a last call before deadlines close, and the free creator pack —{' '}
             <strong style={{ color: '#1B1916' }}>{openCount} open right now</strong>.
           </p>
         )}
@@ -110,7 +110,7 @@ export default function EmailSubscribe({ compact = false, openCount }: { compact
               className="btn"
               style={{ flex: '0 0 auto' }}
             >
-              {status === 'loading' ? '...' : 'Get Alerts'}
+              {status === 'loading' ? '...' : 'Get the pack'}
             </button>
           </div>
           <label style={{ display: 'flex', alignItems: 'flex-start', gap: '8px', cursor: 'pointer' }}>
@@ -180,9 +180,9 @@ export default function EmailSubscribe({ compact = false, openCount }: { compact
                 <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
                 <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
               </svg>
-              Subscribing...
+              Sending your link...
             </span>
-          ) : 'Get Contest Alerts'}
+          ) : 'Get alerts + the free creator pack'}
         </button>
       </form>
       {status === 'error' && <SubscribeError message={message} />}

@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { supabaseAdmin } from '@/lib/supabase'
-import { buildBundleEmail, recordSends, sendToRecipients, type Recipient, type ContestEmailItem } from '@/lib/email'
+import { buildBundleEmail, recordSends, sendConfirmReminders, sendToRecipients, type Recipient, type ContestEmailItem } from '@/lib/email'
+import { markReminded, pendingForReminder } from '@/lib/subscribers'
 import { isMissingRelation, logAgentRun, withDbRetry } from '@/lib/db-health'
 
 // Vercel Cron — the ONLY thing that emails subscribers. Runs once a day.
@@ -53,6 +54,17 @@ export async function GET(request: NextRequest) {
   const dayStartUtc = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate()))
   const isMonday = now.getUTCDay() === 1
 
+  // Signups who never clicked the confirm link get one reminder a day later.
+  // They aren't on the list yet, so nothing below emails them.
+  const pendingConfirm = await pendingForReminder(now)
+  let reminded = 0
+  if (pendingConfirm.length && !dry) {
+    const r = await sendConfirmReminders(pendingConfirm)
+    await markReminded(r.sent)
+    reminded = r.sent.length
+    if (r.error) console.error('[notify] confirm reminders:', r.error)
+  }
+
   const read = { attempts: 3, timeoutMs: 15_000, backoffMs: [2_000, 5_000] }
   const [subsRes, openRes, sendsRes] = await Promise.all([
     withDbRetry(s => supabaseAdmin.from('subscribers').select('email,name,unsubscribe_token,created_at').eq('confirmed', true).abortSignal(s), read),
@@ -88,7 +100,7 @@ export async function GET(request: NextRequest) {
   for (const r of sends) {
     if (new Date(r.sent_at) >= dayStartUtc) sentToday++
     const h = history.get(r.recipient) ?? { lastAt: null, told: new Set<string>() }
-    if (['pulse', 'weekly_digest', 'new_contest', 'closing_soon', 'reminder_7day'].includes(r.email_type)) {
+    if (['pulse', 'weekly_digest', 'new_contest', 'closing_soon', 'reminder_7day', 'pack'].includes(r.email_type)) {
       const at = new Date(r.sent_at)
       if (!h.lastAt || at > h.lastAt) h.lastAt = at
     }
@@ -134,7 +146,7 @@ export async function GET(request: NextRequest) {
 
   if (dry) {
     return NextResponse.json({
-      ok: true, dry: true, subscribers: subs.length, pending: plans.length, sendingToday: toSend.length, waitingForBudget: waiting,
+      ok: true, dry: true, confirmRemindersDue: pendingConfirm.length, subscribers: subs.length, pending: plans.length, sendingToday: toSend.length, waitingForBudget: waiting,
       waitingOnGap, dailyBudget: DAILY_BUDGET, sentTodayAlready: sentToday, batchSize: BATCH,
       sample: toSend.slice(0, 3).map(p => ({ email: p.sub.email.replace(/^(.).*(@.*)$/, '$1***$2'), subject: p.bundle.subject, new: p.counts[0], closingSoon: p.counts[1], closingThisWeek: p.counts[2] })),
     })
@@ -167,7 +179,7 @@ export async function GET(request: NextRequest) {
 
   const stillWaiting = waiting + result.failed
   const backlogDays = DAILY_BUDGET > 0 ? Math.ceil(stillWaiting / DAILY_BUDGET) : 0
-  const details = { sent: result.sent, failed: result.failed, waiting: stillWaiting, backlogDays, dailyBudget: DAILY_BUDGET, sentTodayBefore: sentToday, new: uniq(0), soon: uniq(1), week: uniq(2), quota: !!result.quotaExceeded, unrecorded: unrecorded.length }
+  const details = { reminded, sent: result.sent, failed: result.failed, waiting: stillWaiting, backlogDays, dailyBudget: DAILY_BUDGET, sentTodayBefore: sentToday, new: uniq(0), soon: uniq(1), week: uniq(2), quota: !!result.quotaExceeded, unrecorded: unrecorded.length }
 
   if (result.recordFailed) {
     const why = unrecorded.length

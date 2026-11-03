@@ -1,7 +1,7 @@
 import { Resend } from 'resend'
 import { supabaseAdmin } from './supabase'
 import { isMissingRelation, withDbRetry, type DbRetryOptions } from './db-health'
-import { COMMUNITY, GUIDE, OVERS, OVERS_OFF_PERCENT } from './creator-pack'
+import { COMMUNITY, GUIDE, OFFER_ENDS_LABEL, OVERS, OVERS_OFF_PERCENT, offerDaysLeft, offerOpen } from './creator-pack'
 
 const FROM_EMAIL = process.env.FROM_EMAIL || 'contests@updates.aifilmcontests.com'
 const REPLY_TO   = process.env.REPLY_TO_EMAIL || 'hello@aifilmcontests.com'
@@ -21,7 +21,7 @@ export interface Recipient {
 }
 
 export type EmailKind =
-  | 'welcome' | 'new_contest' | 'closing_soon' | 'weekly_digest' | 'pulse'
+  | 'welcome' | 'confirm' | 'pack' | 'new_contest' | 'closing_soon' | 'weekly_digest' | 'pulse'
   | 'reminder_7day' | 'outreach' | 'report' | 'custom'
 
 export interface ContestEmailItem {
@@ -315,30 +315,6 @@ function oversFeature(kind: EmailKind, heading: string) {
   </div>`
 }
 
-/** The other two pieces of the creator pack, under the offer in the welcome. */
-function packExtras() {
-  const row = (title: string, text: string, href: string, cta: string, first: boolean) => `
-    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="${first ? '' : `border-top:1px solid ${T.rule};`}"><tr>
-      <td style="padding:18px 0;vertical-align:top;">
-        <div style="font-family:${DISPLAY};font-size:24px;line-height:1.1;color:${T.ink};margin-bottom:6px;">${title}</div>
-        <div style="font-size:14px;line-height:1.6;color:${T.inkSoft};margin-bottom:10px;">${text}</div>
-        ${textLink(href, `${cta} →`)}
-      </td>
-    </tr></table>`
-  return `
-  <div style="margin-top:10px;">
-    ${row(escapeHtml(GUIDE.title), 'Every step from reading the rules to exporting the file: shot list, look, stills, clips, sound, and the checks that get entries thrown out.', `${SITE_URL}${GUIDE.path}`, 'Read the guide', true)}
-    ${row(COMMUNITY.name, 'My free community on Skool for people learning AI creative workflows. Ask questions and see how others build their shots.', COMMUNITY.url, 'Join free', false)}
-  </div>`
-}
-
-function packExtrasText() {
-  return `${GUIDE.title}: ${SITE_URL}${GUIDE.path}
-${COMMUNITY.name}, my free community: ${COMMUNITY.url}
-
-`
-}
-
 function oversFeatureText(kind: EmailKind, heading: string) {
   if (!oversEnabled()) return ''
   return `${heading.toUpperCase()}\nI built Overs so you can make the stills and clips for an entry without another big subscription. Type a shot and it makes the stills. Pick one and it becomes a clip that opens exactly on that frame.\n` +
@@ -368,12 +344,11 @@ const PICK_MIN_DAYS = 14
 
 /**
  * Open, free, any AI tool, and at least two weeks to make something: the
- * contests a new subscriber can actually enter. Soonest deadline first, three
- * at most. A contest that requires its own tool (AKOOL, Runway's fund) is left
- * out, because a newcomer would have to sign up for that tool to enter, and so
- * is one whose organizer we could not name.
+ * contests someone new can actually enter. A contest that requires its own
+ * tool (AKOOL, Runway's fund) is left out, because they would have to sign up
+ * for that tool to enter, and so is one whose organizer we could not name.
  */
-export function starterPicks(contests: PickableContest[], now = Date.now(), count = 3): ContestEmailItem[] {
+function enterable(contests: PickableContest[], now: number) {
   return contests
     .filter(c => !c.status || c.status === 'open')
     .filter(c => c.organizer && !/^unknown$/i.test(c.organizer.trim()))
@@ -381,15 +356,41 @@ export function starterPicks(contests: PickableContest[], now = Date.now(), coun
     .filter((c, i, all) => all.findIndex(o => o.organizer === c.organizer && o.deadline === c.deadline) === i)
     .filter(c => isFreeEntry(c.entryFee))
     .filter(c => (c.aiToolsAllowed ?? []).some(t => /\b(any|all)\b/i.test(t)) && !(c.aiToolsAllowed ?? []).some(t => /must/i.test(t)))
-    .map(c => ({ c, days: Math.ceil((new Date(c.deadline).getTime() - now) / 86_400_000) }))
-    .filter(({ days }) => days >= PICK_MIN_DAYS)
-    .sort((a, b) => a.days - b.days)
-    .slice(0, count)
-    .map(({ c }) => ({
-      id: c.id, name: c.name, organizer: c.organizer, prize: c.prize, deadline: c.deadline, url: c.url,
-      description: c.description.length > 180 ? c.description.slice(0, 177).replace(/\s+\S*$/, '') + '…' : c.description,
-    }))
+    .filter(c => Math.ceil((new Date(c.deadline).getTime() - now) / 86_400_000) >= PICK_MIN_DAYS)
 }
+
+/** The biggest dollar figure in a prize line. Other currencies count as 0:
+    30,000,000 KRW is about $21,000, and ranking it as thirty million is wrong. */
+function usdPrize(prize: string): number {
+  let best = 0
+  const re = /\$\s?([\d,]+(?:\.\d+)?)\s*([KkMm])?\b|([\d,]+(?:\.\d+)?)\s*([KkMm])?\s*USD\b/g
+  let m
+  while ((m = re.exec(prize))) {
+    const n = parseFloat((m[1] ?? m[3]).replace(/,/g, ''))
+    const unit = (m[2] ?? m[4] ?? '').toLowerCase()
+    const v = n * (unit === 'm' ? 1e6 : unit === 'k' ? 1e3 : 1)
+    if (isFinite(v) && v > best) best = v
+  }
+  return best
+}
+
+/**
+ * This week's contest for the creator pack: the one pinned in the admin panel
+ * (settings key featured_contest_id) while it is open, otherwise the enterable
+ * contest with the biggest cash prize. Null when nothing qualifies, and the
+ * email leaves the section out.
+ */
+export function featuredContest(contests: PickableContest[], pinnedId: string | null = null, now = Date.now()): ContestEmailItem | null {
+  const pinned = pinnedId ? contests.find(c => c.id === pinnedId && (!c.status || c.status === 'open') && new Date(c.deadline).getTime() > now) : undefined
+  const pick = pinned ?? enterable(contests, now).sort((a, b) => usdPrize(b.prize) - usdPrize(a.prize))[0]
+  if (!pick) return null
+  return {
+    id: pick.id, name: pick.name, organizer: pick.organizer, prize: pick.prize, deadline: pick.deadline, url: pick.url,
+    description: pick.description,
+  }
+}
+
+export const FEATURED_SETTING = 'featured_contest_id'
 
 // ─── Core sender: one email PER RECIPIENT via Resend batch ────────────────────
 //
@@ -588,131 +589,189 @@ export async function sendPlainEmail(opts: {
   })
 }
 
-// ─── Welcome email ────────────────────────────────────────────────────────────
+// ─── Signup: confirm, then the creator pack ───────────────────────────────────
+//
+// A signup gets one short email with one link. Clicking it confirms the address
+// and sends the creator pack: the Overs offer with its real deadline, this
+// week's contest to make something for, the guide and Creatives Club. Nobody
+// gets contest emails before they confirm. A signup who hasn't clicked after
+// a day gets one reminder (the notify cron), then nothing.
 
-/** The welcome, built without sending: the signup route sends it, the preview renders it. */
-// The welcome is the signup's receipt, built like the best order confirmations:
-// three contests to start with, the kit for making an entry, a two-week plan,
-// and a letter from Abhi with the one favour we ask.
-
-/** Two weeks from a contest to an entry, matching the picks (at least 14 days
-    left) and the guide's order. */
-const WELCOME_PLAN: Array<[string, string, string]> = [
-  ['Days 1–2', 'Pick one and read the rules', 'Note the length, the format, any tool they require and what they say about AI. Missing one of these can get an entry thrown out.'],
-  ['Days 3–6', 'Shot list and stills', 'Write every shot as one line, settle the look, then make a still for each shot. In Overs you type the shot and pick the still you like.'],
-  ['Days 7–11', 'Clips and sound', 'Turn each still into a clip that opens on that frame, then lay in sound. Sound is what makes a string of clips feel like a film.'],
-  ['Days 12–14', 'Edit, check, submit', 'Cut it together, run the export checklist in the guide and submit with a day to spare.'],
-]
-
-function welcomePlan() {
-  return WELCOME_PLAN.map(([when, title, text], i) => `
-    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="${i ? `border-top:1px solid ${T.rule};` : ''}">
-      <tr>
-        <td width="96" style="width:96px;vertical-align:top;padding:18px 10px 18px 0;${caps(T.accent, 10)}line-height:1.6;">${when}</td>
-        <td style="vertical-align:top;padding:16px 0 18px;">
-          <div style="font-family:${DISPLAY};font-size:22px;line-height:1.15;color:${T.ink};margin-bottom:6px;">${title}</div>
-          <div style="font-size:14px;line-height:1.6;color:${T.inkSoft};">${text}</div>
-        </td>
-      </tr>
-    </table>`).join('')
+function confirmUrl(token: string) {
+  return `${SITE_URL}/confirm?token=${encodeURIComponent(token)}`
 }
 
-const NUMBER_WORDS = ['', 'One', 'Two', 'Three', 'Four', 'Five']
+/** "ends November 30", "ends in 4 days, on November 30", "ends today". */
+function offerEnds(now: Date) {
+  const days = offerDaysLeft(now)
+  if (days <= 1) return 'ends today'
+  if (days <= 7) return `ends in ${days} days, on ${OFFER_ENDS_LABEL}`
+  return `ends ${OFFER_ENDS_LABEL}`
+}
 
-export function buildWelcomeEmail(
+/** A paragraph in the letter-style emails. */
+const para = (html: string, color = T.ink, size = 16, margin = '0 0 16px 0') =>
+  `<p style="font-family:${SERIF};font-size:${size}px;line-height:1.65;color:${color};margin:${margin};">${html}</p>`
+const signature = `<p style="font-family:${DISPLAY};font-style:italic;font-size:30px;line-height:1;color:${T.ink};margin:8px 0 0 0;">Abhi</p>`
+
+/** The email a signup gets: confirm the address, get the pack. `reminder`
+    is the one nudge a day later. */
+export function buildConfirmEmail(name: string | null | undefined, token: string, reminder = false, now = new Date()): {
+  subject: string
+  html: (unsub: string) => string
+  text: (unsub: string) => string
+} {
+  const first = name?.split(' ')[0] ?? null
+  const hey = first ? `Hey ${escapeHtml(first)},` : 'Hey,'
+  const url = confirmUrl(token)
+  const open = oversEnabled() && offerOpen(now)
+  const pack = open
+    ? `Overs Pro at $${OVERS.monthlyUsd} a month, the contest film guide and ${COMMUNITY.name}`
+    : `the contest film guide, ${COMMUNITY.name} and this week's contest`
+  const lead = reminder
+    ? `You signed up for AI Film Contests but haven't confirmed, so your creator pack hasn't gone out. One click sends it: ${pack}.`
+    : `Confirm your email and I'll send your creator pack: ${pack}.`
+  const deadline = open ? `The $${OVERS.monthlyUsd} Overs price ${offerEnds(now)}.` : ''
+  const after = reminder ? 'This is the only reminder.' : "Didn't sign up? Ignore this and you won't hear from us."
+  return {
+    subject: reminder ? 'Your creator pack is still waiting' : 'Confirm your email to get your creator pack',
+    html: unsub => shell(`
+  ${para(hey)}
+  ${para(lead)}
+  <div style="margin:26px 0 26px 0;">${button(url, 'Confirm and send my pack →')}</div>
+  ${deadline ? para(deadline, T.inkSoft, 15) : ''}
+  ${para(after, T.faint, 14)}
+  ${signature}`, unsub, reminder ? 'Reminder' : 'Confirm', open ? `One click. ${deadline}` : 'One click and your creator pack is on its way.', now),
+    text: unsub =>
+      `${first ? `Hey ${first},` : 'Hey,'}\n\n${lead}\n\nConfirm and send my pack: ${url}\n\n` +
+      (deadline ? `${deadline}\n\n` : '') + `${after}\n\nAbhi\n\nUnsubscribe: ${unsub}`,
+  }
+}
+
+/**
+ * The creator pack, sent the moment someone confirms. `existing` is for people
+ * who were on the list before the pack existed. While the founding price is
+ * open it leads with Overs and its deadline; after, the pack is the contest,
+ * the guide and the club.
+ */
+export function buildPackEmail(
   name: string | null | undefined,
-  picks: ContestEmailItem[] = [],
-  /** How many contests are open right now, for the opening paragraph. 0 leaves it out. */
-  openCount = 0,
-  /** The date on the masthead; tests pass a fixed one. */
-  now = new Date(),
+  featured: ContestEmailItem | null,
+  opts: { existing?: boolean; now?: Date } = {},
 ): {
   subject: string
   html: (unsub: string) => string
   text: (unsub: string) => string
   contestIds: string[]
 } {
-  const firstName = name?.split(' ')[0] ?? null
-  const subject = picks.length
-    ? `You're in. ${picks.length === 1 ? 'One contest' : `${picks.length} contests`} to enter first`
-    : "You're on the list: AI Film Contests"
-  const packHeading = `Overs Pro for $${OVERS.monthlyUsd} a month`
-  const preheader = `Three contests to start with, Overs at ${OVERS_OFF_PERCENT}% off, the contest film guide and Creatives Club.`
-  const count = NUMBER_WORDS[picks.length] ?? String(picks.length)
-  const title = picks.length
-    ? `${count} contest${picks.length === 1 ? '' : 's'} worth your next two weeks.`
-    : 'Every AI film contest, checked every day.'
-  const p = (html: string, margin = '0 0 16px 0') =>
-    `<p style="font-family:${SERIF};font-size:17px;line-height:1.7;color:${T.ink};margin:${margin};">${html}</p>`
+  const now = opts.now ?? new Date()
+  const first = name?.split(' ')[0] ?? null
+  const open = oversEnabled() && offerOpen(now)
+  const ends = offerEnds(now)
+  const subject = open
+    ? `Your creator pack: Overs for $${OVERS.monthlyUsd} until ${OFFER_ENDS_LABEL}`
+    : 'Your creator pack is here'
+  const opening = opts.existing
+    ? "You've been on the list a while, so you get the creator pack new subscribers now get. Here it is."
+    : "You're confirmed. Here's your creator pack."
+  const oversCopy = `Overs is the tool I built for making AI films. Type a shot and it makes the stills. Pick one and it becomes a clip that opens on that exact frame.`
+  const priceCopy = `$${OVERS.monthlyUsd} a month for your first ${OVERS.months} months, then $${OVERS.fullUsd}. The price ${ends}, or sooner if the ${OVERS.places} founding places fill.`
+  const fine = 'You bring your own OpenRouter key, so each clip costs what the video model charges. Cancel any time.'
+  const featuredLine = featured
+    ? `${featured.prize} · free to enter · closes ${fmtDate(featured.deadline)}`
+    : ''
+
+  const oversHtml = open ? `
+  ${sectionHead(`Overs Pro for $${OVERS.monthlyUsd} a month`)}
+  <div style="padding-top:14px;">
+    ${para(oversCopy)}
+    ${para(`<strong>${priceCopy}</strong>`)}
+    ${para(fine, T.faint, 13, '0 0 22px 0')}
+    ${button(oversLink('pack'), `Claim Overs for $${OVERS.monthlyUsd} →`)}
+  </div>` : ''
+
+  const featuredHtml = featured ? `
+  ${sectionHead("This week's contest", open ? 'Make your first still for it in Overs tonight.' : undefined)}
+  <div style="padding-top:16px;">
+    <a href="${featured.url}" style="font-family:${DISPLAY};font-size:30px;line-height:1.08;color:${T.ink};text-decoration:none;">${escapeHtml(featured.name)}</a>
+    <div style="font-size:13px;line-height:1.5;color:${T.inkSoft};margin:8px 0 10px 0;"><strong style="color:${T.ink};">${escapeHtml(trimTo(featured.prize, 90))}</strong> · free to enter · closes ${shortDate(featured.deadline)}</div>
+    <div style="font-size:14px;line-height:1.6;color:${T.inkSoft};margin:0 0 12px 0;">${escapeHtml(trimTo(featured.description, 200))}</div>
+    ${textLink(featured.url, 'Read the rules →')}
+  </div>` : ''
+
+  const resourcesHtml = `
+  ${sectionHead('Also yours')}
+  <div style="padding-top:12px;">
+    ${para(`<a href="${SITE_URL}${GUIDE.path}" style="color:${T.ink};">${escapeHtml(GUIDE.title)}</a>. Every step from the rules to the export, and the checks that get entries thrown out.`, T.inkSoft, 15, '0 0 12px 0')}
+    ${para(`<a href="${COMMUNITY.url}" style="color:${T.ink};">${COMMUNITY.name}</a>. My free community for AI creative workflows. Post what you make and get feedback.`, T.inkSoft, 15, '0')}
+  </div>`
+
   return {
     subject,
-    // So the first bundle does not repeat the picks as new.
-    contestIds: picks.map(c => c.id).filter((x): x is string => !!x).map(id => `new:${id}`),
+    contestIds: featured?.id ? [`new:${featured.id}`] : [],
     html: unsub => shell(`
-  ${picture(EMAIL_ART.welcome)}
-  ${headline(firstName ? `Welcome, ${escapeHtml(firstName)}` : 'Welcome', title,
-    `You're on the list.${openCount ? ` ${openCount} contests are open right now, and we check every one daily, so you only hear about the ones you can still enter.` : ' We check every contest daily, so you only hear about the ones you can still enter.'}`)}
-
-  ${picks.length ? sectionHead('Start here', 'Free to enter, any AI tool allowed, at least two weeks to make something.') + index(picks) : ''}
-
-  ${sectionHead('Your kit', 'Three things that come with your subscription.')}
-  ${oversFeature('welcome', packHeading)}
-  ${packExtras()}
-
-  ${sectionHead('The plan', 'Your first entry in two weeks.')}
-  ${welcomePlan()}
-  <div style="border-top:1px solid ${T.rule};padding-top:14px;">${textLink(`${SITE_URL}${GUIDE.path}`, 'Every step in detail, in the guide →')}</div>
-
-  ${sectionHead('A note from Abhi')}
-  <div style="padding-top:14px;">
-    ${p(`Hey${firstName ? ` ${escapeHtml(firstName)}` : ''},`)}
-    ${p("I'm Abhi. I run AI Film Contests, and the list gets checked every day so you don't spend a weekend on a contest that has already closed.")}
-    ${p(`I also built Overs and run Creatives Club, which is why they're in your kit. When you make something for one of these contests, post it in <a href="${COMMUNITY.url}" style="color:${T.accent};">the club</a> or reply here with the link. I want to see it.`)}
-    <p style="font-family:${DISPLAY};font-style:italic;font-size:34px;line-height:1;color:${T.ink};margin:4px 0 24px 0;">Abhi</p>
-    <p style="font-family:${SERIF};font-size:15px;line-height:1.65;color:${T.inkSoft};margin:0;">
-      <em>P.S.</em> One favour: reply to this email, even just "got it". It tells Gmail and Outlook you want these, so contest alerts land in Primary instead of Promotions.
-      You'll hear from us when a contest opens, before a deadline closes, and once a week with what's closing. Never daily.
-    </p>
-  </div>
-
-  <div style="margin-top:36px;">${button(SITE_URL, 'See every open contest →')}</div>`, unsub, 'Welcome', preheader, now),
+  ${para(first ? `Hey ${escapeHtml(first)},` : 'Hey,')}
+  ${para(opening, T.ink, 16, '0 0 4px 0')}
+  ${oversHtml}
+  ${featuredHtml}
+  ${resourcesHtml}
+  <div style="border-top:1px solid ${T.ink};margin-top:40px;padding-top:18px;">
+    ${para("I run AI Film Contests and the list gets checked every day, so you don't spend a weekend on a contest that has already closed. Reply and tell me which contest you're entering.", T.ink, 16, '0')}
+    ${signature}
+  </div>`, unsub, 'Creator pack', open ? `Overs for $${OVERS.monthlyUsd} a month ${ends}. Plus this week's contest.` : "This week's contest, the guide and the club.", now),
     text: unsub =>
-      `${firstName ? `Welcome, ${firstName}.` : 'Welcome.'} You're on the list.\n\n` +
-      (openCount ? `${openCount} contests are open right now, checked every day.\n\n` : '') +
-      (picks.length ? `START HERE (free, any AI tool, at least two weeks left)\n\n${textList(picks)}\n\n` : '') +
-      `YOUR KIT\n\n` +
-      oversFeatureText('welcome', packHeading) +
-      packExtrasText() +
-      `THE PLAN: YOUR FIRST ENTRY IN TWO WEEKS\n\n` +
-      WELCOME_PLAN.map(([when, title, text]) => `${when}: ${title}\n${text}`).join('\n\n') +
-      `\n\nEvery step in detail: ${SITE_URL}${GUIDE.path}\n\n` +
-      `A NOTE FROM ABHI\n\nI'm Abhi. I run AI Film Contests, and the list gets checked every day so you don't spend a weekend on a contest that has already closed.\n\n` +
-      `I also built Overs and run Creatives Club, which is why they're in your kit. When you make something for one of these contests, post it in the club (${COMMUNITY.url}) or reply here with the link. I want to see it.\n\nAbhi\n\n` +
-      `P.S. One favour: reply "got it" so contest alerts land in Primary. You'll hear from us when a contest opens, before a deadline closes, and once a week with what's closing. Never daily.\n\n` +
-      `Every open contest: ${SITE_URL}\n\nUnsubscribe: ${unsub}`,
+      `${first ? `Hey ${first},` : 'Hey,'}\n\n${opening}\n\n` +
+      (open ? `OVERS PRO FOR $${OVERS.monthlyUsd} A MONTH\n${oversCopy}\n${priceCopy}\n${fine}\nClaim it: ${oversLink('pack')}\n\n` : '') +
+      (featured ? `THIS WEEK'S CONTEST\n${featured.name}\n${featuredLine}\n${featured.url}\n\n` : '') +
+      `ALSO YOURS\n${GUIDE.title}: ${SITE_URL}${GUIDE.path}\n${COMMUNITY.name}, my free community: ${COMMUNITY.url}\n\n` +
+      `I run AI Film Contests and the list gets checked every day, so you don't spend a weekend on a contest that has already closed. Reply and tell me which contest you're entering.\n\nAbhi\n\nUnsubscribe: ${unsub}`,
   }
 }
 
-export async function sendWelcomeEmail(
-  email: string,
-  name?: string | null,
-  token?: string | null,
-  /** Contests to start with (starterPicks); none and the section is left out. */
-  picks: ContestEmailItem[] = [],
-  openCount = 0,
-) {
-  const w = buildWelcomeEmail(name, picks, openCount)
+export async function sendConfirmEmail(email: string, name: string | null, token: string, reminder = false) {
+  const c = buildConfirmEmail(name, token, reminder)
   const result = await sendToRecipients({
-    kind: 'welcome',
-    subject: w.subject,
+    kind: 'confirm',
+    subject: c.subject,
     recipients: [{ email, token, name }],
-    contestIds: w.contestIds,
-    // The signup form waits on this; a welcome record isn't used for dedup.
+    // The signup form waits on this.
     recordAttempts: 1,
-    html: (_r, unsub) => w.html(unsub),
-    text: (_r, unsub) => w.text(unsub),
+    html: (_r, unsub) => c.html(unsub),
+    text: (_r, unsub) => c.text(unsub),
   })
   return { success: result.success, error: result.error }
+}
+
+/** The one reminder, to signups who never clicked. Returns who it went to. */
+export async function sendConfirmReminders(pending: Array<{ email: string; name: string | null; token: string }>): Promise<{ sent: string[]; error?: unknown }> {
+  if (!pending.length) return { sent: [] }
+  const result = await sendToRecipients({
+    kind: 'confirm',
+    subject: buildConfirmEmail(null, '', true).subject,
+    recipients: pending,
+    html: (r, unsub) => buildConfirmEmail(r.name, r.token ?? '', true).html(unsub),
+    text: (r, unsub) => buildConfirmEmail(r.name, r.token ?? '', true).text(unsub),
+  })
+  if (!result.sent) return { sent: [], error: result.error }
+  const dropped = new Set(result.dropped ?? [])
+  return { sent: pending.map(p => p.email).filter(e => !dropped.has(e)), error: result.error }
+}
+
+export async function sendPackEmail(
+  recipients: Recipient[],
+  featured: ContestEmailItem | null,
+  opts: { existing?: boolean; subjectPrefix?: string } = {},
+): Promise<SendResult> {
+  const p = buildPackEmail(null, featured, { existing: opts.existing })
+  return sendToRecipients({
+    kind: 'pack',
+    subject: r => `${opts.subjectPrefix ?? ''}${buildPackEmail(r.name, featured, { existing: opts.existing }).subject}`,
+    recipients,
+    contestIds: p.contestIds,
+    recordAttempts: recipients.length === 1 ? 1 : undefined,
+    html: (r, unsub) => buildPackEmail(r.name, featured, { existing: opts.existing }).html(unsub),
+    text: (r, unsub) => buildPackEmail(r.name, featured, { existing: opts.existing }).text(unsub),
+  })
 }
 
 // ─── Daily pulse: new contests + last-call, folded into ONE email ─────────────
