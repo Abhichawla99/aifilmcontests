@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 import Link from 'next/link'
 import InnerLayout from '@/components/InnerLayout'
 import EmailSubscribe from '@/components/EmailSubscribe'
-import { COMMUNITY, GUIDE, OFFER_ENDS_LABEL, OVERS, OVERS_OFF_PERCENT } from '@/lib/creator-pack'
+import { COMMUNITY, GUIDE, OFFER_ENDS_LABEL, OVERS, OVERS_COSTS, OVERS_REPLACES } from '@/lib/creator-pack'
 
 /* The free creator pack. Claiming it is subscribing and clicking the confirm
    link: the pack email delivers all three pieces, and /confirm shows them too.
@@ -11,11 +11,11 @@ import { COMMUNITY, GUIDE, OFFER_ENDS_LABEL, OVERS, OVERS_OFF_PERCENT } from '@/
 
 export const metadata: Metadata = {
   title: 'Free Creator Pack for AI Filmmakers | AI Film Contests',
-  description: `Free for AI filmmakers: Overs Pro at ${OVERS_OFF_PERCENT}% off ($${OVERS.monthlyUsd} a month for ${OVERS.months} months), a step-by-step guide to making an AI film for a contest, and the Creatives Club community.`,
+  description: `Free for AI filmmakers: Overs Pro, one tool for every AI image and video model, at $${OVERS.monthlyUsd} a month for ${OVERS.months} months, plus a step-by-step guide to making an AI film for a contest, and the Creatives Club community.`,
   alternates: { canonical: 'https://aifilmcontests.com/starter-pack' },
   openGraph: {
     title: 'Free Creator Pack for AI Filmmakers',
-    description: `Overs at ${OVERS_OFF_PERCENT}% off, a contest film guide and a free community. Claim it with your email.`,
+    description: `Overs, one tool in place of your AI subscriptions, for $${OVERS.monthlyUsd} a month. Plus a contest film guide and a free community. Claim it with your email.`,
     url: 'https://aifilmcontests.com/starter-pack',
     siteName: 'AI Film Contests',
   },
@@ -46,22 +46,22 @@ export default function StarterPackPage() {
             The creator pack.<br /><span className="g">Claim it free.</span>
           </h1>
           <p style={{ fontSize: 'clamp(15px, 1.8vw, 18px)', lineHeight: 1.7, color: '#6F6A61', margin: 0 }}>
-            Everything you need to go from a contest you like to a finished entry: the tool to make it
-            for {OVERS_OFF_PERCENT}% less, a guide that walks through every step, and a community to ask when you get stuck.
+            Everything you need to go from a contest you like to a finished entry: one tool in place of
+            your AI subscriptions, a guide that walks through every step, and a community to ask when you get stuck.
           </p>
         </div>
 
         <div className="pack-grid">
           <section className="pack-item pack-item-lead">
-            <div style={label}>{OVERS_OFF_PERCENT}% off</div>
+            <div style={label}>One tool, every model</div>
             <h2 style={title}>Overs Pro for ${OVERS.monthlyUsd} a month</h2>
             <p style={body}>
-              ${OVERS.monthlyUsd} a month for your first {OVERS.months} months instead of ${OVERS.fullUsd}. Type a shot
-              and Overs makes the stills. Pick one and it becomes a clip that opens exactly on that frame. Put several
+              ${OVERS.monthlyUsd} a month for your first {OVERS.months} months instead of ${OVERS.fullUsd}. {OVERS_REPLACES} Type a shot
+              and it makes the stills. Pick one and it becomes a clip that opens exactly on that frame. Put several
               pictures on the bar and the clip works from all of them.
             </p>
             <p style={{ ...body, fontSize: 13.5, color: '#6F6A61' }}>
-              It runs on your own OpenRouter key, so you pay the video models at their price, with no markup.
+              {OVERS_COSTS}
               Cancel any time from your account page. The ${OVERS.monthlyUsd} price ends {OFFER_ENDS_LABEL}.
             </p>
             <a href="#claim" style={more}>Claim it with your email →</a>

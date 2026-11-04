@@ -3,7 +3,7 @@
 import Link from 'next/link'
 import { useSearchParams } from 'next/navigation'
 import { useEffect, useRef, useState } from 'react'
-import { COMMUNITY, GUIDE, OFFER_ENDS_LABEL, OVERS, OVERS_OFF_PERCENT, offerOpen, oversHref } from '@/lib/creator-pack'
+import { COMMUNITY, GUIDE, OFFER_ENDS_LABEL, OVERS, OVERS_OFF_PERCENT, OVERS_REPLACES, offerOpen, oversHref } from '@/lib/creator-pack'
 
 /* Confirms on load, by POST, so a mail scanner that only fetches the link
    confirms nobody. Then shows the pack here as well, because the email can
@@ -70,6 +70,7 @@ export default function ConfirmPack() {
             <div className="pack-item pack-item-lead">
               <p style={itemTitle}>Overs Pro, {OVERS_OFF_PERCENT}% off</p>
               <p style={itemBody}>
+                {OVERS_REPLACES}{' '}
                 ${OVERS.monthlyUsd} a month for your first {OVERS.months} months, then ${OVERS.fullUsd}. Ends {OFFER_ENDS_LABEL}, or
                 sooner if the {OVERS.places} founding places fill.
               </p>

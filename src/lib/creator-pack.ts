@@ -38,6 +38,14 @@ export function oversHref(placement: string): string {
   return `${OVERS.url}?utm_source=aifilmcontests&utm_medium=site&utm_campaign=${encodeURIComponent(placement)}`
 }
 
+/* How Overs is pitched everywhere: one creating tool in place of a stack of
+   AI subscriptions. The models and prices are what Overs reaches through an
+   OpenRouter key (Overs models list, checked Nov 3 2026: FLUX 3 Klein about
+   $0.01 a still, Wan 3.0 about $0.50 for 5 s). Recheck before changing. */
+export const OVERS_MODELS = 'Seedance, Veo, Kling, Nano Banana and FLUX'
+export const OVERS_REPLACES = `Overs puts ${OVERS_MODELS} in one tool, so you don't pay a separate subscription for each.`
+export const OVERS_COSTS = "You use your own OpenRouter key and pay each model's own price, with no markup: stills from a cent or two, clips from about 50 cents."
+
 export const OVERS_LINE = `Overs Pro for $${OVERS.monthlyUsd} a month for ${OVERS.months} months, ${OVERS_OFF_PERCENT}% off`
 
 /** The last moment the founding price can be claimed: Nov 30, end of day in

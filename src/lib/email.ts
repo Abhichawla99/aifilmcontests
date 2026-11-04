@@ -1,7 +1,7 @@
 import { Resend } from 'resend'
 import { supabaseAdmin } from './supabase'
 import { isMissingRelation, withDbRetry, type DbRetryOptions } from './db-health'
-import { COMMUNITY, GUIDE, OFFER_ENDS_LABEL, OVERS, OVERS_OFF_PERCENT, offerDaysLeft, offerOpen } from './creator-pack'
+import { COMMUNITY, GUIDE, OFFER_ENDS_LABEL, OVERS, OVERS_COSTS, OVERS_MODELS, OVERS_OFF_PERCENT, OVERS_REPLACES, offerDaysLeft, offerOpen } from './creator-pack'
 
 const FROM_EMAIL = process.env.FROM_EMAIL || 'contests@updates.aifilmcontests.com'
 const REPLY_TO   = process.env.REPLY_TO_EMAIL || 'hello@aifilmcontests.com'
@@ -127,7 +127,7 @@ const EMAIL_ART: Record<ArtSlot, EmailArt | null> = {
 /** The lime poster that opens the signup emails, as an image so Gmail shows it. */
 type Poster = { src: string; alt: string; width: number; height: number }
 const POSTERS: Record<'pack' | 'confirm', Poster> = {
-  pack: { src: `${SITE_URL}/email/poster-pack.png`, alt: '$3 until Nov 30. Overs Pro for your first 3 months. 700 founding places.', width: 600, height: 478 },
+  pack: { src: `${SITE_URL}/email/poster-pack.png`, alt: '$3 until Nov 30. Overs Pro: every AI model in one tool. 700 founding places.', width: 600, height: 478 },
   confirm: { src: `${SITE_URL}/email/poster-confirm.png`, alt: 'One click and your creator pack is on its way.', width: 600, height: 400 },
 }
 
@@ -265,8 +265,9 @@ function textList(items: ContestEmailItem[]) {
 
 // ─── Overs: the freebie for people making an entry ────────────────────────────
 //
-// Overs (overs.studio) is Abhi's other product: stills from a few words and
-// clips from any still, on the person's own OpenRouter key. People on this
+// Overs (overs.studio) is Abhi's other product, pitched as one creating tool
+// in place of a stack of AI subscriptions: every image and video model in one
+// place, on the person's own OpenRouter key. People on this
 // list get Pro for $3 a month for their first three months, then $39 (the
 // founding offer; its page for filmmakers is /filmmakers). Every contest email
 // carries one short block under the contests; the welcome and spotlight
@@ -282,7 +283,7 @@ function oversLink(kind: EmailKind) {
   return `${OVERS_URL}?utm_source=aifilmcontests&utm_medium=email&utm_campaign=${kind}`
 }
 
-const OVERS_LINE = 'Overs turns a few words into stills and any still into a clip, on your own OpenRouter key. For people on this list it\'s $3 a month for the first 3 months.'
+const OVERS_LINE = `${OVERS_REPLACES} It runs on your own OpenRouter key. For people on this list it's $${OVERS.monthlyUsd} a month for the first ${OVERS.months} months.`
 
 /** What the three months save: $108. */
 const OVERS_SAVING = (OVERS.fullUsd - OVERS.monthlyUsd) * OVERS.months
@@ -296,7 +297,7 @@ function oversBlock(kind: EmailKind) {
     <div style="${caps(T.faint, 10)}margin-bottom:8px;">Picked one?</div>
     <p style="font-family:${SERIF};font-size:16px;line-height:1.6;color:${T.inkSoft};margin:0 0 10px 0;">
       <a href="${SITE_URL}${GUIDE.path}" style="color:${T.ink};text-decoration:underline;">The contest film guide</a> takes you from the rules to the export.
-      For the stills and clips, I built Overs: <span style="text-decoration:line-through;color:${T.faint};">$${OVERS.fullUsd}</span> <strong style="color:${T.ink};">$${OVERS.monthlyUsd} a month</strong> for your first ${OVERS.months} months.
+      For the stills and clips I built Overs, which puts Seedance, Veo, Kling and the rest in one tool so you don't pay for each separately. <span style="text-decoration:line-through;color:${T.faint};">$${OVERS.fullUsd}</span> <strong style="color:${T.ink};">$${OVERS.monthlyUsd} a month</strong> for your first ${OVERS.months} months.
     </p>
     ${textLink(oversLink(kind), `Get Overs for $${OVERS.monthlyUsd} →`)}
     <span style="font-family:${SERIF};font-style:italic;color:${T.faint};font-size:14px;margin-left:8px;">Abhi</span>
@@ -317,7 +318,7 @@ function oversFeature(kind: EmailKind, heading: string) {
     <div style="${caps(T.accent, 10)}margin-bottom:10px;">${OVERS_OFF_PERCENT}% off for people on this list</div>
     <div style="font-family:${DISPLAY};font-size:34px;line-height:1.05;color:${T.ink};margin-bottom:12px;">${heading}</div>
     <p style="font-family:${SERIF};font-size:16px;line-height:1.65;color:${T.inkSoft};margin:0 0 14px 0;">
-      I built Overs so you can make the stills and clips for an entry without another big subscription.
+      I built Overs so you don't need a separate subscription for every image and video model. ${OVERS_MODELS} are all in one place.
       Type a shot and it makes the stills. Pick one and it becomes a clip that opens exactly on that frame.
     </p>
     <table role="presentation" cellpadding="0" cellspacing="0" style="margin:0 0 6px 0;"><tr>
@@ -325,7 +326,7 @@ function oversFeature(kind: EmailKind, heading: string) {
       <td style="vertical-align:baseline;font-size:13px;line-height:1.5;color:${T.inkSoft};">a month for ${OVERS.months} months<br><span style="text-decoration:line-through;color:${T.faint};">$${OVERS.fullUsd} a month</span> · $${OVERS_SAVING} saved</td>
     </tr></table>
     <p style="font-size:12px;line-height:1.6;color:${T.faint};margin:10px 0 20px 0;">
-      Then $${OVERS.fullUsd} a month, cancel any time. Runs on your own OpenRouter key, so each clip costs what the video model charges, with no markup.
+      Then $${OVERS.fullUsd} a month, cancel any time. ${OVERS_COSTS}
     </p>
     ${button(oversLink(kind), `Get Overs for $${OVERS.monthlyUsd} →`)}
   </div>`
@@ -333,8 +334,8 @@ function oversFeature(kind: EmailKind, heading: string) {
 
 function oversFeatureText(kind: EmailKind, heading: string) {
   if (!oversEnabled()) return ''
-  return `${heading.toUpperCase()}\nI built Overs so you can make the stills and clips for an entry without another big subscription. Type a shot and it makes the stills. Pick one and it becomes a clip that opens exactly on that frame.\n` +
-    `For people on this list, Overs Pro is $3 a month for your first 3 months, then $39. Cancel any time. It runs on your own OpenRouter key, so each clip costs what the video model charges, with no markup.\n` +
+  return `${heading.toUpperCase()}\nI built Overs so you don't need a separate subscription for every image and video model. ${OVERS_MODELS} are all in one place. Type a shot and it makes the stills. Pick one and it becomes a clip that opens exactly on that frame.\n` +
+    `For people on this list, Overs Pro is $3 a month for your first 3 months, then $39. Cancel any time. ${OVERS_COSTS}\n` +
     `Get Overs for $3: ${oversLink(kind)}\n\n`
 }
 
@@ -659,7 +660,7 @@ export function buildConfirmEmail(name: string | null | undefined, token: string
   const url = confirmUrl(token)
   const open = oversEnabled() && offerOpen(now)
   const pack = open
-    ? `Overs Pro at $${OVERS.monthlyUsd} a month, the contest film guide and ${COMMUNITY.name}`
+    ? `Overs Pro at $${OVERS.monthlyUsd} a month (every AI image and video model in one tool), the contest film guide and ${COMMUNITY.name}`
     : `the contest film guide, ${COMMUNITY.name} and this week's contest`
   const lead = reminder
     ? `You signed up for AI Film Contests but haven't confirmed, so your creator pack hasn't gone out. One click sends it: ${pack}.`
@@ -710,9 +711,9 @@ export function buildPackEmail(
   const opening = opts.existing
     ? "You've been on the list a while, so you get the creator pack new subscribers now get. Here's what's in it."
     : "You're confirmed. Here's what's in your pack."
-  const oversCopy = `Overs is the tool I built for making AI films. Type a shot and it makes the stills. Pick one and it becomes a clip that opens on that exact frame.`
+  const oversCopy = `I built Overs so you don't need a separate subscription for every image and video model. ${OVERS_MODELS} are all in one place. Type a shot and it makes the stills. Pick one and it becomes a clip that opens on that exact frame.`
   const priceCopy = `$${OVERS.monthlyUsd} a month for your first ${OVERS.months} months, then $${OVERS.fullUsd}. The price ${ends}, or sooner if the ${OVERS.places} founding places fill.`
-  const fine = 'You bring your own OpenRouter key, so each clip costs what the video model charges. Cancel any time.'
+  const fine = `${OVERS_COSTS} Cancel any time.`
   const featuredLine = featured
     ? `${featured.prize} · free to enter · closes ${fmtDate(featured.deadline)}`
     : ''
@@ -720,7 +721,7 @@ export function buildPackEmail(
   // Drawings alternate sides down the email, starting on the left.
   const rows: Array<[EmailArt | null, string]> = []
   if (open) rows.push([EMAIL_ART.packOvers, `
-    ${packHead(`Overs Pro, $${OVERS.monthlyUsd} a month`)}
+    ${packHead("Every AI model in one tool")}
     ${packText(oversCopy)}
     ${packText(`<strong>${priceCopy}</strong>`, T.ink)}
     ${packText(fine, T.faint, 13)}
@@ -766,7 +767,7 @@ export function buildPackEmail(
   </div>`, unsub, 'Creator pack', open ? `Overs for $${OVERS.monthlyUsd} a month ${ends}. Plus this week's contest.` : "This week's contest, the guide and the club.", now, open ? POSTERS.pack : undefined),
     text: unsub =>
       `${first ? `Hey ${first},` : 'Hey,'}\n\n${opening}\n\n` +
-      (open ? `OVERS PRO FOR $${OVERS.monthlyUsd} A MONTH\n${oversCopy}\n${priceCopy}\n${fine}\nClaim it: ${oversLink('pack')}\n\n` : '') +
+      (open ? `EVERY AI MODEL IN ONE TOOL, $${OVERS.monthlyUsd} A MONTH\n${oversCopy}\n${priceCopy}\n${fine}\nClaim it: ${oversLink('pack')}\n\n` : '') +
       (featured ? `THIS WEEK'S CONTEST\n${featured.name}\n${featuredLine}\n${featured.url}\n\n` : '') +
       `ALSO YOURS\n${GUIDE.title}: ${SITE_URL}${GUIDE.path}\n${COMMUNITY.name}, my free community: ${COMMUNITY.url}\n\n` +
       `${note}\n\nAbhi\n\nUnsubscribe: ${unsub}`,

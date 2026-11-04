@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { COMMUNITY, GUIDE, OFFER_ENDS_LABEL, OVERS, OVERS_OFF_PERCENT, PACK_PATH } from '@/lib/creator-pack'
+import { COMMUNITY, GUIDE, OFFER_ENDS_LABEL, OVERS, OVERS_MODELS, PACK_PATH } from '@/lib/creator-pack'
 
 /* The homepage's pitch for the free creator pack: the three pieces side by
    side, with the claim going to the subscribe card in the hero (signing up is
@@ -41,10 +41,10 @@ export default function CreatorPackSection() {
 
         <div className="pack-grid" style={{ marginBottom: 0 }}>
           <div className="pack-item pack-item-lead">
-            <div style={label}>{OVERS_OFF_PERCENT}% off</div>
+            <div style={label}>One tool, every model</div>
             <h3 style={title}>Overs Pro for ${OVERS.monthlyUsd} a month</h3>
             <p style={body}>
-              Type a shot and get the stills. Pick one and it becomes a clip that opens on that frame.
+              {OVERS_MODELS} in one tool, so you stop paying a subscription for each.
               ${OVERS.monthlyUsd} a month for {OVERS.months} months instead of ${OVERS.fullUsd}, on your own OpenRouter key.
               Ends {OFFER_ENDS_LABEL}.
             </p>
