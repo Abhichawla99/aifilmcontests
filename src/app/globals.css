@@ -1901,6 +1901,23 @@ img, svg, video, canvas { max-width: 100%; }
 .pack-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; margin-bottom: 20px; }
 .pack-item { background: #FFFFFF; border: 1px solid #E3DED3; border-radius: 16px; padding: 24px 24px 22px; min-width: 0; }
 .pack-item-lead { border-color: #C7D2FE; box-shadow: inset 0 3px 0 #4F46E5; }
+/* The pack's cards wear the site's pastels (theme.ts), each with Abhi's ink
+   drawing in a white frame, the way the homepage's three drawings sit. The
+   pack email uses the same cards. */
+.pack-tint-purple { background: #F3F0F9; border-color: #E1DAF0; --pack-line: #E1DAF0; }
+.pack-tint-yellow { background: #FBF4DE; border-color: #F0E3BC; --pack-line: #F0E3BC; }
+.pack-tint-pink   { background: #FDEEEC; border-color: #F5D9D5; --pack-line: #F5D9D5; }
+.pack-art {
+  background: #FFFFFF; border: 1px solid var(--pack-line, #E3DED3); border-radius: 10px;
+  height: 168px; padding: 10px; margin-bottom: 18px;
+  display: flex; align-items: center; justify-content: center;
+}
+.pack-art img { max-width: 100%; max-height: 100%; width: auto; height: auto; object-fit: contain; }
+.pack-deadline { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 12px; margin-top: 22px; font-size: 14px; color: #6F6A61; }
+.pack-deadline-pill {
+  display: inline-block; background: #4F46E5; color: #FFFFFF; border-radius: 8px; padding: 7px 12px;
+  font-family: 'Space Grotesk', sans-serif; font-size: 14px; font-weight: 700; letter-spacing: -0.01em;
+}
 @media (max-width: 860px) { .pack-grid { grid-template-columns: minmax(0, 1fr); } }
 
 .pack-claim {

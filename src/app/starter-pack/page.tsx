@@ -1,8 +1,12 @@
 import type { Metadata } from 'next'
+import Image from 'next/image'
 import Link from 'next/link'
 import InnerLayout from '@/components/InnerLayout'
 import EmailSubscribe from '@/components/EmailSubscribe'
-import { COMMUNITY, GUIDE, OFFER_ENDS_LABEL, OVERS, OVERS_COSTS, OVERS_OFF_PERCENT, OVERS_REPLACES } from '@/lib/creator-pack'
+import { COMMUNITY, GUIDE, OFFER_ENDS_LABEL, OVERS, OVERS_COSTS, OVERS_OFF_PERCENT, OVERS_REPLACES, PACK_ART, offerOpen } from '@/lib/creator-pack'
+
+// Rebuilt hourly so the deadline line comes down once the offer closes.
+export const revalidate = 3600
 
 /* The free creator pack. Claiming it is subscribing and clicking the confirm
    link: the pack email delivers all three pieces, and /confirm shows them too.
@@ -33,6 +37,7 @@ const body: React.CSSProperties = { fontSize: 15, lineHeight: 1.7, color: '#4A46
 const more: React.CSSProperties = { fontFamily: 'Space Grotesk, sans-serif', fontSize: 14, fontWeight: 600, color: '#4338CA', textDecoration: 'none' }
 
 export default function StarterPackPage() {
+  const open = offerOpen(new Date())
   return (
     <InnerLayout>
       <div className="max-w-5xl mx-auto px-5" style={{ padding: 'clamp(40px, 6vw, 72px) 20px clamp(48px, 7vw, 88px)' }}>
@@ -49,10 +54,19 @@ export default function StarterPackPage() {
             Everything you need to go from a contest you like to a finished entry: one tool in place of
             your AI subscriptions, a guide that walks through every step, and a community to ask when you get stuck.
           </p>
+          {open && (
+            <div className="pack-deadline">
+              <span className="pack-deadline-pill">${OVERS.monthlyUsd} ({OVERS_OFF_PERCENT}% off) until {OFFER_ENDS_LABEL}</span>
+              <span>or until the {OVERS.places} founding places fill</span>
+            </div>
+          )}
         </div>
 
         <div className="pack-grid">
-          <section className="pack-item pack-item-lead">
+          <section className="pack-item pack-item-lead pack-tint-purple">
+            <div className="pack-art">
+              <Image src={PACK_ART.overs.src} width={PACK_ART.overs.width} height={PACK_ART.overs.height} alt={PACK_ART.overs.alt} />
+            </div>
             <div style={label}>One tool, every model</div>
             <h2 style={title}>Overs Pro for ${OVERS.monthlyUsd} a month ({OVERS_OFF_PERCENT}% off)</h2>
             <p style={body}>
@@ -61,13 +75,16 @@ export default function StarterPackPage() {
               pictures on the bar and the clip works from all of them.
             </p>
             <p style={{ ...body, fontSize: 13.5, color: '#6F6A61' }}>
-              {OVERS_COSTS}
+              {OVERS_COSTS}{' '}
               Cancel any time from your account page. The ${OVERS.monthlyUsd} price ends {OFFER_ENDS_LABEL}.
             </p>
             <a href="#claim" style={more}>Claim it with your email →</a>
           </section>
 
-          <section className="pack-item">
+          <section className="pack-item pack-tint-yellow">
+            <div className="pack-art">
+              <Image src={PACK_ART.guide.src} width={PACK_ART.guide.width} height={PACK_ART.guide.height} alt={PACK_ART.guide.alt} />
+            </div>
             <div style={label}>Guide</div>
             <h2 style={title}>{GUIDE.title}</h2>
             <p style={body}>
@@ -77,7 +94,10 @@ export default function StarterPackPage() {
             <Link href={GUIDE.path} style={more}>Read the guide →</Link>
           </section>
 
-          <section className="pack-item">
+          <section className="pack-item pack-tint-pink">
+            <div className="pack-art">
+              <Image src={PACK_ART.club.src} width={PACK_ART.club.width} height={PACK_ART.club.height} alt={PACK_ART.club.alt} />
+            </div>
             <div style={label}>Community</div>
             <h2 style={title}>{COMMUNITY.name}</h2>
             <p style={body}>

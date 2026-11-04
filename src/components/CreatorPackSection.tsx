@@ -1,5 +1,6 @@
+import Image from 'next/image'
 import Link from 'next/link'
-import { COMMUNITY, GUIDE, OFFER_ENDS_LABEL, OVERS, OVERS_MODELS, OVERS_OFF_PERCENT, PACK_PATH } from '@/lib/creator-pack'
+import { COMMUNITY, GUIDE, OFFER_ENDS_LABEL, OVERS, OVERS_MODELS, OVERS_OFF_PERCENT, PACK_ART, PACK_PATH } from '@/lib/creator-pack'
 
 /* The homepage's pitch for the free creator pack: the three pieces side by
    side, with the claim going to the subscribe card in the hero (signing up is
@@ -40,7 +41,10 @@ export default function CreatorPackSection() {
         </div>
 
         <div className="pack-grid" style={{ marginBottom: 0 }}>
-          <div className="pack-item pack-item-lead">
+          <div className="pack-item pack-item-lead pack-tint-purple">
+            <div className="pack-art">
+              <Image src={PACK_ART.overs.src} width={PACK_ART.overs.width} height={PACK_ART.overs.height} alt={PACK_ART.overs.alt} />
+            </div>
             <div style={label}>One tool, every model</div>
             <h3 style={title}>Overs Pro for ${OVERS.monthlyUsd} a month ({OVERS_OFF_PERCENT}% off)</h3>
             <p style={body}>
@@ -50,7 +54,10 @@ export default function CreatorPackSection() {
             </p>
             <a href="#subscribe" style={more}>Claim it with your email →</a>
           </div>
-          <div className="pack-item">
+          <div className="pack-item pack-tint-yellow">
+            <div className="pack-art">
+              <Image src={PACK_ART.guide.src} width={PACK_ART.guide.width} height={PACK_ART.guide.height} alt={PACK_ART.guide.alt} />
+            </div>
             <div style={label}>Guide</div>
             <h3 style={title}>{GUIDE.title}</h3>
             <p style={body}>
@@ -59,7 +66,10 @@ export default function CreatorPackSection() {
             </p>
             <Link href={GUIDE.path} style={more}>Read the guide →</Link>
           </div>
-          <div className="pack-item">
+          <div className="pack-item pack-tint-pink">
+            <div className="pack-art">
+              <Image src={PACK_ART.club.src} width={PACK_ART.club.width} height={PACK_ART.club.height} alt={PACK_ART.club.alt} />
+            </div>
             <div style={label}>Community</div>
             <h3 style={title}>{COMMUNITY.name}</h3>
             <p style={body}>

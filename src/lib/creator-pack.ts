@@ -33,6 +33,14 @@ export const GUIDE = {
   title: 'How to make an AI film for a contest',
 }
 
+/** Abhi's ink drawings for the pack's cards, the same ones the pack email
+    uses (public/email, cut onto white for the cards' white frames). */
+export const PACK_ART = {
+  overs: { src: '/email/card-overs.png', width: 400, height: 411, alt: 'Ink drawing: someone holding up a film frame as a strip of film unspools from it' },
+  guide: { src: '/email/card-guide.png', width: 400, height: 456, alt: 'Ink drawing: someone walking while reading a big book, pages drifting behind' },
+  club: { src: '/email/card-club.png', width: 400, height: 260, alt: 'Ink drawing: three friends laughing around one laptop' },
+}
+
 /** The Overs link with where it was clicked, so Overs can tell which placement works. */
 export function oversHref(placement: string): string {
   return `${OVERS.url}?utm_source=aifilmcontests&utm_medium=site&utm_campaign=${encodeURIComponent(placement)}`
