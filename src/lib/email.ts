@@ -127,7 +127,7 @@ const EMAIL_ART: Record<ArtSlot, EmailArt | null> = {
 /** The lime poster that opens the signup emails, as an image so Gmail shows it. */
 type Poster = { src: string; alt: string; width: number; height: number }
 const POSTERS: Record<'pack' | 'confirm', Poster> = {
-  pack: { src: `${SITE_URL}/email/poster-pack.png`, alt: '$3 until Nov 30. Overs Pro: every AI model in one tool. 700 founding places.', width: 600, height: 478 },
+  pack: { src: `${SITE_URL}/email/poster-pack.png`, alt: '$3 (92% off) until Nov 30. Overs Pro: every AI model in one tool. 700 founding places.', width: 600, height: 478 },
   confirm: { src: `${SITE_URL}/email/poster-confirm.png`, alt: 'One click and your creator pack is on its way.', width: 600, height: 400 },
 }
 
