@@ -36,6 +36,104 @@ describe the old dark theme; the reasoning still applies, the colours do not.)*
 
 ---
 
+## 2026-11-04 — The browse list's prize, set and columned as what it is
+
+**Changed** — the prize cell in the browse list's row, `Row` in
+`ContestBrowser.tsx`. Three files, 119 lines added and 9 removed, 24 of the
+additions being comment. One new local component (`RowPrize`) and one measuring
+hook beside it, one inline grid template, one CSS selector narrowed and one
+line added to an existing `@media (max-width: 560px)`, plus a four-line
+cross-reference in `PrizeValue.tsx`. No new dependency, no data, no copy, no
+route. The card grid and the contest page are untouched; this is the list view
+only, which the toggle in the toolbar reaches and `?view=list` links.
+
+**Was** — the list view was the one surface on the site that never learned the
+rule the other two already follow. `PrizeValue.tsx` has drawn the line twice:
+on the contest page since 10-09 and on the card since 11-02, a prize that is a
+figure gets the tinted display face, and a prize that is a sentence gets set to
+be read. A row did neither. Every prize, figure or sentence, printed at
+12.5px Space Grotesk 600 in the category ink inside a cell held to
+`maxWidth: 220` and cut by `text-overflow: ellipsis`.
+
+Both halves of that were wrong, and they compounded. 50 of the 61 open
+contests carry a prize that is a sentence, so a row's most emphatic type —
+heavier than the contest's own name beside it — was usually a sentence, and
+then the 220px cell cut it mid-word. Five of the first eight rows on the live
+page: `Official selection screening in Las …`, `Official Selection and
+biannual You…`, `Award laurels across six categorie…`, `WAIFF Trophy + 5
+winners advance …`, `4 cash awards across Best Film, Be…`. The card had this
+exact fault in its blurb and fixed it on 10-08; the row never got the fix.
+
+And the cell was starved while the row was not. The grid ran
+`auto minmax(0,1fr) auto auto`, so the name column absorbed every spare pixel
+and the prize stayed at its fixed 220px. At 1440px that left roughly 520px of
+nothing between a title that needed none of it and a value being cut for want
+of it, and the cell's left edge moved with every title, so there was no column
+to read down.
+
+**Looked at** — Criterion's Shop All Films in list view, Metrograph's Now
+Playing. Criterion runs five columns over 1,899 rows — `Spine # / Title /
+Director / Country / Year` — and not one cell is truncated, because every
+value it puts in a column is a short typed one: a number, a name, a country, a
+year. Metrograph has prose to place and refuses to column it at all: the spec
+line is `DIRECTOR: PAYAL KAPADIA / 2024 / 110MIN / DCP`, four typed values
+level with each other and unweighted, and the synopsis gets its own full
+measure underneath, ending on `MORE…` on a line of its own. **The observation
+is that neither puts a sentence in a column and cuts it** — a column carries a
+typed value, prose gets its own measure, and the cut, where there is one, is a
+deliberate word rather than wherever the pixels ran out.
+
+**Now** — the row keeps its single line, which is what the list view is for,
+but the cell behaves like a column and the value is set as what it is.
+
+The cut lands on a whole word. `useOneLine` measures the text in the face the
+cell is actually painted in, using the same canvas measurer, the same
+`trimTail` punctuation rule and the same `\u2026` the card's blurb has used
+since 10-08, and walks back to the last whole word that fits. The CSS ellipsis
+stays on underneath as the backstop, so a bad measurement is no worse than
+what the row did before. The cell is a grid track rather than content-sized,
+so its width never moves with what is put in it and the `ResizeObserver`
+cannot feed itself.
+
+The setting follows the value. `RowPrize` reuses `MONEY` and
+`PRIZE_IS_A_FIGURE` from `PrizeValue.tsx`, so the figure/sentence line is
+drawn in exactly one place for all three scales. A figure keeps the setting it
+had to the character — Space Grotesk 600 in the category tint, tabular. A
+sentence is set in the body face at 400 in `#57524A`, level with the organizer
+line under the title rather than louder than the title, with any money inside
+it still picked out in the tint by the shared `PrizeFigures`. Nothing is
+extracted, reordered or dropped; the string prints whole wherever it fits.
+
+The column is a column. `auto minmax(0,1.25fr) minmax(0,1fr) auto` gives the
+name first call on the row and hands the prize the gutter it was never using.
+At 1440px the cell goes from 220px to about 390px and its left edge stops
+moving, so the eye has a second rail to run down. Most prizes that were cut
+now print whole: `Award laurels across six categories; no cash prize stated`,
+`WAIFF Trophy + 5 winners advance to WAIFF Cannes 2027`, `Official Selection
+and biannual YouTube screening`. The two longest still end in an ellipsis, now
+after `digital` and after `Best AI` rather than inside them.
+
+Two details that fall out of it. `.browse-row:hover .browse-row-prize` became
+`.browse-row:hover .browse-row-prize.is-figure`: a figure is a fact worth
+lifting to the accent under the cursor, a prose prize is not something the row
+is asking anyone to act on, and lifting it would undo the setting. And the
+`@media (max-width: 560px)` block, which has hidden the prize since the row
+was written, now also declares the row's three columns — left at four, the
+hidden cell's `1fr` track went on claiming its share and the name was cut at
+`International AI Sh…` with 150px of empty row beside it. Caught in the first
+390px capture, fixed before the commit; the phone row is byte-for-byte what it
+was.
+
+**Checked** — `npm run build` exit 0. Local production server at 1440px,
+700px and 390px, and the live page after deploy. `✓ no horizontal overflow` at
+all three. 390px unchanged from before the run.
+
+**Screens** — `reports/design/2026-11-04-before.png` (live, 1440px, list view),
+`reports/design/2026-11-04-after.png` (live, 1440px),
+`reports/design/2026-11-04-after-390.png` (live, 390px).
+
+---
+
 ## 2026-11-03 — A hub index's count column, headed once instead of captioned per row
 
 **Changed** — the count column on the five hub indexes that print a constant
