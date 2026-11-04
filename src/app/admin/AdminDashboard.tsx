@@ -16,6 +16,7 @@ type Contest = {
   eligibility: string | null
   entry_fee: string | null
   featured: boolean
+  featured_until: string | null
   url: string
   created_at: string | null
 }
@@ -40,6 +41,13 @@ function fmtShort(d: string) {
 
 function daysLeft(d: string) {
   return Math.ceil((new Date(d).getTime() - Date.now()) / 86_400_000)
+}
+
+// A contest is actually featured only while a paid listing is active — the same
+// test the public pages use (ContestCard.tsx, contests/[id]/page.tsx). The raw
+// `featured` column is a dead editorial flag nothing visitor-facing reads.
+function isFeatured(c: Contest) {
+  return !!c.featured_until && new Date(c.featured_until).getTime() > Date.now()
 }
 
 const STATUS_COLORS: Record<string, string> = {
@@ -90,7 +98,6 @@ function EditModal({
     url: contest.url ?? '',
     eligibility: contest.eligibility ?? '',
     entry_fee: contest.entry_fee ?? '',
-    featured: contest.featured ?? false,
   })
   const [saving, setSaving] = useState(false)
 
@@ -189,17 +196,19 @@ function EditModal({
             <input style={inputStyle} value={form.entry_fee} onChange={e => set('entry_fee', e.target.value)} placeholder="Free" />
           </div>
 
-          {/* Featured */}
+          {/* Featured — read-only: only a paid listing (Stripe) sets featured_until */}
           <div style={{ gridColumn: '1 / -1', display: 'flex', alignItems: 'center', gap: '10px' }}>
             <input
               type="checkbox"
               id="featured"
-              checked={form.featured}
-              onChange={e => set('featured', e.target.checked)}
-              style={{ width: '15px', height: '15px', cursor: 'pointer', accentColor: '#4f46e5' }}
+              checked={isFeatured(contest)}
+              disabled
+              style={{ width: '15px', height: '15px', cursor: 'not-allowed', accentColor: '#4f46e5', opacity: 0.7 }}
             />
-            <label htmlFor="featured" style={{ ...labelStyle, margin: 0, cursor: 'pointer', textTransform: 'none', fontSize: '13px', color: '#6F6A61', letterSpacing: 'normal' }}>
-              Featured (shown prominently — use for prizes &gt; $10k or major sponsors)
+            <label htmlFor="featured" style={{ ...labelStyle, margin: 0, cursor: 'not-allowed', textTransform: 'none', fontSize: '13px', color: '#6F6A61', letterSpacing: 'normal' }}>
+              {isFeatured(contest)
+                ? `Featured — paid listing active until ${fmtShort(contest.featured_until!)}`
+                : 'Not featured — set automatically by a paid listing, not editable here'}
             </label>
           </div>
         </div>
@@ -440,7 +449,11 @@ export default function AdminDashboard({ contests: initial, stats }: { contests:
                       {/* Name */}
                       <td style={{ padding: '10px 14px' }}>
                         <div style={{ fontWeight: 500, color: '#26231E', maxWidth: '220px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
-                          {c.featured && <span style={{ fontSize: '10px', color: '#4F46E5', marginRight: '5px' }}>★</span>}
+                          {isFeatured(c) && (
+                            <span style={{ fontSize: '10px', color: '#4F46E5', marginRight: '5px' }} title={`Featured until ${fmtShort(c.featured_until!)}`}>
+                              ★ until {fmtShort(c.featured_until!)}
+                            </span>
+                          )}
                           {c.name}
                         </div>
                       </td>
