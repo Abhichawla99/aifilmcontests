@@ -95,7 +95,10 @@ export default async function PrizeIndexPage() {
 
         {/* Roster */}
         <section style={{ marginBottom: 44 }}>
-          <h2 style={sectionLabel}>{rows.length} Prize Types</h2>
+          <div className="cr-head">
+            <h2 style={{ ...sectionLabel, marginBottom: 0 }}>{rows.length} Prize Types</h2>
+            <span className="cr-head-count">Open now</span>
+          </div>
           <div className="cr-list">
             {rows.map(({ slug, page, openCount: typeOpenCount }) => (
               <Link key={slug} href={`/prize/${slug}`} className="cr-row">
@@ -103,9 +106,8 @@ export default async function PrizeIndexPage() {
                   <div className="cr-name">{page.label}</div>
                   <p className="cr-one">{page.description}</p>
                 </div>
-                <div className="cr-since">
-                  <span className="cr-since-label">Open now</span>
-                  <span className="cr-since-date">{typeOpenCount}</span>
+                <div className="cr-count">
+                  <span className="sr-only">Open now: </span>{typeOpenCount}
                 </div>
                 <span className="cr-go" aria-hidden="true">&rarr;</span>
               </Link>

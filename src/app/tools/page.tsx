@@ -103,7 +103,10 @@ export default async function ToolsPage() {
 
         {/* Roster */}
         <section style={{ marginBottom: 44 }}>
-          <h2 style={sectionLabel}>{rows.length} Tools</h2>
+          <div className="cr-head">
+            <h2 style={{ ...sectionLabel, marginBottom: 0 }}>{rows.length} Tools</h2>
+            <span className="cr-head-count">Open now</span>
+          </div>
           <div className="cr-list">
             {rows.map(({ slug, tool, openCount: toolOpenCount }) => (
               <Link key={slug} href={`/tools/${slug}`} className="cr-row">
@@ -111,9 +114,8 @@ export default async function ToolsPage() {
                   <div className="cr-name">{tool.name}</div>
                   <p className="cr-one">{tool.tagline}</p>
                 </div>
-                <div className="cr-since">
-                  <span className="cr-since-label">Open now</span>
-                  <span className="cr-since-date">{toolOpenCount}</span>
+                <div className="cr-count">
+                  <span className="sr-only">Open now: </span>{toolOpenCount}
                 </div>
                 <span className="cr-go" aria-hidden="true">&rarr;</span>
               </Link>

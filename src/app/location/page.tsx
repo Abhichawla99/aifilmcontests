@@ -95,7 +95,10 @@ export default async function LocationIndexPage() {
 
         {/* Roster */}
         <section style={{ marginBottom: 44 }}>
-          <h2 style={sectionLabel}>{rows.length} Locations</h2>
+          <div className="cr-head">
+            <h2 style={{ ...sectionLabel, marginBottom: 0 }}>{rows.length} Locations</h2>
+            <span className="cr-head-count">Open now</span>
+          </div>
           <div className="cr-list">
             {rows.map(([slug, loc]) => (
               <Link key={slug} href={`/location/${slug}`} className="cr-row">
@@ -103,9 +106,8 @@ export default async function LocationIndexPage() {
                   <div className="cr-name">{loc.label}</div>
                   <p className="cr-one">{loc.filterNote}</p>
                 </div>
-                <div className="cr-since">
-                  <span className="cr-since-label">Open now</span>
-                  <span className="cr-since-date">{openCount}</span>
+                <div className="cr-count">
+                  <span className="sr-only">Open now: </span>{openCount}
                 </div>
                 <span className="cr-go" aria-hidden="true">&rarr;</span>
               </Link>
