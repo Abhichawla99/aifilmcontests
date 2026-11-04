@@ -1,11 +1,12 @@
 'use client'
 
-import { useState, useMemo, useEffect } from 'react'
+import { useState, useMemo, useEffect, useRef } from 'react'
 import { Contest } from '@/data/contests'
 import ContestCard from './ContestCard'
 import { normalizeCategory, categoryStyles } from '@/lib/theme'
 import { daysUntilDeadline, formatDeadlineShort } from '@/lib/deadline'
 import { isFree } from '@/lib/contest-filters'
+import { MONEY, PRIZE_IS_A_FIGURE, PrizeFigures } from '@/components/PrizeValue'
 
 type StatusFilter = 'all' | 'open' | 'upcoming'
 type SortKey = 'deadline' | 'prize' | 'newest'
@@ -60,6 +61,101 @@ function bucket(c: Contest): string {
 }
 const BUCKET_ORDER = ['Closing this week', 'Closing this month', 'In the next three months', 'Later in the year', 'Not open yet']
 
+/* ── The prize, at row scale ────────────────────────────────────────────────
+   The third and last place this value is printed, and the only one that never
+   learned the rule the other two already follow (src/components/PrizeValue.tsx:
+   a figure gets the tinted display face, a sentence gets set to be read). A row
+   printed every prize at Space Grotesk 600 in the category ink inside a fixed
+   220px cell, cut by `text-overflow: ellipsis` — so the 50 open contests in 61
+   whose prize is a sentence put a half-word in the row's most emphatic type,
+   with more weight than the contest's own name beside it: "Official selection
+   screening in Las …", "4 cash awards across Best Film, Be…", "WAIFF Trophy +
+   5 winners advance …".
+
+   Two things change. The cut now lands on a whole word, the same rule the
+   card's blurb has used since 10-08, measured in the face the cell is actually
+   painted in; the CSS ellipsis stays on underneath as the backstop. And the
+   setting follows the value: a figure keeps exactly the face it had, a sentence
+   is set level with the organizer line, with any money inside it still picked
+   out in the tint by the shared PrizeFigures. Nothing is extracted, reordered
+   or dropped — the string is printed whole wherever it fits. */
+
+const ELLIPSIS = '…'
+
+let measureCtx: CanvasRenderingContext2D | null = null
+function measurer() {
+  if (!measureCtx && typeof document !== 'undefined') {
+    measureCtx = document.createElement('canvas').getContext('2d')
+  }
+  return measureCtx
+}
+
+/* A comma or a dash before an ellipsis reads as a typo; a full stop reads as
+   four dots. Same tail rule as the card. */
+function trimTail(s: string) {
+  return s.replace(/[\s,;:.–—-]+$/, '')
+}
+
+/* Renders whole on the server and on first paint, then cuts to the cell's own
+   width once it has one. The cell is a grid track, not content-sized, so its
+   width never moves with what we put in it and the observer cannot loop. */
+function useOneLine(text: string) {
+  const ref = useRef<HTMLSpanElement>(null)
+  const [shown, setShown] = useState(text)
+  useEffect(() => {
+    const el = ref.current
+    if (!el) return
+    const fit = () => {
+      const m = measurer()
+      const width = el.clientWidth - 1
+      if (!m || !text || !(width > 0)) return
+      const cs = getComputedStyle(el)
+      m.font = `${cs.fontStyle} ${cs.fontWeight} ${cs.fontSize} ${cs.fontFamily}`
+      try { (m as CanvasRenderingContext2D & { letterSpacing: string }).letterSpacing = cs.letterSpacing } catch { /* older engines */ }
+      if (m.measureText(text).width <= width) { setShown(text); return }
+      let cut = text
+      while (cut) {
+        if (m.measureText(trimTail(cut) + ELLIPSIS).width <= width) break
+        const back = cut.lastIndexOf(' ')
+        if (back < 0) { cut = ''; break }
+        cut = cut.slice(0, back)
+      }
+      /* Nothing fits whole — leave the CSS ellipsis to do what it did before. */
+      setShown(cut ? trimTail(cut) + ELLIPSIS : text)
+    }
+    fit()
+    const ro = new ResizeObserver(fit)
+    ro.observe(el)
+    document.fonts?.ready.then(fit).catch(() => { /* measured against the fallback */ })
+    return () => ro.disconnect()
+  }, [text])
+  return { ref, shown }
+}
+
+function RowPrize({ text, color }: { text: string; color: string }) {
+  const value = (text || '').trim()
+  const { ref, shown } = useOneLine(value)
+  if (!value) return <span className="browse-row-prize" aria-hidden />
+  const figures = value.match(MONEY)
+  const isFigure = Boolean(figures) && value.length <= PRIZE_IS_A_FIGURE
+
+  return (
+    <span
+      ref={ref}
+      className={`browse-row-prize${isFigure ? ' is-figure' : ''}`}
+      style={{
+        minWidth: 0, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap',
+        fontVariantNumeric: 'tabular-nums',
+        ...(isFigure
+          ? { fontSize: 12.5, fontFamily: 'Space Grotesk, sans-serif', fontWeight: 600, color }
+          : { fontSize: 12.5, fontWeight: 400, color: '#57524A' }),
+      }}
+    >
+      {isFigure || !figures ? shown : <PrizeFigures text={shown} color={color} />}
+    </span>
+  )
+}
+
 /* ── One compact row. 70 contests are far easier to scan as rows than as cards,
      so the view toggle is a real feature, not decoration. ─────────────────── */
 function Row({ c }: { c: Contest }) {
@@ -71,7 +167,13 @@ function Row({ c }: { c: Contest }) {
       href={`/contests/${c.id}`}
       style={{
         display: 'grid',
-        gridTemplateColumns: 'auto minmax(0,1fr) auto auto',
+        /* The prize was a fixed 220px cell with every spare pixel of the row
+           banked into the name column beside it — ~520px of air at 1440px,
+           between a title that needed none of it and a value being cut for
+           want of it. Both are tracks now, so the column starts at the same x
+           down the whole list and the value gets the room the gutter was
+           holding. */
+        gridTemplateColumns: 'auto minmax(0,1.25fr) minmax(0,1fr) auto',
         alignItems: 'center',
         gap: 14,
         padding: '11px 14px',
@@ -95,11 +197,7 @@ function Row({ c }: { c: Contest }) {
           {c.organizer}{isFree(c.entryFee) ? ' · Free entry' : ''}
         </span>
       </span>
-      <span className="browse-row-prize" style={{
-        fontSize: 12.5, color: tint.text, fontFamily: 'Space Grotesk, sans-serif',
-        fontWeight: 600, fontVariantNumeric: 'tabular-nums', textAlign: 'right',
-        maxWidth: 220, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap',
-      }}>{c.prize}</span>
+      <RowPrize text={c.prize} color={tint.text} />
       <span style={{
         fontSize: 12.5, fontWeight: 700, fontFamily: 'Space Grotesk, sans-serif',
         fontVariantNumeric: 'tabular-nums', textAlign: 'right', whiteSpace: 'nowrap',

@@ -408,10 +408,17 @@ img, svg, video, canvas { max-width: 100%; }
 /* ── Browse list rows ──────────────────────────────────────────────────────── */
 .browse-row:first-child { border-top: none !important; }
 .browse-row:hover { background: #FBFAF8; }
-.browse-row:hover .browse-row-prize { color: #4338CA; }
+/* Only a figure takes the hover accent. A prose prize is set to be read, level
+   with the organizer line; lifting it to indigo on hover would promote a
+   sentence the row is not asking anyone to act on. */
+.browse-row:hover .browse-row-prize.is-figure { color: #4338CA; }
 @media (max-width: 560px) {
   /* The prize is the first thing to go on a phone: the name and the deadline are
-     what a filmmaker scans by. */
+     what a filmmaker scans by. With its cell gone the row is three columns, and
+     it has to be told so — left at four, the name shares the row with an empty
+     track and gets cut at "International AI Sh…" with 150px of nothing beside
+     it. Overrides the inline template the row sets for the wide layout. */
+  .browse-row { grid-template-columns: auto minmax(0,1fr) auto !important; }
   .browse-row-prize { display: none; }
 }
 

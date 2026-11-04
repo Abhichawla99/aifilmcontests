@@ -78,6 +78,11 @@ export default function PrizeValue({ text, color, gap }: { text: string; color: 
   )
 }
 
+// The browse list's row is the third scale of this same rule, and lives beside
+// the row it sets — see RowPrize in src/components/ContestBrowser.tsx. It shares
+// MONEY, PRIZE_IS_A_FIGURE and PrizeFigures from here, so the figure/sentence
+// line is drawn in exactly one place for all three.
+
 // ── The same rule, at card scale ───────────────────────────────────────────
 // The contest page learned on 10-09 that the setting has to follow the value.
 // A card never did: every prize printed at 14px Space Grotesk 700 in the
