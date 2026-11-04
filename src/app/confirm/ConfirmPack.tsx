@@ -68,10 +68,10 @@ export default function ConfirmPack() {
         <div className="pack-grid" style={{ marginBottom: 0 }}>
           {open && (
             <div className="pack-item pack-item-lead">
-              <p style={itemTitle}>Overs Pro, {OVERS_OFF_PERCENT}% off</p>
+              <p style={itemTitle}>Overs Pro, every model in one tool</p>
               <p style={itemBody}>
                 {OVERS_REPLACES}{' '}
-                ${OVERS.monthlyUsd} a month for your first {OVERS.months} months, then ${OVERS.fullUsd}. Ends {OFFER_ENDS_LABEL}, or
+                ${OVERS.monthlyUsd} a month ({OVERS_OFF_PERCENT}% off) for your first {OVERS.months} months, then ${OVERS.fullUsd}. Ends {OFFER_ENDS_LABEL}, or
                 sooner if the {OVERS.places} founding places fill.
               </p>
               <a href={oversHref('confirm')} target="_blank" rel="noopener" style={itemLink}>Claim Overs for ${OVERS.monthlyUsd} →</a>

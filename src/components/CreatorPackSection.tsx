@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { COMMUNITY, GUIDE, OFFER_ENDS_LABEL, OVERS, OVERS_MODELS, PACK_PATH } from '@/lib/creator-pack'
+import { COMMUNITY, GUIDE, OFFER_ENDS_LABEL, OVERS, OVERS_MODELS, OVERS_OFF_PERCENT, PACK_PATH } from '@/lib/creator-pack'
 
 /* The homepage's pitch for the free creator pack: the three pieces side by
    side, with the claim going to the subscribe card in the hero (signing up is
@@ -42,7 +42,7 @@ export default function CreatorPackSection() {
         <div className="pack-grid" style={{ marginBottom: 0 }}>
           <div className="pack-item pack-item-lead">
             <div style={label}>One tool, every model</div>
-            <h3 style={title}>Overs Pro for ${OVERS.monthlyUsd} a month</h3>
+            <h3 style={title}>Overs Pro for ${OVERS.monthlyUsd} a month ({OVERS_OFF_PERCENT}% off)</h3>
             <p style={body}>
               {OVERS_MODELS} in one tool, so you stop paying a subscription for each.
               ${OVERS.monthlyUsd} a month for {OVERS.months} months instead of ${OVERS.fullUsd}, on your own OpenRouter key.

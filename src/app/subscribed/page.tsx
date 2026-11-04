@@ -3,7 +3,7 @@ import Link from 'next/link'
 import InnerLayout from '@/components/InnerLayout'
 import ContestCard from '@/components/ContestCard'
 import { getAllContests } from '@/lib/contests-db'
-import { COMMUNITY, OVERS } from '@/lib/creator-pack'
+import { COMMUNITY, OVERS, OVERS_OFF_PERCENT } from '@/lib/creator-pack'
 
 export const revalidate = 900
 
@@ -39,7 +39,7 @@ export default async function SubscribedPage() {
           <p className="sok-head">Check your inbox.</p>
           <p className="sok-sub">
             Click the link we just sent and your creator pack comes straight back: Overs Pro
-            at ${OVERS.monthlyUsd} a month, the contest film guide and {COMMUNITY.name}.
+            at ${OVERS.monthlyUsd} a month ({OVERS_OFF_PERCENT}% off), the contest film guide and {COMMUNITY.name}.
           </p>
 
           <div className="sok-step">

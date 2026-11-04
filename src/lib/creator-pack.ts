@@ -46,7 +46,7 @@ export const OVERS_MODELS = 'Seedance, Veo, Kling, Nano Banana and FLUX'
 export const OVERS_REPLACES = `Overs puts ${OVERS_MODELS} in one tool, so you don't pay a separate subscription for each.`
 export const OVERS_COSTS = "You use your own OpenRouter key and pay each model's own price, with no markup: stills from a cent or two, clips from about 50 cents."
 
-export const OVERS_LINE = `Overs Pro for $${OVERS.monthlyUsd} a month for ${OVERS.months} months, ${OVERS_OFF_PERCENT}% off`
+export const OVERS_LINE = `Overs Pro for $${OVERS.monthlyUsd} a month (${OVERS_OFF_PERCENT}% off) for ${OVERS.months} months`
 
 /** The last moment the founding price can be claimed: Nov 30, end of day in
     California. Stripe has to agree (the FOUNDING promo stops then), or the

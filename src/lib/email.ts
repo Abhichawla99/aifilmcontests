@@ -283,7 +283,7 @@ function oversLink(kind: EmailKind) {
   return `${OVERS_URL}?utm_source=aifilmcontests&utm_medium=email&utm_campaign=${kind}`
 }
 
-const OVERS_LINE = `${OVERS_REPLACES} It runs on your own OpenRouter key. For people on this list it's $${OVERS.monthlyUsd} a month for the first ${OVERS.months} months.`
+const OVERS_LINE = `${OVERS_REPLACES} It runs on your own OpenRouter key. For people on this list it's $${OVERS.monthlyUsd} a month (${OVERS_OFF_PERCENT}% off) for the first ${OVERS.months} months.`
 
 /** What the three months save: $108. */
 const OVERS_SAVING = (OVERS.fullUsd - OVERS.monthlyUsd) * OVERS.months
@@ -297,7 +297,7 @@ function oversBlock(kind: EmailKind) {
     <div style="${caps(T.faint, 10)}margin-bottom:8px;">Picked one?</div>
     <p style="font-family:${SERIF};font-size:16px;line-height:1.6;color:${T.inkSoft};margin:0 0 10px 0;">
       <a href="${SITE_URL}${GUIDE.path}" style="color:${T.ink};text-decoration:underline;">The contest film guide</a> takes you from the rules to the export.
-      For the stills and clips I built Overs, which puts Seedance, Veo, Kling and the rest in one tool so you don't pay for each separately. <span style="text-decoration:line-through;color:${T.faint};">$${OVERS.fullUsd}</span> <strong style="color:${T.ink};">$${OVERS.monthlyUsd} a month</strong> for your first ${OVERS.months} months.
+      For the stills and clips I built Overs, which puts Seedance, Veo, Kling and the rest in one tool so you don't pay for each separately. <span style="text-decoration:line-through;color:${T.faint};">$${OVERS.fullUsd}</span> <strong style="color:${T.ink};">$${OVERS.monthlyUsd} a month (${OVERS_OFF_PERCENT}% off)</strong> for your first ${OVERS.months} months.
     </p>
     ${textLink(oversLink(kind), `Get Overs for $${OVERS.monthlyUsd} →`)}
     <span style="font-family:${SERIF};font-style:italic;color:${T.faint};font-size:14px;margin-left:8px;">Abhi</span>
@@ -660,11 +660,11 @@ export function buildConfirmEmail(name: string | null | undefined, token: string
   const url = confirmUrl(token)
   const open = oversEnabled() && offerOpen(now)
   const pack = open
-    ? `Overs Pro at $${OVERS.monthlyUsd} a month (every AI image and video model in one tool), the contest film guide and ${COMMUNITY.name}`
+    ? `Overs Pro at $${OVERS.monthlyUsd} a month (${OVERS_OFF_PERCENT}% off), the contest film guide and ${COMMUNITY.name}`
     : `the contest film guide, ${COMMUNITY.name} and this week's contest`
   const lead = reminder
     ? `You signed up for AI Film Contests but haven't confirmed, so your creator pack hasn't gone out. One click sends it: ${pack}.`
-    : `Confirm your email and I'll send your creator pack: ${pack}.`
+    : `Confirm your email and I'll send your creator pack: ${pack}.${open ? ' Overs puts every AI image and video model in one tool.' : ''}`
   const deadline = open ? `The $${OVERS.monthlyUsd} Overs price ${offerEnds(now)}.` : ''
   const after = reminder ? 'This is the only reminder.' : "Didn't sign up? Ignore this and you won't hear from us."
   return {
@@ -706,13 +706,13 @@ export function buildPackEmail(
   const open = oversEnabled() && offerOpen(now)
   const ends = offerEnds(now)
   const subject = open
-    ? `Your creator pack: Overs for $${OVERS.monthlyUsd} until ${OFFER_ENDS_LABEL}`
+    ? `Your creator pack: Overs for $${OVERS.monthlyUsd} (${OVERS_OFF_PERCENT}% off) until ${OFFER_ENDS_LABEL}`
     : 'Your creator pack is here'
   const opening = opts.existing
     ? "You've been on the list a while, so you get the creator pack new subscribers now get. Here's what's in it."
     : "You're confirmed. Here's what's in your pack."
   const oversCopy = `I built Overs so you don't need a separate subscription for every image and video model. ${OVERS_MODELS} are all in one place. Type a shot and it makes the stills. Pick one and it becomes a clip that opens on that exact frame.`
-  const priceCopy = `$${OVERS.monthlyUsd} a month for your first ${OVERS.months} months, then $${OVERS.fullUsd}. The price ${ends}, or sooner if the ${OVERS.places} founding places fill.`
+  const priceCopy = `$${OVERS.monthlyUsd} a month (${OVERS_OFF_PERCENT}% off) for your first ${OVERS.months} months, then $${OVERS.fullUsd}. The price ${ends}, or sooner if the ${OVERS.places} founding places fill.`
   const fine = `${OVERS_COSTS} Cancel any time.`
   const featuredLine = featured
     ? `${featured.prize} · free to enter · closes ${fmtDate(featured.deadline)}`
@@ -745,7 +745,7 @@ export function buildPackEmail(
 
   const cta = open ? `
   <div style="text-align:center;margin-top:26px;">
-    ${button(oversLink('pack'), `Claim Overs for $${OVERS.monthlyUsd} →`)}
+    ${button(oversLink('pack'), `Claim Overs for $${OVERS.monthlyUsd} (${OVERS_OFF_PERCENT}% off) →`)}
     <div style="font-family:${FONT};font-size:12px;color:${T.faint};margin-top:12px;">${capFirst(ends)}, or when the ${OVERS.places} places fill</div>
   </div>` : ''
 
@@ -764,7 +764,7 @@ export function buildPackEmail(
   <div style="border-top:1px solid ${T.ink};padding-top:26px;text-align:center;">
     ${para(note, T.ink, 16, '0', 'center')}
     ${signature}
-  </div>`, unsub, 'Creator pack', open ? `Overs for $${OVERS.monthlyUsd} a month ${ends}. Plus this week's contest.` : "This week's contest, the guide and the club.", now, open ? POSTERS.pack : undefined),
+  </div>`, unsub, 'Creator pack', open ? `Overs for $${OVERS.monthlyUsd} a month (${OVERS_OFF_PERCENT}% off) ${ends}. Plus this week's contest.` : "This week's contest, the guide and the club.", now, open ? POSTERS.pack : undefined),
     text: unsub =>
       `${first ? `Hey ${first},` : 'Hey,'}\n\n${opening}\n\n` +
       (open ? `EVERY AI MODEL IN ONE TOOL, $${OVERS.monthlyUsd} A MONTH\n${oversCopy}\n${priceCopy}\n${fine}\nClaim it: ${oversLink('pack')}\n\n` : '') +
