@@ -22,9 +22,28 @@ body {
   font-feature-settings: 'kern' 1, 'liga' 1;
 }
 
+/* The type system declares a heading's family and its tracking, and until now
+   said nothing about its leading — so every heading that did not set its own
+   inherited body's 1.7, the leading of a paragraph applied to display type. A
+   two-line heading then opened wider than the prose beneath it and read as two
+   headings: the 25px h2s on the article pages, the 19px card titles in the
+   homepage's pack row. 16 of the 17 headings on a topic page were set this way.
+
+   calc(1em + 0.3rem) gives leading that tightens as the type grows, which is
+   what display type wants and what one prose ratio cannot do: 1.44 at an 11px
+   small-caps label, 1.28 at a 17px card title, 1.19 at a 25px section heading,
+   1.11 at a 44px page title. Criterion sets prose at 1.60 and its headings at
+   1.10 to 1.25; It's Nice That sets prose at 1.47 and its 18px cards at 1.33;
+   Mubi runs a 42px display head at 1.07 and a 12px label at 1.40. None of the
+   three sets a heading at its own prose leading, and the gap widens with size.
+
+   This is a default, not an override. Every heading that already states its
+   leading — the 1.05-1.08 display titles, the 1.35 and 1.4 small ones — keeps
+   exactly the value it was tuned to. */
 h1, h2, h3, h4, h5, .display {
   font-family: 'Space Grotesk', sans-serif;
   letter-spacing: -0.02em;
+  line-height: calc(1em + 0.3rem);
 }
 
 /* Scrollbar */
