@@ -36,6 +36,81 @@ describe the old dark theme; the reasoning still applies, the colours do not.)*
 
 ---
 
+## 2026-11-05 — Headings get their own leading, and it tightens as the type grows
+
+**Changed** — one declaration on the `h1, h2, h3, h4, h5, .display` rule at the
+top of `globals.css`, plus the comment that explains it. One file, 19 lines
+added and none removed, 18 of the additions being comment. No component, no
+markup, no data, no copy, no route, no new dependency.
+
+**Was** — the type system has declared a heading's family and its tracking
+since the paper redesign and has never said a word about its leading. So every
+heading that did not set its own inherited `body`'s `line-height: 1.7` — the
+leading of a paragraph, applied to display type. It was not an edge case: 14 of
+the 30 headings on the homepage, 16 of the 17 on a topic page, 14 of 15 on
+`/feature`, 9 of 13 on a contest page, and the same story on `/guide`,
+`/tools`, `/creators`, `/submit`, `/starter-pack`, `/topics` and
+`/cinematic-ads`.
+
+On a single-line heading it only cost air. Where a heading wrapped, it showed.
+The 25px `h2`s on the article pages ran at 42.5px of leading while the 18px
+prose under them ran at 29.9px, so `November 15 to 30: Jaipur's extended tier,
+AI ZONE and` / `three listings to confirm` opened wider than the body copy it
+headed and read as two headings rather than one. Same fault at 19px in the
+homepage's pack row: `How to make an AI film for a` / `contest`, two lines with
+a paragraph's gap between them, beside two sibling cards whose titles happened
+to fit on one line and so looked like a different object.
+
+**Looked at** — Criterion's Current index, It's Nice That's front page and
+Mubi's Notebook, measuring rather than eyeballing: computed `line-height ÷
+font-size` on every heading and on the prose beside it. Criterion sets prose at
+1.60 and its headings at 1.10 (30px) to 1.25 (16px). It's Nice That sets prose
+at 1.47 and its 18px card titles at 1.33, its 22px lead at 1.23. Mubi runs
+prose at 1.40, a 42px display head at 1.07 and a 12px label at 1.40. **The
+observation is that none of the three sets a heading at its own prose leading,
+and the distance between the two widens as the type grows** — a 12px label can
+sit at the prose ratio, a 40px headline sits nowhere near it. Ours had one
+ratio for every size on the page, and it was the prose one.
+
+**Now** — `line-height: calc(1em + 0.3rem)` on the heading rule. A constant
+4.8px added to the type size is a shrinking fraction of it, so the ratio falls
+as the heading grows, which is the shape the three reference sites have and
+what a single number cannot do. Measured on the live pages, not computed: 1.48
+at a 10px spec label on a contest page, 1.44 at an 11px footer head, 1.40 at a
+12px group heading, 1.28 at a 17px card title, 1.25 at the 19px pack-row title,
+1.19 at a 25px article heading, 1.16 at the 30px FAQ head, 1.11 at a 44px page
+title. The two wrapped headings now set as one object each, and the pack row's
+three card titles read as three of the same thing.
+
+It is a default, not an override. Every heading that already states its leading
+keeps exactly the value it was tuned to: the 1.05 to 1.08 display titles
+(`.ftp-title`, `.sbp-title`, `.nf-title`, the pack section's `h2`), `.sok-head`
+at 1.35, `.rcal-link` at 1.4. Nothing that was deliberately set moved.
+
+**Left alone, and why** — `body`'s own 1.7. It is prose leading on prose and it
+is right; the bug was borrowing it for display type, not the value itself. And
+the four 10px small-caps spec labels on a contest page, which land at 1.48 and
+stay there: at that size the reference sites sit at the prose ratio too, and
+tightening a one-line small-caps label gains nothing.
+
+**Checked** — `npm run build` exit 0. Every heading on `/`, `/topics`, the
+topic article, `/feature`, `/submit`, `/guide`, `/tools`, `/creators`,
+`/starter-pack`, `/unsubscribe` and `/cinematic-ads` re-measured after the
+change: none now above 1.45 except the four 10px labels above. All eleven page
+types plus a contest page returned `✓ no horizontal overflow (390px in 390px)`,
+and 1440px is clean. The generated `src/data/contests-snapshot.json` the build
+rewrites was reverted before the commit, so this ships as a stylesheet change
+only.
+
+**Before/after** — `reports/design/2026-11-05-before.png` and
+`2026-11-05-after.png` are the homepage pack row at 1440px;
+`2026-11-05-before-390.png` and `2026-11-05-after-390.png` are the same row at
+390px, where the two-line title shows worst; `2026-11-05-before-article.png`
+and `2026-11-05-after-article.png` are the topic page's wrapped 25px `h2`. All
+six from the live site, before and after the deploy.
+
+---
+
 ## 2026-11-04 — The browse list's prize, set and columned as what it is
 
 **Changed** — the prize cell in the browse list's row, `Row` in
