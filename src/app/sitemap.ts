@@ -255,6 +255,7 @@ const TOPICS = [
   'ai-film-festivals-in-toronto',
   'ai-film-festivals-in-montreal',
   'ai-film-festivals-in-dubai',
+  'ai-film-festivals-in-spain-2026',
   'ai-feature-film-festivals-2026',
   'ai-sci-fi-film-contests-2026',
   'experimental-ai-film-contests-2026',
