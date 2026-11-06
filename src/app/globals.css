@@ -1519,6 +1519,20 @@ img, svg, video, canvas { max-width: 100%; }
   color: #A39D91;
   margin-bottom: 4px;
 }
+/* The measure. .cr-one below has carried `max-width: 56ch` since the roster was
+   written; the name above it carried none, so the larger, heavier face got the
+   longer line. Measured at 1440px: the blurb sets 73 characters in 459px, the
+   name set 88 in its 708px track and 100 in the 810px a .cr-row-nocount row
+   hands back — a 17px/600 line of 100 characters, with the body it heads at 73
+   directly underneath. And because the track width depends on whether the row
+   has a count, the title's right edge stepped 102px between neighbouring rows:
+   no rail to read down on the one page where it matters, /topics, which mixes
+   both variants over 77 rows. The same 56ch on this face resolves to 606px and
+   sets 75 characters, so the two now hold one measure, declared one way. Only
+   /topics and /guide have names long enough to reach it; the other six indexes
+   (/tools, /categories, /prize, /location, /vs, /creators — 42 characters at the
+   longest) are untouched, and below 620px the track is nowhere near 606px, so
+   the phone is unchanged. */
 .cr-name {
   font-family: 'Space Grotesk', sans-serif;
   font-size: 17px;
@@ -1526,6 +1540,7 @@ img, svg, video, canvas { max-width: 100%; }
   line-height: 1.25;
   letter-spacing: -0.01em;
   color: #1B1916;
+  max-width: 56ch;
 }
 .cr-where { font-size: 11.5px; line-height: 1.4; color: #8B867C; margin-top: 3px; }
 .cr-one {
