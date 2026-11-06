@@ -36,6 +36,101 @@ describe the old dark theme; the reasoning still applies, the colours do not.)*
 
 ---
 
+## 2026-11-06 — The index row's title, given the measure its own blurb already had
+
+**Changed** — one declaration on the `.cr-name` rule in `globals.css`, plus the
+comment that explains it. One file, 15 lines added and none removed, 14 of the
+additions being comment. No component, no markup, no data, no copy, no route,
+no new dependency. The generated `src/data/contests-snapshot.json` the build
+rewrites was reverted before the commit, so this ships as a stylesheet change
+only.
+
+**Was** — the `.cr-row` is the site's one index object: eight pages are built
+from it (`/topics`, `/guide`, `/creators`, `/tools`, `/categories`, `/prize`,
+`/location`, `/vs`). Inside a row, the blurb has carried `max-width: 56ch`
+since the roster rows were written. The name above it carried none. So the
+larger, heavier face took the longer line, which is the relationship upside
+down.
+
+Measured on the live pages at 1440px, in the faces they are actually painted
+in: the blurb, 13px Inter, sets 73 characters in 459px. The name, 17px Space
+Grotesk 600, sets 88 in its 708px track — and 100 in the 810px that a
+`.cr-row-nocount` row hands back when it has no figure to print. A hundred
+characters at 17px/600, with the body copy it heads running at 73 directly
+underneath it.
+
+The second half of that was the part you could see without counting. Because
+the track width depends on whether the row has a count, the title's right edge
+stepped 102px between neighbouring rows. `/topics` is the only index of the
+eight that mixes both variants, and it does it over 77 rows, so the one column
+a visitor reads straight down had no rail to read down — the title ended at
+1002 on a row with a count and at 1104 on the row under it. The rows that ran
+longest were also the ones that broke worst: `1 Billion Followers Summit AI
+Film Award 2027: How to Enter the $1M Seedance Prize by` and then `Nov 20`
+alone on the second line, 92 characters against six.
+
+**Looked at** — It's Nice That's Nice Feed, Mubi's Now Showing, Criterion's
+front page. The Nice Feed is the one that answers this: it is a 14,449px row
+of slides living in an 849px box, and it never cuts one — Swiper snaps whole
+slides into the frame and the continuation is signalled by `Explore All →`
+rather than by a sliced word. Mubi and Criterion sidestep horizontal rows
+entirely at this width and set everything as a grid of fixed-measure cells.
+**The observation is that none of the three lets a line of type end wherever
+the container happens to stop** — the measure is decided for the type, and the
+box is then built around it, not the other way round. Ours had it backwards on
+exactly one of the two faces in the cell.
+
+Worth saying what this run did *not* take from the wander, because the log has
+been here before. 10-07 looked at this same row problem on the phone nav and
+removed a mask, on the rule that whatever marks an edge has to be true. The
+temptation today was a fade on the homepage ticker, which hard-clips `NOV 9`
+and `Jingrui AI Cre` at both ends. 10-07 already settled that: the cut is the
+affordance, and it is honest. Left alone.
+
+**Now** — the same `56ch`, on the same kind of declaration, on the face above.
+At 17px Space Grotesk it resolves to 615px and sets 75 characters, so the name
+and the blurb under it hold one measure, within two characters of each other,
+declared one way in two places.
+
+The rail arrives with it. Every `.cr-name` box on all eight pages is now 615px
+regardless of which row variant it sits in, so the 102px step is gone and the
+title's right boundary is the same on row 1 and row 77. The breaks improve
+where they were worst: `1 Billion Followers Summit AI Film Award 2027: How to
+Enter the $1M` / `Seedance Prize by Nov 20`, instead of a six-character orphan.
+
+The cost is honest and it is height. `/topics` goes from 21 two-line titles to
+51 of 77, and `/guide` from 10 to 15 of 40. Not one title on either page goes
+to three lines. Every row that gained a line gained it because its title was
+over 75 characters, which is a title that wanted two lines.
+
+**Left alone, and why** — the other six indexes. Their longest name is 42
+characters (`/vs`), so no cap at any sane value reaches them; `/tools`,
+`/creators` and `/vs` were re-measured after the change and render exactly as
+they did before. `.cr-row-nocount` keeps giving its empty column's track back
+to the title: the grid still collapses, which is what keeps the arrow's right
+edge aligned down the list — the title simply no longer spends the gift on a
+longer line.
+
+**Checked** — `npm run build` exit 0. Local production server and then the
+live pages after deploy, at 1440px and 390px. `✓ no horizontal overflow` at
+both. Below 620px the title's track is 256–260px, nowhere near 615px, so the
+cap never binds there: the live `/topics` capture at 390px is byte-identical
+before and after, same md5.
+
+**Found while looking, not fixed here** — two things outside this robot's
+lane, written up as open items in `OPTIMIZER_BACKLOG.md`: `isFree()` matches
+`free` as a substring, so every `FilmFreeway` entry fee reads as free; and the
+homepage FAQ still carries the stale seven-day reminder claim the 2026-11-01
+item removed from `/unsubscribe`.
+
+**Before/after** — `reports/design/2026-11-06-before.png` and
+`2026-11-06-after.png` are `/topics` at 1440px; `2026-11-06-before-390.png` and
+`2026-11-06-after-390.png` are the same page at 390px, identical by design;
+`2026-11-06-before-guide.png` and `2026-11-06-after-guide.png` are `/guide` at
+1440px. All six from the live site, before and after the deploy.
+
+---
+
 ## 2026-11-05 — Headings get their own leading, and it tightens as the type grows
 
 **Changed** — one declaration on the `h1, h2, h3, h4, h5, .display` rule at the
