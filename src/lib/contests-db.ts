@@ -1,3 +1,4 @@
+import { cache } from 'react'
 import { unstable_cache } from 'next/cache'
 import { supabaseAdmin, supabaseRead } from './supabase'
 import { Contest } from '@/data/contests'
@@ -77,10 +78,12 @@ export function getSnapshotStatus(): { stale: boolean; generatedAt: string | nul
 // Now the table is read once and shared through Next's data cache for
 // CONTESTS_REVALIDATE_SECONDS. When that window passes, the next caller still
 // gets the cached list at once and the refresh runs in the background, so no
-// visitor waits on the database. A live read that fails, or hangs longer than
-// LIVE_READ_TIMEOUT_MS, falls back to the build-time snapshot, and that
-// fallback is cached like any other result: hammering a database that is
-// already down only keeps it down.
+// visitor waits on the database. A failed background refresh is not cached,
+// so the last good list keeps being served. Only when nothing is cached yet
+// does a request wait on the database: if that read fails or takes longer
+// than LIVE_READ_TIMEOUT_MS, the request gets the build-time snapshot, which
+// is not cached (until Nov 5 2026 it was, and a refresh that tripped over a
+// frozen function's timer pinned the snapshot in place; see readAllContestsLive).
 //
 // A route handler that writes contests can call revalidateTag(CONTESTS_CACHE_TAG)
 // to publish sooner. The robots write straight to Supabase over REST, so their
@@ -102,43 +105,67 @@ const LIVE_READ_TIMEOUT_MS = 10_000
 
 type ContestsRead = { contests: Contest[]; snapshotGeneratedAt: string | null }
 
-// A 0-row result is never an `error` here — Supabase only populates `error` on
-// a genuine transport/query failure (bad connection, DNS, 5xx, timeout). An
-// empty table is just `data: []`. So any `error` means the read itself failed
-// and must not be mistaken for "no contests": serve the snapshot, or throw and
-// let the page/route fail loudly (a 5xx) instead of silently rendering as if
-// nothing exists.
-async function readAllContestsLive(): Promise<ContestsRead> {
+// Rejects after `ms`. Used only around reads a request is waiting on, never
+// inside a cached function (see below).
+function withTimeout<T>(p: Promise<T>, ms: number, what: string): Promise<T> {
+  let timer: ReturnType<typeof setTimeout> | undefined
+  return Promise.race([
+    p,
+    new Promise<never>((_, reject) => {
+      timer = setTimeout(() => reject(new Error(`TimeoutError: ${what} took over ${ms}ms`)), ms)
+    }),
+  ]).finally(() => clearTimeout(timer))
+}
+
+// The read inside the cache: no timer and no snapshot fallback, and any
+// failure is thrown. Two reasons, both from Nov 4-5 2026, when every page
+// served the snapshot:
+//  - When the cached list is stale, Next returns it and runs this in the
+//    background. Vercel freezes the function once the response is sent, so a
+//    timer started here kept running through the freeze and fired the moment
+//    the function woke for its next request (the "10s" timeouts were logged
+//    150ms into those requests). Without a timer the paused read just resumes.
+//  - A thrown error is never cached: Next keeps serving the last good list and
+//    tries again on the next call. The old version returned the snapshot,
+//    which unstable_cache then cached for fifteen minutes as if it were live.
+// A 0-row result is never an `error`: Supabase only sets `error` on a real
+// transport/query failure, and an empty table is just `data: []`.
+async function readAllContestsLive(): Promise<Contest[]> {
   const { data, error } = await supabaseRead
     .from('contests')
     .select('*')
     .order('deadline', { ascending: true })
-    .abortSignal(AbortSignal.timeout(LIVE_READ_TIMEOUT_MS))
-
-  if (error) {
-    const snapshot = loadSnapshot()
-    if (snapshot) {
-      console.error(`getAllContests: live read failed (${error.message}); serving snapshot from ${snapshot.generatedAt}`)
-      return { contests: snapshot.contests, snapshotGeneratedAt: snapshot.generatedAt }
-    }
-    throw new Error(`Failed to fetch contests: ${error.message}`)
-  }
-
-  return {
-    contests: (data as Record<string, unknown>[]).map(rowToContest),
-    snapshotGeneratedAt: null,
-  }
+  if (error) throw new Error(`Failed to fetch contests: ${error.message}`)
+  return (data as Record<string, unknown>[]).map(rowToContest)
 }
 
-const readAllContests = unstable_cache(readAllContestsLive, ['contests', 'all'], {
+// React's cache() makes it one read per render: a page that asks for the
+// contests in several places (the logs showed eight identical reads per page)
+// shares one call. The key changed with this version so lists cached by the
+// old reader, snapshots included, are not served.
+const readAllContests = cache(unstable_cache(readAllContestsLive, ['contests', 'all', 'v2'], {
   revalidate: CONTESTS_REVALIDATE_SECONDS,
   tags: [CONTESTS_CACHE_TAG],
-})
+}))
 
+// The timeout and the snapshot live out here, around the call a visitor's
+// request is actually waiting on, where a freeze cannot trip them. This only
+// waits on the database when nothing is cached yet (a cold cache after a
+// deploy); otherwise the cached list comes back at once. The snapshot is not
+// cached, so the next render tries the database again.
 async function sharedContests(): Promise<ContestsRead> {
-  const read = await readAllContests()
-  lastServedSnapshotAt = read.snapshotGeneratedAt
-  return read
+  try {
+    const contests = await withTimeout(readAllContests(), LIVE_READ_TIMEOUT_MS, 'contests read')
+    lastServedSnapshotAt = null
+    return { contests, snapshotGeneratedAt: null }
+  } catch (err) {
+    const snapshot = loadSnapshot()
+    const reason = err instanceof Error ? err.message : String(err)
+    if (!snapshot) throw new Error(`Failed to fetch contests: ${reason}`)
+    console.error(`getAllContests: live read failed (${reason}); serving snapshot from ${snapshot.generatedAt}`)
+    lastServedSnapshotAt = snapshot.generatedAt
+    return { contests: snapshot.contests, snapshotGeneratedAt: snapshot.generatedAt }
+  }
 }
 
 export async function getAllContests(): Promise<Contest[]> {
@@ -189,7 +216,6 @@ const readContestByIdLive = unstable_cache(
       .from('contests')
       .select('*')
       .eq('id', id)
-      .abortSignal(AbortSignal.timeout(LIVE_READ_TIMEOUT_MS))
       .maybeSingle()
     // Thrown rather than returned, so a failed read is never cached as "no such contest".
     if (error) throw new Error(`Failed to fetch contest "${id}": ${error.message}`)
@@ -205,7 +231,7 @@ export async function getContestById(id: string): Promise<Contest | null> {
   if (found) return found
   if (snapshotGeneratedAt) return null
   try {
-    return await readContestByIdLive(id)
+    return await withTimeout(readContestByIdLive(id), LIVE_READ_TIMEOUT_MS, `contest "${id}" read`)
   } catch (err) {
     console.error(err instanceof Error ? err.message : String(err))
     return null
