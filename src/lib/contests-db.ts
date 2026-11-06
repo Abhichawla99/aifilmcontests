@@ -1,5 +1,5 @@
 import { unstable_cache } from 'next/cache'
-import { supabase, supabaseAdmin } from './supabase'
+import { supabaseAdmin, supabaseRead } from './supabase'
 import { Contest } from '@/data/contests'
 import snapshotFile from '@/data/contests-snapshot.json'
 
@@ -109,7 +109,7 @@ type ContestsRead = { contests: Contest[]; snapshotGeneratedAt: string | null }
 // let the page/route fail loudly (a 5xx) instead of silently rendering as if
 // nothing exists.
 async function readAllContestsLive(): Promise<ContestsRead> {
-  const { data, error } = await supabase
+  const { data, error } = await supabaseRead
     .from('contests')
     .select('*')
     .order('deadline', { ascending: true })
@@ -185,7 +185,7 @@ export async function upsertContest(contest: Contest) {
 // which case the database was already unreachable and asking again only hangs.
 const readContestByIdLive = unstable_cache(
   async (id: string): Promise<Contest | null> => {
-    const { data, error } = await supabase
+    const { data, error } = await supabaseRead
       .from('contests')
       .select('*')
       .eq('id', id)

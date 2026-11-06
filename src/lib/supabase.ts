@@ -12,15 +12,25 @@ const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY || 'placeholder
 // of that explicitly: it runs in route handlers and crons, which are dynamic.
 const noStoreFetch: typeof fetch = (input, init) => fetch(input, { ...init, cache: 'no-store' })
 
-// Public client — for reading contests (respects RLS). Used ONLY inside the
-// unstable_cache readers in src/lib/contests-db.ts, which is why it gets the
-// plain fetch: unstable_cache already makes every fetch inside its callback
-// bypass Next's fetch cache, and an explicit `cache: 'no-store'` in there is
-// treated as dynamic usage while a page is being statically generated (the
-// build, and every ISR refresh after it). supabase-js reports that thrown
-// error as a failed read, which would make the readers cache the snapshot
-// instead of the live table. Do not use this client anywhere else.
+// Public client (respects RLS). The contests reads no longer use it (see
+// supabaseRead below). It keeps the plain fetch, as supabaseRead does, for
+// the reason the contests readers need it: unstable_cache already makes every
+// fetch inside its callback bypass Next's fetch cache, and an explicit
+// `cache: 'no-store'` in there is treated as dynamic usage while a page is
+// being statically generated (the build, and every ISR refresh after it).
+// supabase-js reports that thrown error as a failed read, which would make the
+// readers cache the snapshot instead of the live table.
 export const supabase = createClient(supabaseUrl, supabaseAnonKey)
+
+// Server read client for the shared contests readers in contests-db.ts: the
+// plain fetch, with the service key. On Nov 4-5 2026 (as far back as the logs
+// go) every read of the contests table with the anon key timed out on Vercel,
+// in every region and on every deploy, so the site served the build snapshot.
+// The build's own read with the service key worked from Vercel throughout.
+// Server-only, like supabaseAdmin: never import it into a client component.
+export const supabaseRead = createClient(supabaseUrl, supabaseServiceKey, {
+  auth: { autoRefreshToken: false, persistSession: false },
+})
 
 // Admin client — for writing subscribers/contests, bypasses RLS
 export const supabaseAdmin = createClient(supabaseUrl, supabaseServiceKey, {
