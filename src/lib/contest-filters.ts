@@ -8,12 +8,22 @@
 export const CLOSING_SOON_WINDOW_DAYS = 14
 export const NEW_WINDOW_DAYS = 14
 
-const FREE_ENTRY_TERMS = ['free', 'no fee', 'no entry fee', '$0', 'none']
+// Word-boundary patterns, not substring `includes` -- a plain substring
+// match on 'free' reads "Paid entry via FilmFreeway" as free because
+// "FilmFreeway" contains "free". Each pattern requires the term to stand
+// on its own, so "FilmFreeway" no longer matches (no boundary before
+// "free" inside it) while "Free", "No fee", "$0" and "None" still do.
+const FREE_ENTRY_PATTERNS: RegExp[] = [
+  /\bfree\b/i,
+  /\bno\s+fee\b/i,
+  /\bno\s+entry\s+fee\b/i,
+  /\$\s?0(?!\.?\d)/,
+  /\bnone\b/i,
+]
 
 export function isFree(entryFee: string): boolean {
   if (!entryFee) return true
-  const lower = entryFee.toLowerCase()
-  return FREE_ENTRY_TERMS.some(t => lower.includes(t))
+  return FREE_ENTRY_PATTERNS.some(p => p.test(entryFee))
 }
 
 const CURRENCY_PATTERN = /[$€£¥]\s?\d|\d\s?(usd|cad|eur|gbp|aud)/i

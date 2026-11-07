@@ -22,13 +22,6 @@ function daysLeft(deadline: string) {
 function fmtShort(d: string) {
   return new Date(d).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })
 }
-const FREE_ENTRY_TERMS = ['free', 'no fee', 'no entry fee', '$0', 'none']
-function isFreeEntry(entryFee: string): boolean {
-  if (!entryFee) return true
-  const lower = entryFee.toLowerCase()
-  return FREE_ENTRY_TERMS.some(t => lower.includes(t))
-}
-
 export default async function Home() {
   const allContests: Contest[] = await getAllContests()
   const open     = allContests.filter(c => c.status === 'open')
@@ -71,7 +64,7 @@ export default async function Home() {
   const ticker = [...open].sort((a, b) => new Date(a.deadline).getTime() - new Date(b.deadline).getTime())
   const tickerItems = [...ticker, ...ticker]
 
-  const freeOpenCount = open.filter(c => isFreeEntry(c.entryFee)).length
+  const freeOpenCount = open.filter(c => isFree(c.entryFee)).length
 
   const homeFaqs = [
     {
