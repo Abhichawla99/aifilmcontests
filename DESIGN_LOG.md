@@ -36,6 +36,61 @@ describe the old dark theme; the reasoning still applies, the colours do not.)*
 
 ---
 
+## 2026-11-07 — A card's genre line stays with the blurb it describes
+
+**Changed** — two declarations in `ContestCard.tsx`: `flex: 1` comes off the
+blurb's wrapper and `margin-top: auto` goes on the `<hr>` beneath the genre
+line, plus the comments that explain both. One component, 21 lines touched, 18
+of them comment. No markup added or removed, no data, no copy, no route, no
+colour, no new dependency. The generated `src/data/contests-snapshot.json` the
+build rewrites was reverted before the commit.
+
+**Was** — a card is a flex column inside a CSS grid, so every card in a row is
+stretched to the height of the tallest one in that row. That slack has to land
+in exactly one seam, and since the 11-02 run it has landed on the blurb
+wrapper's `flex: 1` — which sits between the blurb and the categories line.
+
+Measured on the live homepage at 1440px, across the twelve cards it shows: the
+blurb paragraph is 66px tall on every single one of them (three lines, clamped),
+while its wrapper ran 66, 68, 86, 89, 131px. So the hole underneath the blurb
+was 0, 2, 20, 23 and 65px on those cards, and 131px on the first one —
+*International AI Short Film Festival (IASFF)*, where "short film, experimental"
+sat 131px below the sentence it files and 12px above the rule.
+
+At 131px of nothing, the genre line is no longer reading as the end of the
+listing's description. It reads as the top of the prize block, because that is
+the only thing near it. Which is the relationship upside down: the categories
+describe the film the contest wants, not the money it pays.
+
+**Now** — the rule carries the grow instead. The body of the card — title,
+organizer, blurb, genre line — sets as one block, with the genre line 12px under
+its blurb on all twelve cards, measured. The slack falls at the one seam the card
+already draws a line at, so it reads as space before a rule rather than as a hole
+in the prose. The prize block stays pinned to the bottom edge, exactly where it
+was: `hrTop` is unchanged on every card, and no card's height moved by a pixel.
+
+At 390px, where cards are one per column and a column has no slack to absorb,
+nothing moves at all — blurb-to-genre and genre-to-rule were both 12px before and
+both 12px after. Verified with the CDP tool at both widths; no horizontal
+overflow at either.
+
+**Inspired by** — Metrograph's calendar. Two listings sit side by side there,
+*After Winter Comes Spring* and *21*, and the second one carries an extra italic
+line about a Q&A that the first does not have. Metrograph does not square the
+two: the title and its credit line ("Helke Misselwitz / 1998 / 116min / DCP")
+stay locked together at the top of both, the showtimes sit at different heights,
+and the slack simply ends the shorter listing. Nothing in the middle of a listing
+is ever pulled apart to make two listings the same height. Our cards are tinted
+panels and do want a bottom edge, so the slack still has to go somewhere — but it
+goes to the rule, not into the prose.
+
+**Before/after** — `reports/design/2026-11-07-before.png`,
+`reports/design/2026-11-07-before-390.png`,
+`reports/design/2026-11-07-after.png`,
+`reports/design/2026-11-07-after-390.png`.
+
+---
+
 ## 2026-11-06 — The index row's title, given the measure its own blurb already had
 
 **Changed** — one declaration on the `.cr-name` rule in `globals.css`, plus the
