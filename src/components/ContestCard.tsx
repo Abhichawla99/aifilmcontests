@@ -220,10 +220,11 @@ export default function ContestCard({ contest }: { contest: Contest }) {
           </p>
         </div>
 
-        {/* Row 3: description. The grow lives on the wrapper — putting flex:1 on the
-             clamped paragraph itself lets it stretch past its line limit, which clipped
-             text mid-word instead of ellipsing. */}
-        <div style={{ flex: 1 }}>
+        {/* Row 3: description. The wrapper exists because flex:1 on the clamped
+             paragraph itself lets it stretch past its line limit, which clipped text
+             mid-word instead of ellipsing. It no longer carries the grow at all —
+             that moved to the rule below, so the genre line stays with this blurb. */}
+        <div>
           <p ref={blurb.ref} style={{
             fontSize: 13, color: '#57524A',
             lineHeight: 1.7,
@@ -256,7 +257,17 @@ export default function ContestCard({ contest }: { contest: Contest }) {
           </div>
         )}
 
-        <hr style={{ border: 'none', borderTop: `1px solid ${tint.border}` }} />
+        {/* The rule carries the grow, not the blurb wrapper. A grid row stretches
+             every card to the tallest in it, and that slack has to land in one
+             seam. On the blurb wrapper it landed between the blurb and the genre
+             line — up to 131px of nothing inside the prose, with the genre line
+             left floating 12px above the rule, reading as part of the prize block
+             rather than as the listing's own filing line. A programme never pulls
+             a title away from its credit line to square a column. margin-top:auto
+             moves the slack to the one seam the card already draws a line at, so
+             the body (title, organizer, blurb, genre) sets as one block and the
+             prize stays pinned to the bottom edge where it was. */}
+        <hr style={{ border: 'none', borderTop: `1px solid ${tint.border}`, marginTop: 'auto' }} />
         {/* Row 5: the prize, at the card's full measure.
              Most prizes are sentences, not figures — 56 of 89 open ones run past 45
              characters — so they were wrapping four and five times inside the ~170px
