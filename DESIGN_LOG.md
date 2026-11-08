@@ -36,6 +36,81 @@ describe the old dark theme; the reasoning still applies, the colours do not.)*
 
 ---
 
+## 2026-11-08 — The footer's "More" column, split at the seams it already had
+
+**Changed** — `SiteFooter.tsx` (three nav groups become four, same seventeen
+links regrouped, nothing added or removed) and the `.sfoot-grid` rule plus its
+phone breakpoint in `globals.css`. Two files, 44 insertions and 16 deletions,
+about half of it comment. No markup class renamed, no URL, no label, no data,
+no copy, no colour, no new dependency. The generated
+`src/data/contests-snapshot.json` the build rewrites was reverted before the
+commit.
+
+**Was** — the footer is the one component every page of the site draws, and it
+carried three columns: **Browse** (6 links), **More** (11) and **Contact** (2).
+"More" was a catch-all, which means it had no rule about what belongs in it —
+so every hub page the site has built since the footer was unified on 09-30
+(Tools, Categories, Compare Tools, By Prize, By Location, Guides, Topics) was
+filed there, one at a time, and the column grew by one row each time with
+nobody deciding it should.
+
+Measured on the live homepage at 1440px, the four grid children ran 95px
+(identity), 172px (Browse), **349px** (More) and 83px (Contact). One column was
+twice the next and four times the last, so the footer block was 349px tall to
+hold a 172px column, a 112px-worth of links column and an 83px one — roughly
+250px of the footer was blank paper held open by a single column's length.
+
+At 390px it was worse than lopsided, it was wrong. The two link columns set
+side by side, so Browse ended at its sixth row while More carried on for five
+more — 177px of empty column beside a live one — and Contact, with nowhere left
+in that row, dropped onto a third row of its own with the right half of the
+screen empty beside it. 579px of footer, of which about 45% was nothing.
+
+**Now** — four groups, each named for the part of the site it actually is, so
+none of them is the one that absorbs whatever gets built next:
+
+- **Browse** — the contest lists: All Contests (off the homepage), Closing
+  Soon, Free to Enter, Cash Prizes, Student, New.
+- **Index** — the hub pages, every one of them the same directory cut a
+  different way: Categories, Tools, Compare Tools, By Prize, By Location,
+  Featured Creators.
+- **Read** — the pages somebody wrote rather than the ones the data builds:
+  Guides, Topics, Cinematic AI Ads.
+- **Get in touch** — two forms and two addresses: Submit a Contest, Feature a
+  Contest, the email, LinkedIn.
+
+Measured after, on the live site: 172 / 201 / 112 / 142px. The tallest column
+is now 1.8× the shortest instead of 4.2×, and the footer grid is **201px tall
+instead of 349** at 1440px. At 390px the four groups set as a 2×2 — Browse
+beside Index, Read beside Get in touch — and the grid is **490px instead of
+579**, with no column left stranded on a row by itself.
+
+The grid takes a fourth link track (`repeat(4, minmax(104px, auto))`, column
+gap 48px → 36px) and the two-column phone layout now starts at 900px rather
+than 640px: five tracks stop fitting the narrowest container any page passes
+the footer, `max-w-4xl`'s 856px, below about 860px. Verified with the CDP tool
+at 390, 901 and 1440px on the homepage (`max-w-6xl`), a contest page and a
+`/tools/[slug]` page (both `max-w-4xl`) — no horizontal overflow at any of
+them, and `Browse` picks up its sixth link off the homepage without the row
+growing.
+
+**Inspired by** — the Criterion Collection's footer, which has no "More" in it
+at all. Its groups are *Shop the Collection*, *Current*, *The Criterion
+Channel*, *My Criterion*, *FAQ* — each one named for a part of the site, so the
+leftovers have nowhere to collect and the deepest group is five links; even the
+group with a single link in it (*My Criterion*, which is just the login) is
+left short rather than padded or merged. It's Nice That, looked at the same
+afternoon, has exactly the fault we had: a column headed *Links* running ten
+deep next to groups of three and four. The difference between the two is not
+the layout, it is whether any heading is allowed to mean "everything else".
+
+**Before/after** — `reports/design/2026-11-08-before.png`,
+`reports/design/2026-11-08-before-390.png`,
+`reports/design/2026-11-08-after.png`,
+`reports/design/2026-11-08-after-390.png`.
+
+---
+
 ## 2026-11-07 — A card's genre line stays with the blurb it describes
 
 **Changed** — two declarations in `ContestCard.tsx`: `flex: 1` comes off the
