@@ -932,10 +932,13 @@ img, svg, video, canvas { max-width: 100%; }
 }
 .sfoot-grid {
   display: grid;
-  /* The 1fr identity column absorbs the slack, so the two link columns sit to
-     the right the way the old left/right split did. */
-  grid-template-columns: minmax(200px, 1fr) minmax(128px, auto) minmax(128px, auto) minmax(128px, auto);
-  gap: 28px 48px;
+  /* The 1fr identity column absorbs the slack, so the link columns sit to
+     the right the way the old left/right split did. Four of them since
+     2026-11-08, when "More" was split at the seams it actually had; the
+     narrowest container any page passes is max-w-4xl (856px of content), and
+     four tracks at 104px plus 36px gaps leave about 70px spare there. */
+  grid-template-columns: minmax(180px, 1fr) repeat(4, minmax(104px, auto));
+  gap: 28px 36px;
   align-items: start;
 }
 .sfoot-mark {
@@ -986,10 +989,12 @@ img, svg, video, canvas { max-width: 100%; }
   padding: 5px 0;
 }
 
-@media (max-width: 640px) {
+@media (max-width: 900px) {
   /* Two link columns still fit side by side at 375px — the longest label,
-     "Featured Creators", is about 107px — so only the identity block needs a
-     full-width line of its own. */
+     "abhixchawla@gmail.com", is about 142px — so only the identity block needs
+     a full-width line of its own. The four nav columns then set as 2×2:
+     Browse beside Index, Read beside Get in touch. 900px rather than the old
+     640px because five tracks stop fitting a max-w-4xl page below that. */
   .sfoot-grid { grid-template-columns: 1fr 1fr; gap: 26px 20px; }
   .sfoot-ident { grid-column: 1 / -1; }
 }
