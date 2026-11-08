@@ -232,6 +232,7 @@ const TOPICS = [
   'ai-film-contests-closing-december-2026',
   'ai-film-contests-closing-january-2027',
   'ai-film-contests-closing-february-2027',
+  'ai-film-awards-2026-2027',
   '1-billion-followers-summit-ai-film-award-2027',
   'ai-christmas-film-contests-2026',
   'ai-film-contests-closing-october-2026',
