@@ -82,7 +82,7 @@ export default async function Home() {
     },
     {
       q: 'How do the deadline alerts work?',
-      a: 'They’re free. Subscribe once with your email and we’ll notify you when a new contest opens and again 7 days before any deadline closes — no account or payment needed.',
+      a: 'They’re free. Subscribe once with your email and we’ll notify you when a new contest opens and again with a last call three days before any deadline closes — no account or payment needed.',
     },
   ]
 
