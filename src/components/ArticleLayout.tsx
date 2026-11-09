@@ -65,17 +65,19 @@ export function ArticleHeader({
       padding: 'clamp(24px, 3.5vw, 40px)',
       marginBottom: 40,
     }}>
-      <div style={{
-        display: 'inline-flex', alignItems: 'center', gap: 7,
-        background: 'rgba(255,255,255,0.72)', border: `1px solid ${tint.border}`,
-        borderRadius: 100, padding: '4px 12px', marginBottom: 18,
-      }}>
-        <span aria-hidden style={{ fontSize: 13, lineHeight: 1 }}>{kindEmoji}</span>
-        <span style={{
-          fontSize: 11, fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase',
-          color: tint.text, fontFamily: 'Space Grotesk, sans-serif',
-        }}>{kind}</span>
-      </div>
+      {/* The band's kind line. This was the last capsule on the site: a white
+          pill with its own border and radius, holding the glyph and the word,
+          sitting inside a band that is already a bordered tinted box — a
+          container inside a container, naming the page it is standing in.
+          Everywhere else the house already names a thing with type over the
+          band's own hairline (.spot-masthead, 10-27) or files it into a meta
+          run (10-26, 10-29). This is that grammar, late. The glyph stays: the
+          emoji are the site's private language and the Principles protect
+          them. Only the shape around them goes. */}
+      <p className="ah-kind" style={{ color: tint.text }}>
+        <span aria-hidden className="ah-kind-glyph">{kindEmoji}</span>
+        {kind}
+      </p>
 
       <h1 style={{
         fontFamily: 'Space Grotesk, sans-serif',

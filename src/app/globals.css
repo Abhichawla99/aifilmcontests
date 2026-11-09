@@ -1823,6 +1823,33 @@ img, svg, video, canvas { max-width: 100%; }
   .hfaq-row { grid-template-columns: 1fr; gap: 7px; padding: 16px 2px 18px; }
 }
 
+/* The band's kind line — GUIDE, DEADLINE, TOOL, CREATOR. Set as one line of
+   type at the top of the band, not as a pill inside it. Same register as
+   .spot-masthead (Space Grotesk, 600, uppercase, 0.12em): wider tracking than
+   a field caption because nothing sits directly under it to be read against
+   and it is the first line of the band. It takes its colour from the band's
+   own tint, so it reads as part of the band rather than as a sticker on it.
+   The glyph keeps a little optical lead and sits on the caps baseline. */
+.ah-kind {
+  margin: 0 0 22px;
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  line-height: 1.2;
+}
+.ah-kind-glyph {
+  font-size: 13px;
+  letter-spacing: 0;
+  margin-right: 7px;
+  vertical-align: -1px;
+}
+
+@media (max-width: 640px) {
+  .ah-kind { margin-bottom: 18px; }
+}
+
 /* 2026-10-02 — the article band's footer strip (ArticleHeader, 14 page types).
    It was one flex row: Updated, read time, the open/coming-soon counts and
    "Contest facts checked against live sources daily", all 12px at 0.85 opacity
