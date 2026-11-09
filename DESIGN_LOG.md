@@ -36,6 +36,114 @@ describe the old dark theme; the reasoning still applies, the colours do not.)*
 
 ---
 
+## 2026-11-09 — The article band's kind line, as type instead of a pill
+
+**Changed** — the kind label at the top of `ArticleHeader` in
+`src/components/ArticleLayout.tsx`, and a new `.ah-kind` / `.ah-kind-glyph`
+block in `globals.css` set directly above the `.ah-meta` comment that
+documents the same band's footer. Two files, 24 lines touched in the
+component (9 of them comment) and 27 added to the stylesheet (7 comment).
+No markup class renamed elsewhere, no prop added or removed, no call site
+touched, no URL, no label, no data, no copy, no colour value, no new
+dependency. The generated `src/data/contests-snapshot.json` the build
+rewrites was reverted before the commit.
+
+**Was** — `ArticleHeader` draws the masthead band on fourteen page types:
+every `/guide`, `/topics`, `/tools`, `/vs`, `/categories`, `/location`,
+`/prize` and `/creators` page, the craft guides, and the five browse lists
+(`/contests/closing-soon`, `free`, `cash-prizes`, `student`, `new`). It is
+the most-drawn band on the site after the header and the footer.
+
+Its first element was a capsule: `rgba(255,255,255,0.72)` fill, a
+`1px solid ${tint.border}` border, `border-radius: 100px`, `4px 12px` of
+padding, holding the kind glyph at 13px and the word — `GUIDE`, `DEADLINE`,
+`TOOL`, `CREATOR` — at 11px/700.
+
+**It was a container inside a container.** The band it sat in is already a
+bordered, tinted, 16px-radius box. So the page's kind arrived wrapped twice:
+a white pill with a border, inside a green box with a border, the inner one
+naming the outer one it was standing in. Measured on the live site, the pill
+ran 108×29px on `/contests/closing-soon` and 80×29px on `/tools/runway` —
+a bordered object roughly a fifth the width of the headline beneath it,
+carrying one word.
+
+**And it was the last one.** The entry for 2026-10-26 took two pills off the
+hero, 10-27 took the capsule off the featured spotlight, 10-28 took five
+chips off the contest rail and 10-29 took two capsules off the contest
+header band. Four consecutive runs removed this exact shape from four
+components and none of them looked at the one component that draws it on
+fourteen page types. The white fill was also the only white on a paper site:
+`#FBFAF8` everywhere, `rgba(255,255,255,0.72)` in that one pill.
+
+**Now** — the kind set as one line of type at the top of the band, in the
+band's own `tint.text`, in the register `.spot-masthead` established on
+10-27: Space Grotesk, 11px, 600, uppercase, `0.12em` — tracked wider than a
+field caption (`.spot-label`'s `0.08em`) because nothing sits directly under
+it to be read against and it is the first line of the band. The glyph keeps
+`margin-right: 7px` and `vertical-align: -1px` so it sits on the caps
+baseline rather than above it.
+
+The band now reads in one ink from top to bottom: kind line, headline,
+standfirst, the hairline and the facts under it, all in the tint the page
+was given. Nothing on it is a sticker any more.
+
+**The glyph stays.** The Principles protect the emoji as the site's private
+language, and taking a dozen of them off fourteen page types is a change
+about the emoji, not about the capsule. Worth noting for a future run,
+though: these are not the `theme.ts` set. `ArticleHeader` keeps its own
+second, undeclared map inline — 📓 🧭 🎛️ ⚖️ 🏆 🗺️ 🗂️ 🎥, plus per-call
+overrides like ⏳ — which is exactly the "never introduce a tint outside
+that file" rule, applied to glyphs instead of colours. One set or two is a
+decision somebody should make deliberately; today's change does not make it.
+
+**Measured** (live site before, local production build after, same widths,
+same pages):
+
+| page | width | band before | band after |
+|---|---|---|---|
+| `/contests/closing-soon` | 1440 | 334px | 325px |
+| `/contests/closing-soon` | 390 | 322px | 309px |
+| `/tools/runway` | 1440 | 395px | 385px |
+| `/tools/runway` | 390 | 473px | 460px |
+| `/guide/how-to-win-runway-ai-film-festival` | 1440 | 490px | 480px |
+
+The kind line holds its y to the pixel — `top: 235` before and after at
+1440px on both `/contests/closing-soon` and the guide — and the headline
+lifts 9px on desktop and 13px on a phone, which is the pill's own
+`4px + border` padding plus the 2px the tighter line-height gives back. The
+kind element itself goes from 29px tall and 80–108px wide to 16px tall and
+no box at all.
+
+**Inspired by** — Criterion's Current. An article there sets the title,
+then the byline, then `FEATURES — OCT 23, 2026` in small letterspaced caps:
+**the kind of page is filed in the same meta line as the date, as one more
+fact about the piece, not as a badge standing over it.** Metrograph's
+Journal goes further and prints no kind at all — title, `by Colleen Kelsey`,
+one line of blurb. It's Nice That, looked at the same hour, has exactly the
+fault we had: its `/features` index heads itself with the word *Features*
+inside a bordered box. Three editorial sites, two of which treat the kind as
+information and one of which treats it as a label to be worn. Adapted, not
+copied: ours keeps the kind above the headline, where a directory needs it
+to say what sort of page you have landed on, but drops the shape — and keeps
+the band's own tint rather than Criterion's red.
+
+**Checked** — `npm run build` exit 0. No horizontal overflow at 1440px,
+901px and 390px on nine page types that draw the band:
+`/contests/closing-soon`, `/contests/free`,
+`/guide/how-to-win-runway-ai-film-festival`,
+`/topics/ai-film-awards-2026-2027`, `/tools/runway`,
+`/categories/animation`, `/prize/free-entry`, `/vs/runway-vs-sora`,
+`/location/united-states`. Verified against live data with the service-role
+key swapped in for the pre-existing local anon-key gap (never written to any
+file, same workaround as every run since 2026-10-17).
+
+**Before/after** — `reports/design/2026-11-09-before.png`,
+`reports/design/2026-11-09-before-390.png`,
+`reports/design/2026-11-09-after.png`,
+`reports/design/2026-11-09-after-390.png`, all four `/contests/closing-soon`.
+
+---
+
 ## 2026-11-08 — The footer's "More" column, split at the seams it already had
 
 **Changed** — `SiteFooter.tsx` (three nav groups become four, same seventeen
