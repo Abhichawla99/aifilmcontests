@@ -3,7 +3,7 @@ import { Metadata } from 'next'
 import Link from 'next/link'
 import { getContestById, getAllContests } from '@/lib/contests-db'
 import { normalizeCategory, closedStyle } from '@/lib/theme'
-import { isFree } from '@/lib/contest-filters'
+import { isFree, duplicateKeeperId } from '@/lib/contest-filters'
 import ContestCard from '@/components/ContestCard'
 import EmailSubscribe from '@/components/EmailSubscribe'
 import DeadlineReminder from '@/components/DeadlineReminder'
@@ -66,6 +66,21 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
   const contest = await getContestById(id)
   if (!contest) return { title: 'Contest Not Found' }
 
+  // A row the weekly review has already merged into a keeper: point every
+  // crawler signal at the keeper's own page instead of this one, so the two
+  // stop competing for the same query. The visible body also shrinks to a
+  // short "this listing moved" card -- see the page component below.
+  const keeperId = duplicateKeeperId(contest.description)
+  if (keeperId) {
+    const keeperUrl = `https://aifilmcontests.com/contests/${keeperId}`
+    return {
+      title: `${contest.name} | AI Film Contests`,
+      description: `This listing has moved. See ${keeperId.replace(/-/g, ' ')} on AI Film Contests.`,
+      robots: { index: false, follow: true },
+      alternates: { canonical: keeperUrl },
+    }
+  }
+
   const dl = daysLeft(contest.deadline)
   const deadlineStr = fmt(contest.deadline)
   const desc = contest.status === 'open'
@@ -98,6 +113,68 @@ export default async function ContestPage({ params }: { params: Promise<{ id: st
   const { id } = await params
   const contest = await getContestById(id)
   if (!contest) notFound()
+
+  // A row the weekly review has already merged into a keeper: no event
+  // details, no related contests, no full body -- just a short pointer to
+  // where the listing actually lives now. generateMetadata above already
+  // sent the canonical and noindex signals; this is the visible half of
+  // that same fix.
+  const keeperId = duplicateKeeperId(contest.description)
+  if (keeperId) {
+    const keeper = await getContestById(keeperId)
+    return (
+      <div style={{ background: '#FBFAF8', minHeight: '100vh' }}>
+        <header style={{ borderBottom: '1px solid rgba(27,25,22,0.06)' }}>
+          <div className="max-w-5xl mx-auto px-5 py-4 flex items-center justify-between">
+            <Link href="/" style={{ textDecoration: 'none', display: 'flex', alignItems: 'center', gap: 10 }}>
+              <div style={{
+                width: 30, height: 30, borderRadius: 7,
+                background: '#4f46e5',
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                fontSize: 12, fontWeight: 700, fontFamily: 'Space Grotesk, sans-serif', color: '#fff',
+              }}>
+                AI
+              </div>
+              <span style={{ fontFamily: 'Space Grotesk, sans-serif', fontWeight: 600, fontSize: 15, color: '#26231E' }}>
+                AI Film Contests
+              </span>
+            </Link>
+            <Link href="/" className="link-muted" style={{ fontSize: 13 }}>
+              ← All contests
+            </Link>
+          </div>
+        </header>
+
+        <main className="max-w-5xl mx-auto px-5 py-12">
+          <p style={{ fontSize: 12, color: '#A8A296', marginBottom: 24 }}>
+            <Link href="/" className="link-muted">AI Film Contests</Link>
+            <span style={{ margin: '0 6px' }}>›</span>
+            <span style={{ color: '#8B867C' }}>{contest.name}</span>
+          </p>
+
+          <div style={{
+            background: '#F4F2EE',
+            border: '1px solid rgba(27,25,22,0.08)',
+            borderRadius: 16,
+            padding: 'clamp(22px, 3vw, 32px)',
+            maxWidth: 560,
+          }}>
+            <h1 style={{ fontFamily: 'Space Grotesk, sans-serif', fontSize: 20, fontWeight: 600, color: '#26231E', marginBottom: 10 }}>
+              This listing has moved
+            </h1>
+            <p style={{ color: '#5B574F', fontSize: 14, lineHeight: 1.6, marginBottom: 18 }}>
+              {contest.name} is tracked as one listing with {keeper ? keeper.name : 'its other edition'} on AI Film Contests.
+            </p>
+            <Link href={`/contests/${keeperId}`} className="btn" style={{ display: 'inline-block' }}>
+              View the current listing →
+            </Link>
+          </div>
+        </main>
+
+        <SiteFooter container="max-w-4xl" />
+      </div>
+    )
+  }
 
   const isOpen     = contest.status === 'open'
   const isClosed   = contest.status === 'closed'

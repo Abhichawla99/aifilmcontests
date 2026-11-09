@@ -43,3 +43,16 @@ export function isForStudents(eligibility: string): boolean {
   if (!eligibility) return false
   return /student/i.test(eligibility)
 }
+
+// The weekly review merges a duplicate by closing the extra row and
+// prepending this marker to its description, pointing at the kept row's own
+// page (see scripts/find-duplicate-contests.mjs, which reads the same
+// marker to stop re-reporting resolved groups). Nothing in src/ read this
+// text before now, so every merged-duplicate row still rendered a full,
+// indexable contest page competing with its own keeper for the same query.
+const DUPLICATE_POINTER = /^Duplicate listing — see \/contests\/([^.]+)\./
+
+export function duplicateKeeperId(description: string | undefined): string | null {
+  const match = DUPLICATE_POINTER.exec(description ?? '')
+  return match ? match[1] : null
+}

@@ -14,6 +14,7 @@ import {
   hasCashPrize,
   isRecent,
   isForStudents,
+  duplicateKeeperId,
 } from '@/lib/contest-filters'
 
 // Contest reads are shared through a fifteen-minute cache (src/lib/contests-db.ts),
@@ -302,8 +303,15 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   const openContests = contests.filter(c => c.status === 'open')
 
-  // Individual contest pages -- priority + frequency based on status
-  const contestUrls: MetadataRoute.Sitemap = contests.map(c => {
+  // Individual contest pages -- priority + frequency based on status.
+  // A row the weekly review has already merged into a keeper points at its
+  // own description ("Duplicate listing — see /contests/<keeper>."); its page
+  // now canonicalises to the keeper and noindexes itself (see
+  // contests/[id]/page.tsx), so it has no business in the sitemap either --
+  // listing it would ask Google to crawl and index a page that tells it not to.
+  const contestUrls: MetadataRoute.Sitemap = contests
+    .filter(c => !duplicateKeeperId(c.description))
+    .map(c => {
     const isOpen     = c.status === 'open'
     const isUpcoming = c.status === 'upcoming'
 
