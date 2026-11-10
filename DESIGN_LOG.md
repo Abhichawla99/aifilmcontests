@@ -36,6 +36,85 @@ describe the old dark theme; the reasoning still applies, the colours do not.)*
 
 ---
 
+## 2026-11-10 — On a phone, /topics' count comes off its column
+
+**Changed** — the count column on `/topics`, below 620px only. Two files, 28
+lines added and 1 removed: one class on the list wrapper in
+`src/app/topics/page.tsx` (with a five-line comment saying why), and one block
+inside the existing `@media (max-width: 620px)` in `globals.css` (22 lines, 17
+of them comment). No new class on any row, no markup moved, no prop, no call
+site, no colour value, no copy, no URL, no data, no dependency. The generated
+`src/data/contests-snapshot.json` the build rewrites was reverted before the
+commit.
+
+**Was** — `/topics` is the one index of the eight sharing `.cr-list` where the
+count is optional. The 2026-10-31 run stopped it printing `Cites  0 contests`
+on rows that cite nothing, and gave those rows `.cr-row-nocount` so the empty
+track goes back to the title instead of holding 84px of paper open. That is
+right on a desktop and it is right in principle. What it did on a phone was
+make a title's measure depend on its own row rather than on the page.
+
+Measured in a 390px emulated viewport, not estimated: of 81 rows, 53 carry a
+count and get a 260px title track; the other 28 get 346px. So the right edge
+of the titles stepped 86px between neighbours, over and over, down a list of
+81 — nothing to read down, and the 53 narrow rows paying for it twice, since
+a 260px track set the first title at four lines where 346px sets it at three.
+
+This is the same problem the 2026-11-03 run named and fixed on this same page
+at desktop widths, where the step was 102px and `.cr-name`'s new
+`max-width: 56ch` closed it. That fix cannot reach here and the entry said so
+at the time: 56ch on this face resolves to 606px, and a 390px viewport hands
+the track 346px at its widest. The phone was left stepping.
+
+**Looked at** — Criterion's *Shop All Films* list view and Metrograph's film
+index, both at 390px. Criterion's rows carry different facts: a single film
+prints its director and `United States, 1977` under the title, a box set
+(`3 Films by Louis Malle`, `4 by Agnès Varda`) prints nothing but the title.
+Metrograph does the same — `DIRECTOR: DAVID LEAN` on the row that has one,
+and the row above it, with no director, simply doesn't. **The observation is
+that on a phone neither gives a column to a fact only some rows have.** The
+variable facts stack inside the title's own column, under the title; the only
+things holding columns of their own are the fields every row carries —
+Criterion's spine number and cover art, which is why its titles all start and
+end at the same x no matter what sits under them. Ours was doing the reverse:
+handing a column to the one field that isn't on every row, and letting the
+title pay for its absence.
+
+**Now** — below 620px the row is a single track and `.cr-since` sets as one
+line under the blurb, 9px down: `CITES` at 9.5px/600 in `#A39D91`, 9px of
+space, then `6 contests` at 12px/700 tabular in `#3E3A33`. That is
+`.cr-work`'s language on `/creators` exactly — `WORK` then the titles, inline,
+one line at the foot of the row — reused rather than reinvented, and it works
+on this value and not on `/guide`'s because `6 contests` is a phrase carrying
+its own unit. A bare `Jun 30, 2026` set loose on a row would be any date on
+the page; `6 contests` says what it is.
+
+Measured after, same viewport: all 81 titles now hold 346px, the first title
+goes from four lines to three and the second from three to two, and the list
+has one rail down each edge. Desktop is untouched — 615.2px title, 84px
+column, identical before and after.
+
+**Scope** — the rule hangs off `.cr-list-count-inline`, a class only
+`/topics`' list carries, so the other seven indexes are byte-identical.
+`/guide` and `/creators` were measured too and don't have this problem:
+every row on both prints a count, so neither steps (40 of 40 and 4 of 4), and
+`/guide`'s label is the varying `Closed`/`Updated` signal that is the point of
+its column. The five indexes the 2026-11-03 run gave a column head to
+(`/tools`, `/categories`, `/prize`, `/location`, `/vs`) don't step either, for
+the same reason.
+
+**Checked** — `npm run build` exit 0. `/topics` 200 at both widths with
+`✓ no horizontal overflow` (1440px and 390px); `/guide` confirmed unchanged at
+390px by measurement, not by eye. Live `/topics` 200 after deploy with the new
+class present in the served HTML.
+
+**Before/after** — `reports/design/2026-11-10-before.png` (desktop) and
+`2026-11-10-before-390.png`; `2026-11-10-after.png` and
+`2026-11-10-after-390.png`. The 390px pair is the one to look at: the before
+shows the step across four consecutive rows, the after shows one rail.
+
+---
+
 ## 2026-11-09 — The article band's kind line, as type instead of a pill
 
 **Changed** — the kind label at the top of `ArticleHeader` in
