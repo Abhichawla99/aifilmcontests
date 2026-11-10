@@ -1686,6 +1686,28 @@ img, svg, video, canvas { max-width: 100%; }
   .cr-row-nocount { grid-template-columns: 1fr; }
   .cr-go { display: none; }
   .cr-since { min-width: 72px; }
+  /* ── /topics' count, off the column and onto the row (2026-11-10) ──────────
+     /topics is the one index of the eight where the count is optional: 53 of
+     its 81 rows cite a contest, 28 cite none. On a phone that made the title's
+     own measure depend on its neighbour -- 260px on a row with a count, 346px
+     on the row under it, an 86px step repeated down 81 rows with no rail to
+     read any of them against. It is the same problem .cr-name's `max-width:
+     56ch` fixed at desktop widths (2026-11-03), and that fix cannot reach here:
+     56ch resolves to 606px and a 390px track is nowhere near it.
+     Criterion's phone list and Metrograph's film index both answer it the same
+     way -- a row's variable facts stack inside the title's own column (`1945 /
+     87MIN / 35MM` under the title, `DIRECTOR: DAVID LEAN` on the row that has
+     one and nothing on the row that doesn't), and a column of its own goes only
+     to a field every row carries. So the count leaves the grid below 620px and
+     sets as one `CITES  6 contests` line under the blurb, in the same inline
+     label-then-value language .cr-work already uses on /creators -- which works
+     precisely because this value is a phrase carrying its own unit. Every title
+     now holds 346px. Scoped to this one list: /guide and /creators print a
+     count on every row, have no step, and are untouched. */
+  .cr-list-count-inline .cr-row { grid-template-columns: 1fr; row-gap: 9px; }
+  .cr-list-count-inline .cr-since { text-align: left; min-width: 0; }
+  .cr-list-count-inline .cr-since-label { display: inline; margin-right: 9px; }
+  .cr-list-count-inline .cr-since-date { display: inline; margin-top: 0; }
   .cr-why-row { grid-template-columns: 1fr; gap: 5px; }
 }
 
