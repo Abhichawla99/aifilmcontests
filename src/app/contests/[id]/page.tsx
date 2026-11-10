@@ -4,6 +4,7 @@ import Link from 'next/link'
 import { getContestById, getAllContests } from '@/lib/contests-db'
 import { normalizeCategory, closedStyle } from '@/lib/theme'
 import { isFree, duplicateKeeperId } from '@/lib/contest-filters'
+import { formatDeadline } from '@/lib/deadline'
 import ContestCard from '@/components/ContestCard'
 import EmailSubscribe from '@/components/EmailSubscribe'
 import DeadlineReminder from '@/components/DeadlineReminder'
@@ -14,6 +15,10 @@ import { OVERS_OFF_PERCENT, PACK_PATH } from '@/lib/creator-pack'
 export const revalidate = 900
 
 // ── Helpers ────────────────────────────────────────────────────────────────
+// `deadline`, `submissionOpen` and `eventDate` are bare `date` columns (see
+// src/lib/deadline.ts) and must go through formatDeadline(), which reads the
+// string's own numerals in UTC. `fmt()` is left only for `updatedAt`, a real
+// `timestamptz` instant where the reader's own local time is the right read.
 function fmt(d: string) {
   return new Date(d).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })
 }
@@ -82,7 +87,7 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
   }
 
   const dl = daysLeft(contest.deadline)
-  const deadlineStr = fmt(contest.deadline)
+  const deadlineStr = formatDeadline(contest.deadline)
   const desc = contest.status === 'open'
     ? `${contest.name} — Deadline ${deadlineStr}${dl > 0 ? ` (${dl} days left)` : ' (today)'}. Prize: ${contest.prize}. ${contest.description.slice(0, 120)}`
     : `${contest.name} by ${contest.organizer}. ${contest.description.slice(0, 140)}`
@@ -449,11 +454,11 @@ export default async function ContestPage({ params }: { params: Promise<{ id: st
                     letterSpacing: '-0.02em', fontVariantNumeric: 'tabular-nums',
                     color: isClosed ? '#8B867C' : isUrgent ? '#C2410C' : '#1B1916',
                   }}>
-                    {isOpen && dl > 0 ? `${dl} day${dl !== 1 ? 's' : ''} left` : isOpen && dl <= 0 ? 'Closes today' : fmt(contest.deadline)}
+                    {isOpen && dl > 0 ? `${dl} day${dl !== 1 ? 's' : ''} left` : isOpen && dl <= 0 ? 'Closes today' : formatDeadline(contest.deadline)}
                   </div>
                   {isOpen && (
                     <div style={{ fontSize: 13, color: '#7A7469', marginTop: 4, fontVariantNumeric: 'tabular-nums' }}>
-                      {fmt(contest.deadline)}
+                      {formatDeadline(contest.deadline)}
                     </div>
                   )}
                   {contest.updatedAt && (
@@ -482,8 +487,8 @@ export default async function ContestPage({ params }: { params: Promise<{ id: st
                 </div>
 
                 <SpecRow label="Entry fee" value={contest.entryFee || 'See official site'} highlight={isFree(contest.entryFee)} />
-                {contest.submissionOpen && <SpecRow label="Submissions open" value={fmt(contest.submissionOpen)} />}
-                {contest.eventDate && <SpecRow label="Festival date" value={fmt(contest.eventDate)} />}
+                {contest.submissionOpen && <SpecRow label="Submissions open" value={formatDeadline(contest.submissionOpen)} />}
+                {contest.eventDate && <SpecRow label="Festival date" value={formatDeadline(contest.eventDate)} />}
                 {contest.location && <SpecRow label="Location" value={contest.location} />}
 
                 {/* Categories, as the rail's own spec row.
