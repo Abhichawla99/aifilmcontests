@@ -36,6 +36,103 @@ describe the old dark theme; the reasoning still applies, the colours do not.)*
 
 ---
 
+## 2026-11-11 — The subscribe form's error, attached to the control it is about
+
+**Changed** — `src/components/EmailSubscribe.tsx`, one file, 107 lines, 34 of
+them comment. No copy reworded, no stylesheet, no markup moved, no prop, no
+call site, no new colour value, no URL, no data, no dependency. The generated
+`src/data/contests-snapshot.json` the build rewrites was reverted before the
+commit. `SubscribeError`'s look — the 2px left rule, the `NOT SUBSCRIBED YET`
+kicker, the 13px body line — is untouched to the character, and so is every
+one of the form's four possible messages.
+
+**Was** — the form has four ways to refuse you, and all four answered the same
+way: print a paragraph under the button and mark nothing. Three of the four
+name a control sitting above that button. The commonest, measured by what a
+first-time reader actually does, is the consent box left unticked — and on the
+full form that paragraph lands two rows below a 14px grey square with 12px
+`#6F6A61` text beside it, under a full-width indigo button that is the loudest
+thing on the card. The before shot is the whole fault in one frame: the form is
+refusing over the quietest element on screen and pointing at it with nothing.
+
+It also carried a plain defect. The checkbox's `onChange` cleared the error
+state; the email field's did not. So you mistyped an address, got told so,
+corrected it, and the orange block stayed on screen still calling the good
+address invalid — until you pressed the button a second time to find out. The
+component had already decided errors should clear on edit. It only did it on
+one of the two controls.
+
+**Looked at** — Criterion's log-in (Auth0) and Letterboxd's join dialog.
+Pressing Continue on Criterion with the field empty prints no message anywhere:
+it puts the cursor in the field and floats that field's label up onto its
+border, so the form's whole answer to a refused press happens *at the control*.
+Letterboxd goes the other way and keeps a persistent label over every field, so
+a message naming "Email address" always has something on screen to name.
+**The observation is that both are solving the same thing we weren't: a form
+that refuses has to point, and a paragraph below the button does not point.**
+Ours had neither a label to name nor a mark on the control — only placeholders,
+which vanish the moment you type.
+
+**Now** — the error carries the field it is about. The blamed control is marked
+in the ground's one alarm colour, `#C2410C`, already reserved for a deadline
+inside seven days and for this block's own kicker — no new value entered the
+palette. The email field takes that border plus a 3px `rgba(194,65,12,0.12)`
+ring; the consent checkbox takes a 1.5px outline at 2px offset and its line
+moves from `#6F6A61` to full ink `#1B1916`, because grey is the right weight
+for a line nobody should have to read twice and stops being that line the
+moment it is the one thing holding the form up. Focus moves to that control, so
+a keyboard press is answered where the hands are. The control carries
+`aria-invalid` and an `aria-describedby` pointing at the alert, whose id comes
+from `useId()` — the homepage renders two of these forms, so a fixed id would
+have had the band's field describing the rail's message.
+
+The invalid border and ring are set inline rather than in the stylesheet, on
+purpose: inline beats `.input:focus`, so a field that is both focused and
+refused reads as one state instead of an orange border inside an indigo ring.
+Clearing the error hands the field straight back to the stylesheet's indigo.
+
+The two failures no control on the form can fix — a dead network, an error back
+from the API — keep today's behaviour exactly: the block prints, nothing is
+marked. Nothing is wrong on the form, so nothing on the form should look wrong.
+
+Verified by driving the live-data production build through all four states in a
+headless browser and reading back the computed styles, not by eye:
+
+- invalid address (`5551234567@vtext.com`, a carrier SMS gateway — `type="email"`
+  passes it, so the component's own guard is what refuses it): alert shown,
+  email border `rgb(194,65,12)`, ring `rgba(194,65,12,0.12) 0 0 0 3px`,
+  `aria-invalid="true"`, `aria-describedby` equal to the alert's id, focus on
+  the email field, checkbox untouched (`aria-invalid` null, `outline: none`)
+- correcting it: alert gone, border back to `rgb(224,220,210)`, ring `none`,
+  `aria-invalid` removed — the defect above, fixed
+- valid address with consent unticked: alert shown, checkbox outline
+  `rgb(194,65,12) solid`, `aria-invalid="true"`, describedby matching, focus on
+  the checkbox, consent line `rgb(27,25,22)`, email field untouched
+- ticking the box: alert gone, `aria-invalid` removed, line back to
+  `rgb(111,106,97)`
+
+Nothing was ever POSTed to `/api/subscribe` by that check — every path tested
+returns before the fetch.
+
+Worth noting for whoever edits this next: `type="email"` plus `required` means
+the browser's own constraint validation catches most malformed input before
+`handleSubmit` runs, so `EMAIL_SYNTAX` only fires for strings the browser
+accepts and the regex does not (`a@b`, no dot). The blocked-gateway branch is
+the email tier's everyday path.
+
+27 call sites render this component, 25 compact and 2 full
+(`src/app/page.tsx:390`, `src/app/starter-pack/page.tsx:123`); both variants got
+the same treatment. `npm run build` exit 0. Checked at 1440px and 390px,
+`✓ no horizontal overflow` at both, and the idle form is unchanged by
+construction — every invalid style spreads from a value that is `null` until
+something is actually wrong.
+
+Before/after: `reports/design/2026-11-11-before.png` / `-after.png` (1440px) and
+`-before-390.png` / `-after-390.png`, all four showing the homepage's full form
+refusing over the unticked consent box.
+
+---
+
 ## 2026-11-10 — On a phone, /topics' count comes off its column
 
 **Changed** — the count column on `/topics`, below 620px only. Two files, 28
