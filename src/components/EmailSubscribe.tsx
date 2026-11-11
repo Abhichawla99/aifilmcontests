@@ -1,15 +1,25 @@
 'use client'
 
-import { useState } from 'react'
+import { useId, useRef, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { isBlockedEmailDomain } from '@/lib/blocked-email-domains'
 
 const EMAIL_SYNTAX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 
-function SubscribeError({ message }: { message: string }) {
+/* Burnt orange, the ground's one alarm colour — already reserved for a deadline
+   inside seven days and for this block's own kicker. Nothing else on paper uses it. */
+const ALARM = '#C2410C'
+const ALARM_RING = '0 0 0 3px rgba(194,65,12,0.12)'
+
+/* Which control the form is refusing over. `null` covers the two failures no
+   control on the form can fix — a dead network, an error back from the API — so
+   those keep today's behaviour exactly: the block prints, nothing is marked. */
+type ErrorField = 'email' | 'consent' | null
+
+function SubscribeError({ message, id }: { message: string; id?: string }) {
   return (
-    <div role="alert" style={{ marginTop: 12, borderLeft: '2px solid #C2410C', padding: '1px 0 1px 12px' }}>
-      <div style={{ fontFamily: 'Space Grotesk, sans-serif', fontSize: 10.5, fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase', color: '#C2410C', marginBottom: 3 }}>
+    <div id={id} role="alert" style={{ marginTop: 12, borderLeft: `2px solid ${ALARM}`, padding: '1px 0 1px 12px' }}>
+      <div style={{ fontFamily: 'Space Grotesk, sans-serif', fontSize: 10.5, fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase', color: ALARM, marginBottom: 3 }}>
         Not subscribed yet
       </div>
       <p style={{ fontSize: 13, lineHeight: 1.5, color: '#3E3A33', margin: 0 }}>{message}</p>
@@ -24,28 +34,52 @@ export default function EmailSubscribe({ compact = false, openCount }: { compact
   const [consent, setConsent] = useState(false)
   const [status,  setStatus]  = useState<'idle' | 'loading' | 'error'>('idle')
   const [message, setMessage] = useState('')
+  const [field,   setField]   = useState<ErrorField>(null)
+
+  /* Several of these render on one page (the homepage has the hero rail and the
+     subscribe band), so the alert needs an id unique to its own instance before
+     an input is allowed to point at it. */
+  const alertId = useId()
+  const emailRef   = useRef<HTMLInputElement>(null)
+  const consentRef = useRef<HTMLInputElement>(null)
+
+  const fail = (where: ErrorField, text: string) => {
+    setStatus('error')
+    setMessage(text)
+    setField(where)
+    /* A refused press should put the cursor on the control that refused it.
+       Until now the only answer was a paragraph below the button, which on the
+       full form sits two rows under the checkbox it is talking about. */
+    if (where === 'email') emailRef.current?.focus()
+    if (where === 'consent') consentRef.current?.focus()
+  }
+
+  /* The checkbox already cleared the error the moment you ticked it. The email
+     field did not, so a corrected address sat under a block still calling it
+     invalid. Same rule for both now, and only for the control being blamed. */
+  const clearIfBlaming = (where: Exclude<ErrorField, null>) => {
+    if (status === 'error' && field === where) { setStatus('idle'); setMessage(''); setField(null) }
+  }
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     const cleanEmail = email.trim()
     if (!cleanEmail) return
     if (!EMAIL_SYNTAX.test(cleanEmail)) {
-      setStatus('error')
-      setMessage('Please enter a valid email address.')
+      fail('email', 'Please enter a valid email address.')
       return
     }
     if (isBlockedEmailDomain(cleanEmail)) {
-      setStatus('error')
-      setMessage("That looks like a phone carrier's text-message gateway, which can't receive a real email. Please use a regular email address.")
+      fail('email', "That looks like a phone carrier's text-message gateway, which can't receive a real email. Please use a regular email address.")
       return
     }
     if (!consent) {
-      setStatus('error')
-      setMessage('Please agree to receive email alerts to continue.')
+      fail('consent', 'Please agree to receive email alerts to continue.')
       return
     }
     setStatus('loading')
     setMessage('')
+    setField(null)
     try {
       const res = await fetch('/api/subscribe', {
         method: 'POST',
@@ -63,14 +97,23 @@ export default function EmailSubscribe({ compact = false, openCount }: { compact
         // see /subscribed, which shows the next open contests instead.
         router.push('/subscribed')
       } else {
-        setStatus('error')
-        setMessage(data.error || 'Something went wrong.')
+        fail(null, data.error || 'Something went wrong.')
       }
     } catch {
-      setStatus('error')
-      setMessage('Network error. Please try again.')
+      fail(null, 'Network error. Please try again.')
     }
   }
+
+  const emailInvalid   = status === 'error' && field === 'email'
+  const consentInvalid = status === 'error' && field === 'consent'
+
+  /* Inline, so it beats `.input:focus`'s indigo: a field that is both focused
+     and refused should read as one state, not two. Clearing the error hands the
+     field straight back to the stylesheet's indigo ring. */
+  const invalidInput = emailInvalid ? { borderColor: ALARM, boxShadow: ALARM_RING } : null
+  const invalidBox   = consentInvalid ? { outline: `1.5px solid ${ALARM}`, outlineOffset: 2 } : null
+  const errorProps = (invalid: boolean) =>
+    invalid ? { 'aria-invalid': true as const, 'aria-describedby': alertId } : {}
 
   if (compact) {
     return (
@@ -95,14 +138,16 @@ export default function EmailSubscribe({ compact = false, openCount }: { compact
               desktop one (451px and up still seat the pair, unchanged). */}
           <div className="flex flex-wrap gap-2">
             <input
+              ref={emailRef}
               type="email"
               value={email}
-              onChange={e => setEmail(e.target.value)}
+              onChange={e => { setEmail(e.target.value); clearIfBlaming('email') }}
               placeholder="your@email.com"
               aria-label="Email address"
               required
               className="input"
-              style={{ padding: '9px 12px', fontSize: '13px', flex: '1 1 18rem', minWidth: 0 }}
+              {...errorProps(emailInvalid)}
+              style={{ padding: '9px 12px', fontSize: '13px', flex: '1 1 18rem', minWidth: 0, ...invalidInput }}
             />
             <button
               type="submit"
@@ -115,17 +160,22 @@ export default function EmailSubscribe({ compact = false, openCount }: { compact
           </div>
           <label style={{ display: 'flex', alignItems: 'flex-start', gap: '8px', cursor: 'pointer' }}>
             <input
+              ref={consentRef}
               type="checkbox"
               checked={consent}
-              onChange={e => { setConsent(e.target.checked); if (status === 'error') { setStatus('idle'); setMessage('') } }}
-              style={{ marginTop: '2px', accentColor: '#4f46e5', flexShrink: 0 }}
+              onChange={e => { setConsent(e.target.checked); clearIfBlaming('consent') }}
+              {...errorProps(consentInvalid)}
+              style={{ marginTop: '2px', accentColor: '#4f46e5', flexShrink: 0, ...invalidBox }}
             />
-            <span style={{ fontSize: '11px', color: '#6F6A61', lineHeight: 1.5 }}>
+            {/* Grey is the right weight for a line nobody should have to read
+                twice. The moment it is the one thing holding the form up, it
+                stops being that line. */}
+            <span style={{ fontSize: '11px', color: consentInvalid ? '#1B1916' : '#6F6A61', lineHeight: 1.5 }}>
               I agree to receive email alerts about AI film contests. Unsubscribe anytime.
             </span>
           </label>
         </form>
-        {status === 'error' && <SubscribeError message={message} />}
+        {status === 'error' && <SubscribeError id={alertId} message={message} />}
       </div>
     )
   }
@@ -143,26 +193,31 @@ export default function EmailSubscribe({ compact = false, openCount }: { compact
           className="input"
         />
         <input
+          ref={emailRef}
           type="email"
           value={email}
-          onChange={e => setEmail(e.target.value)}
+          onChange={e => { setEmail(e.target.value); clearIfBlaming('email') }}
           placeholder="Email address"
           aria-label="Email address"
           required
           className="input"
+          {...errorProps(emailInvalid)}
+          style={invalidInput ?? undefined}
         />
 
         {/* Consent checkbox — unchecked by default, required for GDPR */}
         <label style={{ display: 'flex', alignItems: 'flex-start', gap: '9px', cursor: 'pointer', padding: '2px 0' }}>
           <input
+            ref={consentRef}
             type="checkbox"
             checked={consent}
-            onChange={e => { setConsent(e.target.checked); if (status === 'error') { setStatus('idle'); setMessage('') } }}
-            style={{ marginTop: '2px', accentColor: '#4f46e5', flexShrink: 0, width: '14px', height: '14px' }}
+            onChange={e => { setConsent(e.target.checked); clearIfBlaming('consent') }}
+            {...errorProps(consentInvalid)}
+            style={{ marginTop: '2px', accentColor: '#4f46e5', flexShrink: 0, width: '14px', height: '14px', ...invalidBox }}
           />
-          <span style={{ fontSize: '12px', color: '#6F6A61', lineHeight: 1.55 }}>
+          <span style={{ fontSize: '12px', color: consentInvalid ? '#1B1916' : '#6F6A61', lineHeight: 1.55 }}>
             I agree to receive email alerts about AI film contests.{' '}
-            <a href="/unsubscribe" style={{ color: '#6F6A61', textDecoration: 'underline', textUnderlineOffset: 2 }}>
+            <a href="/unsubscribe" style={{ color: consentInvalid ? '#1B1916' : '#6F6A61', textDecoration: 'underline', textUnderlineOffset: 2 }}>
               Unsubscribe anytime.
             </a>
           </span>
@@ -185,7 +240,7 @@ export default function EmailSubscribe({ compact = false, openCount }: { compact
           ) : 'Get alerts + the free creator pack'}
         </button>
       </form>
-      {status === 'error' && <SubscribeError message={message} />}
+      {status === 'error' && <SubscribeError id={alertId} message={message} />}
     </div>
   )
 }
