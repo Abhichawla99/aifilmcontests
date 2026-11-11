@@ -66,6 +66,15 @@ export default async function GuidePage({ params }: { params: Promise<{ slug: st
     ? citedContests.reduce((latest, c) => (!latest || c.deadline > latest) ? c.deadline : latest, '')
     : null
 
+  // When every contest this guide cites has closed, point the reader at the
+  // nearest live replacement (same location, else a shared category) instead
+  // of dumping them on the full directory -- see the 2026-11-08
+  // OPTIMIZER_BACKLOG.md finding.
+  const replacementContest = allCitedClosed
+    ? all.find(c => c.status === 'open' && citedContests.some(cited => cited.location && c.location === cited.location))
+      ?? all.find(c => c.status === 'open' && citedContests.some(cited => cited.categories.some(cat => c.categories.includes(cat))))
+    : null
+
   const articleLd = {
     '@context': 'https://schema.org',
     '@type': 'Article',
@@ -143,7 +152,13 @@ export default async function GuidePage({ params }: { params: Promise<{ slug: st
         >
           {closedDate && (
             <p style={{ marginTop: 14, fontSize: 13, color: '#8B867C', lineHeight: 1.5 }}>
-              Submissions closed {fmt(closedDate)}. <Link href="/" style={{ color: '#4338CA', fontWeight: 600, textDecoration: 'none' }}>Browse open contests →</Link>
+              Submissions closed {fmt(closedDate)}. {replacementContest ? (
+                <Link href={`/contests/${replacementContest.id}`} style={{ color: '#4338CA', fontWeight: 600, textDecoration: 'none' }}>
+                  {replacementContest.name} is open now →
+                </Link>
+              ) : (
+                <Link href="/" style={{ color: '#4338CA', fontWeight: 600, textDecoration: 'none' }}>Browse open contests →</Link>
+              )}
             </p>
           )}
         </ArticleHeader>
