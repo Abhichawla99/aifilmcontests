@@ -16,6 +16,7 @@ export interface Contest {
   aiToolsAllowed: string[]
   eligibility: string
   entryFee: string
+  /** Editorial curation flag only — not the paid-listing flag. Paid placement is `featuredUntil`. */
   featured: boolean
   /** Set only by a paid featured listing (Stripe). Editorial `featured` stays a curation flag. */
   featuredUntil?: string
@@ -729,10 +730,6 @@ export const contests: Contest[] = [
 
 export function getContestsByStatus(status: ContestStatus) {
   return contests.filter(c => c.status === status)
-}
-
-export function getFeaturedContests() {
-  return contests.filter(c => c.featured && c.status !== 'closed')
 }
 
 export function getContestById(id: string) {
