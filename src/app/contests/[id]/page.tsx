@@ -324,9 +324,11 @@ export default async function ContestPage({ params }: { params: Promise<{ id: st
             padding: 'clamp(22px, 3vw, 32px)',
             marginBottom: 32,
           }}>
-            <div style={{ display: 'flex', alignItems: 'flex-start', gap: 18 }}>
-              <span aria-hidden style={{ fontSize: 40, lineHeight: 1, flexShrink: 0 }}>{tint.emoji}</span>
-              <div style={{ minWidth: 0 }}>
+            {/* The mark sits in its own column beside the title at reading
+                widths, and comes off that column on a phone. See .band-row. */}
+            <div className="band-row">
+              <span aria-hidden className="band-mark">{tint.emoji}</span>
+              <div className="band-body">
                 {/* The status, and the notes on it, as one meta line. Both
                     notes used to be bordered capsules sitting beside `Open
                     now`, which was already plain type in the same family,

@@ -356,6 +356,50 @@ img, svg, video, canvas { max-width: 100%; }
   .hero-meta-credit { margin-left: 0; padding: 0; border-left: none; margin-top: 7px; }
 }
 
+/* ── Contest page: the header band's layout ─────────────────────────────────
+   The category's emoji, the status line, the title and the organizer.
+
+   The mark used to hold a fixed column beside the title at every width: a
+   40px glyph plus an 18px gap, taken off the band's inner track and held for
+   the whole block, not just for the line the glyph is on. At 1440px that is
+   a rounding error. At 390px the band's inner track is 306px, so the mark was
+   spending 58px of it — 19% — and the title, the organizer and the status
+   line were all reading in the 248px left over. A 63-character festival name
+   set at 24px breaks at about 21 characters there: "The 8th Hainan Island /
+   International Film / Festival — AI Film Gala". The organizer credit below
+   it paid the same toll — AI New York Awards' "Cre8ive NYC (Festival
+   Director Iwona Rydz)" took two lines in 248px and takes one in 306px.
+
+   Metrograph's Now Playing listing is a two-column row at reading widths —
+   the still on the left, the title, the date chips and the spec block on the
+   right. At phone width it does not narrow that split, it abandons it: the
+   still goes full width above and the title runs the whole 375px under it.
+   The picture never keeps a column beside the title on a phone; it goes above
+   it. Criterion's browse does the same, with no column beside any heading at
+   all below 620px. So does ours now: under 560px the mark leaves the row and
+   sets above the status line, a little smaller to pay for the row it costs,
+   and the title takes the band's full width. Nothing else about the band —
+   its tint, its border, its radius, its padding, the type — changed.
+
+   560px, not the 620px the .cr-* indexes use, because the stack costs a row
+   of height and should only be paid where it buys a line back. At 640px the
+   column leaves the title 478px and it sets in two lines; stacked it would
+   still be two. The crossover for a long festival name is near 500px, and
+   560px is the nearest value already in this file — .hero-meta drops the
+   homepage's credit onto its own line there, for the same reason. */
+.band-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 18px;
+}
+.band-mark { font-size: 40px; line-height: 1; flex-shrink: 0; }
+.band-body { min-width: 0; }
+
+@media (max-width: 560px) {
+  .band-row { display: block; }
+  .band-mark { display: block; font-size: 36px; margin-bottom: 11px; }
+}
+
 /* ── Contest page: the header band's status line ────────────────────────────
    Open now / Free entry / Featured, set as one meta line.
 
