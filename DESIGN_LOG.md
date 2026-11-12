@@ -36,6 +36,86 @@ describe the old dark theme; the reasoning still applies, the colours do not.)*
 
 ---
 
+## 2026-11-12 — On a phone, the contest band's mark comes off the title's column
+
+**Changed** — the contest page's header band: three inline style objects in
+`src/app/contests/[id]/page.tsx` swapped for three class names, and a new
+`.band-row` / `.band-mark` / `.band-body` block in `globals.css` above the
+`.band-meta` block it belongs with. Two files, 8 changed lines of markup and 43
+of stylesheet, 30 of them comment. No copy, no colour, no tint, no radius, no
+padding, no type value, no URL, no data, no dependency. The generated
+`src/data/contests-snapshot.json` the build rewrites was reverted before the
+commit. Desktop is pixel-identical: a full-page 1440px capture before and after
+differs in zero pixels.
+
+**Was** — the band is a flex row: the category's emoji in a fixed left column,
+then the status line, the h1 and the organizer credit in the column beside it.
+That column is 40px of glyph plus an 18px gap, and it was held for the whole
+block at every width — not just for the line the glyph is actually on, and not
+just at widths that can spare it.
+
+At 1440px it is a rounding error. At 390px the band's inner track is 306px, so
+58px of it — 19% — went to a decorative mark and everything that matters was
+reading in the 248px left over. A 63-character festival name set at 24px breaks
+at about 21 characters there, which is how "The 8th Hainan Island International
+Film Festival — AI Film Gala" became three ragged lines. The organizer credit
+below it paid the same toll: AI New York Awards' "Cre8ive NYC (Festival Director
+Iwona Rydz)" wrapped to two lines in 248px and fits one in 306px. The band-meta
+comment from 2026-10-29 had already measured this track at "~246px at 390px"
+and designed the status line down to 12px notes to survive it — the row was
+being tuned around the column rather than the column being questioned.
+
+**Looked at** — Metrograph's Now Playing listing and Criterion's Shop All Films,
+both at 375px. **The observation is that Metrograph does not narrow its
+two-column row on a phone, it abandons it**: at reading widths the still sits
+left and the title, the date chips and the `DIRECTOR / 2026 / 99MIN / DCP` spec
+block sit right; at 375px the still goes full width above and `ZI` and
+everything under it runs the whole 375px. The picture never keeps a column
+beside the title on a phone — it goes above it. Criterion's browse makes the
+same bet more plainly: `SHOP ALL FILMS`, its intro paragraph and every grid
+title run the full width, and nothing on the page holds a column beside a
+heading at that size. Ours was the only one still renting a column to a 40px
+glyph.
+
+**Now** — below 560px `.band-row` becomes a block, the mark sets above the
+status line at 36px with 11px under it, and the title takes the band's full
+306px. For the Hainan name that is three balanced lines instead of three ragged
+ones; for "AI Film Award 2027 — 1 Billion Followers Summit" it is two lines
+instead of three; for "AI New York Awards" the title fits one line and the
+organizer credit under it drops from two lines to one. The stack costs about
+47px of height and the title buys most of it back.
+
+560px, not the 620px the `.cr-*` indexes use, because the stack should only be
+paid where it buys a line back. At 640px the column still leaves the title 478px
+and it sets in two lines; stacked it would also be two, so the row would be pure
+cost. The crossover for a long festival name is near 500px, and 560px is the
+nearest value already in this file — `.hero-meta` drops the homepage's presenter
+credit onto its own line at exactly that width, for exactly this reason.
+
+**Verified** — `npm run build` exit 0. Checked on `next start` at 1440px, 640px,
+620px, 600px, 390px and 375px: no horizontal overflow at any of them, the switch
+is clean on both sides of 560px, and the open, closed and free-entry variants of
+the status line all still set correctly (`runway-gen48-2026` for the closed
+case). The 1440px before/after capture is a zero-pixel diff. Live after deploy
+(f74702a): `/contests/hainan-ai-film-gala-2026` returns 200 and serves
+`band-mark`.
+
+**Noted for a later run, not done today** — the breadcrumb's last crumb is the
+page's own h1 repeated verbatim. On a phone that is two full lines of 12px grey
+immediately above the same words at 24px, on every inner page. Twenty-one route
+files hand-roll the identical five-line `<p>`, so this wants a shared component
+before it wants a style, which is more than one day's change. The visible crumb
+is also not what search engines read — the contest page emits a separate
+`BreadcrumbList` JSON-LD — so shortening it costs nothing.
+
+**Before / after** — `reports/design/2026-11-12-before-390.png`,
+`reports/design/2026-11-12-before-390-short.png`,
+`reports/design/2026-11-12-before.png`,
+`reports/design/2026-11-12-after-390.png`,
+`reports/design/2026-11-12-after-390-short.png`,
+`reports/design/2026-11-12-after-375.png`,
+`reports/design/2026-11-12-after.png`.
+
 ## 2026-11-11 — The subscribe form's error, attached to the control it is about
 
 **Changed** — `src/components/EmailSubscribe.tsx`, one file, 107 lines, 34 of
