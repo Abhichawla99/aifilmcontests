@@ -267,6 +267,7 @@ const TOPICS = [
   'how-much-ai-does-a-film-need-for-ai-film-festivals',
   'ai-film-festivals-in-china-2026',
   'online-ai-film-contests-2026',
+  'runway-ai-film-festival-2027',
 ] as const
 
 // Comparison pages. VS_PAGES content lives inline in vs/[slug]/page.tsx as
