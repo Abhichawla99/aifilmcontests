@@ -36,6 +36,109 @@ describe the old dark theme; the reasoning still applies, the colours do not.)*
 
 ---
 
+## 2026-11-13 — The creator pack's offer deadline, as type instead of a button
+
+**Changed** — the deadline line in the hero of `/starter-pack`. Two files, 54
+lines added and 8 removed, 20 of the added lines comment: the one `<span>`
+block in `src/app/starter-pack/page.tsx` plus the phrase that feeds it, and the
+`.pack-deadline` block in `globals.css` it hangs off. No layout moved, no
+radius, no padding, no new colour value, no new dependency, no font, no URL, no
+data. The copy on the page today is unchanged to the character. The generated
+`src/data/contests-snapshot.json` the build rewrites was reverted before the
+commit.
+
+**Was** — `.pack-deadline-pill`, which is `.btn`. Side by side:
+
+| | `.btn` | `.pack-deadline-pill` |
+|---|---|---|
+| background | `#4F46E5` | `#4F46E5` |
+| colour | `#fff` | `#FFFFFF` |
+| radius | `8px` | `8px` |
+| family | Space Grotesk | Space Grotesk |
+| size / weight | 13px / 600 | 14px / 700 |
+| padding | 9px 18px | 7px 12px |
+
+So the one object in the hero wearing the site's primary button — indigo fill,
+white display face, 8px corners — was a `<span>`, sitting directly under a
+headline that reads *Claim it free.* and directly above the three cards, in
+exactly the slot a page like this puts its button. Nothing happens when you
+press it. The real action, the email form, is two screens down behind `#claim`,
+and the only link to it from up here is a 14px text link buried in the first
+card's last line. A visitor who did the obvious thing got nothing, and the page
+spent its loudest gesture telling them a date.
+
+It also read the same at every distance. The pill has printed
+`$3 (92% off) until November 30` since the offer opened and would print it
+unchanged on November 29. The pack's own email has never done that —
+`offerEnds()` in `src/lib/email.ts` has always switched to
+"ends in 4 days, on November 30" inside seven days and "ends today" on the
+last one, off `offerDaysLeft()`, which has sat in `src/lib/creator-pack.ts`
+this whole time with the page as the one place not reading it. The email knew
+the offer was closing; the page it links to did not.
+
+**Looked at** — Mubi's front page, the Criterion Channel, and Metrograph's
+membership page. Mubi sets `TRY 7 DAYS FREE` as a plain all-caps type line
+above the email row and keeps its one filled button for *Get started*, with the
+terms in grey underneath. Criterion spends its gold on *Subscribe* and
+*See more* and on nothing else. Metrograph prints `STARTING AT $5/MONTH` as type
+inside a thin-ruled panel with the one filled red button directly beneath it.
+**The observation is that all three spend the brand's single filled colour
+only on the thing you press, and set the price and the offer's terms as type
+beside it.** Ours was doing the exact reverse: the fact wore the fill and the
+action wore body copy.
+
+**Now** — the deadline is set as type, in the language the rest of the ground
+already uses for a deadline. The term keeps 14px/700 Space Grotesk at
+`-0.01em` — the pill's own type, unchanged, which is why the line still carries
+on a 680px measure without a fill behind it — and takes ink `#1B1916`. The
+qualifier steps down to 13.5px in the body face at `#6F6A61`, from 14px, so the
+two read as one fact and its condition rather than two equal statements. The
+row's `align-items` moves from `center` to `baseline`, which is what the fill
+was hiding: with no box, the two sit on one line properly.
+
+No rule between them. `.band-meta` separates its notes with a hairline and that
+was the obvious thing to reuse, but measured at 390px the two strings are 215px
+and 215px in a 350px track, so they *always* wrap onto separate lines here — and
+a hairline that only ever hangs at the start of a line is not a separator, it is
+a pull-quote rule. The gap and the weight step do the work instead.
+
+Inside seven days the term takes `#C2410C` and the email's own sentence. No new
+value entered the palette: burnt orange has been the ground's deadline alarm
+since 2026-09-08, reserved for a deadline inside seven days, and this is a
+deadline inside seven days. The threshold, the wording and the arithmetic are
+the email's, imported rather than rewritten. The far case keeps
+`until November 30` verbatim, so nothing a visitor reads today changed — only
+what they will read from November 24.
+
+**Checked** — `npm run build` exit 0. Both widths clean,
+`✓ no horizontal overflow` at 1440px and 390px. The two branches a visitor
+cannot see today were rendered through the real page against a fixed clock and
+read back out of the served HTML, not reasoned about:
+
+- `2026-11-26T18:00:00Z` → `class="pack-deadline-term pack-deadline-term-soon"`,
+  text `$3 (92% off) ends in 5 days, on November 30`
+- `2026-12-01T06:00:00Z` (the last hours) → same class,
+  text `$3 (92% off) ends today`
+- the real clock, 17 days out → `class="pack-deadline-term"` alone, text
+  `$3 (92% off) until November 30`
+
+The probe was a one-line edit to `const now`, reverted from the working tree
+before the commit; the committed file reads `new Date()`. `revalidate = 3600`
+was already on this page, for exactly this reason — the comment above it says
+the line has to come down when the offer closes — so an hourly rebuild is what
+makes a count of days honest here rather than a number baked in at deploy.
+
+**Scope** — `.pack-deadline` is rendered in one place, the hero of
+`/starter-pack`, and `grep` confirms no other file referenced
+`.pack-deadline-pill`. `PackBanner`'s `FREE` chip and `/feature`'s grey
+"Not listed yet?" pill are the same family of problem and were left alone: one
+change a day.
+
+**Before/after** — `reports/design/2026-11-13-before.png` /
+`-after.png` (1440px) and `-before-390.png` / `-after-390.png`.
+
+---
+
 ## 2026-11-12 — On a phone, the contest band's mark comes off the title's column
 
 **Changed** — the contest page's header band: three inline style objects in
