@@ -2052,10 +2052,40 @@ img, svg, video, canvas { max-width: 100%; }
   display: flex; align-items: center; justify-content: center;
 }
 .pack-art img { max-width: 100%; max-height: 100%; width: auto; height: auto; object-fit: contain; }
-.pack-deadline { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 12px; margin-top: 22px; font-size: 14px; color: #6F6A61; }
-.pack-deadline-pill {
-  display: inline-block; background: #4F46E5; color: #FFFFFF; border-radius: 8px; padding: 7px 12px;
-  font-family: 'Space Grotesk', sans-serif; font-size: 14px; font-weight: 700; letter-spacing: -0.01em;
+.pack-deadline { display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 14px; margin-top: 22px; }
+
+/* The offer's deadline is a fact, not a control.
+
+   It used to be set as `.pack-deadline-pill`: #4F46E5 fill, white Space
+   Grotesk, 8px radius, 7px/12px padding — which is `.btn` at the top of this
+   file, half a weight heavier and a little tighter. So the loudest object in
+   the hero of a page whose headline reads "Claim it free." was the one thing
+   on it that could not be pressed, sitting exactly where that page's button
+   would go. Mubi, Criterion Channel and Metrograph all spend their one filled
+   colour only on the thing you press and set the price and its terms as type
+   beside it; ours was doing the reverse.
+
+   Set as type now, the way the rest of the ground sets a deadline: the term
+   in ink at display weight, the qualifier a step down in grey body face. No
+   rule between them — at 390px the two always wrap onto separate lines, and a
+   hairline that only ever hangs at the start of a line is not a separator.
+
+   Inside seven days the term takes #C2410C, the ground's one deadline alarm,
+   and the days-left count the pack email has printed all along. A deadline
+   that reads identically at seventeen days and at one is a badge. */
+.pack-deadline-term {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  line-height: 1.5;
+  color: #1B1916;
+}
+.pack-deadline-term-soon { color: #C2410C; }
+.pack-deadline-note {
+  font-size: 13.5px;
+  line-height: 1.5;
+  color: #6F6A61;
 }
 @media (max-width: 860px) { .pack-grid { grid-template-columns: minmax(0, 1fr); } }
 

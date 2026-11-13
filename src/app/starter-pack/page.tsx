@@ -3,7 +3,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import InnerLayout from '@/components/InnerLayout'
 import EmailSubscribe from '@/components/EmailSubscribe'
-import { COMMUNITY, GUIDE, OFFER_ENDS_LABEL, OVERS, OVERS_COSTS, OVERS_OFF_PERCENT, OVERS_REPLACES, PACK_ART, offerOpen } from '@/lib/creator-pack'
+import { COMMUNITY, GUIDE, OFFER_ENDS_LABEL, OVERS, OVERS_COSTS, OVERS_OFF_PERCENT, OVERS_REPLACES, PACK_ART, offerDaysLeft, offerOpen } from '@/lib/creator-pack'
 
 // Rebuilt hourly so the deadline line comes down once the offer closes.
 export const revalidate = 3600
@@ -37,7 +37,21 @@ const body: React.CSSProperties = { fontSize: 15, lineHeight: 1.7, color: '#4A46
 const more: React.CSSProperties = { fontFamily: 'Space Grotesk, sans-serif', fontSize: 14, fontWeight: 600, color: '#4338CA', textDecoration: 'none' }
 
 export default function StarterPackPage() {
-  const open = offerOpen(new Date())
+  const now = new Date()
+  const open = offerOpen(now)
+
+  /* How the deadline reads. Far out it stays exactly as it always has —
+     "until November 30". Inside seven days it switches to the sentence the
+     pack email has printed all along (offerEnds() in src/lib/email.ts, same
+     <= 7 threshold) and the line turns #C2410C, the ground's one deadline
+     alarm. The page is rebuilt hourly (revalidate above), which is what makes
+     a count of days safe to print here. */
+  const daysLeft = offerDaysLeft(now)
+  const closingSoon = daysLeft <= 7
+  const endsPhrase =
+    daysLeft <= 1 ? 'ends today'
+    : closingSoon ? `ends in ${daysLeft} days, on ${OFFER_ENDS_LABEL}`
+    : `until ${OFFER_ENDS_LABEL}`
   return (
     <InnerLayout>
       <div className="max-w-5xl mx-auto px-5" style={{ padding: 'clamp(40px, 6vw, 72px) 20px clamp(48px, 7vw, 88px)' }}>
@@ -56,8 +70,10 @@ export default function StarterPackPage() {
           </p>
           {open && (
             <div className="pack-deadline">
-              <span className="pack-deadline-pill">${OVERS.monthlyUsd} ({OVERS_OFF_PERCENT}% off) until {OFFER_ENDS_LABEL}</span>
-              <span>or until the {OVERS.places} founding places fill</span>
+              <span className={closingSoon ? 'pack-deadline-term pack-deadline-term-soon' : 'pack-deadline-term'}>
+                ${OVERS.monthlyUsd} ({OVERS_OFF_PERCENT}% off) {endsPhrase}
+              </span>
+              <span className="pack-deadline-note">or until the {OVERS.places} founding places fill</span>
             </div>
           )}
         </div>
