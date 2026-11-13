@@ -290,8 +290,9 @@ export default async function CinematicAdsPage() {
               </h2>
 
               <p style={{ fontSize: 15, color: '#3E3A33', lineHeight: 1.75, maxWidth: 600, marginBottom: 12 }}>
-                Ruminate X is an AI film studio in Calgary that makes brand films and AI commercials for consumer
-                brands, pharma and pharmacy companies, labs, medical companies and other businesses. Every frame is
+                Ruminate X is an AI film studio that makes brand films and AI commercials for brands across the
+                United States, its main market, and Canada, from consumer brands to pharma, labs and medical
+                companies. It is based in Calgary. Every frame is
                 made with generative AI; people write, board, edit, mix and grade every film. Brand films and
                 commercials start at US$5,000 and are quoted from the brief.
               </p>
