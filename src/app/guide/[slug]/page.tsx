@@ -189,7 +189,7 @@ export default async function GuidePage({ params }: { params: Promise<{ slug: st
           </section>
         )}
 
-        {/* Ruminatex callout */}
+        {/* Ruminate X callout */}
         {guide.ruminatex && guide.ruminatexNote && (
           <div style={{
             border: '1px solid rgba(99,102,241,0.25)',
@@ -202,7 +202,7 @@ export default async function GuidePage({ params }: { params: Promise<{ slug: st
               {guide.ruminatexNote}
             </p>
             <a
-              href="https://ruminatex.com"
+              href="https://www.ruminatex.com/ai-commercial-production"
               target="_blank"
               rel="noopener noreferrer"
               style={{
@@ -215,7 +215,7 @@ export default async function GuidePage({ params }: { params: Promise<{ slug: st
                 gap: 6,
               }}
             >
-              Visit Ruminatex →
+              Visit Ruminate X →
             </a>
           </div>
         )}

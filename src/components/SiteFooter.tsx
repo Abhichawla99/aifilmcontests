@@ -45,12 +45,12 @@ export default function SiteFooter({
           </p>
           <p className="sfoot-credit">
             <a
-              href="https://ruminatex.com"
+              href="https://www.ruminatex.com"
               target="_blank"
               rel="noopener noreferrer"
               className="link-muted"
             >
-              Crafted by Ruminatex
+              Crafted by Ruminate X
             </a>
           </p>
         </div>

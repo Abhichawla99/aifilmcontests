@@ -39,12 +39,12 @@ export const creators: Creator[] = [
     name: 'Ruminate X',
     type: 'studio',
     location: 'Calgary, Alberta, Canada',
-    website: 'https://ruminatex.com',
+    website: 'https://www.ruminatex.com',
     oneLiner: 'Cinematic story studio making brand films and story-driven AI commercials.',
     bio:
-      'Ruminate X is an AI video production studio based in Calgary, Alberta, working with brands in North America, the UK, Australia and beyond. ' +
-      'It makes cinema-grade brand films, AI commercials, fashion and lifestyle content, product launch videos and social content, treating each brief as a film production rather than a video shoot. ' +
-      'The studio was founded in 2024 and also builds and runs AI Film Contests.',
+      'Ruminate X is an AI film studio in Calgary, Alberta, Canada that makes brand films and AI commercials for consumer brands, pharma and pharmacy companies, labs, medical companies and other businesses. ' +
+      'Every frame is made with generative AI; people write, board, edit, mix and grade every film. Brand films and commercials start at US$5,000 and are quoted from the brief. ' +
+      'Abhi Chawla founded the studio in 2024. AI Film Contests is run by the same creative group, so read this profile as a disclosure, not a review.',
     tags: ['brand-films', 'ai-commercials', 'fashion', 'social-content', 'calgary'],
     workLinks: [
       { title: 'Calgary Stampede 2026', url: 'https://www.youtube.com/watch?v=d-s9SxA4Klk', client: 'Calgary Stampede' },

@@ -41,7 +41,7 @@ export default function FeaturedSpotlight({ contest }: { contest: Contest }) {
           only chip on a card whose own grammar is a caption over a hairline
           (see .spot-label and the prize and deadline rows below), and the one
           shape the paid slot wore that nothing else on the page did. That is
-          the fault taken off the Ruminatex credit on 2026-10-25 and off the
+          the fault taken off the Ruminate X credit on 2026-10-25 and off the
           hero's two pills on 2026-10-26. Mubi and Criterion both label their
           lead item with this same word and set it as type over a rule. The
           claim and the indigo stay; the container goes. */}

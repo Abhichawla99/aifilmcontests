@@ -957,7 +957,7 @@ img, svg, video, canvas { max-width: 100%; }
 
 /* ── Site footer (.sfoot) ───────────────────────────────────────────────────
    Seven links of two and three words each ("Submit a Contest", "Cinematic AI
-   Ads", "Crafted by Ruminatex") were set as one centre-justified row with
+   Ads", "Crafted by Ruminate X") were set as one centre-justified row with
    middot separators. At 1440px there was no room for it, so every label broke
    across two lines while its separator stayed vertically centred between them;
    at 390px the row did not wrap at all and both end links ran off the edges of

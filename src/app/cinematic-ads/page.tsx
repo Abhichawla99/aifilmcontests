@@ -7,7 +7,7 @@ import SiteFooter from '@/components/SiteFooter'
 export const metadata: Metadata = {
   title: 'Cinematic AI Advertising — How AI is Transforming Brand Filmmaking',
   description: 'From generative visuals to AI-directed narratives, discover how cinematic AI is changing the way brands tell stories. Tools, competitions, and studios leading the way.',
-  keywords: ['cinematic AI advertising', 'AI brand films', 'generative AI commercial', 'AI video production', 'AI advertising agency', 'Ruminatex', 'brand filmmaking AI'],
+  keywords: ['cinematic AI advertising', 'AI brand films', 'generative AI commercial', 'AI video production', 'AI advertising agency', 'Ruminate X', 'brand filmmaking AI'],
   openGraph: {
     title: 'Cinematic AI Advertising — Brand Storytelling Reimagined',
     description: 'How generative AI is reshaping commercial filmmaking and brand storytelling. Competitions, tools, and the agencies leading the charge.',
@@ -102,13 +102,13 @@ export default async function CinematicAdsPage() {
             <nav style={{ display: 'flex', alignItems: 'center', gap: 20, fontSize: 13 }}>
               <Link href="/#contests" className="link-muted">Browse Contests</Link>
               <a
-                href="https://ruminatex.com"
+                href="https://www.ruminatex.com/ai-commercial-production"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="btn"
                 style={{ padding: '6px 14px', fontSize: 12 }}
               >
-                Ruminatex ↗
+                Ruminate X ↗
               </a>
             </nav>
           </div>
@@ -162,12 +162,12 @@ export default async function CinematicAdsPage() {
             {/* CTA pair */}
             <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap', alignItems: 'center' }}>
               <a
-                href="https://ruminatex.com"
+                href="https://www.ruminatex.com/ai-commercial-production"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="btn"
               >
-                Work with Ruminatex
+                Work with Ruminate X
                 <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
                   <path strokeLinecap="round" strokeLinejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" />
                 </svg>
@@ -238,7 +238,7 @@ export default async function CinematicAdsPage() {
           </div>
         </section>
 
-        {/* ── Ruminatex feature section ── */}
+        {/* ── Ruminate X feature section ── */}
         <section style={{ padding: 'clamp(40px, 6vw, 80px) 0' }}>
           <div className="max-w-5xl mx-auto px-5">
             {/* A hairline and the page's own section grammar, not a gradient
@@ -286,27 +286,28 @@ export default async function CinematicAdsPage() {
                 fontWeight: 700, letterSpacing: '-0.03em', lineHeight: 1.1,
                 color: '#1B1916', marginBottom: 14,
               }}>
-                Ruminatex
+                Ruminate X
               </h2>
 
               <p style={{ fontSize: 15, color: '#3E3A33', lineHeight: 1.75, maxWidth: 600, marginBottom: 12 }}>
-                A cinematic AI advertising agency built for brands that want to move at the speed of culture.
-                Ruminatex combines generative AI tools with a director&apos;s eye to produce brand films,
-                campaign visuals, and commercial content that looks and feels like it cost 10× more to make.
+                Ruminate X is an AI film studio in Calgary that makes brand films and AI commercials for consumer
+                brands, pharma and pharmacy companies, labs, medical companies and other businesses. Every frame is
+                made with generative AI; people write, board, edit, mix and grade every film. Brand films and
+                commercials start at US$5,000 and are quoted from the brief.
               </p>
               <p style={{ fontSize: 14, color: '#6F6A61', lineHeight: 1.75, maxWidth: 600, marginBottom: 26 }}>
-                If your brand wants to compete in the growing space of AI-native visual content —
-                from social campaigns to long-form brand narratives — Ruminatex is where to start.
+                Ruminate X is run by the same creative group as AI Film Contests. If your brand wants an AI
+                commercial or brand film, from a social spot to a long-form brand story, start with its brief form.
               </p>
 
               <a
-                href="https://ruminatex.com"
+                href="https://www.ruminatex.com/ai-commercial-production"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="btn"
                 style={{ display: 'inline-flex' }}
               >
-                Visit Ruminatex
+                Visit Ruminate X
                 <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
                   <path strokeLinecap="round" strokeLinejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
                 </svg>

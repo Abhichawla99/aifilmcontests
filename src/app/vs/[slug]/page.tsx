@@ -274,7 +274,7 @@ export default async function VSPage({ params }: { params: Promise<{ slug: strin
           </>
         )}
 
-        {/* Ruminatex callout */}
+        {/* Ruminate X callout */}
         {page.ruminatex && page.ruminatexNote && (
           <div style={{
             border: '1px solid rgba(99,102,241,0.25)',
@@ -287,12 +287,12 @@ export default async function VSPage({ params }: { params: Promise<{ slug: strin
               {page.ruminatexNote}
             </p>
             <a
-              href="https://ruminatex.com"
+              href="https://www.ruminatex.com/ai-commercial-production"
               target="_blank"
               rel="noopener noreferrer"
               style={{ fontSize: 13, fontWeight: 600, color: '#4338CA', textDecoration: 'none' }}
             >
-              Visit Ruminatex →
+              Visit Ruminate X →
             </a>
           </div>
         )}

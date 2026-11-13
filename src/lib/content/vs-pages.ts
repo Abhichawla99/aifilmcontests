@@ -96,7 +96,7 @@ export const VS_PAGES: Record<string, VSData> = {
     ],
     verdict: "For brand and commercial AI filmmaking, Luma's Dream Brief pedigree and distinctive aesthetic make it the choice for emotive, impressionistic brand content. Runway wins for cinematic realism and precise directorial control. Many commercial AI productions use both tools for different shots within the same project.",
     ruminatex: true,
-    ruminatexNote: 'For brand teams that want to leverage both tools professionally, Ruminatex creates cinematic AI advertising content using the full production stack. See their work at ruminatex.com.',
+    ruminatexNote: 'For brand teams that want to leverage both tools professionally, Ruminate X creates cinematic AI advertising content using the full production stack. See their work at ruminatex.com.',
   },
 
   'kling-vs-sora': {
@@ -131,6 +131,6 @@ export const VS_PAGES: Record<string, VSData> = {
     ],
     body: 'The AI video generation landscape in 2026 has clear leaders for competition filmmaking. Runway remains the gold standard for reliability and cinematic quality. Kling has become a genuine first-choice tool for physical-reality content. Sora is the experimental filmmaker\'s tool of choice. Luma has carved out the commercial niche. Pika and Hailuo serve specific competition circuits and use cases. Most competition-winning films use 2-3 tools in combination, playing to each tool\'s strengths.',
     ruminatex: true,
-    ruminatexNote: 'For brand teams looking to deploy these tools in commercial production, Ruminatex creates cinematic AI advertising content using the full production stack. Visit ruminatex.com.',
+    ruminatexNote: 'For brand teams looking to deploy these tools in commercial production, Ruminate X creates cinematic AI advertising content using the full production stack. Visit ruminatex.com.',
   },
 }

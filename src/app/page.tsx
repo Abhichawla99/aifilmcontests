@@ -244,15 +244,15 @@ export default async function Home() {
                         : `${open.length} contests open · updated daily`}
                   </span>
 
-                  {/* Presented by Ruminatex */}
+                  {/* Presented by Ruminate X */}
                   <a
-                    href="https://ruminatex.com"
+                    href="https://www.ruminatex.com"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="hero-meta-credit"
                   >
                     <span className="hero-meta-credit-label">Presented by</span>
-                    <span className="hero-meta-credit-name">Ruminatex</span>
+                    <span className="hero-meta-credit-name">Ruminate X</span>
                     <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" aria-hidden="true">
                       <path strokeLinecap="round" strokeLinejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
                     </svg>
@@ -478,7 +478,7 @@ export default async function Home() {
           <ContestBrowser contests={allContests} />
         </section>
 
-        {/* ── Ruminatex / Cinematic AI advertising callout ── */}
+        {/* ── Ruminate X / Cinematic AI advertising callout ── */}
         <section className="max-w-6xl mx-auto px-5 pb-12">
           <aside className="rcal">
             {/* Film frame, stroked in the accent at the left rail rather than
@@ -499,7 +499,7 @@ export default async function Home() {
             </a>
             <a
               className="rcal-site"
-              href="https://ruminatex.com"
+              href="https://www.ruminatex.com"
               target="_blank"
               rel="noopener noreferrer"
             >
