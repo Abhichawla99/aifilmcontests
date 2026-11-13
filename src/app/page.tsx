@@ -1,6 +1,7 @@
 import { getAllContests, getSnapshotStatus } from '@/lib/contests-db'
 import { Contest } from '@/data/contests'
 import { isFree } from '@/lib/contest-filters'
+import { formatDeadlineShort } from '@/lib/deadline'
 import ContestBrowser from '@/components/ContestBrowser'
 import { ClapperDrawing, CalendarDrawing, EnvelopeDrawing, FilmmakerDoodle } from '@/components/Illustrations'
 import EmailSubscribe from '@/components/EmailSubscribe'
@@ -19,9 +20,7 @@ export const revalidate = 900
 function daysLeft(deadline: string) {
   return Math.ceil((new Date(deadline).getTime() - Date.now()) / 86_400_000)
 }
-function fmtShort(d: string) {
-  return new Date(d).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })
-}
+const fmtShort = formatDeadlineShort
 export default async function Home() {
   const allContests: Contest[] = await getAllContests()
   const open     = allContests.filter(c => c.status === 'open')

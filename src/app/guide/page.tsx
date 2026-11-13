@@ -3,6 +3,7 @@ import Link from 'next/link'
 import InnerLayout from '@/components/InnerLayout'
 import EmailSubscribe from '@/components/EmailSubscribe'
 import { getAllContests } from '@/lib/contests-db'
+import { formatDeadline } from '@/lib/deadline'
 import { GUIDES } from '@/lib/content/guides'
 import { CRAFT_GUIDES, CRAFT_GUIDE_ORDER } from '@/data/craft-guides'
 
@@ -101,7 +102,7 @@ export default async function GuideIndexPage() {
       : []
     const allCitedClosed = cited.length > 0 && cited.every(c => c.status === 'closed')
     const closedDate = allCitedClosed
-      ? fmt(cited.reduce((latest, c) => (!latest || c.deadline > latest) ? c.deadline : latest, ''))
+      ? formatDeadline(cited.reduce((latest, c) => (!latest || c.deadline > latest) ? c.deadline : latest, ''))
       : null
     const row: Row = { slug, title: guide.title, description: guide.description, date: guide.datePublished ? fmt(guide.datePublished) : null, closedDate }
     if (/deadlines-|closing/.test(slug)) deadlineGuides.push(row)

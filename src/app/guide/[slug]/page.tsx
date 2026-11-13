@@ -5,6 +5,7 @@ import { getAllContests } from '@/lib/contests-db'
 import InnerLayout from '@/components/InnerLayout'
 import { ArticleHeader, ArticleGrid, H2, P, FaqList, readingMinutes, splitStandfirst } from '@/components/ArticleLayout'
 import EmailSubscribe from '@/components/EmailSubscribe'
+import { formatDeadline } from '@/lib/deadline'
 import { GUIDES } from '@/lib/content/guides'
 
 export const revalidate = 900
@@ -36,9 +37,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   }
 }
 
-function fmt(d: string) {
-  return new Date(d).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
-}
+const fmt = formatDeadline
 function daysLeft(d: string) {
   return Math.ceil((new Date(d).getTime() - Date.now()) / 86_400_000)
 }

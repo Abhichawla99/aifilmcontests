@@ -2,6 +2,7 @@ import { notFound } from 'next/navigation'
 import { Metadata } from 'next'
 import Link from 'next/link'
 import { getAllContests } from '@/lib/contests-db'
+import { formatDeadline } from '@/lib/deadline'
 import InnerLayout from '@/components/InnerLayout'
 import { ArticleHeader, ArticleGrid, H2, P, FaqList, readingMinutes, splitStandfirst } from '@/components/ArticleLayout'
 import EmailSubscribe from '@/components/EmailSubscribe'
@@ -54,9 +55,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   }
 }
 
-function fmt(d: string) {
-  return new Date(d).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
-}
+const fmt = formatDeadline
 function daysLeft(d: string) {
   return Math.ceil((new Date(d).getTime() - Date.now()) / 86_400_000)
 }
