@@ -52,29 +52,41 @@ function GuideSection({ heading, rows }: { heading: string; rows: Row[] }) {
   return (
     <section style={{ marginBottom: 44 }}>
       <h2 style={sectionLabel}>{heading}</h2>
-      <div className="cr-list">
-        {rows.map(row => (
+      {/* cr-list-meta-inline: below 620px the Updated/Closed column leaves the
+          grid and sets as one line under the blurb, giving every title the full
+          350px track instead of 253-260px. Guide titles are the longest strings
+          on the site, and 10 of these 40 rows have no date at all yet still held
+          that column's 72px open. The rule lives in globals.css's 620px block,
+          shared with /topics. */}
+      <div className="cr-list cr-list-meta-inline">
+        {rows.map(row => {
+          const since = row.closedDate
+            ? { label: 'Closed', value: row.closedDate }
+            : row.date ? { label: 'Updated', value: row.date } : null
+          return (
           <Link key={row.slug} href={`/guide/${row.slug}`} className="cr-row">
             <div>
               <div className="cr-name">{row.title}</div>
               <p className="cr-one">{row.description}</p>
             </div>
+            {/* Always rendered, so the arrow keeps its own 18px track and the
+                right edge still lines up down the desktop list. On a phone an
+                empty one is hidden by `.cr-list-meta-inline .cr-since:empty`,
+                since once the column is inline an empty div is an empty grid
+                row and would open 9px of gap under the blurb on the 10 rows
+                that carry no date. */}
             <div className="cr-since">
-              {row.closedDate ? (
+              {since && (
                 <>
-                  <span className="cr-since-label">Closed</span>
-                  <span className="cr-since-date">{row.closedDate}</span>
-                </>
-              ) : row.date && (
-                <>
-                  <span className="cr-since-label">Updated</span>
-                  <span className="cr-since-date">{row.date}</span>
+                  <span className="cr-since-label">{since.label}</span>
+                  <span className="cr-since-date">{since.value}</span>
                 </>
               )}
             </div>
             <span className="cr-go" aria-hidden="true">&rarr;</span>
           </Link>
-        ))}
+          )
+        })}
       </div>
     </section>
   )

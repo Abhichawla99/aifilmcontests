@@ -95,12 +95,14 @@ export default async function TopicsIndexPage() {
         {/* Roster */}
         <section style={{ marginBottom: 44 }}>
           <h2 style={sectionLabel}>{rows.length} Topics</h2>
-          {/* cr-list-count-inline: on a phone the Cites column leaves the grid and
+          {/* cr-list-meta-inline: on a phone the Cites column leaves the grid and
               sets as one line under the blurb, so all 81 titles hold one measure
-              instead of stepping 86px wherever a row has no count. /topics is the
-              only index that mixes both variants, so it is the only list that asks
-              for it; the rule lives in globals.css's 620px block. */}
-          <div className="cr-list cr-list-count-inline">
+              instead of stepping 86px wherever a row has no count. /guide asks
+              for the same rule (2026-11-14) because a quarter of its rows render
+              that column empty; the rule lives in globals.css's 620px block, and
+              was called cr-list-count-inline until /guide's value turned out to
+              be a date rather than a count. */}
+          <div className="cr-list cr-list-meta-inline">
             {/* 28 of these 72 rows cite no contest, and every one of them used to
                 print `Cites  0 contests` in the same 700-weight ink as the row that
                 cites nine. The column exists to say which topic pages open onto live
