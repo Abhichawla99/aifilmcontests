@@ -48,13 +48,6 @@ export default async function CategoryPage({ params }: { params: Promise<{ slug:
   const upcoming = contests.filter(c => c.status === 'upcoming')
   const closed = contests.filter(c => c.status === 'closed')
 
-  function fmt(d: string) {
-    return new Date(d).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
-  }
-  function daysLeft(d: string) {
-    return Math.ceil((new Date(d).getTime() - Date.now()) / 86_400_000)
-  }
-
   // JSON-LD ItemList
   const jsonLd = {
     '@context': 'https://schema.org',

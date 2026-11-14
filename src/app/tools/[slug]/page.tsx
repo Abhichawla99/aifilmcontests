@@ -60,13 +60,6 @@ export default async function ToolPage({ params }: { params: Promise<{ slug: str
   const open = matching.filter(c => c.status === 'open')
   const upcoming = matching.filter(c => c.status === 'upcoming')
 
-  function fmt(d: string) {
-    return new Date(d).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
-  }
-  function daysLeft(d: string) {
-    return Math.ceil((new Date(d).getTime() - Date.now()) / 86_400_000)
-  }
-
   const jsonLd = {
     '@context': 'https://schema.org',
     '@type': 'ItemList',

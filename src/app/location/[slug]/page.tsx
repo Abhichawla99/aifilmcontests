@@ -37,13 +37,6 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   }
 }
 
-function fmt(d: string) {
-  return new Date(d).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
-}
-function daysLeft(d: string) {
-  return Math.ceil((new Date(d).getTime() - Date.now()) / 86_400_000)
-}
-
 export default async function LocationPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params
   const loc = LOCATIONS[slug]

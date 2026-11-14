@@ -3,6 +3,7 @@
 import { useState, useTransition } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
+import { formatDeadline } from '@/lib/deadline'
 
 type Contest = {
   id: string
@@ -32,9 +33,6 @@ type Stats = {
 
 type Log = { type: 'success' | 'error' | 'info'; msg: string }
 
-function fmt(d: string) {
-  return new Date(d).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
-}
 function fmtShort(d: string) {
   return new Date(d).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: '2-digit' })
 }
@@ -471,7 +469,7 @@ export default function AdminDashboard({ contests: initial, stats }: { contests:
 
                       {/* Deadline */}
                       <td style={{ padding: '10px 14px', whiteSpace: 'nowrap' }}>
-                        <span style={{ color: isUrgent ? '#C2410C' : '#7A7469' }}>{fmt(c.deadline)}</span>
+                        <span style={{ color: isUrgent ? '#C2410C' : '#7A7469' }}>{formatDeadline(c.deadline)}</span>
                         {c.status === 'open' && <span style={{ fontSize: '11px', color: isUrgent ? '#C2410C' : '#A8A296', marginLeft: '6px' }}>{dl}d</span>}
                       </td>
 
