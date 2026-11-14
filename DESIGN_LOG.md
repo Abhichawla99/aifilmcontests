@@ -36,6 +36,72 @@ describe the old dark theme; the reasoning still applies, the colours do not.)*
 
 ---
 
+## 2026-11-14 — On a phone, /guide's date comes off the title's column
+
+**Changed** — the Updated/Closed column on the `/guide` index, below 620px.
+Three files, 66 lines added and 35 removed, 45 of the added lines comment: the
+`.cr-list-meta-inline` block in `src/app/globals.css`, the one `<div
+className="cr-list">` in `src/app/guide/page.tsx` plus the small refactor that
+lets an empty cell render as empty, and the rename at `/topics`' call site. No
+desktop rule changed, no new colour value, no radius, no padding, no new
+dependency, no font, no URL, no data, no copy. The generated
+`src/data/contests-snapshot.json` the build rewrites was reverted before the
+commit.
+
+**Was** — `.cr-row` at 390px is `grid-template-columns: 1fr auto`, with
+`.cr-since { min-width: 72px }` and a 14px gap. Measured on the live build:
+
+| | before | after |
+|---|---|---|
+| title measure | 253–260px | 346px, all 40 rows |
+| titles at 3 lines | 40 of 40 | 10 of 40 |
+| titles at 2 lines | 0 | 26 |
+| titles at 1 line | 0 | 2 |
+| `.cr-since` height | 40px, in rows 274–357px tall | — |
+| rows rendering it empty | 10 of 40, still holding 72px | 10, hidden |
+
+So 86px of a 350px track — a quarter of the phone's width — went to a column
+that was two short lines at the top of the row and nothing for the remaining
+234–317px. On ten of the forty rows it held nothing at all. The titles it
+squeezed are the longest strings on the site, and every one of them set three
+lines.
+
+**Why not before** — the 2026-11-10 entry built exactly this rule for `/topics`
+and scoped it there, on the reasoning that "/guide and /creators print a count
+on every row, have no step, and are untouched." That is true of `/creators`. It
+is not true of `/guide`: a quarter of its rows render that cell empty. The step
+is hidden rather than absent, because `.cr-since`'s 72px minimum holds the
+column open whether or not anything is in it — which is the worse of the two
+failures, since the paper is spent either way. `/creators` stays untouched.
+
+**Inspired by** — MUBI's Notebook index and Letterboxd's Journal, both looked at
+on a phone today. Neither spends a fixed column on a date. MUBI sets the byline
+and the date as one line under the standfirst (`Adrian Curry · 13 NOV 2026`),
+headline at the full column; Letterboxd puts the same pair above the headline as
+a dateline (`Interview · 12 NOV 2026`). Same answer as Criterion's and
+Metrograph's phone lists, already cited here on 2026-11-10: a row's facts stack
+inside the title's own column, and a column of its own goes only to a field
+every row carries. Ours sets under the blurb, as `UPDATED  Sep 16, 2026`, in the
+inline label-then-value language `.cr-work` already uses on `/creators`.
+
+**Also** — renamed the modifier `.cr-list-count-inline` → `.cr-list-meta-inline`
+and updated both call sites. The name said "count" because `/topics`' value is
+one; `/guide`'s is a date, and a class whose name contradicts half its users is
+a trap for the next run. Same four rules, plus
+`.cr-list-meta-inline .cr-since:empty { display: none }` — once the column is
+inline, an empty div is an empty grid row and would open 9px of gap under the
+blurb on the ten dateless rows. The cell is still always rendered, so the arrow
+keeps its own 18px track: all 40 arrows measured at the same x on desktop,
+before and after.
+
+**Verified** — `npm run build` exit 0. At 390px: `✓ no horizontal overflow
+(390px in 390px)` on `/guide` and on `/topics`; `/topics`' 85 titles still all
+hold 346px, unchanged by the rename. At 1440px `/guide` is pixel-identical.
+Before/after in `reports/design/2026-11-14-before.png` and
+`reports/design/2026-11-14-after.png`.
+
+---
+
 ## 2026-11-13 — The creator pack's offer deadline, as type instead of a button
 
 **Changed** — the deadline line in the hero of `/starter-pack`. Two files, 54
