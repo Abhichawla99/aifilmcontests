@@ -1,4 +1,5 @@
 import { Contest } from '@/data/contests'
+import { isFree } from '@/lib/contest-filters'
 
 interface PrizePageData {
   label: string
@@ -8,7 +9,6 @@ interface PrizePageData {
   filterFn: (c: Contest) => boolean
 }
 
-const FREE_ENTRY_TERMS = ['free', 'no fee', 'no entry fee', '$0', 'none']
 const HIGH_PRIZE_TERMS = ['$10,000', '$20,000', '$25,000', '$50,000', '$100,000', '$135,000', '$1,000,000', '10k', '20k', '25k', '50k', '100k', '135k', '$42']
 const CASH_TERMS = ['$', 'usd', 'cash', 'prize money', 'grand prix']
 const GRANT_TERMS = ['grant', 'fund', 'funding', 'commission', 'residency', 'award fund']
@@ -24,10 +24,7 @@ export const PRIZE_PAGES: Record<string, PrizePageData> = {
     description: 'AI film competitions with no entry fee — completely free to enter. No submission fee required.',
     keywords: 'free AI film contest, free entry AI competition 2026',
     body: 'Not every AI film contest requires an entry fee. Several major competitions — including contests run by Runway, Kling, and Hailuo — are free to enter. Free entry contests are ideal for emerging filmmakers building their competition portfolio without significant upfront cost. Check individual contest pages for eligibility requirements, even when entry is free.',
-    filterFn: (c: Contest) => {
-      if (!c.entryFee) return true
-      return hasTerm(c.entryFee, FREE_ENTRY_TERMS)
-    },
+    filterFn: (c: Contest) => isFree(c.entryFee),
   },
   'high-prize': {
     label: 'High Prize AI Film Contests ($10K+)',
