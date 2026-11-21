@@ -341,7 +341,7 @@ export default function ContestBrowser({ contests }: { contests: Contest[] }) {
   return (
     <div>
       {/* ── Controls ── */}
-      <div style={{ marginBottom: 22, display: 'flex', flexDirection: 'column', gap: 12 }}>
+      <div className="bb-stack" style={{ marginBottom: 22 }}>
 
         {/* Search, sort, view — one row, one height */}
         <div className="bb-controls">

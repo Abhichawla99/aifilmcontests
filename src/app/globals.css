@@ -719,6 +719,19 @@ img, svg, video, canvas { max-width: 100%; }
   flex-wrap: wrap;
   align-items: center;
 }
+/* The block is five named groups stacked: search+sort+view, Show, Category,
+   then the result count. On desktop every group is a single 34px line, so 12px
+   between them is a toolbar's rhythm and nothing is ambiguous. At 390px the
+   label moves above its chips (.bb-row below) and the chips wrap, so a group
+   becomes a 115-141px block — and that same 12px then separates two whole
+   groups while only 6px holds a label to the chips it governs. Measured on the
+   live build at 390px: Show ran 4252-4367 and Category's label opened at 4379,
+   12px later, with each label 6px above its own first chip. A 2:1 ratio across
+   blocks that tall reads as one undifferentiated column, which is why the one
+   hairline in the whole block (.bb-sep, which lives *inside* the Show group)
+   was carrying the only visible structure. The groups get the air instead. */
+.bb-stack { display: flex; flex-direction: column; gap: 12px; }
+
 .bb-search { position: relative; flex: 1 1 260px; min-width: 0; }
 .bb-search .input { height: 38px; padding: 0 12px 0 30px; }
 .bb-search-icon {
@@ -802,6 +815,9 @@ img, svg, video, canvas { max-width: 100%; }
 }
 
 @media (max-width: 640px) {
+  /* Each group is now a block, not a line, so the gap between groups has to
+     beat the 6px gap inside one. See .bb-stack. */
+  .bb-stack { gap: 22px; }
   /* Label above its chips: at 390px a label column eats a third of the width
      and every chip row wraps to three lines. */
   .bb-row { grid-template-columns: 1fr; gap: 6px; }
@@ -817,7 +833,11 @@ img, svg, video, canvas { max-width: 100%; }
     height: 1px;
     min-height: 0;
     align-self: auto;
-    margin: 7px 0 2px;
+    /* Even on both sides. .bb-chips adds its own 4px row-gap above and below,
+       so 7px/2px painted the rule 11px under the three chips it divides from
+       and 6px over the one it divides — a separator hugging one side reads as
+       that side's lid, not as a division. 6px/6px lands it at 10px either way. */
+    margin: 6px 0;
   }
 }
 
