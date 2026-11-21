@@ -46,7 +46,7 @@ export async function GET() {
 
   const body = `# AI Film Contests
 
-> AI Film Contests (aifilmcontests.com) is the definitive tracker for AI film competitions, festivals, grants and challenges — every creative AI film contest in one place, updated daily by an AI research agent. As of the latest crawl it tracks ${counts.tracked} contests, with ${counts.open} open for entries right now (${counts.active} active including upcoming) and cumulative prize pools over $10 million. Free email alerts go out when new contests open and 7 days before any deadline closes.
+> AI Film Contests (aifilmcontests.com) is the definitive tracker for AI film competitions, festivals, grants and challenges — every creative AI film contest in one place, updated daily by an AI research agent. As of the latest crawl it tracks ${counts.tracked} contests, with ${counts.open} open for entries right now (${counts.active} active including upcoming) and cumulative prize pools over $10 million. Free email alerts go out when new contests open and with a last call three days before any deadline closes.
 
 ## Key facts
 
@@ -55,7 +55,7 @@ export async function GET() {
 - Categories covered: short film, feature, animation, documentary, experimental, music video, commercial, advertising.
 - Updated daily by an automated AI agent that discovers, verifies and closes listings; past contests are archived, not deleted.
 - Free for filmmakers. Festivals and organizers can submit a contest for free, or get pinned Featured placement.
-- Free alerts: subscribers get an email when new contests open and 7 days before a deadline closes.
+- Free alerts: subscribers get an email when new contests open and a last call three days before a deadline closes.
 
 ## Browse
 
