@@ -15,6 +15,7 @@
  */
 
 import { getAllContests } from '@/lib/contests-db'
+import { duplicateKeeperId } from '@/lib/contest-filters'
 
 export const revalidate = 900
 
@@ -28,11 +29,15 @@ async function getCounts(): Promise<Counts> {
     if (!all || all.length === 0) {
       return { tracked: '160+', open: 'dozens', active: 'dozens' }
     }
+    // Merged-duplicate rows are closed pointer rows kept in the table but
+    // noindexed and excluded from the sitemap — don't advertise them as
+    // part of the tracked total either.
+    const tracked = all.filter((c) => !duplicateKeeperId(c.description)).length
     const open = all.filter((c) => c.status === 'open').length
     const upcoming = all.filter((c) => c.status === 'upcoming').length
     const active = open + upcoming
     return {
-      tracked: String(all.length),
+      tracked: String(tracked),
       open: String(open),
       active: String(active),
     }

@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-11-21T09:56:14.399Z",
+  "generatedAt": "2026-11-21T12:19:28.752Z",
   "contests": [
     {
       "id": "wsxa-hailuo-2026",
@@ -9172,11 +9172,11 @@
       "location": "Global (online)",
       "event_date": "2026-12-03",
       "created_at": "2026-11-15T08:15:28.621815+00:00",
-      "updated_at": "2026-11-15T14:24:41.689335+00:00",
+      "updated_at": "2026-11-21T12:17:11.749107+00:00",
       "featured_until": null,
       "featured_paid_at": null,
-      "organizer_email": null,
-      "organizer_contact_url": "https://discord.gg/U9q6r6UGWp",
+      "organizer_email": "support@higgsfield.ai",
+      "organizer_contact_url": "https://higgsfield.ai/contact",
       "outreach_sent_at": null,
       "outreach_status": null
     },

@@ -7,6 +7,7 @@ import { Metadata } from 'next'
 import Link from 'next/link'
 import { getAllContests } from '@/lib/contests-db'
 import { CATEGORIES, contestHasCategorySlug } from '@/lib/content/categories'
+import { duplicateKeeperId } from '@/lib/contest-filters'
 
 export const revalidate = 900
 
@@ -46,7 +47,10 @@ export default async function CategoryPage({ params }: { params: Promise<{ slug:
   const contests = all.filter(c => contestHasCategorySlug(c.categories, slug))
   const open = contests.filter(c => c.status === 'open')
   const upcoming = contests.filter(c => c.status === 'upcoming')
-  const closed = contests.filter(c => c.status === 'closed')
+  // Merged-duplicate rows are closed pointer rows (see duplicateKeeperId)
+  // kept in the table but noindexed and excluded from the sitemap — don't
+  // count them in the public "N closed" figure either.
+  const closed = contests.filter(c => c.status === 'closed' && !duplicateKeeperId(c.description))
 
   // JSON-LD ItemList
   const jsonLd = {

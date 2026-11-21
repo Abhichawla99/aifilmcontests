@@ -1,6 +1,6 @@
 import { getAllContests, getSnapshotStatus } from '@/lib/contests-db'
 import { Contest } from '@/data/contests'
-import { isFree } from '@/lib/contest-filters'
+import { isFree, duplicateKeeperId } from '@/lib/contest-filters'
 import { formatDeadlineShort } from '@/lib/deadline'
 import ContestBrowser from '@/components/ContestBrowser'
 import { ClapperDrawing, CalendarDrawing, EnvelopeDrawing, FilmmakerDoodle } from '@/components/Illustrations'
@@ -25,6 +25,10 @@ export default async function Home() {
   const allContests: Contest[] = await getAllContests()
   const open     = allContests.filter(c => c.status === 'open')
   const upcoming = allContests.filter(c => c.status === 'upcoming')
+  // Merged-duplicate rows are closed pointer rows (see duplicateKeeperId) kept
+  // in the table but noindexed and left out of the sitemap — don't count them
+  // as part of the public listing total either.
+  const trackedCount = allContests.filter(c => !duplicateKeeperId(c.description)).length
 
   /* A read that comes back with nothing is a failed read, not an empty directory.
      The table has never held fewer than 200 rows and nothing on this site deletes
@@ -414,7 +418,7 @@ export default async function Home() {
                 title: 'Every contest, one place',
                 body: noListings
                   ? 'Festivals, studio challenges, grants and brand briefs, not just the famous ones.'
-                  : `${allContests.length} tracked and ${open.length} open right now — festivals, studio challenges, grants and brand briefs, not just the famous ones.`,
+                  : `${trackedCount} tracked and ${open.length} open right now — festivals, studio challenges, grants and brand briefs, not just the famous ones.`,
               },
               {
                 art: <CalendarDrawing />, bg: '#FBF4DE', border: '#F0E3BC', ink: '#6B5A22',
