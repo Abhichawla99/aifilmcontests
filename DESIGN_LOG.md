@@ -36,6 +36,72 @@ describe the old dark theme; the reasoning still applies, the colours do not.)*
 
 ---
 
+## 2026-11-21 — On a phone, the browse filters' groups get more air than their own labels
+
+**Changed** — the vertical rhythm of the browse control block, below 640px.
+Two files, 20 lines added and 2 removed, 17 of the added lines comment: the new
+`.bb-stack` rule and the `.bb-sep` margin in `src/app/globals.css`, and the one
+`<div>` in `src/components/ContestBrowser.tsx` that stops carrying its stack
+gap as an inline style so a breakpoint can reach it. No desktop rule changed,
+no colour, no radius, no font, no new dependency, no URL, no data, no copy.
+The generated `src/data/contests-snapshot.json` the build rewrites was reverted
+before the commit.
+
+**Was** — the control block stacks five named groups: search + sort + view,
+Show, Category, then the result count. On desktop each group is a single 34px
+line, so the 12px between them is an ordinary toolbar rhythm and nothing is
+ambiguous. At 640px and under, `.bb-row` turns to one column so the label sits
+*above* its chips, and the chips wrap — a group stops being a line and becomes
+a block. Measured on the live build at 390px:
+
+| | before | after |
+|---|---|---|
+| Show group height | 115px | 118px |
+| Category group height | 141px | 141px |
+| gap between the two groups | 12px | 22px |
+| gap from a label to its own chips | 6px | 6px |
+| ratio, between-groups : within-group | 2 : 1 | 3.7 : 1 |
+| `.bb-sep` to the chips above it | 11px | 10px |
+| `.bb-sep` to the chip below it | 6px | 10px |
+
+So two blocks 115px and 141px tall were held apart by 12px, while 6px held each
+label to the chips it governs. At that ratio nothing in the block is grouped by
+spacing, and the reader is left to infer the groups from the labels alone. It
+is also, on the evidence, why `.bb-sep` exists at all: the 2026-10-22 entry put
+a full-width hairline *inside* the Show group to tell the additive Free-entry
+filter from the three exclusive status chips, and at 390px that hairline was
+the only visible structure anywhere in the block — the one line in a control
+bar, drawn within a group rather than between them.
+
+The separator had its own fault. `margin: 7px 0 2px` plus `.bb-chips`' own 4px
+row-gap painted it 11px under the three chips it divides from and 6px over the
+one it divides. A rule that sits twice as close to one side reads as that
+side's lid, so "Free entry (23)" came off looking like a caption hung under a
+line rather than the second half of a choice.
+
+**Not changed** — the 10-22 decision stands: the hairline stays, still
+full-width, still forcing the break. It was doing a job spacing should have
+been doing, and now that the groups are apart it can go back to doing only its
+own. Desktop is byte-identical — measured at 1440px and 768px, the control rows
+open and close at exactly the same y as before, and the breakpoint is clean
+(22px at 640px, 12px at 641px). No horizontal overflow at 375, 390, 640, 641,
+768 or 1440.
+
+**Inspired by** — Criterion's *Shop All Films* and siteinspire's *Explore
+Websites*, both looked at today. Neither draws a rule inside a filter group:
+Criterion puts the result count, Filter, Sort and the view toggles on one line
+and lets the first hairline in the page be the one that closes the controls and
+opens the listing; siteinspire keeps five whole filter dimensions as a single
+quiet line of labels. Both make their groups read by spacing and by the small
+label alone. Ours already had the labels — it just had not given them enough
+room to be believed on a phone.
+
+**Before/after** — `reports/design/2026-11-21-before.png` and
+`2026-11-21-after.png` at 390px, `2026-11-21-before-desktop.png` and
+`2026-11-21-after-desktop.png` at 1440px.
+
+---
+
 ## 2026-11-14 — On a phone, /guide's date comes off the title's column
 
 **Changed** — the Updated/Closed column on the `/guide` index, below 620px.
