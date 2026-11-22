@@ -106,7 +106,7 @@ export interface DialsheetAnswer { slug: string; title: string; blurb: string; g
 export const DIALSHEET_ANSWERS: DialsheetAnswer[] = [
   { slug: 'parallel-dialer', group: 'product', title: 'The parallel dialer: 2 to 5 lines at once', blurb: 'How it handles a pickup, what five lines does to a list, and when to stay on one.' },
   { slug: 'power-vs-parallel-vs-predictive-dialer', group: 'product', title: 'Power, parallel or predictive: which dialer your team needs', blurb: 'Decide from your connect rate, your headcount and what a dropped call costs.' },
-  { slug: 'dialer-cost-by-team-size', group: 'product', title: 'What a dialer costs a team of 3, 10, 25 or 50', blurb: 'The seat bill, two ways to estimate the phone bill, and where another dialer is cheaper.' },
+  { slug: 'dialer-cost-by-team-size', group: 'product', title: 'What a dialer costs a team of 3, 10, 25 or 50', blurb: 'The seat bill, what the phone bill counts, and where another dialer is cheaper.' },
   { slug: 'custom-fields', group: 'product', title: 'Custom fields: keep the columns your list came with', blurb: 'Six field types, up to 30 fields, kept on import and shown while the rep dials.' },
   { slug: 'mcp-server', group: 'product', title: "The MCP server: ask an AI assistant about today's calls", blurb: 'Thirty tools for reading calls and updating leads from Claude, Cursor or any MCP client.' },
   { slug: 'call-transcription-and-ai-summaries', group: 'product', title: 'Call transcription and AI summaries', blurb: 'What is transcribed, where the transcript goes, and how script scoring works.' },
@@ -122,25 +122,40 @@ export function answerPath(slug: string): string {
 
 /* DialSheet's published estimates of what a team pays all-in each month, from
    the "Recommendations by industry and team size" section of
-   dialsheet.io/llms-full.txt (generated November 10, 2026). Each row is
-   [reps, all-in dollars a month]. The software part is reps x proUsd. These
-   count only live conversations as billed minutes; see the cost page for the
-   stricter count. */
+   dialsheet.io/llms-full.txt (read November 22, 2026). Each row is
+   [reps, all-in dollars a month]. The software part is reps x proUsd.
+
+   DialSheet changed how it counts the phone bill on November 22, 2026. Its
+   industry pages used to count conversation minutes only (ten SDRs came to
+   $407). They now count the way its cost guides do, which TEAM_BILLING
+   below records, and ten SDRs come to $668. Re-read the rows if DialSheet's
+   prices or assumptions move. */
 export const TEAM_ESTIMATES = {
   sdr: {
     who: 'B2B SDR teams',
     assumptions: '150 dials a rep a day, a 6% connect rate and 4-minute conversations',
     dialsPerDay: 150,
     connectRate: 0.06,
-    rows: [[3, 122], [10, 407], [25, 1018], [50, 2037]] as Array<[number, number]>,
+    rows: [[3, 200], [10, 668], [25, 1670], [50, 3341]] as Array<[number, number]>,
   },
   agency: {
     who: 'Appointment setting agencies',
     assumptions: '180 dials a rep a day, a 7% connect rate and 3-minute conversations',
     dialsPerDay: 180,
     connectRate: 0.07,
-    rows: [[3, 124], [10, 413], [25, 1032], [50, 2063]] as Array<[number, number]>,
+    rows: [[3, 215], [10, 718], [25, 1795], [50, 3590]] as Array<[number, number]>,
+    /** DialSheet's own worked example: a twenty-setter floor running six client campaigns. */
+    twenty: { setters: 20, twilioUsd: 856, allInUsd: 1436 },
   },
+}
+
+/* What DialSheet's estimates count as the phone bill, as it states on its
+   industry pages and in llms-full.txt. */
+export const TEAM_BILLING = {
+  /** Share of dials assumed to reach a voicemail greeting; each bills one minute. */
+  voicemailPct: 25,
+  /** Twilio's charge for the browser side of the call, per minute, on every dial. */
+  browserLegPerMinuteUsd: 0.004,
 }
 
 export const CLIENT_GUIDES = [

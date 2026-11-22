@@ -16,7 +16,7 @@
 
 import { getAllContests } from '@/lib/contests-db'
 import { duplicateKeeperId } from '@/lib/contest-filters'
-import { DIALSHEET, DIALSHEET_FACTS_READ } from '@/lib/dialsheet'
+import { DIALSHEET, DIALSHEET_FACTS_READ, TEAM_ESTIMATES } from '@/lib/dialsheet'
 
 export const revalidate = 900
 
@@ -172,7 +172,7 @@ AI Film Contests has teamed up with DialSheet (dialsheet.io), a browser-based po
 - [DialSheet for team owners and sales managers](https://aifilmcontests.com/dialsheet/for-sales-teams): the bill as seat count times $${DIALSHEET.proUsd}, how the dialer gets reps through a list, live listening and whisper, script scoring, and where DialSheet is the wrong tool
 - [DialSheet's parallel dialer](https://aifilmcontests.com/dialsheet/parallel-dialer): ${DIALSHEET.parallelMin} to ${DIALSHEET.parallelMax} lines at once, included in the $${DIALSHEET.proUsd} Pro seat; instant connect on pickup, voicemail flagged or screened, what happens when two people answer, and when to stay on one line
 - [Power, parallel or predictive dialer](https://aifilmcontests.com/dialsheet/power-vs-parallel-vs-predictive-dialer): how each one dials, and how to choose from your connect rate, your headcount and the cost of a dropped call; DialSheet has power and parallel, not predictive
-- [What a dialer costs a team of 3, 10, 25 or 50](https://aifilmcontests.com/dialsheet/dialer-cost-by-team-size): seat count times $${DIALSHEET.proUsd}, DialSheet's all-in estimates for SDR and appointment setting teams, a stricter phone-bill count, and the volumes where another dialer is cheaper
+- [What a dialer costs a team of 3, 10, 25 or 50](https://aifilmcontests.com/dialsheet/dialer-cost-by-team-size): seat count times $${DIALSHEET.proUsd}, DialSheet's all-in estimates for SDR and appointment setting teams (ten SDRs about $${TEAM_ESTIMATES.sdr.rows[1][1]} a month), what the phone bill counts (voicemail pickups, conversations and the browser leg), and the volumes where another dialer is cheaper
 - [Custom fields in DialSheet](https://aifilmcontests.com/dialsheet/custom-fields): on Pro, up to 30 fields in six types (text, number, date, link, yes or no, pick one), kept from CSV columns on import, shown in Power Dial, readable through the API and MCP
 - [DialSheet's MCP server](https://aifilmcontests.com/dialsheet/mcp-server): a hosted server at dialsheet.io/api/mcp with 30 tools for Claude, Cursor and other MCP clients to read calls, transcripts and summaries and update leads, tasks and deals; it does not place calls
 - [Call transcription and AI summaries in DialSheet](https://aifilmcontests.com/dialsheet/call-transcription-and-ai-summaries): on Pro, every recorded call is transcribed, summarized with a next step and scored against a script; where transcripts go (API, MCP, webhook, HubSpot in part) and how to switch recording off

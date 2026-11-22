@@ -2,28 +2,24 @@ import type { Metadata } from 'next'
 import {
   DialsheetArticle, DialsheetLink, DsList, DsP, DsTable, InlineLink, dialsheetMetadata, type DsFaq, type DsSection,
 } from '@/components/DialsheetPartner'
-import { DIALSHEET, DIALSHEET_PATH, TEAM_ESTIMATES, answerPath, proTeamUsd } from '@/lib/dialsheet'
+import { DIALSHEET, DIALSHEET_PATH, TEAM_BILLING, TEAM_ESTIMATES, answerPath, proTeamUsd } from '@/lib/dialsheet'
 
 /* What a team pays. The seat sums are arithmetic on DialSheet's price. The
-   all-in estimates are DialSheet's (TEAM_ESTIMATES, from llms-full.txt). The
-   stricter phone-bill count is this page's own arithmetic on DialSheet's
-   published Twilio rate and its cost page's assumption of about one billed
-   minute a dial, and the page says which is which. */
+   all-in estimates and the way they count the phone bill are DialSheet's
+   (TEAM_ESTIMATES and TEAM_BILLING, from llms-full.txt). The per-rep phone
+   bill is the 10-rep estimate less its seats, divided by ten. */
 
 const SLUG = 'dialer-cost-by-team-size'
 const TITLE = 'What a Dialer Costs a Sales Team of 3, 10, 25 or 50'
-const STANDFIRST = `On DialSheet a team's software bill is the seat count times $${DIALSHEET.proUsd}: $${proTeamUsd(3)} for 3 reps, $${proTeamUsd(10)} for 10, $${proTeamUsd(25)} for 25 and $${proTeamUsd(50).toLocaleString('en-US')} for 50. The phone bill is separate and follows how much the team talks. Both are worked out below, with the volume at which another dialer costs less.`
+const STANDFIRST = `On DialSheet a team's software bill is the seat count times $${DIALSHEET.proUsd}: $${proTeamUsd(3)} for 3 reps, $${proTeamUsd(10)} for 10, $${proTeamUsd(25)} for 25 and $${proTeamUsd(50).toLocaleString('en-US')} for 50. The phone bill is separate and follows how much the team dials. Both are worked out below, with the volume at which another dialer costs less.`
 
 export const metadata: Metadata = dialsheetMetadata(SLUG, TITLE, STANDFIRST)
 
 const usd = (n: number) => `$${n.toLocaleString('en-US')}`
-const WORK_DAYS = 21
-/** One rep's month of calls if every dial bills about a minute, at DialSheet's listed Twilio rate. */
-const strictPerRep = (dialsPerDay: number) => Math.round(dialsPerDay * WORK_DAYS * DIALSHEET.twilioPerMinuteUsd)
 const sdr = TEAM_ESTIMATES.sdr
 const agency = TEAM_ESTIMATES.agency
 /** What the estimate leaves for the phone bill, per rep, on the 10-rep row. */
-const lightPerRep = (rows: Array<[number, number]>) => Math.round((rows[1][1] - proTeamUsd(rows[1][0])) / rows[1][0])
+const phonePerRep = (rows: Array<[number, number]>) => Math.round((rows[1][1] - proTeamUsd(rows[1][0])) / rows[1][0])
 
 const sections: DsSection[] = [
   {
@@ -46,18 +42,23 @@ const sections: DsSection[] = [
     ),
   },
   {
-    h: 'The phone bill, estimated two ways',
+    h: 'The phone bill',
     body: (
       <>
         <DsP>
           Calls run on your own Twilio account at about ${DIALSHEET.twilioPerMinuteUsd} a minute for the US and $
-          {DIALSHEET.twilioNumberUsd} a month per number. How much that comes to depends on what you count as a billed
-          minute, and DialSheet&apos;s own pages count it two ways.
+          {DIALSHEET.twilioNumberUsd} a month per number. Twilio bills for more than the conversations, and
+          DialSheet&apos;s estimates count three things.
         </DsP>
+        <DsList items={[
+          <>Voicemail: {TEAM_BILLING.voicemailPct}% of dials are assumed to reach a voicemail greeting, and each of those bills one minute.</>,
+          <>Conversations: each one bills its length, rounded up to the minute.</>,
+          <>The browser leg: the rep&apos;s side of the call bills ${TEAM_BILLING.browserLegPerMinuteUsd} a minute on every dial, answered or not.</>,
+        ]} />
         <DsP>
-          Its industry pages count live conversations only. For {sdr.who} they assume {sdr.assumptions},
-          which leaves about ${lightPerRep(sdr.rows)} a rep a month for the phone bill. These are its all-in figures,
-          software included.
+          For {sdr.who} DialSheet assumes {sdr.assumptions}. Counted that way the phone bill is about $
+          {phonePerRep(sdr.rows)} a rep a month, and for an appointment setter it is about ${phonePerRep(agency.rows)}.
+          These are its all-in figures, software included.
         </DsP>
         <DsTable
           figures
@@ -68,13 +69,8 @@ const sections: DsSection[] = [
           The appointment setting column assumes {agency.assumptions}.
         </DsP>
         <DsP>
-          DialSheet&apos;s cost page is stricter. It counts about one billed minute for every dial, which is closer to
-          what happens when voicemail picks up. At that rate, {sdr.dialsPerDay} dials a day over {WORK_DAYS} working
-          days is about ${strictPerRep(sdr.dialsPerDay)} a rep a month on top of the seat. That sum is ours, made from
-          DialSheet&apos;s listed rate.
-        </DsP>
-        <DsP>
-          Your bill will land between the two. Budget with the stricter one and check your first Twilio invoice.
+          Both columns are estimates on those assumptions. A team that dials more or connects more often pays more, so
+          check your first Twilio invoice against the table.
         </DsP>
       </>
     ),
@@ -100,7 +96,7 @@ const sections: DsSection[] = [
     body: (
       <>
         <DsList items={[
-          <>Three or more reps who each make more than about 70 dials a day. DialSheet&apos;s cost page says Aircall Professional&apos;s bundled minutes cost less at that volume, and the stricter phone-bill count above shows why.</>,
+          <>Three or more reps who each make more than about 70 dials a day. DialSheet&apos;s cost page says Aircall Professional&apos;s bundled minutes cost less at that volume.</>,
           <>One rep who parallel-dials more than about 81 numbers a day and will sign for a year. DialSheet says CloudTalk&apos;s $64 annual seat with its parallel add-on costs less.</>,
           <>A floor of 20 or more agents on predictive campaigns, which DialSheet does not serve.</>,
         ]} />
@@ -120,7 +116,7 @@ const sections: DsSection[] = [
 const faqs: DsFaq[] = [
   {
     q: 'How much does DialSheet cost for 10 reps?',
-    a: `$${proTeamUsd(10)} a month for software. DialSheet's own all-in estimate for a ten-person SDR team is about ${usd(sdr.rows[1][1])} a month, counting live conversations as the billed minutes. Counting about a minute for every dial, the phone bill is closer to $${strictPerRep(sdr.dialsPerDay)} a rep.`,
+    a: `$${proTeamUsd(10)} a month for software. DialSheet's own all-in estimate for a ten-person SDR team is about ${usd(sdr.rows[1][1])} a month, which leaves about $${phonePerRep(sdr.rows)} a rep for the phone bill. That bill counts the conversations, a minute for each voicemail pickup, and the browser leg on every dial.`,
   },
   {
     q: 'Is there a minimum number of seats?',

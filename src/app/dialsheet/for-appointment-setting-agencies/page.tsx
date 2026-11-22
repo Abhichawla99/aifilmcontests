@@ -26,9 +26,10 @@ const sections: DsSection[] = [
     body: (
       <>
         <DsP>
-          Ten setters are ${proTeamUsd(10)} a month and twenty are ${proTeamUsd(20)}. DialSheet estimates about $130
-          of Twilio usage on top for a twenty-setter floor running six client campaigns, and puts the same headcount
-          on a $100 to $150 a seat platform at $2,000 to $3,000 a month.
+          Ten setters are ${proTeamUsd(10)} a month and twenty are ${proTeamUsd(20)}. DialSheet estimates about{' '}
+          {usd(agency.twenty.twilioUsd)} of Twilio usage on top for a twenty-setter floor running six client
+          campaigns, which is about {usd(agency.twenty.allInUsd)} all-in. It puts the same headcount on a $100 to $150
+          a seat platform at $2,000 to $3,000 a month.
         </DsP>
         <DsTable
           figures
@@ -36,9 +37,10 @@ const sections: DsSection[] = [
           rows={agency.rows.map(([reps, allIn]) => [`${reps} setters`, usd(proTeamUsd(reps)), `${usd(allIn)} a month`])}
         />
         <DsP>
-          The all-in column assumes {agency.assumptions}, and it counts live conversations as the billed minutes.{' '}
-          <InlineLink href={answerPath('dialer-cost-by-team-size')}>The cost page</InlineLink> shows a stricter count
-          and the volume at which a plan with bundled minutes is cheaper.
+          The all-in column assumes {agency.assumptions}. It counts the conversations, a minute for each voicemail
+          pickup, and the browser leg on every dial.{' '}
+          <InlineLink href={answerPath('dialer-cost-by-team-size')}>The cost page</InlineLink> shows how the phone bill
+          is counted and the volume at which a plan with bundled minutes is cheaper.
         </DsP>
         <DsP>
           A setter you add for one client&apos;s three-month campaign costs ${DIALSHEET.proUsd} a month for those three
@@ -134,7 +136,7 @@ const faqs: DsFaq[] = [
   },
   {
     q: 'How much does DialSheet cost for 20 setters?',
-    a: `$${proTeamUsd(20)} a month for software. DialSheet estimates about $130 a month of Twilio usage on top for a twenty-setter floor running six campaigns.`,
+    a: `$${proTeamUsd(20)} a month for software. DialSheet estimates about ${usd(agency.twenty.twilioUsd)} a month of Twilio usage on top for a twenty-setter floor running six campaigns, which is about ${usd(agency.twenty.allInUsd)} all-in.`,
   },
   {
     q: 'Can DialSheet send booked appointments to GoHighLevel?',
