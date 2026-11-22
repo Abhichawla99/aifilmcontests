@@ -5,9 +5,42 @@ import InnerLayout from '@/components/InnerLayout'
 import LogoMark from '@/components/LogoMark'
 import { ArticleGrid, FaqList, H2, MEASURE } from '@/components/ArticleLayout'
 import {
-  DIALSHEET, DIALSHEET_FACTS_READ, DIALSHEET_FACTS_READ_ISO, DIALSHEET_PAGES, DIALSHEET_PATH,
-  CLIENT_GUIDES, dialsheetHref,
+  DIALSHEET, DIALSHEET_ANSWERS, DIALSHEET_FACTS_READ, DIALSHEET_FACTS_READ_ISO, DIALSHEET_PAGES, DIALSHEET_PATH,
+  CLIENT_GUIDES, answerPath, dialsheetHref, type DialsheetAnswer,
 } from '@/lib/dialsheet'
+
+/** A plain table in the section's ruled style. The second column is set as a figure. */
+export function DsTable({ head, rows, pick, figures }: { head: string[]; rows: React.ReactNode[][]; pick?: number; figures?: boolean }) {
+  return (
+    <div className="ds-table-wrap">
+      <table className={figures ? 'ds-table ds-table-nums' : 'ds-table'}>
+        <thead><tr>{head.map(h => <th key={h}>{h}</th>)}</tr></thead>
+        <tbody>
+          {rows.map((r, i) => (
+            <tr key={i} className={i === pick ? 'ds-row-pick' : undefined}>
+              {r.map((c, j) => <td key={j}>{c}</td>)}
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  )
+}
+
+/** A copyable block: a prompt, a formula, a line to say. */
+export function DsBlock({ children }: { children: string }) {
+  return (
+    <pre style={{
+      fontFamily: 'ui-monospace, SFMono-Regular, Menlo, monospace',
+      fontSize: 13.5, lineHeight: 1.65, color: '#26231E',
+      background: '#F4F2EE', borderLeft: '2px solid #4F46E5',
+      padding: '16px 18px', marginBottom: 22, maxWidth: 700,
+      whiteSpace: 'pre-wrap', overflowWrap: 'anywhere',
+    }}>
+      {children}
+    </pre>
+  )
+}
 
 /* The DialSheet section: the pages under /dialsheet. DialSheet is the site's
    calling partner, and every page here says so in its label and its small
@@ -121,13 +154,27 @@ export function CardRow({ items, tints }: { items: ReadonlyArray<{ path: string;
   )
 }
 
+/** The answer pages of one group, as a ruled list of links, two to a row. */
+export function AnswerList({ group }: { group: DialsheetAnswer['group'] }) {
+  return (
+    <dl className="ds-facts">
+      {DIALSHEET_ANSWERS.filter(a => a.group === group).map(a => (
+        <div className="ds-fact" key={a.slug}>
+          <dt><Link href={answerPath(a.slug)} className="ds-answer-link">{a.title}</Link></dt>
+          <dd>{a.blurb}</dd>
+        </div>
+      ))}
+    </dl>
+  )
+}
+
 export interface DsSection { h: string; body: React.ReactNode }
 export interface DsFaq { q: string; a: string }
 
 /** One long page in the DialSheet section: header band, prose with a contents
     rail, the FAQ, the way on to DialSheet and the rest of the section. */
 export function DialsheetArticle({
-  slug, label, title, standfirst, sections, faqs, placement, art,
+  slug, label, title, standfirst, sections, faqs, placement, art, related,
 }: {
   slug: string
   label: string
@@ -137,6 +184,8 @@ export function DialsheetArticle({
   faqs: DsFaq[]
   placement: string
   art?: { src: string; width: number; height: number; alt: string }
+  /** Slugs of answer pages to list first under "More on DialSheet". */
+  related?: string[]
 }) {
   const url = `${BASE}${DIALSHEET_PATH}/${slug}`
   const articleLd = {
@@ -171,7 +220,15 @@ export function DialsheetArticle({
       acceptedAnswer: { '@type': 'Answer', text: f.a },
     })),
   }
-  const others = DIALSHEET_PAGES.filter(p => p.path !== `${DIALSHEET_PATH}/${slug}`)
+  // The pages this one names as next, then the section's three main pages.
+  const relatedAnswers = (related ?? [])
+    .map(s => DIALSHEET_ANSWERS.find(a => a.slug === s))
+    .filter((a): a is DialsheetAnswer => Boolean(a))
+    .map(a => ({ path: answerPath(a.slug), title: a.title }))
+  const others = [
+    ...relatedAnswers,
+    ...DIALSHEET_PAGES.filter(p => p.path !== `${DIALSHEET_PATH}/${slug}`).map(p => ({ path: p.path, title: p.title })),
+  ]
 
   return (
     <InnerLayout>

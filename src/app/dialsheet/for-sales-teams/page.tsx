@@ -152,6 +152,7 @@ export default function Page() {
       faqs={faqs}
       placement="teams"
       art={COLLAB_ART.team}
+      related={['sdr-quota-math', 'how-to-coach-cold-calls', 'dialer-cost-by-team-size', 'for-appointment-setting-agencies']}
     />
   )
 }

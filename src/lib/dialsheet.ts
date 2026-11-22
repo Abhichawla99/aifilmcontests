@@ -97,6 +97,52 @@ export const DIALSHEET_PAGES = [
   },
 ] as const
 
+/* The answer pages: one question a sales manager, an SDR lead or an
+   appointment setting agency asks about a dialer, per page. `group` decides
+   which list the hub files it under. Add a page here and it reaches the hub,
+   the sitemap and the "More on DialSheet" list by itself; llms.txt is edited
+   by hand (src/app/llms.txt/route.ts). */
+export interface DialsheetAnswer { slug: string; title: string; blurb: string; group: 'product' | 'managing' }
+export const DIALSHEET_ANSWERS: DialsheetAnswer[] = [
+  { slug: 'parallel-dialer', group: 'product', title: 'The parallel dialer: 2 to 5 lines at once', blurb: 'How it handles a pickup, what five lines does to a list, and when to stay on one.' },
+  { slug: 'power-vs-parallel-vs-predictive-dialer', group: 'product', title: 'Power, parallel or predictive: which dialer your team needs', blurb: 'Decide from your connect rate, your headcount and what a dropped call costs.' },
+  { slug: 'dialer-cost-by-team-size', group: 'product', title: 'What a dialer costs a team of 3, 10, 25 or 50', blurb: 'The seat bill, two ways to estimate the phone bill, and where another dialer is cheaper.' },
+  { slug: 'custom-fields', group: 'product', title: 'Custom fields: keep the columns your list came with', blurb: 'Six field types, up to 30 fields, kept on import and shown while the rep dials.' },
+  { slug: 'mcp-server', group: 'product', title: "The MCP server: ask an AI assistant about today's calls", blurb: 'Thirty tools for reading calls and updating leads from Claude, Cursor or any MCP client.' },
+  { slug: 'call-transcription-and-ai-summaries', group: 'product', title: 'Call transcription and AI summaries', blurb: 'What is transcribed, where the transcript goes, and how script scoring works.' },
+  { slug: 'live-call-listening-and-whisper', group: 'product', title: 'Listen to live calls and whisper to a rep', blurb: 'What the live board shows, who can use it, and when to listen instead of whisper.' },
+  { slug: 'for-appointment-setting-agencies', group: 'managing', title: 'For appointment setting agencies', blurb: 'The seat bill for a pod, running several clients, and the Twilio rule offshore teams hit.' },
+  { slug: 'sdr-quota-math', group: 'managing', title: 'How many dials it takes to hit quota', blurb: 'Three numbers, one division, and which of the three to fix for each rep.' },
+  { slug: 'how-to-coach-cold-calls', group: 'managing', title: "A weekly routine for coaching a team's cold calls", blurb: 'Scan summaries, pick three calls a rep, and fix one thing at a time.' },
+]
+
+export function answerPath(slug: string): string {
+  return `${DIALSHEET_PATH}/${slug}`
+}
+
+/* DialSheet's published estimates of what a team pays all-in each month, from
+   the "Recommendations by industry and team size" section of
+   dialsheet.io/llms-full.txt (generated November 10, 2026). Each row is
+   [reps, all-in dollars a month]. The software part is reps x proUsd. These
+   count only live conversations as billed minutes; see the cost page for the
+   stricter count. */
+export const TEAM_ESTIMATES = {
+  sdr: {
+    who: 'B2B SDR teams',
+    assumptions: '150 dials a rep a day, a 6% connect rate and 4-minute conversations',
+    dialsPerDay: 150,
+    connectRate: 0.06,
+    rows: [[3, 122], [10, 407], [25, 1018], [50, 2037]] as Array<[number, number]>,
+  },
+  agency: {
+    who: 'Appointment setting agencies',
+    assumptions: '180 dials a rep a day, a 7% connect rate and 3-minute conversations',
+    dialsPerDay: 180,
+    connectRate: 0.07,
+    rows: [[3, 124], [10, 413], [25, 1032], [50, 2063]] as Array<[number, number]>,
+  },
+}
+
 export const CLIENT_GUIDES = [
   {
     path: '/guide/how-ai-filmmakers-get-commercial-clients',

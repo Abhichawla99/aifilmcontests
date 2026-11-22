@@ -71,7 +71,7 @@ const sections: DsSection[] = [
           dialer, times the vendor&apos;s seat minimum. These are its figures as published on {DIALSHEET_FACTS_READ}.
         </DsP>
         <div className="ds-table-wrap">
-          <table className="ds-table">
+          <table className="ds-table ds-table-nums">
             <thead>
               <tr><th>Dialer</th><th>Entry price a month</th><th>What to know</th></tr>
             </thead>

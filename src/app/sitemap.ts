@@ -5,6 +5,7 @@ import { Contest } from '@/data/contests'
 import { TOOLS as TOOL_CONTENT } from '@/lib/content/tools'
 import { GUIDES as GUIDE_CONTENT } from '@/lib/content/guides'
 import { CRAFT_GUIDES, CRAFT_GUIDE_ORDER } from '@/data/craft-guides'
+import { DIALSHEET_ANSWERS } from '@/lib/dialsheet'
 import { TOPICS as TOPIC_CONTENT } from '@/lib/content/topics'
 import { PRIZE_PAGES as PRIZE_CONTENT } from '@/lib/content/prize-pages'
 import { contestHasCategorySlug } from '@/lib/content/categories'
@@ -87,7 +88,7 @@ const STATIC_PAGES: MetadataRoute.Sitemap = [
     priority: 0.7,
   },
   // The DialSheet partner pages: the team-up's front page and its three pages.
-  ...['', '/best-affordable-power-dialer', '/features', '/for-sales-teams'].map(path => ({
+  ...['', '/best-affordable-power-dialer', '/features', '/for-sales-teams', ...DIALSHEET_ANSWERS.map(a => `/${a.slug}`)].map(path => ({
     url: `${BASE}/dialsheet${path}`,
     lastModified: RECORDED_DATES.dialsheet,
     changeFrequency: 'monthly' as const,

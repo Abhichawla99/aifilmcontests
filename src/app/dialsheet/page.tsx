@@ -3,7 +3,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import InnerLayout from '@/components/InnerLayout'
 import {
-  CardRow, COLLAB_ART, DialsheetButton, DialsheetLink, PartnerLockup, PartnerSmallPrint, dialsheetMetadata,
+  AnswerList, CardRow, COLLAB_ART, DialsheetButton, DialsheetLink, PartnerLockup, PartnerSmallPrint, dialsheetMetadata,
 } from '@/components/DialsheetPartner'
 import {
   ABHI, CLIENT_GUIDES, DIALSHEET, DIALSHEET_FACTS_READ_ISO, DIALSHEET_PAGES,
@@ -154,6 +154,24 @@ export default function DialsheetHubPage() {
             </div>
           </div>
           <CardRow items={DIALSHEET_PAGES} tints={['pack-tint-blue', 'pack-tint-green', 'pack-tint-purple']} />
+        </section>
+
+        <section className="ds-section">
+          <h2 className="ds-h2">Questions managers ask about a dialer</h2>
+          <p className="ds-lede">
+            One question to a page, answered with DialSheet&apos;s own numbers and the cases where another tool fits
+            better.
+          </p>
+          <AnswerList group="product" />
+        </section>
+
+        <section className="ds-section">
+          <h2 className="ds-h2">Running the team</h2>
+          <p className="ds-lede">
+            For the person who owns the quota: the sums behind it, a coaching routine, and what an appointment setting
+            agency needs from a dialer.
+          </p>
+          <AnswerList group="managing" />
         </section>
 
         <section className="pack-claim" style={{ marginBottom: 28 }}>

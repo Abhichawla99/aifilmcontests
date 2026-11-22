@@ -37,6 +37,7 @@ const CRM: Feature[] = [
   { name: 'Filters and sorting', text: 'Filter your leads by tag, call outcome or time zone, and sort them by company.' },
   { name: 'Pipeline, tasks and callbacks', text: 'A deal pipeline, tasks and callback reminders on each lead.' },
   { name: 'Shared lead pools', text: 'A team works one pool of leads, with leads assigned to each rep.' },
+  { name: 'Custom fields', plan: PRO, text: 'Up to 30 fields in six types. A spreadsheet column with no home can be kept as a field on import, and filled fields show beside the lead in Power Dial.' },
   { name: 'Unlimited leads', plan: PRO, text: `The free plan holds a list of up to ${DIALSHEET.freeLeads} leads. Pro has no cap.` },
 ]
 
@@ -149,6 +150,7 @@ export default function Page() {
       sections={sections}
       faqs={faqs}
       placement="features"
+      related={['parallel-dialer', 'custom-fields', 'mcp-server', 'call-transcription-and-ai-summaries', 'live-call-listening-and-whisper']}
     />
   )
 }
