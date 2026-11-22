@@ -36,6 +36,75 @@ describe the old dark theme; the reasoning still applies, the colours do not.)*
 
 ---
 
+## 2026-11-22 — The deadline gets the right-hand column in "Closing soonest"
+
+**Changed** — the meta cell of the homepage subscribe card's three-row
+"Closing soonest" list. One file, 12 lines added and 2 removed, 8 of the added
+lines comment: the second `<span>` inside the row in `src/app/page.tsx`. No
+layout rule outside that cell, no breakpoint, no new colour value, no radius,
+no padding, no new dependency, no font, no URL, no data, no copy. The generated
+`src/data/contests-snapshot.json` the build rewrites was reverted before the
+commit.
+
+**Was** — the list sits under "Never miss a deadline", is headed CLOSING
+SOONEST, and is sorted by deadline. Each row was a flex with the name at
+`flex: 1` and one right-flush `nowrap` cell holding
+`` {fmtShort(c.deadline)}{cash ? ` · ${cash}` : ''} `` — the date first, the
+cash figure after it, both in `#6F6A61`. So whatever sat last in that string
+owned the right edge, and on any row with a prize to show, that was the prize.
+Measured on the production build:
+
+| | before | after |
+|---|---|---|
+| date's left edge, row 1 (no prize) @390px | 258.5px | 258.5px |
+| date's left edge, row 2 (no prize) @390px | 258.5px | 258.5px |
+| date's left edge, row 3 ($1,000,000) @390px | **180.0px** | **258.5px** |
+| date's left edge, rows 1–2 @1440px | 328.5px | 328.5px |
+| date's left edge, row 3 @1440px | **250.0px** | **328.5px** |
+| name column, rows 1–2 @390px | 248.5px | 248.5px |
+| name column, row 3 @390px | 170.0px | 171.8px |
+| row heights, all three | 50 / 35.4 / 35.4 | 50 / 35.4 / 35.4 |
+
+Three rows, three dates, and the one carrying a prize sat 78.5px left of the
+two above it at both widths. The list's whole subject — the thing it is sorted
+by, named after and asking for an email address about — was the only fact in it
+without a column, and it lost its place to a figure that is not even present on
+most rows. The cell had `font-variant-numeric: tabular-nums` set on it already,
+which is the tell: someone meant these dates to line up and the ordering inside
+the string quietly prevented it.
+
+**Now** — the prize leads the cell and the deadline closes it, so the date is
+hard against the right edge on every row whether or not a prize is there. The
+two facts are two spans instead of one string: the prize drops one step of ink
+to `#8B867C` (already in the palette, the same grey the breadcrumbs and small
+captions use) and the deadline keeps `#6F6A61`, so they read as a qualifier and
+a key rather than one run of text. The ` · ` separator and its two spaces became
+an 8px gap, which is where the 1.8px the name column gains comes from. Rows
+without a prize are byte-identical.
+
+**Not changed** — the regex that decides whether a prize is short enough to
+print at all, the three-row slice, the hairlines, the row padding, the name's
+size and ink, and the ticker above the hero, which already sets days-left and
+the date in that order and was left alone.
+
+**Inspired by** — Criterion's *Shop All Films* list view and Metrograph's
+calendar, both looked at today. Criterion heads its columns once — Spine #,
+Title, Director, Country, Year — and then never captions a row again; the
+secondary columns drop to a lighter grey at the same size, so hierarchy is
+carried by ink and position, not by size or boxes. Metrograph sets a film's
+facts as one unlabelled line under the title, "Nick Park / 1995 / 85min / DCP",
+and the order is fixed for every film, so the eye learns where to look once.
+Both are programmes, and in a programme the thing you are scanning for holds
+the same place in every row. Ours had the right typography for that already and
+the wrong word order.
+
+**Before/after** — `reports/design/2026-11-22-before.png` and
+`2026-11-22-after.png` at 390px, `2026-11-22-before-desktop.png` and
+`2026-11-22-after-desktop.png` at 1440px. No horizontal overflow at 375, 390,
+640, 768 or 1440.
+
+---
+
 ## 2026-11-21 — On a phone, the browse filters' groups get more air than their own labels
 
 **Changed** — the vertical rhythm of the browse control block, below 640px.
