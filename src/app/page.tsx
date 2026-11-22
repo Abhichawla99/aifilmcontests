@@ -377,11 +377,21 @@ export default async function Home() {
                                 <span style={{ fontSize: 12.5, color: '#3E3A33', lineHeight: 1.4, flex: 1, minWidth: 0 }}>
                                   {c.name}
                                 </span>
+                                {/* The deadline last, hard against the right edge, so
+                                    it forms a column in a list that is sorted by it and
+                                    named after it. It used to lead the cell and the cash
+                                    figure trailed it, which pushed the date 78px left of
+                                    the rows above it on any row that had a prize to show
+                                    — the one fact being scanned was the one with no
+                                    column. The prize keeps its place and drops one step
+                                    of ink so the two read as different things. */}
                                 <span style={{
-                                  fontSize: 12, color: '#6F6A61', whiteSpace: 'nowrap',
+                                  display: 'flex', alignItems: 'baseline', gap: 8,
+                                  fontSize: 12, whiteSpace: 'nowrap',
                                   fontVariantNumeric: 'tabular-nums', flexShrink: 0,
                                 }}>
-                                  {fmtShort(c.deadline)}{cash ? ` · ${cash}` : ''}
+                                  {cash && <span style={{ color: '#8B867C' }}>{cash}</span>}
+                                  <span style={{ color: '#6F6A61' }}>{fmtShort(c.deadline)}</span>
                                 </span>
                               </div>
                             )
