@@ -67,6 +67,7 @@ const RECORDED_DATES = {
   submitPage:    new Date('2026-10-14T12:19:38-06:00'), // src/app/submit/page.tsx
   featurePage:   new Date('2026-10-19T16:44:48-06:00'), // src/app/feature/page.tsx
   starterPack:   new Date('2026-10-30T13:00:00-06:00'), // src/app/starter-pack/page.tsx
+  dialsheet:     new Date('2026-11-22T12:00:00-07:00'), // src/app/dialsheet/** (the DialSheet partner pages)
 }
 
 // Static pages -- homepage, the cinematic-ads landing page, and the creators
@@ -85,6 +86,13 @@ const STATIC_PAGES: MetadataRoute.Sitemap = [
     changeFrequency: 'monthly',
     priority: 0.7,
   },
+  // The DialSheet partner pages: the team-up's front page and its three pages.
+  ...['', '/best-affordable-power-dialer', '/features', '/for-sales-teams'].map(path => ({
+    url: `${BASE}/dialsheet${path}`,
+    lastModified: RECORDED_DATES.dialsheet,
+    changeFrequency: 'monthly' as const,
+    priority: path ? 0.6 : 0.7,
+  })),
   {
     url: `${BASE}/cinematic-ads`,
     lastModified: RECORDED_DATES.cinematicAds,

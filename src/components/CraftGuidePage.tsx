@@ -130,7 +130,9 @@ export function CraftGuidePage({ slug }: { slug: string }) {
     description: g.description,
     url,
     mainEntityOfPage: url,
-    author: { '@type': 'Organization', name: 'AI Film Contests Editorial', url: BASE },
+    author: g.author
+      ? { '@type': 'Person', name: g.author.name, url: g.author.url, sameAs: [g.author.url] }
+      : { '@type': 'Organization', name: 'AI Film Contests Editorial', url: BASE },
     publisher: { '@type': 'Organization', name: 'AI Film Contests', url: BASE },
     datePublished: g.datePublished,
     dateModified: g.dateModified ?? g.datePublished,
@@ -172,6 +174,12 @@ export function CraftGuidePage({ slug }: { slug: string }) {
         />
 
         <ArticleGrid headings={g.sections.map(s => s.h)}>
+          {g.author && (
+            <p className="guide-byline">
+              By <a href={g.author.url} target="_blank" rel="noopener" style={linkStyle}>{g.author.name}</a>
+              {g.author.note ? <span>. {g.author.note}</span> : null}
+            </p>
+          )}
           {introRest && <Blocks body={introRest} />}
           {g.sections.map((s, i) => (
             <section key={i}>

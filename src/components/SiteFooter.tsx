@@ -90,6 +90,7 @@ export default function SiteFooter({
             <Link href="/guide" className="link-muted">Guides</Link>
             <Link href="/topics" className="link-muted">Topics</Link>
             <Link href="/cinematic-ads" className="link-muted">Cinematic AI Ads</Link>
+            <Link href="/dialsheet" className="link-muted">Partner: DialSheet</Link>
           </div>
         </nav>
 

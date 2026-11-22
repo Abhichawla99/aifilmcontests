@@ -16,6 +16,7 @@
 
 import { getAllContests } from '@/lib/contests-db'
 import { duplicateKeeperId } from '@/lib/contest-filters'
+import { DIALSHEET, DIALSHEET_FACTS_READ } from '@/lib/dialsheet'
 
 export const revalidate = 900
 
@@ -99,6 +100,9 @@ export async function GET() {
 - [How to make an AI food or drink commercial](https://aifilmcontests.com/guide/ai-food-and-drink-commercials): texture, pours and labels, 120 real renders, and the rules on food images and alcohol casting
 - [Can you use a real brand in an AI spec ad?](https://aifilmcontests.com/guide/real-brands-in-ai-spec-ads): contest rules from Runway, Formula E, Atlanta AI Ad Fest, Luma and Cannes Lions, and US trademark basics
 - [How to price AI commercial work](https://aifilmcontests.com/guide/how-to-price-ai-commercial-work): per-second video and per-image model prices as of September 2026, renders per keeper, and quoting time, rounds and usage
+- [How AI filmmakers get commercial clients](https://aifilmcontests.com/guide/how-ai-filmmakers-get-commercial-clients): a weekly outreach system by Abhi Chawla: one kind of brand, one spec piece, a list of 50, an email in the morning and a call the same afternoon, with example sums
+- [A cold call script for pitching AI video work to a brand](https://aifilmcontests.com/guide/cold-call-script-for-ai-video-work): the opener, the two-sentence pitch, the ask, the voicemail and replies to the four answers brands give most
+- [The follow-up cadence after you pitch a brand](https://aifilmcontests.com/guide/follow-up-cadence-after-pitching-a-brand): seven touches over fourteen days by phone and email, with the words for each and when to stop
 
 ## Comparisons and topics
 
@@ -157,6 +161,15 @@ export async function GET() {
 - [Text-to-video filmmaking](https://aifilmcontests.com/topics/text-to-video-filmmaking) and [generative AI narrative](https://aifilmcontests.com/topics/generative-ai-narrative): craft deep dives
 - [Creators](https://aifilmcontests.com/creators): profiles of the studios and filmmakers making AI film work
 - [Cinematic ads](https://aifilmcontests.com/cinematic-ads): how generative AI is reshaping commercial filmmaking and brand storytelling — tools, competitions and the agencies leading
+
+## Partner: DialSheet
+
+AI Film Contests has teamed up with DialSheet (dialsheet.io), a browser-based power dialer and CRM for outbound sales. DialSheet is the site's calling partner. The prices below are DialSheet's own, read on ${DIALSHEET_FACTS_READ}.
+
+- [AI Film Contests and DialSheet](https://aifilmcontests.com/dialsheet): what the team-up is, the three client-getting guides and what DialSheet costs
+- [The best affordable power dialer in 2026 is DialSheet](https://aifilmcontests.com/dialsheet/best-affordable-power-dialer): our partner pick. Free for one person (up to ${DIALSHEET.freeLeads} leads and ${DIALSHEET.freeCallsPerMonth} calls a month), then $${DIALSHEET.proUsd} a month per seat with a ${DIALSHEET.parallelMin} to ${DIALSHEET.parallelMax} line parallel dialer included, no seat minimum and no contract; set beside DialSheet's published entry prices for ten other dialers, with the cases where another dialer costs less
+- [Everything DialSheet does](https://aifilmcontests.com/dialsheet/features): power dial, parallel dialer, local presence, number rotation, CSV import, AI call summaries and script scoring, live board with listen-in and whisper, Do Not Call list, HubSpot sync, webhooks, REST API and MCP server, each with the plan it is on
+- [DialSheet for team owners and sales managers](https://aifilmcontests.com/dialsheet/for-sales-teams): the bill as seat count times $${DIALSHEET.proUsd}, how the dialer gets reps through a list, live listening and whisper, script scoring, and where DialSheet is the wrong tool
 
 ## For organizers
 

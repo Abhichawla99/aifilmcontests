@@ -5,6 +5,8 @@
    [anchor](href) = a link. The first intro paragraph must carry no links.
    Facts dated September 24, 2026. */
 
+import { CLIENT_GUIDE_DATA, CLIENT_GUIDE_ORDER } from './client-guides'
+
 export interface CraftGuideSection { h: string; body: string }
 export interface CraftGuideFaq { q: string; a: string }
 export interface CraftGuideLink { href: string; label: string }
@@ -19,6 +21,8 @@ export interface CraftGuide {
   faqs: CraftGuideFaq[]
   related: CraftGuideLink[]
   relatedTitle?: string
+  /** A named writer, linked from the byline. Guides without one are the site's own. */
+  author?: { name: string; url: string; note?: string }
 }
 
 export const CRAFT_GUIDE_ORDER: string[] = [
@@ -32,10 +36,13 @@ export const CRAFT_GUIDE_ORDER: string[] = [
   "ai-commercial-packshot-and-end-card",
   "ai-food-and-drink-commercials",
   "real-brands-in-ai-spec-ads",
-  "how-to-price-ai-commercial-work"
+  "how-to-price-ai-commercial-work",
+  // The client-getting series, made with DialSheet (src/data/client-guides.ts).
+  ...CLIENT_GUIDE_ORDER
 ]
 
 export const CRAFT_GUIDES: Record<string, CraftGuide> = {
+  ...CLIENT_GUIDE_DATA,
   "make-an-ai-film-for-a-contest": {
     "title": "How to Make an AI Film for a Contest: From the Rules to the Export",
     "description": "A step-by-step way to make an AI short for a film contest: read the rules first, write a shot list, fix the look, make stills, turn them into clips, add sound, and check the entry before you submit.",

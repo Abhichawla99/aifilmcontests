@@ -2137,3 +2137,117 @@ img, svg, video, canvas { max-width: 100%; }
 .rail-pack { margin-top: 14px; padding-top: 12px; border-top: 1px solid #ECE9E2; font-size: 12.5px; line-height: 1.55; color: #6F6A61; }
 .rail-pack a { color: #4338CA; font-weight: 600; text-decoration: none; }
 .rail-pack a:hover { text-decoration: underline; text-underline-offset: 3px; }
+
+/* ── The DialSheet section (/dialsheet) ───────────────────────────────────────
+   Partner pages. They borrow the pack's cards (.pack-grid, .pack-item, the
+   three tints) and the article shell, and add only what those lack: the two
+   names side by side, a header band that states where the prices came from,
+   the film-credits list on the hub, a ruled feature list and one table.
+   Paper, ink, hairlines and the one indigo, as everywhere else. */
+.ds-lockup {
+  display: flex; align-items: center; flex-wrap: wrap; gap: 8px 10px;
+  font-family: 'Space Grotesk', sans-serif; font-size: 13px; font-weight: 700;
+  letter-spacing: 0.01em; color: #1B1916; margin-bottom: 20px;
+}
+.ds-lockup-x { color: #A8A296; font-weight: 500; }
+.ds-wordmark { font-family: Inter, -apple-system, 'Helvetica Neue', Arial, sans-serif; font-size: 15px; font-weight: 800; letter-spacing: -0.03em; color: #111111; }
+.ds-label {
+  font-family: 'Space Grotesk', sans-serif; font-size: 11px; font-weight: 700;
+  letter-spacing: 0.1em; text-transform: uppercase; color: #4F46E5; margin-bottom: 10px;
+}
+.ds-band {
+  background: #F4F2EE; border: 1px solid #E3DED3; border-radius: 16px;
+  padding: clamp(24px, 3.5vw, 40px); margin-bottom: 40px;
+}
+.ds-h1 {
+  font-family: 'Space Grotesk', sans-serif; font-size: clamp(28px, 4.4vw, 46px); font-weight: 700;
+  line-height: 1.06; letter-spacing: -0.035em; color: #1B1916; margin: 0 0 18px; max-width: 880px;
+}
+.ds-standfirst { font-size: clamp(16px, 1.6vw, 19px); line-height: 1.6; color: #4A463E; max-width: 760px; margin: 0; }
+.ds-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 20px; margin-top: 24px; }
+.ds-btn { font-size: 14px; padding: 11px 20px; min-height: 44px; text-decoration: none; }
+.ds-read { font-size: 13px; color: #6F6A61; }
+.ds-more { font-family: 'Space Grotesk', sans-serif; font-size: 14px; font-weight: 600; color: #4338CA; text-decoration: none; }
+.ds-more:hover { text-decoration: underline; }
+
+/* The hub's opening: words left, the drawing in a white frame right. */
+.ds-hero {
+  display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr);
+  gap: clamp(24px, 5vw, 56px); align-items: center; margin-bottom: clamp(40px, 6vw, 72px);
+}
+.ds-hero-h1 {
+  font-family: 'Space Grotesk', sans-serif; font-size: clamp(38px, 5.6vw, 64px); font-weight: 700;
+  line-height: 1; letter-spacing: -0.04em; color: #1B1916; margin: 0 0 20px;
+}
+.ds-art { background: #FFFFFF; border: 1px solid #E3DED3; border-radius: 16px; padding: clamp(10px, 2vw, 20px); }
+.ds-art img { display: block; width: 100%; height: auto; }
+.ds-art-inline { max-width: 700px; margin: 28px 0 8px; }
+
+/* The credits: a film's end roll, set as a ruled list. Role left, name right. */
+.ds-credits { max-width: 700px; margin: 0; border-top: 1px solid #E3DED3; }
+.ds-credit { display: grid; grid-template-columns: 170px minmax(0, 1fr); gap: 16px; padding: 13px 0; border-bottom: 1px solid #E3DED3; }
+.ds-credit dt {
+  font-family: 'Space Grotesk', sans-serif; font-size: 11px; font-weight: 700; letter-spacing: 0.1em;
+  text-transform: uppercase; color: #8B867C; padding-top: 4px;
+}
+.ds-credit dd { margin: 0; font-size: 16px; line-height: 1.55; color: #26231E; }
+
+.ds-section { margin-bottom: clamp(40px, 6vw, 68px); }
+.ds-h2 {
+  font-family: 'Space Grotesk', sans-serif; font-size: clamp(24px, 3vw, 32px); font-weight: 700;
+  letter-spacing: -0.03em; line-height: 1.1; color: #1B1916; margin: 0 0 12px;
+}
+.ds-lede { font-size: 17px; line-height: 1.7; color: #4A463E; max-width: 680px; margin: 0 0 24px; }
+.ds-section-label {
+  font-family: 'Space Grotesk', sans-serif; font-size: 13px; font-weight: 600; color: #8B867C;
+  text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 16px;
+}
+
+.ds-card { display: flex; flex-direction: column; gap: 8px; text-decoration: none; transition: transform 0.12s; }
+.ds-card:hover { transform: translateY(-2px); }
+.ds-card-title { font-family: 'Space Grotesk', sans-serif; font-size: 19px; font-weight: 700; letter-spacing: -0.02em; line-height: 1.2; color: #1B1916; }
+.ds-card-blurb { font-size: 15px; line-height: 1.6; color: #4A463E; flex: 1; }
+.ds-card-more { font-family: 'Space Grotesk', sans-serif; font-size: 14px; font-weight: 600; color: #4338CA; margin-top: 6px; }
+.pack-tint-blue { background: #E7F1F8; border-color: #CFE2EF; --pack-line: #CFE2EF; }
+.pack-tint-green { background: #EDF4EE; border-color: #D8E8DA; --pack-line: #D8E8DA; }
+
+/* Plain facts, two to a row. */
+.ds-facts { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0 40px; margin: 0; border-top: 1px solid #E3DED3; }
+.ds-fact { padding: 16px 0; border-bottom: 1px solid #E3DED3; }
+.ds-fact dt { font-family: 'Space Grotesk', sans-serif; font-size: 15px; font-weight: 700; color: #1B1916; margin-bottom: 4px; }
+.ds-fact dd { margin: 0; font-size: 15px; line-height: 1.6; color: #4A463E; }
+
+/* A feature and the plan it is on. */
+.ds-features { max-width: 700px; margin: 0 0 18px; border-top: 1px solid #ECE9E2; }
+.ds-feature { padding: 14px 0; border-bottom: 1px solid #ECE9E2; }
+.ds-feature dt { font-family: 'Space Grotesk', sans-serif; font-size: 16px; font-weight: 700; color: #1B1916; margin-bottom: 4px; display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 10px; }
+.ds-feature dd { margin: 0; font-size: 16px; line-height: 1.65; color: #3E3A33; }
+.ds-plan { font-family: 'Space Grotesk', sans-serif; font-size: 10.5px; font-weight: 700; letter-spacing: 0.09em; text-transform: uppercase; color: #4F46E5; }
+
+.ds-table-wrap { max-width: 700px; overflow-x: auto; margin: 0 0 18px; }
+.ds-table { width: 100%; border-collapse: collapse; font-size: 15px; line-height: 1.5; color: #3E3A33; }
+.ds-table th {
+  text-align: left; font-family: 'Space Grotesk', sans-serif; font-size: 11px; font-weight: 700; letter-spacing: 0.09em;
+  text-transform: uppercase; color: #8B867C; padding: 0 14px 10px 0; border-bottom: 1px solid #E3DED3; white-space: nowrap;
+}
+.ds-table td { padding: 11px 14px 11px 0; border-bottom: 1px solid #ECE9E2; vertical-align: top; }
+.ds-table td:nth-child(2) { font-family: 'Space Grotesk', sans-serif; font-weight: 600; color: #1B1916; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.ds-table tr.ds-row-pick td { color: #1B1916; }
+.ds-table tr.ds-row-pick td:first-child { font-weight: 700; }
+
+.ds-cta-title { font-family: 'Space Grotesk', sans-serif; font-size: 24px; font-weight: 700; letter-spacing: -0.02em; color: #1B1916; margin: 0 0 8px; }
+.ds-cta-text { font-size: 15px; line-height: 1.7; color: #4A463E; margin: 0; }
+.ds-small { font-size: 12.5px; line-height: 1.7; color: #8B867C; max-width: 640px; margin: 0; }
+.ds-perk { background: #FBF4DE; border: 1px solid #F0E3BC; border-radius: 16px; padding: clamp(20px, 3vw, 28px); }
+.ds-perk-code { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 18px; font-weight: 700; color: #1B1916; letter-spacing: 0.04em; }
+
+.guide-byline { font-size: 15px; line-height: 1.6; color: #6F6A61; max-width: 700px; margin: 0 0 22px; }
+
+@media (max-width: 860px) {
+  .ds-hero { grid-template-columns: minmax(0, 1fr); }
+  .ds-facts { grid-template-columns: minmax(0, 1fr); }
+}
+@media (max-width: 560px) {
+  .ds-credit { grid-template-columns: minmax(0, 1fr); gap: 2px; }
+  .ds-credit dt { padding-top: 0; }
+}

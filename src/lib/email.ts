@@ -2,6 +2,7 @@ import { Resend } from 'resend'
 import { supabaseAdmin } from './supabase'
 import { isMissingRelation, withDbRetry, type DbRetryOptions } from './db-health'
 import { COMMUNITY, GUIDE, OFFER_ENDS_LABEL, OVERS, OVERS_COSTS, OVERS_MODELS, OVERS_OFF_PERCENT, OVERS_REPLACES, offerDaysLeft, offerOpen } from './creator-pack'
+import { CLIENT_GUIDES, DIALSHEET, DIALSHEET_PERK, dialsheetEmailHref } from './dialsheet'
 
 const FROM_EMAIL = process.env.FROM_EMAIL || 'contests@updates.aifilmcontests.com'
 const REPLY_TO   = process.env.REPLY_TO_EMAIL || 'hello@aifilmcontests.com'
@@ -110,7 +111,8 @@ const T = {
 }
 /** The site's pastel cards (theme.ts categoryStyles). */
 type Tint = { bg: string; border: string; text: string }
-const TINT: Record<'purple' | 'blue' | 'yellow' | 'pink', Tint> = {
+const TINT: Record<'purple' | 'blue' | 'yellow' | 'pink' | 'green', Tint> = {
+  green: { bg: '#EDF4EE', border: '#D8E8DA', text: '#3B5E41' },
   purple: { bg: '#F3F0F9', border: '#E1DAF0', text: '#4C3F72' },
   blue: { bg: '#E7F1F8', border: '#CFE2EF', text: '#31536B' },
   yellow: { bg: '#FBF4DE', border: '#F0E3BC', text: '#6B5A22' },
@@ -123,7 +125,7 @@ const SIGN = `'Newsreader',Georgia,'Times New Roman',serif`
 
 /** Pictures for the emails. Abhi art-directs these; an unset one is left out. */
 type EmailArt = { src: string; alt: string; caption?: string }
-type ArtSlot = 'welcome' | 'spotlight' | 'overs' | 'packOvers' | 'packContest' | 'packGuide' | 'packClub'
+type ArtSlot = 'welcome' | 'spotlight' | 'overs' | 'packOvers' | 'packContest' | 'packGuide' | 'packClub' | 'packDialsheet'
 const EMAIL_ART: Record<ArtSlot, EmailArt | null> = {
   welcome: null,
   spotlight: null,
@@ -135,6 +137,8 @@ const EMAIL_ART: Record<ArtSlot, EmailArt | null> = {
   packContest: { src: `${SITE_URL}/email/card-contest.png`, alt: 'Ink drawing: someone leaping with a film reel trophy, one shoe flying off' },
   packGuide: { src: `${SITE_URL}/email/card-guide.png`, alt: 'Ink drawing: someone walking while reading a big book, pages drifting behind' },
   packClub: { src: `${SITE_URL}/email/card-club.png`, alt: 'Ink drawing: three friends laughing around one laptop' },
+  // Drawn for the DialSheet team-up, in the same ink style, on white.
+  packDialsheet: { src: `${SITE_URL}/email/card-dialsheet.png`, alt: "Ink drawing: a filmmaker laughing into a telephone from a director's chair, a film reel on their lap" },
 }
 
 /** The hero that opens the signup emails, drawn like the site's homepage
@@ -734,6 +738,9 @@ export function buildPackEmail(
   const featuredLine = featured
     ? `${featured.prize} · free to enter · closes ${fmtDate(featured.deadline)}`
     : ''
+  const clientGuideUrl = `${SITE_URL}${CLIENT_GUIDES[0].path}`
+  const dialsheetCopy = `AI Film Contests has teamed up with ${DIALSHEET.name}, a power dialer that's free for one person. Start with our guide to landing brand clients: one kind of brand, one spec piece and a list of 50 to call.`
+  const perkCopy = DIALSHEET_PERK ? `${DIALSHEET_PERK.offer} with the code ${DIALSHEET_PERK.code}.` : ''
 
   // Drawings alternate sides down the email, starting on the left.
   const rows: Array<[EmailArt | null, Tint, string]> = []
@@ -756,6 +763,16 @@ export function buildPackEmail(
     ${packHead(escapeHtml(GUIDE.title))}
     ${packText('Every step from the rules to the export, and the checks that get entries thrown out.')}
     ${textLink(`${SITE_URL}${GUIDE.path}`, 'Read the guide →')}`])
+  // The DialSheet team-up: the client-getting guide first, the dialer second.
+  // The perk line prints only once DIALSHEET_PERK is real (src/lib/dialsheet.ts).
+  rows.push([EMAIL_ART.packDialsheet, TINT.green, `
+    ${packLabel('Partner')}
+    ${packHead('Turn the film into client work')}
+    ${packText(dialsheetCopy)}
+    ${perkCopy ? packText(`<strong>${escapeHtml(perkCopy)}</strong>`, T.ink) : ''}
+    ${textLink(clientGuideUrl, 'Read the client guide →')}
+    <span style="display:inline-block;width:14px;"></span>
+    ${textLink(dialsheetEmailHref('pack'), 'Try DialSheet free →')}`])
   rows.push([EMAIL_ART.packClub, TINT.pink, `
     ${packLabel('Community')}
     ${packHead(COMMUNITY.name)}
@@ -790,6 +807,7 @@ export function buildPackEmail(
       (open ? `EVERY AI MODEL IN ONE TOOL, $${OVERS.monthlyUsd} A MONTH\n${oversCopy}\n${priceCopy}\n${fine}\nClaim it: ${oversLink('pack')}\n\n` : '') +
       (featured ? `THIS WEEK'S CONTEST\n${featured.name}\n${featuredLine}\n${featured.url}\n\n` : '') +
       `ALSO YOURS\n${GUIDE.title}: ${SITE_URL}${GUIDE.path}\n${COMMUNITY.name}, my free community: ${COMMUNITY.url}\n\n` +
+      `TURN THE FILM INTO CLIENT WORK\n${dialsheetCopy}\n${perkCopy ? `${perkCopy}\n` : ''}The client guide: ${clientGuideUrl}\n${DIALSHEET.name}: ${dialsheetEmailHref('pack')}\n\n` +
       `${note}\n\nAbhi\n\nUnsubscribe: ${unsub}`,
   }
 }
