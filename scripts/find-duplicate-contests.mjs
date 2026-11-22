@@ -9,6 +9,16 @@
  * Prints any matching existing id(s) and exits 1 if a likely duplicate is
  * found, exits 0 ("No match found.") otherwise. deadline is YYYY-MM-DD.
  *
+ * Also supports sweeping recently-added rows (e.g. from a daily cron, to
+ * catch robot-made duplicates the morning after instead of the next weekly
+ * review):
+ *   node scripts/find-duplicate-contests.mjs --sweep [days]
+ * Compares every row whose created_at falls within the last `days` days
+ * (default 7) against the whole table using the same signals, skips rows
+ * already carrying a duplicate pointer, and prints the same `DUPLICATE: keep
+ * <id> — extras <ids>` lines as the full scan. Always exits 0, so a cron can
+ * call it unconditionally and just read the output.
+ *
  * Both modes run the same pairwise signals:
  *   1. Name match (after stripping year/edition numbers and punctuation),
  *      gated to a close deadline so next year's edition isn't flagged.
@@ -215,6 +225,21 @@ function isResolvedDuplicate(row) {
   return String(row.description || '').startsWith(RESOLVED_DUPLICATE_MARKER)
 }
 
+// Shared by --sweep and the full scan: print one resolved group in the
+// playbook's `DUPLICATE: keep <id> — extras <ids>` format, picking the most
+// complete row to keep.
+function printDuplicateGroup(rowsInGroup) {
+  const sorted = [...rowsInGroup].sort((a, b) => completenessScore(b) - completenessScore(a))
+  const keep = sorted[0]
+  const extras = sorted.slice(1)
+  console.log(`DUPLICATE: keep ${keep.id} — extras ${extras.map(r => r.id).join(', ')}`)
+  console.log(`  keep:   "${keep.name}" (${keep.url}, deadline ${keep.deadline}, score ${completenessScore(keep)})`)
+  for (const e of extras) {
+    console.log(`  extra:  "${e.name}" (${e.url}, deadline ${e.deadline}, score ${completenessScore(e)})`)
+  }
+  console.log('')
+}
+
 const { data: rows, error } = await supabase
   .from('contests')
   .select('*')
@@ -224,6 +249,8 @@ if (error) {
   console.error(`Failed to read contests: ${error.message}`)
   process.exit(1)
 }
+
+const rowById = new Map(rows.map(r => [r.id, r]))
 
 const checkFlagIdx = process.argv.indexOf('--check')
 if (checkFlagIdx !== -1) {
@@ -255,6 +282,69 @@ if (checkFlagIdx !== -1) {
   process.exit(1)
 }
 
+const sweepFlagIdx = process.argv.indexOf('--sweep')
+if (sweepFlagIdx !== -1) {
+  const daysArg = process.argv[sweepFlagIdx + 1]
+  const days = daysArg && !daysArg.startsWith('--') && !isNaN(Number(daysArg)) && Number(daysArg) > 0
+    ? Number(daysArg)
+    : 7
+  const cutoffMs = Date.now() - days * 86400000
+
+  // Candidates to compare against: every row not already a resolved
+  // duplicate stub (a resolved row's keeper is still a valid match target).
+  const candidates = rows.filter(r => !isResolvedDuplicate(r))
+  const recentRows = candidates.filter(r => {
+    const createdAt = new Date(r.created_at)
+    return !isNaN(createdAt) && createdAt.getTime() >= cutoffMs
+  })
+
+  if (recentRows.length === 0) {
+    console.log(`No rows created in the last ${days} day(s).`)
+    process.exit(0)
+  }
+
+  const sweepIdToGroupIdx = new Map()
+  const sweepGroupsRaw = []
+  function sweepUnion(idA, idB) {
+    const a = sweepIdToGroupIdx.get(idA), b = sweepIdToGroupIdx.get(idB)
+    if (a === undefined && b === undefined) {
+      const idx = sweepGroupsRaw.length
+      sweepGroupsRaw.push(new Set([idA, idB]))
+      sweepIdToGroupIdx.set(idA, idx)
+      sweepIdToGroupIdx.set(idB, idx)
+    } else if (a === undefined) {
+      sweepGroupsRaw[b].add(idA); sweepIdToGroupIdx.set(idA, b)
+    } else if (b === undefined) {
+      sweepGroupsRaw[a].add(idB); sweepIdToGroupIdx.set(idB, a)
+    } else if (a !== b) {
+      for (const id of sweepGroupsRaw[b]) { sweepGroupsRaw[a].add(id); sweepIdToGroupIdx.set(id, a) }
+      sweepGroupsRaw[b] = null
+    }
+  }
+
+  // Each recent row against the whole active table — this also catches two
+  // rows both added inside the window duplicating each other, since each
+  // appears as both a "recent" row and a "candidate" the other is compared to.
+  for (const recent of recentRows) {
+    for (const other of candidates) {
+      if (other.id === recent.id) continue
+      if (duplicateSignal(recent, other)) sweepUnion(recent.id, other.id)
+    }
+  }
+
+  const sweepGroups = sweepGroupsRaw.filter(g => g && g.size > 1)
+  if (sweepGroups.length === 0) {
+    console.log(`No likely duplicates found among the ${recentRows.length} row(s) created in the last ${days} day(s).`)
+    process.exit(0)
+  }
+
+  console.log(`Found ${sweepGroups.length} likely duplicate group(s) touching rows created in the last ${days} day(s):\n`)
+  for (const idSet of sweepGroups) {
+    printDuplicateGroup([...idSet].map(id => rowById.get(id)).filter(Boolean))
+  }
+  process.exit(0)
+}
+
 // Union-find-lite: compare every pair once, merge groups that share a row.
 const idToGroupIdx = new Map()
 const merged = []
@@ -283,7 +373,6 @@ for (let i = 0; i < rows.length; i++) {
   }
 }
 
-const rowById = new Map(rows.map(r => [r.id, r]))
 const finalGroups = merged.filter(g => g && g.size > 1)
 
 if (finalGroups.length === 0) {
@@ -321,13 +410,5 @@ if (unresolvedGroups.length === 0) {
 console.log(`Found ${unresolvedGroups.length} unresolved likely duplicate group(s):\n`)
 
 for (const activeRows of unresolvedGroups) {
-  const rowsInGroup = [...activeRows].sort((a, b) => completenessScore(b) - completenessScore(a))
-  const keep = rowsInGroup[0]
-  const extras = rowsInGroup.slice(1)
-  console.log(`DUPLICATE: keep ${keep.id} — extras ${extras.map(r => r.id).join(', ')}`)
-  console.log(`  keep:   "${keep.name}" (${keep.url}, deadline ${keep.deadline}, score ${completenessScore(keep)})`)
-  for (const e of extras) {
-    console.log(`  extra:  "${e.name}" (${e.url}, deadline ${e.deadline}, score ${completenessScore(e)})`)
-  }
-  console.log('')
+  printDuplicateGroup(activeRows)
 }
