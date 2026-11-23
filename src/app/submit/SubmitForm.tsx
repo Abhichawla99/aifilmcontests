@@ -1,6 +1,42 @@
 'use client'
 
 import { useState } from 'react'
+import Link from 'next/link'
+import snapshot from '@/data/contests-snapshot.json'
+
+type SnapshotContest = { id: string; name: string; url: string }
+
+// Host + normalised path (query strings and trailing slashes stripped) so the
+// three Migoo Video Challenge submissions this week -- same contest, three
+// different `utm_source` values -- collapse to one key. A new edition can
+// still share a landing page with an old one (waiff-la-2026 /
+// waiff-la-usa-2026), so this only ever warns; it never blocks the submit.
+function normalizeContestUrl(raw: string): string | null {
+  try {
+    const u = new URL(raw)
+    const host = u.hostname.replace(/^www\./i, '').toLowerCase()
+    const path = u.pathname.replace(/\/+$/, '') || '/'
+    return `${host}${path}`
+  } catch {
+    return null
+  }
+}
+
+const KNOWN_CONTESTS = new Map<string, { id: string; name: string }>(
+  (snapshot.contests as SnapshotContest[]).reduce<Array<[string, { id: string; name: string }]>>(
+    (acc, c) => {
+      const key = normalizeContestUrl(c.url)
+      if (key) acc.push([key, { id: c.id, name: c.name }])
+      return acc
+    },
+    []
+  )
+)
+
+function findExistingContest(raw: string) {
+  const key = normalizeContestUrl(raw)
+  return key ? KNOWN_CONTESTS.get(key) ?? null : null
+}
 
 const label: React.CSSProperties = {
   display: 'flex', alignItems: 'baseline', gap: 8, fontSize: 11, fontWeight: 600,
@@ -29,6 +65,7 @@ export default function SubmitForm() {
   const [status, setStatus] = useState<'idle' | 'loading' | 'done' | 'error'>('idle')
   const [message, setMessage] = useState('')
   const set = (k: keyof typeof f) => (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => setF(p => ({ ...p, [k]: e.target.value }))
+  const matchedContest = f.url.trim() ? findExistingContest(f.url.trim()) : null
 
   const submit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -79,6 +116,11 @@ export default function SubmitForm() {
           <label style={label} htmlFor="url">Official page</label>
           <input id="url" required type="url" className="input" value={f.url} onChange={set('url')} placeholder="https://" />
           <p style={hint}>We read this page before the listing goes live, and again every morning after that. A festival&rsquo;s own site or its FilmFreeway page both work.</p>
+          {matchedContest && (
+            <p style={{ ...hint, color: '#4338CA' }} role="status">
+              We already list <Link href={`/contests/${matchedContest.id}`} style={{ color: '#4338CA', fontWeight: 600 }}>{matchedContest.name}</Link> from this page. Submit anyway if this is a different edition.
+            </p>
+          )}
         </div>
       </div>
 
