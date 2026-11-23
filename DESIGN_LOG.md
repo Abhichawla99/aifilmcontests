@@ -36,6 +36,91 @@ describe the old dark theme; the reasoning still applies, the colours do not.)*
 
 ---
 
+## 2026-11-23 — The contest rail's "Verified" date, in the shape every other date on the site uses
+
+**Changed** — the `Verified <date>` line in the contest page's right-hand rail,
+and the one `fmt()` that feeds it. One file, 21 lines added and 2 removed, 17
+of the added lines comment: `fmt()`'s month token in
+`src/app/contests/[id]/page.tsx` and the `style` on the `<div>` that prints it.
+No colour, no size, no spacing, no radius, no breakpoint, no new dependency, no
+font, no URL, no data, no copy. The timezone read is untouched. The generated
+`src/data/contests-snapshot.json` the build rewrites was reverted before the
+commit.
+
+**Was** — the rail's head stacks four things: the caption, the countdown, the
+deadline, and the line saying when the deadline was last checked. The deadline
+goes through `formatDeadline()`, as do Submissions open and Festival date
+further down the rail, so all three print `Dec 5, 2026`. The verification line
+used a local `fmt()` set to `month: 'long'` and printed
+`Verified September 20, 2026`. Measured on the production build, the same
+numbers at 390px and at 1440px:
+
+| head group row | size | ink | before | after |
+|---|---|---|---|---|
+| Submission deadline | 10px | #8B867C | 126.0px | 126.0px |
+| 12 days left | 26px | #1B1916 | 144.5px | 144.5px |
+| Dec 5, 2026 | 13px | #7A7469 | 77.0px | 77.0px |
+| Verified …, 2026 | 11px | #A8A296 | **150.3px** | **115.1px** |
+| tabular figures on the Verified line | | | no | yes |
+| head group height | | | 351.5px | 351.5px |
+
+So the smallest, faintest, least load-bearing line in the rail was the longest
+one in it — 150.3px of ink, 5.8px wider than the 26px countdown above it — and
+it was the only date in a stack of three without tabular figures. Both faults
+came out of the same token.
+
+The real cost is not the width. `ContestCard` has always printed
+`Verified Sep 20, 2026`, and `/creators`' `since()` carries a comment saying it
+is matching the card. The rail was the one place writing it the other way, so
+the sentence that vouches for the deadline changed shape in the single click
+between a card and the page that card opens. It contradicts itself on one
+screen, too: scroll down the same contest page to *More open contests like
+this* and the cards there say `Verified Oct 21, 2026` while the rail two
+hundred pixels above says `September`.
+
+The local `fmt()` exists for a good reason, and the comment above it says so:
+`updatedAt` is a real `timestamptz`, not a bare `date` column, so the reader's
+own local time is the right read for it and it must not go through
+`formatDeadline()`. But which zone an instant is read in and how long its
+month's name is are two questions, and that one call was quietly answering
+both. Only the second one was wrong.
+
+**Now** — `month: 'short'` and `font-variant-numeric: tabular-nums`. The ink
+drops to 115.1px, the line is no longer the longest in its own group, and its
+figures column with the deadline directly above it. Nothing else moves: every
+other row in the head group keeps its exact top, height and width, the group's
+height is 351.5px before and after, and `May` is unaffected since `long` and
+`short` are the same string for it.
+
+**Not changed** — `#A8A296`. Measured, this line sits at 2.5:1 against white,
+under AA for 11px text, and it is the site's central trust claim. But that grey
+is the standard faint-meta ink in 46 other declarations across 28 files
+(`/guide`, `/vs`, `/prize`, `/tools`, `/topics`, `/creators`, the nav fade, the
+input placeholder, the submit form's own hints), and one page lifting
+it alone is exactly the drift this log exists to prevent. It is a palette-level
+decision for a run that takes the whole scale at once, not a one-cell one.
+Also untouched: `ContestCard`'s own line, which was already right, and the
+rail's footer strip, which restates the verification claim in `#8B867C` on its
+own ground behind its own hairline.
+
+**Inspired by** — Criterion's *Shop All Films* list view and its film pages,
+and Letterboxd's film page, all looked at today. Criterion's list heads five
+columns and prints `United Kingdom` and `1935` under Country and Year; open
+that film's own page and the FILM INFO block prints `United Kingdom` and
+`1935`. Not "released in 1935", not "UK" — the same fact in the same shape, one
+click apart, so nothing has to be re-read. Letterboxd does it with the year in
+the title lockup: `Seven Samurai 1954` on the detail page is the same figure a
+list row shows. Neither site expands a fact when it has more room; they just
+stop repeating the caption. Ours had the right helper and the right habit
+everywhere except the one line that is there to be believed.
+
+**Before/after** — `reports/design/2026-11-23-before.png` and
+`2026-11-23-after.png` at 390px, `2026-11-23-before-desktop.png` and
+`2026-11-23-after-desktop.png` at 1440px. No horizontal overflow at 375, 390,
+640, 768 or 1440.
+
+---
+
 ## 2026-11-22 — The deadline gets the right-hand column in "Closing soonest"
 
 **Changed** — the meta cell of the homepage subscribe card's three-row
