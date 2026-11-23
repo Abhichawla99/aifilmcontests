@@ -19,8 +19,19 @@ export const revalidate = 900
 // src/lib/deadline.ts) and must go through formatDeadline(), which reads the
 // string's own numerals in UTC. `fmt()` is left only for `updatedAt`, a real
 // `timestamptz` instant where the reader's own local time is the right read.
+//
+// The month is abbreviated (2026-11-23), and that is the only thing changed
+// here: which zone the instant is read in is a separate question from how long
+// the month's name is, and this one call was quietly answering both. Every
+// other date the site prints reads "Sep 20, 2026" — the rail's own deadline,
+// Submissions open and Festival date (all via formatDeadline), ContestCard's
+// own "Verified <date>" line, and /creators' since(), whose comment already
+// says it is matching the card. This line printed "September 20, 2026", so the
+// sentence that vouches for the deadline was the one fact in the rail written
+// in another register, and it changed shape in the single click between a card
+// and the page that card opens.
 function fmt(d: string) {
-  return new Date(d).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })
+  return new Date(d).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
 }
 
 // The organizer's domain, whole. This line's job is to show whose page the
@@ -464,7 +475,13 @@ export default async function ContestPage({ params }: { params: Promise<{ id: st
                     </div>
                   )}
                   {contest.updatedAt && (
-                    <div style={{ fontSize: 11, color: '#A8A296', marginTop: 6 }}>
+                    /* Tabular, like the two lines above it. This is the third
+                       date in a stack of three and was the only one whose
+                       figures did not column with the rest. */
+                    <div style={{
+                      fontSize: 11, color: '#A8A296', marginTop: 6,
+                      fontVariantNumeric: 'tabular-nums',
+                    }}>
                       Verified {fmt(contest.updatedAt)}
                     </div>
                   )}
