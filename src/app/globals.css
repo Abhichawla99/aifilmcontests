@@ -143,6 +143,61 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
 /* legacy hook kept inert so old markup can't break */
 .card-shimmer { display: none; }
 
+/* ── Contest card: the status line ──────────────────────────────────────────
+   Open / Free entry / Featured, set as one meta line — the same grammar the
+   contest page's header band got on 2026-10-29 and the hero on 2026-10-26, at
+   the card's smaller scale.
+
+   Free and Featured were the last two bordered capsules on a card: 9px type
+   inside a hairline box with a white fill, sitting beside an 11px status word
+   in the same green and no box at all. Two notes about the same listing, told
+   apart by a container rather than by rank. Nothing on a card is pressable
+   except the card, so the boxes promised a press that was not there — the rule
+   the 10-05 tags and the 10-19 categories were already fixed under.
+
+   So: the status keeps its dot and its ink, a hairline in the card's own tint
+   divides it from the notes about it, and the notes are joined to each other by
+   the site's middot. They step down to 10px against the status's 11px, so the
+   row reads as one fact with annotations. The group wraps rather than pushing
+   on the deadline figure, which is the only other thing in the row. */
+.card-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 2px 0;
+  min-width: 0;
+}
+.card-meta-status {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+.card-meta-status .dot {
+  display: inline-block;
+  vertical-align: middle;
+  margin-right: 7px;
+  margin-bottom: 1px;
+}
+.card-meta-notes {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  margin-left: 8px;
+  padding-left: 8px;
+  /* Overridden inline with the card's own tint border, so the divider belongs
+     to the card the way the rule above the prize already does. */
+  border-left: 1px solid rgba(27, 25, 22, 0.14);
+}
+.card-meta-sep {
+  margin: 0 5px;
+  color: #A8A296;
+}
+
 /* ── Status dot ─────────────────────────────────────────────────────────────── */
 .dot { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; }
 .dot-open     { background: #16A34A; }

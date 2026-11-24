@@ -122,6 +122,14 @@ export default function ContestCard({ contest }: { contest: Contest }) {
   const isUrgent = isOpen && daysLeft !== null && daysLeft >= 0 && daysLeft <= 7
   const isFeatured = !!contest.featuredUntil && new Date(contest.featuredUntil).getTime() > Date.now()
 
+  /* The notes that sit after the status on the card's meta line. Same two
+     conditions, same labels and same inks as the contest page's header band —
+     the card and the page it opens now say these two facts the same way. */
+  const notes: { label: string; color: string }[] = [
+    ...(isFree(contest.entryFee) && !isClosed ? [{ label: 'Free entry', color: '#15803D' }] : []),
+    ...(isFeatured ? [{ label: 'Featured', color: '#4338CA' }] : []),
+  ]
+
   /* The first category gives the card its identity: emoji + pastel tint. */
   const tint = isClosed ? closedStyle : contest.categories?.[0] ? normalizeCategory(contest.categories[0]) : categoryStyle()
 
@@ -139,38 +147,31 @@ export default function ContestCard({ contest }: { contest: Contest }) {
     >
       <div className={`flex flex-col flex-1 p-5 gap-3 ${isClosed ? 'opacity-70' : ''}`}>
 
-        {/* Row 1: emoji identity + status | deadline figure */}
+        {/* Row 1: emoji identity + status | deadline figure.
+             The status line's two notes used to be bordered capsules; they are
+             type now, after a hairline, in the grammar the contest page's own
+             header band uses for exactly these three facts. The labels and the
+             colours are that band's — see `bandNotes` in contests/[id]/page.tsx
+             and `.card-meta` in globals.css. */}
         <div className="flex items-start justify-between gap-2">
-          <div className="flex items-center gap-2.5">
+          <div className="flex items-center gap-2.5 min-w-0">
             <span aria-hidden style={{ fontSize: 26, lineHeight: 1 }}>{tint.emoji}</span>
-            <div className="flex items-center gap-2">
-              <span className={`dot ${isOpen ? 'dot-open' : isClosed ? 'dot-closed' : 'dot-upcoming'} ${isOpen && !isUrgent ? 'live' : ''}`} />
-              <span style={{
-                fontSize: 11, fontFamily: 'Space Grotesk, sans-serif', fontWeight: 600,
+            <div className="card-meta">
+              <span className="card-meta-status" style={{
                 color: isOpen ? '#15803D' : isClosed ? '#8B867C' : '#B45309',
-                letterSpacing: '0.04em', textTransform: 'uppercase',
               }}>
+                <span className={`dot ${isOpen ? 'dot-open' : isClosed ? 'dot-closed' : 'dot-upcoming'} ${isOpen && !isUrgent ? 'live' : ''}`} />
                 {isOpen ? 'Open' : isClosed ? 'Closed' : 'Coming Soon'}
               </span>
-              {isFree(contest.entryFee) && !isClosed && (
-                <span style={{
-                  fontSize: 9, color: '#15803D',
-                  border: '1px solid rgba(22,163,74,0.35)',
-                  borderRadius: 4, padding: '1px 6px',
-                  fontFamily: 'Space Grotesk, sans-serif', fontWeight: 700,
-                  letterSpacing: '0.06em', textTransform: 'uppercase',
-                  background: 'rgba(255,255,255,0.6)',
-                }}>Free</span>
-              )}
-              {isFeatured && (
-                <span style={{
-                  fontSize: 9, color: '#4F46E5',
-                  border: '1px solid rgba(79,70,229,0.35)',
-                  borderRadius: 4, padding: '1px 6px',
-                  fontFamily: 'Space Grotesk, sans-serif', fontWeight: 700,
-                  letterSpacing: '0.06em', textTransform: 'uppercase',
-                  background: 'rgba(255,255,255,0.6)',
-                }}>Featured</span>
+              {notes.length > 0 && (
+                <span className="card-meta-notes" style={{ borderLeftColor: tint.border }}>
+                  {notes.map((note, i) => (
+                    <span key={note.label}>
+                      {i > 0 && <span className="card-meta-sep" aria-hidden>·</span>}
+                      <span style={{ color: note.color }}>{note.label}</span>
+                    </span>
+                  ))}
+                </span>
               )}
             </div>
           </div>
