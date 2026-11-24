@@ -36,6 +36,92 @@ describe the old dark theme; the reasoning still applies, the colours do not.)*
 
 ---
 
+## 2026-11-24 — The card's "Free" and "Featured", as type after a hairline instead of two capsules
+
+**Changed** — the status line at the top of every contest card. Two files, 82
+lines added and 26 removed, 29 of the added lines comment: the first row of
+`src/components/ContestCard.tsx` and a new `.card-meta*` block in
+`src/app/globals.css`. No new dependency, no font, no URL, no data, no
+breakpoint. The generated `src/data/contests-snapshot.json` the build rewrites
+was reverted before the commit.
+
+**Was** — the row opens with the card's 26px category emoji, then a 6px dot and
+the status word, then up to two notes about the listing. The status word is
+11px Space Grotesk, uppercase, green `#15803D` for an open contest, with no
+container at all. The two notes were bordered capsules:
+
+| | size | ink | border | fill | width |
+|---|---|---|---|---|---|
+| `OPEN` | 11px | #15803D | none | none | 29.3px |
+| `FREE` | 9px | #15803D | 1px rgba(22,163,74,0.35), radius 4 | rgba(255,255,255,0.6) | 36.6px |
+| `FEATURED` | 9px | #4F46E5 | 1px rgba(79,70,229,0.35), radius 4 | rgba(255,255,255,0.6) | — |
+
+So two facts about the same listing, in the same green, sitting next to each
+other, were told apart by a container rather than by rank — and the one in the
+box was set two points *smaller* than the one it was meant to stand out
+against. Nothing on a card is pressable except the card, so the box promised a
+press that was not there: the exact rule the 10-05 tags and the 10-19 category
+chips were already fixed under. These two were the last bordered objects left
+on a card.
+
+The worst of it is `/contests/free`. That page's masthead reads **Free AI film
+contests** over the line `23 free contests open now`, and underneath it all 23
+cards wore the green `FREE` box — the page repeating its own headline 23 times,
+in a container, once per row. On the homepage grid it was 7 of 12.
+
+And the contest page a card opens had already been fixed. Its header band was
+rebuilt on 2026-10-29 for exactly these three facts, and prints them as one
+meta line: status with its dot and its ink, a hairline, then the notes joined
+by the site's middot. Click a card and the same two facts changed shape, label
+(`FREE` → `Free entry`) and, for Featured, ink (`#4F46E5` → the band's
+`#4338CA`) in the single click between them.
+
+**Now** — the card says them the way the page does. The status keeps its dot
+and its ink; a hairline in the card's own tint divides it from the notes about
+it; the notes are joined to each other by the middot and step down to 10px
+against the status's 11px, so the row reads as one fact with annotations rather
+than three equal shouts. The labels and the two inks are lifted from that
+band's own `bandNotes`, so there is one place to change them. Measured on the
+production build:
+
+| | before | after |
+|---|---|---|
+| status group width | 87.9px | 120.1px |
+| bordered objects on a card | 1–2 | 0 |
+| row height | 34.1px | 34.1px |
+| card height (first row of `/contests/free`) | 305.3px | 305.3px |
+
+The group is wider because `Free entry` is a longer label than `Free`, and it
+is allowed to wrap. In the one case that needs it — a contest that is both free
+and featured, which no row is today but which `/feature` sells — the notes run
+measures 134.1px: at 390px it still sets on one line, and in the 1440px
+three-column grid it drops to a second line under the status, hairline hanging,
+rather than pushing on the deadline figure, which is the only other thing in
+the row. Row height there goes 34.1px → 37.7px. No horizontal overflow at
+either width.
+
+**Not changed** — the emoji, the dot, the status words, the deadline figure and
+its date underneath, the conditions that decide when each note appears
+(`isFree(entryFee) && !isClosed`, and `featuredUntil` in the future), the card
+tint, the hover lift, or anything below the first row.
+
+**Inspired by** — MUBI's *Now Showing* grid. Under each still it sets the film
+title, then the director's name and the year on one line: the director in ink,
+the year a step lighter, no delimiter beyond a space and no container anywhere
+on the card. Two facts of different rank, one line, told apart by weight alone.
+Metrograph's calendar goes further and runs four — `Ryusuke Hamaguchi / 2019 /
+119min / DCP` — as one slash-separated line in a single muted ink, with the
+title above it the only thing carrying weight. Neither site has a pill on it.
+Ours had one fact set plainly and the fact beside it in a box, which is the
+opposite arrangement: the annotation was the loudest object in the row.
+
+**Before/after** — `reports/design/2026-11-24-before.png` and
+`2026-11-24-after.png` at 390px, `2026-11-24-before-desktop.png` and
+`2026-11-24-after-desktop.png` at 1440px, all of `/contests/free`. No
+horizontal overflow at 390px or 1440px.
+
+---
+
 ## 2026-11-23 — The contest rail's "Verified" date, in the shape every other date on the site uses
 
 **Changed** — the `Verified <date>` line in the contest page's right-hand rail,
