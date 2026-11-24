@@ -14,7 +14,9 @@
  * review):
  *   node scripts/find-duplicate-contests.mjs --sweep [days]
  * Compares every row whose created_at falls within the last `days` days
- * (default 7) against the whole table using the same signals, skips rows
+ * (default 30 — a duplicate's partner row can land well over a week after
+ * the first one, see the 2026-11-22 Pippit pair, which the 7-day default
+ * missed entirely) against the whole table using the same signals, skips rows
  * already carrying a duplicate pointer, and prints the same `DUPLICATE: keep
  * <id> — extras <ids>` lines as the full scan. Always exits 0, so a cron can
  * call it unconditionally and just read the output.
@@ -287,7 +289,7 @@ if (sweepFlagIdx !== -1) {
   const daysArg = process.argv[sweepFlagIdx + 1]
   const days = daysArg && !daysArg.startsWith('--') && !isNaN(Number(daysArg)) && Number(daysArg) > 0
     ? Number(daysArg)
-    : 7
+    : 30
   const cutoffMs = Date.now() - days * 86400000
 
   // Candidates to compare against: every row not already a resolved
