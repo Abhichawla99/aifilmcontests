@@ -36,6 +36,90 @@ describe the old dark theme; the reasoning still applies, the colours do not.)*
 
 ---
 
+## 2026-11-25 — The /vs comparison table, ruled and stacked so a phone can read it
+
+**Changed** — the pairwise comparison on the five `/vs/<slug>` pages. Two
+files: the table block in `src/app/vs/[slug]/page.tsx` (61 lines of inline-
+styled grid out, 25 lines of semantic table in) and a new `.vs-table` block at
+the end of `src/app/globals.css` (97 lines, 16 of them comment). No new
+dependency, no font, no URL, no data, no copy. `src/lib/content/vs-pages.ts`
+is untouched. The generated `src/data/contests-snapshot.json` the build
+rewrites was reverted before the commit.
+
+**Was** — a rounded, bordered three-column grid held at `1fr 1fr 1fr` at every
+width, head row and body in two separate boxes stitched by `border-radius:
+14px 14px 0 0` and `0 0 14px 14px`. At 1440px it read well. At 390px it did
+not read at all:
+
+| at 390px | before |
+|---|---|
+| column width | 116px |
+| of which padding | 40px |
+| text measure | ~73px |
+| first answer (95 characters) | 11 lines, ~9 characters a line |
+| body ink / size | `#7A7469` / 13px |
+| table height | 1276.5px |
+
+Eleven lines to say "Cinematic realism with consistent color science. Excellent
+for drama and narrative work." The grid never had a breakpoint — the whole
+point of a comparison page, shredded into a column of one- and two-word lines,
+on the device most of that traffic arrives on.
+
+The head cells were also filled with each tool's own brand hue at 0.12 opacity
+— `#4f46e5` for Runway against `#7c3aed` for Kling, `#059669` for Sora,
+`#0891b2` for Luma. Two colours from outside `theme.ts`, which the Principles
+reserve as the only place a tint may be defined, and at 0.12 on paper indigo
+and violet land as the same pale lilac anyway. The colour told the reader
+nothing it was meant to.
+
+**Now** — a real `<table>` in the `.ds-table` idiom the site already uses on
+`/creator-pack`: no outer border, no radius, no fills, hairlines (`#E3DED3`
+under the head, `#ECE9E2` between rows) carrying the grid, criteria as `<th
+scope="row">` and the tool names as `<th scope="col">` — markup these SEO
+pages should have had from the start. Body ink goes to `#3E3A33` at 14.5px.
+The two brand tints are gone; the columns are told apart by their heads, the
+way a programme tells apart a director and a year.
+
+Below 720px the head drops away and a criterion becomes a block: the field
+name in 11px small caps, then each tool named in Space Grotesk with its answer
+on the full measure underneath. Measured on the production build:
+
+| at 390px | before | after |
+|---|---|---|
+| text measure | ~73px | 350px |
+| first answer | 11 lines | 2 lines |
+| body size | 13px | 14.5px |
+| whole table | 1276.5px | 1243px |
+
+It is 33px *shorter* than the version nobody could read, because all that
+height was wasted wrap. At 1440px the criteria column gives up width it did
+not need (328px → 236px) and the two answer columns take it (288px of measure
+each → ~359px and ~364px). Checked at 721px too, the narrowest width that
+still gets three columns: ~30 characters a line, which holds. No horizontal
+overflow at 390, 721 or 1440.
+
+**Not changed** — the breadcrumb, the `ArticleHeader` band above it, the
+Verdict block, the two tool-contest links under it, the ranked `/vs/best-ai-
+video-tools-2026` layout (a different branch of the same page, which uses no
+table), the Ruminate X callout, the open-contests rail, the subscribe section,
+or the criteria text itself. The `color` field stays in `vs-pages.ts`; nothing
+paints with it now.
+
+**Inspired by** — MUBI's film page on a phone. Its Cast & Crew block does go
+two-up at 375px, because those cells hold a name and a role: short strings
+that fit half a measure. Its Awards & Festivals block, directly above, does
+not — each award is a full-width stack, festival name in ink, then the year
+and the result a step lighter underneath. Same page, same phone, two
+treatments, decided by whether the cell holds a label or a sentence. Ours was
+putting six sentences a column into a third of 390px. Columns are for labels;
+a sentence gets the whole width.
+
+**Before/after** — `reports/design/2026-11-25-before.png` and
+`2026-11-25-after.png` at 390px, `2026-11-25-before-desktop.png` and
+`2026-11-25-after-desktop.png` at 1440px, all of `/vs/runway-vs-kling`.
+
+---
+
 ## 2026-11-24 — The card's "Free" and "Featured", as type after a hairline instead of two capsules
 
 **Changed** — the status line at the top of every contest card. Two files, 82
