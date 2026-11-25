@@ -104,66 +104,30 @@ export default async function VSPage({ params }: { params: Promise<{ slug: strin
         {/* Pairwise comparison */}
         {page.type === 'pairwise' && (
           <>
-            {/* Tool headers */}
-            <div style={{
-              display: 'grid',
-              gridTemplateColumns: '1fr 1fr 1fr',
-              gap: 0,
-              marginBottom: 0,
-              borderRadius: '14px 14px 0 0',
-              overflow: 'hidden',
-              border: '1px solid rgba(27,25,22,0.06)',
-            }}>
-              <div style={{ background: 'rgba(27,25,22,0.02)', padding: '16px 20px', borderRight: '1px solid rgba(27,25,22,0.06)' }}>
-                <span style={{ fontSize: 12, color: '#8B867C', textTransform: 'uppercase', letterSpacing: '0.07em' }}>Criteria</span>
-              </div>
-              <div style={{
-                background: `rgba(${parseInt(page.toolA.color.slice(1, 3), 16)},${parseInt(page.toolA.color.slice(3, 5), 16)},${parseInt(page.toolA.color.slice(5, 7), 16)},0.12)`,
-                padding: '16px 20px',
-                borderRight: '1px solid rgba(27,25,22,0.06)',
-                textAlign: 'center',
-              }}>
-                <Link href={`/tools/${page.toolA.slug}`} style={{ fontFamily: 'Space Grotesk, sans-serif', fontWeight: 700, fontSize: 15, color: '#1B1916', textDecoration: 'none' }}>
-                  {page.toolA.name}
-                </Link>
-              </div>
-              <div style={{
-                background: `rgba(${parseInt(page.toolB.color.slice(1, 3), 16)},${parseInt(page.toolB.color.slice(3, 5), 16)},${parseInt(page.toolB.color.slice(5, 7), 16)},0.12)`,
-                padding: '16px 20px',
-                textAlign: 'center',
-              }}>
-                <Link href={`/tools/${page.toolB.slug}`} style={{ fontFamily: 'Space Grotesk, sans-serif', fontWeight: 700, fontSize: 15, color: '#1B1916', textDecoration: 'none' }}>
-                  {page.toolB.name}
-                </Link>
-              </div>
-            </div>
-
-            {/* Comparison rows */}
-            <div style={{
-              border: '1px solid rgba(27,25,22,0.06)',
-              borderTop: 'none',
-              borderRadius: '0 0 14px 14px',
-              overflow: 'hidden',
-              marginBottom: 40,
-            }}>
-              {page.criteria.map((row, i) => (
-                <div key={i} style={{
-                  display: 'grid',
-                  gridTemplateColumns: '1fr 1fr 1fr',
-                  borderTop: i > 0 ? '1px solid rgba(27,25,22,0.04)' : undefined,
-                }}>
-                  <div style={{ padding: '16px 20px', background: 'rgba(27,25,22,0.01)', borderRight: '1px solid rgba(27,25,22,0.04)' }}>
-                    <span style={{ fontSize: 13, fontWeight: 600, color: '#7A7469', fontFamily: 'Space Grotesk, sans-serif' }}>{row.label}</span>
-                  </div>
-                  <div style={{ padding: '16px 20px', borderRight: '1px solid rgba(27,25,22,0.04)' }}>
-                    <p style={{ fontSize: 13, color: '#7A7469', lineHeight: 1.6 }}>{row.a}</p>
-                  </div>
-                  <div style={{ padding: '16px 20px' }}>
-                    <p style={{ fontSize: 13, color: '#7A7469', lineHeight: 1.6 }}>{row.b}</p>
-                  </div>
-                </div>
-              ))}
-            </div>
+            {/* Comparison table — one criterion a row at table widths, one
+                block a criterion below 720px (see .vs-table in globals.css). */}
+            <table className="vs-table">
+              <thead>
+                <tr>
+                  <th scope="col">Criteria</th>
+                  <th scope="col">
+                    <Link href={`/tools/${page.toolA.slug}`} className="vs-table-tool">{page.toolA.name}</Link>
+                  </th>
+                  <th scope="col">
+                    <Link href={`/tools/${page.toolB.slug}`} className="vs-table-tool">{page.toolB.name}</Link>
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                {page.criteria.map((row, i) => (
+                  <tr key={i}>
+                    <th scope="row">{row.label}</th>
+                    <td><span className="vs-table-who">{page.toolA.name}</span>{row.a}</td>
+                    <td><span className="vs-table-who">{page.toolB.name}</span>{row.b}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
 
             {/* Verdict */}
             <div style={{

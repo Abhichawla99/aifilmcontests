@@ -2310,3 +2310,100 @@ img, svg, video, canvas { max-width: 100%; }
   .ds-credit { grid-template-columns: minmax(0, 1fr); gap: 2px; }
   .ds-credit dt { padding-top: 0; }
 }
+
+/* ── /vs comparison table ────────────────────────────────────────────────────
+   2026-11-25. Was a rounded, bordered three-column grid held at 1fr 1fr 1fr at
+   every width. At 390px that left each column 116px wide with 40px of it
+   padding, so a 95-character answer set eleven lines deep at about nine
+   characters a line — the page's whole reason to exist, unreadable on a phone.
+   Both tool columns were also filled with their tool's brand hue at 0.12, two
+   colours from outside theme.ts that landed as the same pale lilac and told
+   the reader nothing.
+
+   Now it is a real table in the .ds-table idiom already used on /creator-pack:
+   no outer box, no radius, no fills, hairlines carrying the grid. Below 720px
+   each criterion becomes a block — the field name, then each tool named with
+   its answer on the full measure. Columns are for short labels; a sentence
+   gets the whole width. */
+.vs-table { width: 100%; border-collapse: collapse; margin: 0 0 40px; }
+.vs-table th,
+.vs-table td { text-align: left; vertical-align: top; }
+.vs-table thead th {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: #8B867C;
+  padding: 0 24px 10px 0;
+  border-bottom: 1px solid #E3DED3;
+}
+.vs-table thead th:last-child { padding-right: 0; }
+.vs-table-tool {
+  font-size: 13px;
+  letter-spacing: 0.06em;
+  color: #1B1916;
+  text-decoration: none;
+}
+.vs-table-tool:hover {
+  color: #4338CA;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.vs-table tbody th {
+  width: 24%;
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 13.5px;
+  font-weight: 700;
+  color: #1B1916;
+  padding: 16px 24px 16px 0;
+  border-bottom: 1px solid #ECE9E2;
+}
+.vs-table tbody td {
+  font-size: 14.5px;
+  line-height: 1.65;
+  color: #3E3A33;
+  padding: 16px 24px 16px 0;
+  border-bottom: 1px solid #ECE9E2;
+}
+.vs-table tbody td:last-child { padding-right: 0; }
+/* The column head names the tool at table widths; on a phone there is no head,
+   so each answer carries the name itself. */
+.vs-table-who { display: none; }
+
+@media (max-width: 720px) {
+  .vs-table,
+  .vs-table tbody,
+  .vs-table tr,
+  .vs-table th,
+  .vs-table td { display: block; }
+  .vs-table thead { display: none; }
+  .vs-table { border-top: 1px solid #E3DED3; }
+  .vs-table tbody tr {
+    padding: 16px 0;
+    border-bottom: 1px solid #ECE9E2;
+  }
+  .vs-table tbody th {
+    width: auto;
+    font-size: 11px;
+    letter-spacing: 0.09em;
+    text-transform: uppercase;
+    color: #8B867C;
+    padding: 0 0 10px;
+    border-bottom: none;
+  }
+  .vs-table tbody td {
+    padding: 0;
+    border-bottom: none;
+  }
+  .vs-table tbody td + td { margin-top: 14px; }
+  .vs-table-who {
+    display: block;
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    color: #1B1916;
+    margin-bottom: 2px;
+  }
+}
