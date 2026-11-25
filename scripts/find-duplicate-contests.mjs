@@ -21,6 +21,27 @@
  * <id> — extras <ids>` lines as the full scan. Always exits 0, so a cron can
  * call it unconditionally and just read the output.
  *
+ * Also supports flagging rows whose own `url` is an aggregator/listicle page
+ * rather than the organizer's own site — the facts a scraper reads off one of
+ * those (prize, deadline, organizer) can actually belong to a neighbouring
+ * listing on the same page. See the 2026-11-22 weekly review's
+ * `jingrui-ai-creation-contest-2026` finding (url pointed at
+ * gasptv.com/ai-film-festivals/, a GASP listicle, and the row had taken
+ * GASP's own prize/deadline instead of the real organizer's):
+ *   node scripts/find-duplicate-contests.mjs --sources
+ * Flags a row's url host if it is a known aggregator (gasptv.com,
+ * skillboxes.com) or if that host hosts 3+ contests whose names share no
+ * real relation with the host's own name — a real organizer's own domain
+ * almost always shares its brand with what it hosts there (higgsfield.ai
+ * hosting "Higgsfield Adathon"), while a true aggregator/listicle host
+ * shares no such relation with the unrelated festivals it merely writes
+ * about. Submission platforms (filmfreeway.com etc.) are excluded from that
+ * auto-detection — they're already known to host many unrelated festivals'
+ * own, per-festival submission pages, not aggregator prose. Prints one line
+ * per flagged row (id, host, updated_at), oldest `updated_at` first, so
+ * research has a re-verify queue instead of waiting for a review to notice.
+ * Read-only, always exits 0.
+ *
  * Both modes run the same pairwise signals:
  *   1. Name match (after stripping year/edition numbers and punctuation),
  *      gated to a close deadline so next year's edition isn't flagged.
@@ -227,6 +248,58 @@ function isResolvedDuplicate(row) {
   return String(row.description || '').startsWith(RESOLVED_DUPLICATE_MARKER)
 }
 
+// Seed list: aggregator/listicle hosts already caught carrying another
+// contest's facts (see the 2026-11-22 weekly review). Any host added here
+// is flagged regardless of how many contests it carries.
+const KNOWN_AGGREGATOR_HOSTS = new Set(['gasptv.com', 'skillboxes.com'])
+
+// A host is also treated as an aggregator if it carries 3+ contests and
+// *none* of their names actually relate to the host's own name — a real
+// organizer's own domain almost always shares its brand with the contests
+// it runs there (e.g. higgsfield.ai hosting "Higgsfield Adathon", or
+// showrunnerstudio.com hosting a contest whose name includes "Showrunner");
+// a true aggregator/listicle host (gasptv.com, skillboxes.com) shares no
+// such relation with the unrelated festivals it merely writes about.
+// Tested against live data: this correctly leaves curiousrefuge.com,
+// higgsfield.ai, worldaifilmfestival.com, wearehuman.foundation and
+// showrunnerstudio.com unflagged (each hosts several of its own,
+// differently-named programs) while still catching skillboxes.com.
+const AGGREGATOR_HOST_MIN_ROWS = 3
+
+function hostBrandToken(host) {
+  // "higgsfield.ai" -> "higgsfield", "worldaifilmfestival.com" -> "worldaifilmfestival"
+  return host.replace(/\.[a-z]{2,}$/, '').replace(/[^a-z0-9]+/g, '')
+}
+
+function nameRelatesToHostBrand(name, brand) {
+  if (!brand || brand.length < 4) return false
+  const condensedName = normalizeName(name).replace(/\s+/g, '')
+  if (condensedName.includes(brand) || brand.includes(condensedName)) return true
+  for (const tok of significantTokens(name)) {
+    if (tok.length >= 5 && brand.includes(tok)) return true
+  }
+  return false
+}
+
+function findAggregatorHosts(allRows) {
+  const byHost = new Map()
+  for (const r of allRows) {
+    const host = domainOf(r.url)
+    if (!host || SUBMISSION_PLATFORM_DOMAINS.has(host)) continue
+    if (!byHost.has(host)) byHost.set(host, [])
+    byHost.get(host).push(r)
+  }
+
+  const aggregatorHosts = new Set(KNOWN_AGGREGATOR_HOSTS)
+  for (const [host, hostRows] of byHost) {
+    if (hostRows.length < AGGREGATOR_HOST_MIN_ROWS) continue
+    const brand = hostBrandToken(host)
+    const anyRelated = hostRows.some(r => nameRelatesToHostBrand(r.name, brand))
+    if (!anyRelated) aggregatorHosts.add(host)
+  }
+  return aggregatorHosts
+}
+
 // Shared by --sweep and the full scan: print one resolved group in the
 // playbook's `DUPLICATE: keep <id> — extras <ids>` format, picking the most
 // complete row to keep.
@@ -282,6 +355,25 @@ if (checkFlagIdx !== -1) {
     console.log(`  matches: "${row.name}" (${row.id}, ${row.url}, deadline ${row.deadline}) — signal: ${signal}`)
   }
   process.exit(1)
+}
+
+const sourcesFlagIdx = process.argv.indexOf('--sources')
+if (sourcesFlagIdx !== -1) {
+  const aggregatorHosts = findAggregatorHosts(rows)
+  const flagged = rows
+    .filter(r => aggregatorHosts.has(domainOf(r.url)))
+    .sort((a, b) => new Date(a.updated_at) - new Date(b.updated_at))
+
+  if (flagged.length === 0) {
+    console.log('No rows found whose url host looks like an aggregator page.')
+    process.exit(0)
+  }
+
+  console.log(`Found ${flagged.length} row(s) whose url host is a known or likely aggregator page (re-verify against the organizer's own site), oldest updated_at first:\n`)
+  for (const r of flagged) {
+    console.log(`  ${r.id}  host: ${domainOf(r.url)}  updated_at: ${r.updated_at}`)
+  }
+  process.exit(0)
 }
 
 const sweepFlagIdx = process.argv.indexOf('--sweep')
