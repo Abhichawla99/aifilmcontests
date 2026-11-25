@@ -246,6 +246,7 @@ const TOPICS = [
   'heygen-video-contest-2026',
   'reelflix-ai-series-competition-2026',
   'kling-ai-contests-2026',
+  'migoo-video-challenge-2026',
   'ai-film-awards-2026-2027',
   'ai-short-film-competitions-2026',
   '1-billion-followers-summit-ai-film-award-2027',
