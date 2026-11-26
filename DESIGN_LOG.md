@@ -36,6 +36,99 @@ describe the old dark theme; the reasoning still applies, the colours do not.)*
 
 ---
 
+## 2026-11-26 — The compact subscribe form, with the thing you must agree to before the button you press
+
+**Changed** — the `compact` branch of `src/components/EmailSubscribe.tsx`
+(28 lines in, 38 out, so ten lines shorter) and a new `.sub-compact` block at the end
+of `src/app/globals.css` (72 lines, 32 of them comment). No new dependency,
+no font, no URL, no data, no copy. The full form in the same file is
+untouched, as are the error component, the focus handling and every aria
+attribute. The generated `src/data/contests-snapshot.json` the build rewrites
+was reverted before the commit.
+
+This form is on more pages than anything else on the site: every contest
+page, every hub (`/topics`, `/tools`, `/prize`, `/location`, `/categories`,
+`/creators`, `/vs`), every guide, every topic page, and the homepage's lower
+subscribe band. Twenty-five call sites.
+
+**Was** — field and button in a `flex-wrap` row, consent checkbox in a label
+underneath. Wherever the row was too narrow to seat the pair it stacked, and
+the reading order became: field, button, then the tickbox the button
+requires. You typed an address, pressed Get the pack, were refused with
+"Please agree to receive email alerts to continue", and focus was sent *back
+up past the button* to a 13px square you had never read.
+
+The button also kept its content width on the row it had dropped onto.
+Measured on the live site before this run:
+
+| | form | field | button | consent |
+|---|---|---|---|---|
+| contest page, 390px | 350px | 350px | **118.6px** | after the button |
+| homepage band, 1440px | 360px | 360px | **118.6px** | after the button |
+
+That second row is the one that decides the implementation. At a 1440px
+viewport the homepage's lower band sits in a 360px auto-fit column, so this
+is not a phone problem with a phone fix — a media query at any sensible
+viewport breakpoint would have left that placement wrong, and the previous
+entry's own note on this form says as much: what decides the layout is the
+row's width, not the viewport's.
+
+**Now** — a three-cell grid, `field / consent / button` stacked, and a
+container query at 26rem that seats the field and the button on one line and
+drops the consent under both. 26rem is where the old flex basis already
+wrapped (18rem + 8px gap + the button's 118.6px = 414.6px), so nothing that
+seats the pair today stops seating it. Swept across viewports on a contest
+page, the grid follows the form's own width exactly, including the two
+places an auto-fit grid hands it a narrow column at a wide viewport:
+
+| viewport | form width | layout |
+|---|---|---|
+| 375px | 335px | stacked |
+| 480px | 440px | one line |
+| 600px | 271px | stacked |
+| 768px | 352.5px | stacked |
+| 900px | 416.5px | one line |
+| 1440px | 476px | one line, field 349.4 / button 118.6 — unchanged |
+
+At 390px the button goes from 118.6px to the full 350px. A third of a row is
+not a button, it is a button that got left behind; a control that drops onto
+its own row should take that row.
+
+Two smaller repairs in the same block, both of them the compact form
+disagreeing with the full one for no reason: the checkbox was left at the
+user agent's 13px and is now 14px, and its sentence was 11px, the smallest
+type anywhere on the site, on the one line a reader has to understand before
+they can finish. It is 12px now. Its colour stays inline, because the error
+state darkens it to ink.
+
+Verified on the production build by driving the form: submitting with a
+valid address and no consent still prints "NOT SUBSCRIBED YET / Please agree
+to receive email alerts to continue", outlines the checkbox in burnt orange
+`#C2410C`, moves focus to it, wires `aria-describedby` to the alert's id and
+darkens the sentence to `#1B1916` — the behaviour the 2026-11-11 entry built,
+intact. Ticking the box clears it. `npm run build` exit 0, no horizontal
+overflow at 390px on the contest page, the homepage, `/topics` and `/guide`.
+
+**Seen** — MUBI's signup, at 375px. The field and the WATCH NOW button are
+one object: same height, flush, and when the pair stacks the button takes the
+field's full width rather than shrinking to its label. The terms sentence
+sits *below* the button, and that is right there, because it is a sentence —
+nothing you have to operate stands between the field and the press. Ours was
+a checkbox in that position, which is a different thing entirely. Criterion's
+shop does the same with its FILTER and SORT pair: two controls, each taking
+half the row, neither of them floating at its content width.
+
+**Noticed, not changed** — `/location` prints the same count, 74, against
+every one of its five regions, which is the site's full open-contest count
+rather than each region's. That is a filter bug, not a design one; flagged
+here for the optimizer.
+
+**Before / after** — `reports/design/2026-11-26-before.png` and
+`-after.png` (390px), `-before-desktop.png` and `-after-desktop.png`
+(1440px).
+
+---
+
 ## 2026-11-25 — The /vs comparison table, ruled and stacked so a phone can read it
 
 **Changed** — the pairwise comparison on the five `/vs/<slug>` pages. Two
