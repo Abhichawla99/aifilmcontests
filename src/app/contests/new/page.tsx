@@ -20,9 +20,11 @@ export const metadata: Metadata = {
     description: 'AI film competitions added to our directory in the last two weeks.',
     url: `${BASE}/contests/new`,
     siteName: 'AI Film Contests',
+    images: [`${BASE}/opengraph-image`],
   },
   twitter: {
     card: 'summary_large_image',
+    images: [`${BASE}/opengraph-image`],
     title: 'Newest AI Film Contests',
     description: 'AI film competitions added to our directory in the last two weeks.',
   },

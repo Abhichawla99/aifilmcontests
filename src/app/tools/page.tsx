@@ -18,9 +18,11 @@ export const metadata: Metadata = {
     description: 'Every AI tool with film contests that require or accept it, and how many are open now.',
     url: `${BASE}/tools`,
     siteName: 'AI Film Contests',
+    images: [`${BASE}/opengraph-image`],
   },
   twitter: {
     card: 'summary_large_image',
+    images: [`${BASE}/opengraph-image`],
     title: 'AI Tools for Film Contests',
     description: 'Every AI tool with film contests that require or accept it, and how many are open now.',
   },

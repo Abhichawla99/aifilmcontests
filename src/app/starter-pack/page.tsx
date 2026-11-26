@@ -22,6 +22,13 @@ export const metadata: Metadata = {
     description: `Overs, one tool in place of your AI subscriptions, for $${OVERS.monthlyUsd} a month (${OVERS_OFF_PERCENT}% off). Plus a contest film guide and a free community. Claim it with your email.`,
     url: 'https://aifilmcontests.com/starter-pack',
     siteName: 'AI Film Contests',
+    images: ['https://aifilmcontests.com/opengraph-image'],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    images: ['https://aifilmcontests.com/opengraph-image'],
+    title: 'Free Creator Pack for AI Filmmakers',
+    description: `Overs, one tool in place of your AI subscriptions, for $${OVERS.monthlyUsd} a month (${OVERS_OFF_PERCENT}% off). Plus a contest film guide and a free community. Claim it with your email.`,
   },
 }
 

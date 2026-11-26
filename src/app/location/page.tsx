@@ -18,9 +18,11 @@ export const metadata: Metadata = {
     description: 'AI film contests for filmmakers in the USA, Europe, the UK, online/remote, and worldwide.',
     url: `${BASE}/location`,
     siteName: 'AI Film Contests',
+    images: [`${BASE}/opengraph-image`],
   },
   twitter: {
     card: 'summary_large_image',
+    images: [`${BASE}/opengraph-image`],
     title: 'AI Film Contests by Location',
     description: 'AI film contests for filmmakers in the USA, Europe, the UK, online/remote, and worldwide.',
   },

@@ -20,9 +20,11 @@ export const metadata: Metadata = {
     description: 'Open AI film competitions whose eligibility welcomes students.',
     url: `${BASE}/contests/student`,
     siteName: 'AI Film Contests',
+    images: [`${BASE}/opengraph-image`],
   },
   twitter: {
     card: 'summary_large_image',
+    images: [`${BASE}/opengraph-image`],
     title: 'AI Film Contests for Students',
     description: 'Open AI film competitions whose eligibility welcomes students.',
   },

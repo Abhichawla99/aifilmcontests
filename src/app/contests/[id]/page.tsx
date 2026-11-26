@@ -112,9 +112,11 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
       url: `https://aifilmcontests.com/contests/${id}`,
       siteName: 'AI Film Contests',
       type: 'website',
+      images: ['https://aifilmcontests.com/opengraph-image'],
     },
     twitter: {
       card: 'summary_large_image',
+      images: ['https://aifilmcontests.com/opengraph-image'],
       title: `${contest.name} | AI Film Contests`,
       description: desc,
     },

@@ -20,9 +20,11 @@ export const metadata: Metadata = {
     description: 'Open AI film competitions offering a cash prize.',
     url: `${BASE}/contests/cash-prizes`,
     siteName: 'AI Film Contests',
+    images: [`${BASE}/opengraph-image`],
   },
   twitter: {
     card: 'summary_large_image',
+    images: [`${BASE}/opengraph-image`],
     title: 'AI Film Contests with Cash Prizes',
     description: 'Open AI film competitions offering a cash prize.',
   },

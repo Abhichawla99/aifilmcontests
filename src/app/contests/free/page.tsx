@@ -20,9 +20,11 @@ export const metadata: Metadata = {
     description: 'Open AI film competitions with no entry fee.',
     url: `${BASE}/contests/free`,
     siteName: 'AI Film Contests',
+    images: [`${BASE}/opengraph-image`],
   },
   twitter: {
     card: 'summary_large_image',
+    images: [`${BASE}/opengraph-image`],
     title: 'Free AI Film Contests',
     description: 'Open AI film competitions with no entry fee.',
   },

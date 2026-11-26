@@ -18,9 +18,11 @@ export const metadata: Metadata = {
     description: 'Free entry, high prize, cash prizes, and grants — how many AI film contests are open in each right now.',
     url: `${BASE}/prize`,
     siteName: 'AI Film Contests',
+    images: [`${BASE}/opengraph-image`],
   },
   twitter: {
     card: 'summary_large_image',
+    images: [`${BASE}/opengraph-image`],
     title: 'AI Film Contests by Prize Type',
     description: 'Free entry, high prize, cash prizes, and grants — how many AI film contests are open in each right now.',
   },

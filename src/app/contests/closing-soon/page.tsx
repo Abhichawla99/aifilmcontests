@@ -20,9 +20,11 @@ export const metadata: Metadata = {
     description: 'Open AI film competitions with a deadline in the next two weeks, soonest first.',
     url: `${BASE}/contests/closing-soon`,
     siteName: 'AI Film Contests',
+    images: [`${BASE}/opengraph-image`],
   },
   twitter: {
     card: 'summary_large_image',
+    images: [`${BASE}/opengraph-image`],
     title: 'AI Film Contests Closing Soon',
     description: 'Open AI film competitions with a deadline in the next two weeks, soonest first.',
   },

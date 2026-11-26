@@ -18,9 +18,11 @@ export const metadata: Metadata = {
     description: 'Short film, animation, feature, documentary and more — how many AI film contests are open in each category right now.',
     url: `${BASE}/categories`,
     siteName: 'AI Film Contests',
+    images: [`${BASE}/opengraph-image`],
   },
   twitter: {
     card: 'summary_large_image',
+    images: [`${BASE}/opengraph-image`],
     title: 'AI Film Contests by Category',
     description: 'Short film, animation, feature, documentary and more — how many AI film contests are open in each category right now.',
   },

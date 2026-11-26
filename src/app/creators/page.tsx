@@ -18,9 +18,11 @@ export const metadata: Metadata = {
     description: 'Profiles of the studios and filmmakers making AI film work.',
     url: `${BASE}/creators`,
     siteName: 'AI Film Contests',
+    images: [`${BASE}/opengraph-image`],
   },
   twitter: {
     card: 'summary_large_image',
+    images: [`${BASE}/opengraph-image`],
     title: 'Featured AI Filmmakers & Studios',
     description: 'Profiles of the studios and filmmakers making AI film work.',
   },

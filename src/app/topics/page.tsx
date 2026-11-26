@@ -18,9 +18,11 @@ export const metadata: Metadata = {
     description: 'Deadline round-ups, tool-specific picks, regional guides and single-festival deep dives, all in one list.',
     url: `${BASE}/topics`,
     siteName: 'AI Film Contests',
+    images: [`${BASE}/opengraph-image`],
   },
   twitter: {
     card: 'summary_large_image',
+    images: [`${BASE}/opengraph-image`],
     title: 'AI Film Contest Guides & Topics',
     description: 'Deadline round-ups, tool-specific picks, regional guides and single-festival deep dives, all in one list.',
   },

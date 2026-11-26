@@ -29,8 +29,9 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
       description: page.description,
       url: `https://aifilmcontests.com/prize/${slug}`,
       siteName: 'AI Film Contests',
+      images: ['https://aifilmcontests.com/opengraph-image'],
     },
-    twitter: { card: 'summary_large_image', title: page.label, description: page.description },
+    twitter: { card: 'summary_large_image', images: ['https://aifilmcontests.com/opengraph-image'], title: page.label, description: page.description },
     alternates: { canonical: `https://aifilmcontests.com/prize/${slug}` },
   }
 }

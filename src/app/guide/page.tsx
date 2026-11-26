@@ -20,9 +20,11 @@ export const metadata: Metadata = {
     description: 'Monthly deadline round-ups, festival-specific how-tos, and craft guides for AI brand and commercial work.',
     url: `${BASE}/guide`,
     siteName: 'AI Film Contests',
+    images: [`${BASE}/opengraph-image`],
   },
   twitter: {
     card: 'summary_large_image',
+    images: [`${BASE}/opengraph-image`],
     title: 'Guides',
     description: 'Monthly deadline round-ups, festival-specific how-tos, and craft guides for AI brand and commercial work.',
   },

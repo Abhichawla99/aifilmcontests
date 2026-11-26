@@ -13,6 +13,14 @@ export const metadata: Metadata = {
     description: 'How generative AI is reshaping commercial filmmaking and brand storytelling. Competitions, tools, and the agencies leading the charge.',
     type: 'article',
     url: 'https://aifilmcontests.com/cinematic-ads',
+    siteName: 'AI Film Contests',
+    images: ['https://aifilmcontests.com/opengraph-image'],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    images: ['https://aifilmcontests.com/opengraph-image'],
+    title: 'Cinematic AI Advertising — Brand Storytelling Reimagined',
+    description: 'How generative AI is reshaping commercial filmmaking and brand storytelling. Competitions, tools, and the agencies leading the charge.',
   },
   alternates: { canonical: 'https://aifilmcontests.com/cinematic-ads' },
 }

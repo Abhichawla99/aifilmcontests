@@ -18,9 +18,11 @@ export const metadata: Metadata = {
     description: 'Head-to-head comparisons of the AI video tools filmmakers use to enter competitions.',
     url: `${BASE}/vs`,
     siteName: 'AI Film Contests',
+    images: [`${BASE}/opengraph-image`],
   },
   twitter: {
     card: 'summary_large_image',
+    images: [`${BASE}/opengraph-image`],
     title: 'AI Video Tool Comparisons',
     description: 'Head-to-head comparisons of the AI video tools filmmakers use to enter competitions.',
   },
