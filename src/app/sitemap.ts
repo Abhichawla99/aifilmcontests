@@ -247,6 +247,7 @@ const TOPICS = [
   'reelflix-ai-series-competition-2026',
   'kling-ai-contests-2026',
   'migoo-video-challenge-2026',
+  'make-a-seedance-film-for-the-1-million-ai-film-award',
   'ai-film-awards-2026-2027',
   'ai-short-film-competitions-2026',
   '1-billion-followers-summit-ai-film-award-2027',
