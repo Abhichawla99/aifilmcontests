@@ -117,63 +117,53 @@ export default function EmailSubscribe({ compact = false, openCount }: { compact
 
   if (compact) {
     return (
-      <div className="w-full">
+      <div className="w-full sub-compact">
         {typeof openCount === 'number' && (
           <p style={{ fontSize: 12, color: '#6F6A61', marginBottom: 10, lineHeight: 1.55 }}>
             New contests within a day of opening, a last call before deadlines close, and the free creator pack —{' '}
             <strong style={{ color: '#1B1916' }}>{openCount} open right now</strong>.
           </p>
         )}
-        <form onSubmit={handleSubmit} className="flex flex-col gap-2">
-          {/* The button keeps its 100px and the field takes whatever is left, which
-              on a phone is not enough: measured on the live site at 390px the field
-              is 200px wide, 174px of that text area, and a 21-character address sets
-              at 176px — you cannot read back what you typed before you send it.
-              What decides this is the row's width, not the viewport's, because the
-              same form sits in a 451px rail on desktop. So it wraps on a flex basis
-              rather than a media query: the field asks for 18rem, and any row that
-              cannot seat 18rem + gap + button drops the button onto its own line and
-              lets the field take the whole width. That is every phone placement
-              (308px on a contest page, 335px on a hub, 350px in a guide) and no
-              desktop one (451px and up still seat the pair, unchanged). */}
-          <div className="flex flex-wrap gap-2">
-            <input
-              ref={emailRef}
-              type="email"
-              value={email}
-              onChange={e => { setEmail(e.target.value); clearIfBlaming('email') }}
-              placeholder="your@email.com"
-              aria-label="Email address"
-              required
-              className="input"
-              {...errorProps(emailInvalid)}
-              style={{ padding: '9px 12px', fontSize: '13px', flex: '1 1 18rem', minWidth: 0, ...invalidInput }}
-            />
-            <button
-              type="submit"
-              disabled={status === 'loading'}
-              className="btn"
-              style={{ flex: '0 0 auto' }}
-            >
-              {status === 'loading' ? '...' : 'Get the pack'}
-            </button>
-          </div>
-          <label style={{ display: 'flex', alignItems: 'flex-start', gap: '8px', cursor: 'pointer' }}>
+        {/* Field, consent, button — in that order, which is the order the full
+            form has always used. The three cells and the breakpoint that seats
+            the field and the button on one line live in .sub-compact in
+            globals.css; the reasoning is written out there. */}
+        <form onSubmit={handleSubmit} className="sub-compact-form">
+          <input
+            ref={emailRef}
+            type="email"
+            value={email}
+            onChange={e => { setEmail(e.target.value); clearIfBlaming('email') }}
+            placeholder="your@email.com"
+            aria-label="Email address"
+            required
+            className="input sub-compact-field"
+            {...errorProps(emailInvalid)}
+            style={{ padding: '9px 12px', fontSize: '13px', ...invalidInput }}
+          />
+          <label className="sub-compact-consent">
             <input
               ref={consentRef}
               type="checkbox"
               checked={consent}
               onChange={e => { setConsent(e.target.checked); clearIfBlaming('consent') }}
               {...errorProps(consentInvalid)}
-              style={{ marginTop: '2px', accentColor: '#4f46e5', flexShrink: 0, ...invalidBox }}
+              style={invalidBox ?? undefined}
             />
             {/* Grey is the right weight for a line nobody should have to read
                 twice. The moment it is the one thing holding the form up, it
                 stops being that line. */}
-            <span style={{ fontSize: '11px', color: consentInvalid ? '#1B1916' : '#6F6A61', lineHeight: 1.5 }}>
+            <span style={{ color: consentInvalid ? '#1B1916' : '#6F6A61' }}>
               I agree to receive email alerts about AI film contests. Unsubscribe anytime.
             </span>
           </label>
+          <button
+            type="submit"
+            disabled={status === 'loading'}
+            className="btn sub-compact-button"
+          >
+            {status === 'loading' ? '...' : 'Get the pack'}
+          </button>
         </form>
         {status === 'error' && <SubscribeError id={alertId} message={message} />}
       </div>

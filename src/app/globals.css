@@ -2407,3 +2407,75 @@ img, svg, video, canvas { max-width: 100%; }
     margin-bottom: 2px;
   }
 }
+
+/* ── Compact subscribe form ───────────────────────────────────────────────────
+   The field, the consent line and the button, set as a grid so the order of
+   the controls follows the order of the decision.
+
+   Until now the compact form put the submit button immediately after the
+   field and the consent checkbox underneath it. On a phone, where the pair
+   stacks, that meant you met the button before the tickbox the button
+   requires: you pressed Get the pack, the form refused, and focus was sent
+   back up past the button to a 13px square you had never read. The full form
+   on the homepage card and /subscribe has always run name, email, consent,
+   button. This is that order, in the width a contest page or a hub rail
+   actually gives it.
+
+   Measured on the production build at 390px, before: a 350px field with a
+   118.6px button orphaned underneath it, taking a third of the row it had
+   dropped onto, and the consent line below that. After: field, consent,
+   button, and the button takes the whole row.
+
+   The breakpoint is a container query, not a media query, because what
+   decides this is the form's own width and not the viewport's — the same
+   component sits in a 476px rail on a desktop contest page and a 350px
+   column on a phone, and an auto-fit grid can hand it a narrow column at a
+   wide viewport. 26rem is where the old flex basis wrapped (18rem + 8px gap
+   + the button's 118.6px = 414.6px), so nothing that seats the pair today
+   stops seating it. */
+.sub-compact { container-type: inline-size; }
+
+.sub-compact-form {
+  display: grid;
+  gap: 8px;
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-areas:
+    'field'
+    'consent'
+    'button';
+}
+.sub-compact-field   { grid-area: field; }
+.sub-compact-consent { grid-area: consent; }
+.sub-compact-button  { grid-area: button; justify-content: center; }
+
+@container (min-width: 26rem) {
+  .sub-compact-form {
+    grid-template-columns: minmax(0, 1fr) auto;
+    grid-template-areas:
+      'field   button'
+      'consent consent';
+  }
+}
+
+/* The checkbox is sized here rather than left at the user agent's 13px: the
+   full form already sets 14px and the two should not disagree. The sentence
+   goes to 12px for the same reason — it was the smallest type on the site at
+   11px, and it is the one line a reader has to understand before they can
+   finish. Its colour stays inline, because the error state darkens it. */
+.sub-compact-consent {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  cursor: pointer;
+}
+.sub-compact-consent input[type='checkbox'] {
+  width: 14px;
+  height: 14px;
+  margin-top: 2px;
+  flex-shrink: 0;
+  accent-color: #4f46e5;
+}
+.sub-compact-consent span {
+  font-size: 12px;
+  line-height: 1.5;
+}
