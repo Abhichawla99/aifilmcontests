@@ -36,6 +36,72 @@ describe the old dark theme; the reasoning still applies, the colours do not.)*
 
 ---
 
+## 2026-11-27 — The hero figures stop printing a total beside its own two parts
+
+**Changed** — the hero figures array in `src/app/page.tsx` (one line out, its
+comment rewritten) and the `.hero-stats` block in `src/app/globals.css`
+(29 lines, 6 of them comment). 42 changed lines in all. No new dependency, no
+font, no URL, no data, no copy rewritten. The generated
+`src/data/contests-snapshot.json` the build rewrites was reverted before the
+commit.
+
+**Was** — four figures on one ruled row: `75 OPEN NOW · 6 COMING SOON ·
+$2.1M+ IN PRIZES · 81 ACTIVE`. A contest in this database is `open`,
+`upcoming` or `closed` and nothing else — checked against the snapshot, which
+holds exactly those three values (75 / 6 / 221). So `Active`, which counted
+everything not closed, was `Open now + Coming soon` added up, always, by
+construction and not by today's numbers happening to line up. It was set at
+the same size, in the same weight, on the same rule as the two figures it
+sums.
+
+A row of four facts where one is arithmetic on two of the others is the shape
+of a stat row that exists because the layout wanted a fourth cell. It was
+worse on a phone: the 2×2 put `81 ACTIVE` diagonally opposite its own parts,
+where nothing suggests the relationship and it reads as a fourth independent
+claim. And the page already prints the number where it belongs — the browse
+masthead further down says "81 active · verified against live sources daily",
+heading the list of 81 it actually counts.
+
+**Now** — three figures, each one a different fact. Desktop is unchanged in
+kind, one column narrower: `repeat(3, max-content)` on the same two hairlines.
+
+The phone needed a real decision, because 2×2 has no honest shape for three
+and three across at 390px leaves about 104px of content per figure, which
+wraps `COMING SOON` to two lines while its neighbours stay on one. So each
+figure becomes one ruled row instead: label left in small caps, figure hard
+right on the tabular column it was already set for, `row-reverse` with
+`space-between` so the DOM order (figure, then its label) is untouched. That
+is the spec row a contest page's rail already uses for ENTRY FEE and DEADLINE
+and the shape the 2026-11-22 entry gave "Closing soonest", so the hero's
+totals and a listing's facts are now set the same way. Right-aligned, the
+three figures share one edge and can be read down as a column instead of
+scanned as a grid.
+
+Verified on the production build and then on the live page at 375, 390, 560
+and 1440px: `npm run build` exit 0, `✓ no horizontal overflow` at every one of
+them, 560px still takes the three-across desktop row, and the `noListings`
+fallback that replaces this slot when the data does not arrive (the 2026-10-11
+entry) is untouched — its sentence sits in the same ruled box at the same
+height.
+
+**Seen** — Criterion's Shop All Films. Above a 1,908-row listing it prints one
+figure, `1908` with `RESULTS` beside it in small caps, sitting on the same
+rule as the Filter and Sort controls. One count, over the list it counts, and
+no masthead row of figures anywhere above it. The restraint is the point: a
+site with a real database can print a dozen totals and the only one that earns
+its place is the one standing over the thing it describes. Ours already had
+that, lower down the page; the hero was printing it a second time next to its
+own ingredients.
+
+**Noticed, not changed** — the `/location` count bug the 2026-11-26 entry
+flagged (74 against all five regions) is still live. Still a filter bug for
+the optimizer, not a design one.
+
+**Before / after** — `reports/design/2026-11-27-before.png` and `-after.png`
+(390px), `-before-desktop.png` and `-after-desktop.png` (1440px).
+
+---
+
 ## 2026-11-26 — The compact subscribe form, with the thing you must agree to before the button you press
 
 **Changed** — the `compact` branch of `src/components/EmailSubscribe.tsx`
