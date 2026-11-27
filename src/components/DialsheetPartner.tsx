@@ -309,11 +309,12 @@ export function DialsheetArticle({
 
 export function dialsheetMetadata(slug: string, title: string, description: string) {
   const url = `${BASE}${DIALSHEET_PATH}${slug ? `/${slug}` : ''}`
+  const images = [`${BASE}/opengraph-image`]
   return {
     title: `${title} | AI Film Contests`,
     description,
     alternates: { canonical: url },
-    openGraph: { title, description, url, siteName: 'AI Film Contests', type: 'article' as const },
-    twitter: { card: 'summary_large_image' as const, title, description },
+    openGraph: { title, description, url, siteName: 'AI Film Contests', type: 'article' as const, images },
+    twitter: { card: 'summary_large_image' as const, title, description, images },
   }
 }
