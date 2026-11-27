@@ -289,10 +289,14 @@ export default async function Home() {
                   Deadline-verified daily by an agent that actually reads each page.
                 </p>
 
-                {/* Figures row: ruled, not boxed. Four across on desktop, 2×2 on a phone
-                    (see .hero-stats in globals.css) so no figure is ever orphaned.
-                    With no data it is replaced, in the same ruled slot and at the same
-                    height, by a sentence — four zeros under OPEN NOW / IN PRIZES is the
+                {/* Figures row: ruled, not boxed. Three across on desktop, one ruled row
+                    each on a phone (see .hero-stats in globals.css). Three, not four:
+                    a contest is open, upcoming or closed and nothing else, so an
+                    "Active" figure was always Open now + Coming soon added up, set the
+                    same size as its own two parts. The browse masthead further down
+                    still prints it, over the list it actually counts.
+                    With no data this row is replaced, in the same ruled slot and at the
+                    same height, by a sentence — zeros under OPEN NOW / IN PRIZES is the
                     one claim this site cannot survive making. */}
                 {noListings ? (
                   <div style={{
@@ -319,7 +323,6 @@ export default async function Home() {
                       { n: open.length,     label: 'Open now',    color: '#15803D' },
                       { n: upcoming.length, label: 'Coming soon', color: '#B45309' },
                       { n: totalPrize >= 1_000_000 ? `$${(totalPrize / 1_000_000).toFixed(1)}M+` : `$${Math.round(totalPrize / 1000)}K+`, label: 'In prizes', color: '#4338CA' },
-                      { n: allContests.filter(c => c.status !== 'closed').length, label: 'Active', color: '#3E3A33' },
                     ].map(s => (
                       <div key={s.label} className="hero-stat">
                         <span className="hero-stat-n" style={{ color: s.color }}>{s.n}</span>

@@ -294,7 +294,7 @@ img, svg, video, canvas { max-width: 100%; }
 /* ── Hero figures: a ruled row, like the totals line of a festival programme ── */
 .hero-stats {
   display: grid;
-  grid-template-columns: repeat(4, max-content);
+  grid-template-columns: repeat(3, max-content);
   width: fit-content;
   max-width: 100%;
   margin-bottom: 44px;
@@ -326,13 +326,26 @@ img, svg, video, canvas { max-width: 100%; }
   letter-spacing: 0.08em;
 }
 @media (max-width: 520px) {
-  /* Four figures do not fit across a phone, and wrapping left one stranded on
-     its own row. Two by two, with the same hairlines, reads as a table. */
-  .hero-stats { grid-template-columns: 1fr 1fr; width: 100%; }
-  .hero-stat, .hero-stat:last-child { padding: 15px 12px 14px 0; }
-  .hero-stat:nth-child(odd) { padding-left: 0; border-left: none; }
-  .hero-stat:nth-child(even) { padding-left: 18px; }
-  .hero-stat:nth-child(n+3) { border-top: 1px solid rgba(27,25,22,0.08); }
+  /* Three figures do not fit across a phone, and the 2x2 this row used while it
+     had four has no honest shape for three. One ruled row each instead: the
+     label left in small caps, the figure hard right on the tabular column it is
+     already set for — the spec row a contest page's rail uses for ENTRY FEE and
+     DEADLINE, so the hero's totals and a listing's facts are set the same way.
+     Right-aligned, the three figures share one edge to be read down. */
+  .hero-stats { grid-template-columns: 1fr; width: 100%; }
+  .hero-stat,
+  .hero-stat:last-child {
+    flex-direction: row-reverse;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 16px;
+    padding: 13px 0 12px;
+  }
+  .hero-stat + .hero-stat {
+    padding-left: 0;
+    border-left: none;
+    border-top: 1px solid rgba(27,25,22,0.08);
+  }
 }
 
 /* ── Hero meta line ─────────────────────────────────────────────────────────
