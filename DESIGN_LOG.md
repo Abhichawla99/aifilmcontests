@@ -36,6 +36,86 @@ describe the old dark theme; the reasoning still applies, the colours do not.)*
 
 ---
 
+## 2026-11-28 — The phone nav stops fading the word that says where you are
+
+**Changed** — `src/components/NavRow.tsx` (its `measure()` and `align()`, plus one
+module constant and three comment lines) and the `.inav` fade block in
+`src/app/globals.css` (three gradient stops and the comment above them). 43
+changed lines in all. No new dependency, no font, no URL, no data, no copy. The
+generated `src/data/contests-snapshot.json` the build rewrites was reverted
+before the commit.
+
+**Was** — on /categories, at 390px, the nav row scrolled itself so that
+`Categories` — the one word on that row naming the page you are reading — sat
+6.4px from the left edge, directly under the 24px-wide start fade. Measured, not
+guessed: `scrollLeft 292 of a 292 max`, current link at `x 6.4`. The mask is
+`linear-gradient(to right, transparent, #000 24px)`, so the "C" and part of the
+"a" were rendered at between 27% and 100% opacity, along with the leading end of
+the indigo rule underneath them. Every other link on the row was solid ink. It is
+the exact symptom the 2026-10-07 entry removed from /creators, arriving again by
+a different road.
+
+Two causes, and they were holding each other up.
+
+`align()` had a shortcut: land the current link one gutter in from the left,
+"unless that stops just shy of the end", in which case go the whole way instead,
+"so the last link reads as the last link". Its test was a distance —
+`max - target < 20` — and never asked whether the current link was in fact the
+last one. On /categories the current link is the fourth of seven, and the row's
+remaining slack happened to be 14px, so the shortcut fired and threw the row to
+its end.
+
+The shortcut existed to dodge a second bug rather than fix it. `measure()` asked
+the scroller whether there was more to scroll — `scrollLeft < scrollWidth -
+clientWidth - 1` — and the row finishes on a 12px `::after` spacer. So any rest
+position within ~12px of the end counted as "there is more this way" and raised
+an end fade over the last link with nothing behind it. Confirmed by hand on
+/tools: at `scrollLeft` 279 and 287 of a 291 max, the old rule said `both`.
+
+**Now** — `measure()` asks the first and last link where the row ends, via their
+rects against the row's, instead of asking the scrollbar. That is what a fade
+actually promises: a link you have not read yet, never a spacer. With that honest,
+the shortcut had nothing left to dodge, so it is gone — the current link is simply
+sent to the 20px gutter and the browser clamps when the row cannot reach it, which
+is already what brings `Creators` (x 203) and `Free Pack` (x 277) to rest in the
+clear.
+
+The fade is 20px rather than 24px so that the two numbers are the same number: it
+covers the row's own gutter and stops exactly where the first legible pixel of a
+link begins. A fade that overlaps type is a soft version of a lie.
+
+Checked at 390px on the production build, every page with a nav:
+
+| page | current link | lands at | fade | before |
+|---|---|---|---|---|
+| /contests/closing-soon | Closing Soon (2nd) | 20.0px | both | unchanged |
+| /tools | Tools (3rd) | 20.4px | both | unchanged |
+| /categories | Categories (4th) | 20.4px | start | **was 6.4px, start** |
+| /creators | Creators (6th) | 203.1px | start | unchanged |
+| /starter-pack | Free Pack (7th) | 277.0px | start | unchanged |
+| / (homepage) | none | — | none | unchanged |
+
+Desktop is untouched: above 760px the row does not scroll and the mask rules live
+inside the media query. `npm run build` exit 0, and both widths report
+`✓ no horizontal overflow`.
+
+**Inspiration** — It's Nice That's phone masthead runs its section row
+(`Insights · NICE LIST · NICER TUESDAYS · ONES TO WATCH`) off both edges and cuts
+each end dead flat: no fade, no shadow, no vignette. The cut *is* the signal that
+the row carries on, and because it is a cut and not a wash, every word still
+inside the viewport is at full strength. The lesson we took is not to drop our
+fade — a soft edge suits paper better than a hard one here — but to hold it to
+the same standard: it may sit on the margin, never on a word you can read.
+
+**Before/after** — `reports/design/2026-11-28-before.png` and
+`2026-11-28-after.png`, /categories at 390px. Both are captures of the production
+build; the live page itself refuses headless Chrome behind Vercel's security
+checkpoint, so the deploy was verified in a real browser instead — `#000 20px`
+present in the served stylesheet, `#000 24px` gone, and the live row measured at
+`Categories, x 20.4, overflow start`.
+
+---
+
 ## 2026-11-27 — The hero figures stop printing a total beside its own two parts
 
 **Changed** — the hero figures array in `src/app/page.tsx` (one line out, its
