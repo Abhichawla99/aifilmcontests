@@ -759,15 +759,18 @@ img, svg, video, canvas { max-width: 100%; }
 
   /* A fade on the edge of this row is a claim that the row carries on past it,
      so it is drawn only on an end there is actually something past — NavRow
-     measures the scroller and writes data-overflow. It used to be painted down
-     the right at all times, at 15% of the row, which got it wrong at both ends:
-     on /creators the row auto-scrolls to its last link and the fade then washed
-     out `Creators` and the indigo rule marking it as the page you are on, while
-     the left edge, with five links behind it, was cut clean with nothing to say
-     so. 24px rather than 58px, because the fade is a hint, not a vignette. */
-  .inav[data-overflow='start'] { --inav-fade: linear-gradient(to right, transparent, #000 24px); }
-  .inav[data-overflow='end']   { --inav-fade: linear-gradient(to right, #000 calc(100% - 24px), transparent); }
-  .inav[data-overflow='both']  { --inav-fade: linear-gradient(to right, transparent, #000 24px, #000 calc(100% - 24px), transparent); }
+     asks the links, not the scroller, and writes data-overflow. It used to be
+     painted down the right at all times, at 15% of the row, which got it wrong
+     at both ends: on /creators the row auto-scrolls to its last link and the
+     fade then washed out `Creators` and the indigo rule marking it as the page
+     you are on, while the left edge, with five links behind it, was cut clean
+     with nothing to say so. A hint, not a vignette — and exactly as wide as
+     the row's own 20px gutter, so it covers the margin and stops where the
+     first legible pixel of a link begins. NavRow parks the current link on
+     that same 20px. */
+  .inav[data-overflow='start'] { --inav-fade: linear-gradient(to right, transparent, #000 20px); }
+  .inav[data-overflow='end']   { --inav-fade: linear-gradient(to right, #000 calc(100% - 20px), transparent); }
+  .inav[data-overflow='both']  { --inav-fade: linear-gradient(to right, transparent, #000 20px, #000 calc(100% - 20px), transparent); }
   .inav[data-overflow='start'],
   .inav[data-overflow='end'],
   .inav[data-overflow='both'] {

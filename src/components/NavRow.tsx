@@ -9,6 +9,9 @@ interface NavRowProps {
   'aria-label'?: string
 }
 
+/** `.inav`'s own side padding on a phone, and the width of the edge fade. */
+const GUTTER = 20
+
 /**
  * The site nav row. Below 760px it becomes one swipeable line, and this
  * component owns the one thing that line needs the stylesheet to know: which
@@ -19,6 +22,9 @@ interface NavRowProps {
  * The server-rendered value is "none" — no fade until a real measurement has
  * happened, which is the safe way round. A missing fade costs nothing; a fade
  * over the last link is the site telling a visitor something untrue.
+ *
+ * It also parks the current page's link on the row's own gutter, clear of the
+ * fade, so the one word on the row that says where you are is legible.
  */
 export default function NavRow({ children, currentKey, ...rest }: NavRowProps) {
   const ref = useRef<HTMLElement>(null)
@@ -26,14 +32,25 @@ export default function NavRow({ children, currentKey, ...rest }: NavRowProps) {
   const measure = useCallback(() => {
     const nav = ref.current
     if (!nav) return
-    const slack = nav.scrollWidth - nav.clientWidth
-    // 1px of tolerance: sub-pixel layout means scrollLeft rarely hits 0 or max exactly.
-    const more = { start: nav.scrollLeft > 1, end: nav.scrollLeft < slack - 1 }
+    const links = nav.querySelectorAll<HTMLElement>('.inav-link')
+    const first = links[0]
+    const last = links[links.length - 1]
+    if (!first || !last) { nav.dataset.overflow = 'none'; return }
+    // A fade promises a link you have not read yet, so ask the links where the
+    // row ends, not the scrollbar. The row finishes on a 12px spacer, and
+    // measuring the scroller counted that spacer as somewhere to go: scroll to
+    // within a few pixels of the end by hand and a fade came up over the last
+    // link with nothing behind it.
+    // 1px of tolerance: sub-pixel layout means the edges rarely meet exactly.
+    const row = nav.getBoundingClientRect()
+    const more = {
+      start: first.getBoundingClientRect().left < row.left - 1,
+      end: last.getBoundingClientRect().right > row.right + 1,
+    }
     nav.dataset.overflow =
-      slack <= 1 ? 'none'
-        : more.start && more.end ? 'both'
-          : more.start ? 'start'
-            : more.end ? 'end' : 'none'
+      more.start && more.end ? 'both'
+        : more.start ? 'start'
+          : more.end ? 'end' : 'none'
   }, [])
 
   // On a phone the links scroll sideways; bring the current one into view.
@@ -41,14 +58,13 @@ export default function NavRow({ children, currentKey, ...rest }: NavRowProps) {
     const nav = ref.current
     if (!nav) return
     const cur = nav.querySelector<HTMLElement>('[aria-current="page"]')
-    const max = nav.scrollWidth - nav.clientWidth
-    if (cur && max > 0) {
-      // Land the link one gutter in from the left edge — unless that stops just
-      // shy of the end, where the only thing left to scroll past is the row's
-      // trailing spacer. Go the whole way instead, so the last link reads as
-      // the last link rather than as one more pixel of somewhere else.
-      const target = cur.offsetLeft - nav.offsetLeft - 20
-      nav.scrollLeft = max - target < 20 ? max : target
+    if (cur && nav.scrollWidth > nav.clientWidth) {
+      // Land the current link one gutter in from the left edge: the gutter the
+      // page's own text keeps, and exactly the width of the start fade, so the
+      // word naming the page you are on is never the word the fade dims. When
+      // the row cannot scroll that far the browser clamps, which is the right
+      // answer — the last links come to rest short of the gutter, in the clear.
+      nav.scrollLeft = cur.offsetLeft - nav.offsetLeft - GUTTER
     }
     measure()
   }, [measure])
