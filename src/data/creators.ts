@@ -109,6 +109,26 @@ export const creators: Creator[] = [
     contests: ['runway-aif-2026'],
     featuredSince: '2026-10-03',
   },
+  {
+    slug: 'asi-oren',
+    name: 'Asi Oren',
+    type: 'filmmaker',
+    location: 'London, England, United Kingdom',
+    website: 'https://asioren.com',
+    oneLiner: 'Cinematographer and creative developer whose AI-assisted short "In Another Breath" took First Prize at Curious Refuge\'s Feel-Good AI Film Competition.',
+    bio:
+      'Asi Oren is a cinematographer and creative developer working across film, interactive journalism and contemporary art, based in London. He is Lead Interactive Developer at Haaretz, where his data-driven, spatial-narrative work has been recognized by the European Press Prize. ' +
+      'His wordless AI-assisted short In Another Breath — built from image generation, animation, editing and sound design, and following two strangers from an awkward moment on a tram into an imagined felt-world lifetime together — won First Prize at Curious Refuge\'s Feel-Good AI Film Competition (2026). ' +
+      'His non-AI film and cinematography work includes Lady Dior — As Seen By, a sculptural exhibition film for Christian Dior shown at the Tel Aviv Museum of Art and the Jewish Museum Berlin, among other international stops.',
+    tags: ['ai-film', 'cinematography', 'london', 'journalism', 'haaretz'],
+    workLinks: [
+      { title: 'In Another Breath', url: 'https://asioren.com/projects/in-another-breath/' },
+      { title: 'Lady Dior — As Seen By', url: 'https://asioren.com/projects/dior/', client: 'Christian Dior' },
+      { title: 'Haaretz — A Story of Three Maps', url: 'https://asioren.com/projects/haaretz/', client: 'Haaretz' },
+    ],
+    contests: ['curious-refuge-feelgood-2026'],
+    featuredSince: '2026-11-28',
+  },
 ]
 
 export function getCreator(slug: string): Creator | undefined {
