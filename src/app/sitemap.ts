@@ -249,6 +249,7 @@ const TOPICS = [
   'migoo-video-challenge-2026',
   'make-a-seedance-film-for-the-1-million-ai-film-award',
   'one-show-creative-use-of-ai-2027',
+  'muscat-ai-film-festival-2026',
   'ai-film-awards-2026-2027',
   'ai-short-film-competitions-2026',
   '1-billion-followers-summit-ai-film-award-2027',
